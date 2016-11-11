@@ -6,7 +6,7 @@
 	<groupId>training</groupId>
 	<artifactId>coffee-machine</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>pom</packaging>
+	<packaging>war</packaging>
 
 	<name>coffee-machine</name>
 
@@ -22,11 +22,23 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/log4j/log4j -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+
 	</dependencies>
 
-	
-	<build>
 
+	<build>
+		<finalName>ROOT</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -37,11 +49,14 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-war-plugin</artifactId> 
+				<configuration> <webResources> <resource> <directory>src/main/resources/local</directory> 
+				<includes> <include>*.properties</include> <include>*/*.properties</include> 
+				</includes> <targetPath>WEB-INF/classes</targetPath> </resource> </webResources> 
+				</configuration> </plugin> -->
+
 		</plugins>
 
 	</build>
-
-	<modules>
-		<module>model</module>
-	</modules>
 </project>

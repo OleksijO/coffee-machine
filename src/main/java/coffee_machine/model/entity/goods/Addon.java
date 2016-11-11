@@ -1,4 +1,4 @@
-package coffee_machine.model.goods;
+package coffee_machine.model.entity.goods;
 
 public class Addon extends AbstractGoods{
 

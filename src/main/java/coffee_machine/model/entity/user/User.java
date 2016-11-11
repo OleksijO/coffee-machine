@@ -1,6 +1,4 @@
-package coffee_machine.model.user;
-
-import coffee_machine.model.Account;
+package coffee_machine.model.entity.user;
 
 public class User extends AbstractUser{
 	private Account account;

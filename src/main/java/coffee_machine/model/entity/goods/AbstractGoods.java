@@ -1,10 +1,9 @@
-package coffee_machine.model.goods;
+package coffee_machine.model.entity.goods;
 
 abstract class AbstractGoods {
 	protected int id;
 	protected String name;
 	protected long price;
-	protected int availability;
 
 	public int getId() {
 		return id;
@@ -28,14 +27,6 @@ abstract class AbstractGoods {
 
 	public void setPrice(long price) {
 		this.price = price;
-	}
-
-	public int getAvailability() {
-		return availability;
-	}
-
-	public void setAvailability(int availability) {
-		this.availability = availability;
 	}
 
 	@Override

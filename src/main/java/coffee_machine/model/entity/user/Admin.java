@@ -1,4 +1,4 @@
-package coffee_machine.model.user;
+package coffee_machine.model.entity.user;
 
 public class Admin extends AbstractUser {
 

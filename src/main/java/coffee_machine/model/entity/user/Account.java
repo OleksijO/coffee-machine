@@ -1,4 +1,4 @@
-package coffee_machine.model;
+package coffee_machine.model.entity.user;
 
 public class Account {
 	private int id;
