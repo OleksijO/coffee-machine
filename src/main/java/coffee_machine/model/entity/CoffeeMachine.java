@@ -4,7 +4,6 @@ import java.util.Map;
 
 import coffee_machine.model.entity.goods.Addon;
 import coffee_machine.model.entity.goods.Drink;
-import coffee_machine.model.entity.user.Account;
 
 public class CoffeeMachine {
 	private Map<Drink, Integer> baseDrinks;

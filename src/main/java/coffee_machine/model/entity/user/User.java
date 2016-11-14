@@ -1,5 +1,7 @@
 package coffee_machine.model.entity.user;
 
+import coffee_machine.model.entity.Account;
+
 public class User extends AbstractUser {
 
 	private transient Account account;

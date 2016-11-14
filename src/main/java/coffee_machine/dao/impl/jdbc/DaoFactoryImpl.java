@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import coffee_machine.dao.AbstractConnection;
+import coffee_machine.dao.AccountDao;
 import coffee_machine.dao.AddonDao;
 import coffee_machine.dao.AdminDao;
 import coffee_machine.dao.CoffeeMachineDao;
@@ -110,9 +111,15 @@ public class DaoFactoryImpl implements coffee_machine.dao.DaoFactory {
 	}
 
 	@Override
-	public CoffeeMachineDao getCoffeeMachine(AbstractConnection connection) {
+	public CoffeeMachineDao getCoffeeMachineDao(AbstractConnection connection) {
 		checkConnection(connection);
 		return new CoffeeMachineDaoImpl(getSqlConnection(connection));
+	}
+
+	@Override
+	public AccountDao getAccountDao(AbstractConnection connection) {
+		checkConnection(connection);
+		return new AccountDaoImpl(getSqlConnection(connection));
 	}
 
 }

@@ -12,6 +12,8 @@ public interface DaoFactory {
 
 	AddonDao getAddonkDao(AbstractConnection connection);
 
-	CoffeeMachineDao getCoffeeMachine(AbstractConnection connection);
+	CoffeeMachineDao getCoffeeMachineDao(AbstractConnection connection);
+
+	AccountDao getAccountDao(AbstractConnection connection);
 
 }
