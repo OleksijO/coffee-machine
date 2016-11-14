@@ -1,7 +1,8 @@
 package coffee_machine.model.entity.user;
 
-public class User extends AbstractUser{
-	private Account account;
+public class User extends AbstractUser {
+
+	private transient Account account;
 
 	public Account getAccount() {
 		return account;
@@ -42,6 +43,4 @@ public class User extends AbstractUser{
 				+ ", lastName=" + lastName + "]";
 	}
 
-	
-	
 }

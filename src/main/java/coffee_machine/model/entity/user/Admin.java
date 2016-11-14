@@ -6,5 +6,5 @@ public class Admin extends AbstractUser {
 	public String toString() {
 		return "Admin [id=" + id + ", login=" + login + ", firstName=" + firstName + ", lastName=" + lastName + "]";
 	}
-	
+
 }

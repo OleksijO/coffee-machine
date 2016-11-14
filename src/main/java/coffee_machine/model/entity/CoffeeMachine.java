@@ -11,7 +11,7 @@ public class CoffeeMachine {
 	private Map<Addon, Integer> addons;
 	private Account account;
 
-	public boolean canPrepareDrinks(Map<Drink, Integer> drinksToPrepare) {
+	public boolean tryPrepareDrinks(Map<Drink, Integer> drinksToPrepare) {
 		for (Drink drinkToPrepare : drinksToPrepare.keySet()) {
 			Drink baseDrink = drinkToPrepare.getBaseDrink();
 			int drinkToPrepareCount = drinksToPrepare.get(baseDrink);
