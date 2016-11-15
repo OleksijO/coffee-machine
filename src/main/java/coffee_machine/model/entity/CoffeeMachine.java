@@ -30,6 +30,24 @@ public class CoffeeMachine {
 		return true;
 	}
 
+	public void addBaseDrinks(Map<Drink, Integer> drinks) {
+		drinks.keySet().forEach(drink -> {
+			if (!baseDrinks.containsKey(drink)) {
+				baseDrinks.put(drink, 0);
+			}
+			baseDrinks.put(drink, baseDrinks.get(drink) + drinks.get(drink));
+		});
+	}
+
+	public void addBaseaddons(Map<Addon, Integer> addonsToAdd) {
+		addonsToAdd.keySet().forEach(addon -> {
+			if (!addons.containsKey(addon)) {
+				addons.put(addon, 0);
+			}
+			addons.put(addon, addons.get(addon) + addonsToAdd.get(addon));
+		});
+	}
+
 	public Map<Drink, Integer> getBaseDrinks() {
 		return baseDrinks;
 	}
