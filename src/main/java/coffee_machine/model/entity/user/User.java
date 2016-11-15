@@ -4,7 +4,7 @@ import coffee_machine.model.entity.Account;
 
 public class User extends AbstractUser {
 
-	private transient Account account;
+	private Account account;
 
 	public Account getAccount() {
 		return account;
@@ -41,8 +41,8 @@ public class User extends AbstractUser {
 
 	@Override
 	public String toString() {
-		return "User [accountId=" + account.getId() + ", id=" + id + ", login=" + login + ", firstName=" + firstName
-				+ ", lastName=" + lastName + "]";
+		return "User [accountId=" + account.getId() + ", id=" + id + ", login=" + login + ", fullName=" + fullName
+				+ "]";
 	}
 
 }

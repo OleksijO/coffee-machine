@@ -10,7 +10,7 @@ public interface DaoFactory {
 
 	DrinkDao getDrinkDao(AbstractConnection connection);
 
-	AddonDao getAddonkDao(AbstractConnection connection);
+	AddonDao getAddonDao(AbstractConnection connection);
 
 	CoffeeMachineDao getCoffeeMachineDao(AbstractConnection connection);
 

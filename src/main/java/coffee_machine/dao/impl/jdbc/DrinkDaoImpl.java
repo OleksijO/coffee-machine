@@ -6,7 +6,7 @@ import java.util.List;
 import coffee_machine.dao.DrinkDao;
 import coffee_machine.model.entity.goods.Drink;
 
-public class DrinkDaoImpl implements DrinkDao {
+public class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
 
 	private Connection connection;
 

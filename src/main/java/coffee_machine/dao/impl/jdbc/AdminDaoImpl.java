@@ -1,12 +1,12 @@
 package coffee_machine.dao.impl.jdbc;
 
-import java.sql.Connection;
-import java.util.List;
-
 import coffee_machine.dao.AdminDao;
 import coffee_machine.model.entity.user.Admin;
 
-public class AdminDaoImpl implements AdminDao {
+import java.sql.Connection;
+import java.util.List;
+
+public class AdminDaoImpl extends AbstractUserDao<Admin> implements AdminDao {
 
 	private Connection connection;
 

@@ -1,11 +1,15 @@
 package coffee_machine.dao.impl.jdbc;
 
+import coffee_machine.dao.AbstractConnection;
+import coffee_machine.dao.exception.DaoException;
+import org.apache.log4j.Logger;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import coffee_machine.dao.AbstractConnection;
-
 public class AbstractConnectionImpl implements AbstractConnection {
+
+	private static final Logger logger = Logger.getLogger(AbstractConnectionImpl.class);
 	private Connection connection;
 
 	AbstractConnectionImpl(Connection connection) {
@@ -17,10 +21,14 @@ public class AbstractConnectionImpl implements AbstractConnection {
 		try {
 			connection.setAutoCommit(false);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logErrorAndThrowDaoException("Can not set autocommit to false", e);
 		}
 
+	}
+
+	private void logErrorAndThrowDaoException(String message, Throwable e) {
+		logger.error(message, e);
+		throw new DaoException(message, e);
 	}
 
 	@Override
@@ -28,8 +36,7 @@ public class AbstractConnectionImpl implements AbstractConnection {
 		try {
 			connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logErrorAndThrowDaoException("Can not set transaction isolation level to READ COMITTED.", e);
 		}
 
 	}
@@ -39,8 +46,7 @@ public class AbstractConnectionImpl implements AbstractConnection {
 		try {
 			connection.setTransactionIsolation(Connection.TRANSACTION_NONE);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logErrorAndThrowDaoException("Can not set transaction isolation level to NONE.", e);
 		}
 
 	}
@@ -50,8 +56,7 @@ public class AbstractConnectionImpl implements AbstractConnection {
 		try {
 			connection.commit();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logErrorAndThrowDaoException("Can not commit transaction.", e);
 		}
 
 	}
@@ -61,8 +66,7 @@ public class AbstractConnectionImpl implements AbstractConnection {
 		try {
 			connection.rollback();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logErrorAndThrowDaoException("Can not rollback transaction.", e);
 		}
 	}
 
@@ -71,8 +75,7 @@ public class AbstractConnectionImpl implements AbstractConnection {
 		try {
 			connection.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logErrorAndThrowDaoException("Can not close SQL connection.", e);
 		}
 	}
 

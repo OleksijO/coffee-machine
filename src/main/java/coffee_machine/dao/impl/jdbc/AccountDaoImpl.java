@@ -1,13 +1,14 @@
 package coffee_machine.dao.impl.jdbc;
 
-import java.sql.Connection;
-import java.util.List;
-
 import coffee_machine.dao.AccountDao;
 import coffee_machine.model.entity.Account;
 
-public class AccountDaoImpl implements AccountDao {
+import java.sql.Connection;
+import java.util.List;
 
+public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
+	private static final String INSERT_SQL = "INSERT INTO account (id, amount) VALUES (?, ?);";
+	private static final String UPDATE_SQL = "INSERT INTO account (id, amount) VALUES (?, ?);";
 	private Connection connection;
 
 	AccountDaoImpl(Connection connection) {

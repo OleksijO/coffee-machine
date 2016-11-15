@@ -4,8 +4,7 @@ abstract class AbstractUser {
 	protected int id;
 	protected String login;
 	protected String password;
-	protected String firstName;
-	protected String lastName;
+	protected String fullName;
 
 	public int getId() {
 		return id;
@@ -31,29 +30,20 @@ abstract class AbstractUser {
 		this.password = password;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getFullName() {
+		return fullName;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((fullName == null) ? 0 : fullName.hashCode());
 		result = prime * result + id;
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		return result;
@@ -68,17 +58,12 @@ abstract class AbstractUser {
 		if (getClass() != obj.getClass())
 			return false;
 		AbstractUser other = (AbstractUser) obj;
-		if (firstName == null) {
-			if (other.firstName != null)
+		if (fullName == null) {
+			if (other.fullName != null)
 				return false;
-		} else if (!firstName.equals(other.firstName))
+		} else if (!fullName.equals(other.fullName))
 			return false;
 		if (id != other.id)
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
 			return false;
 		if (login == null) {
 			if (other.login != null)
@@ -92,4 +77,5 @@ abstract class AbstractUser {
 			return false;
 		return true;
 	}
+
 }

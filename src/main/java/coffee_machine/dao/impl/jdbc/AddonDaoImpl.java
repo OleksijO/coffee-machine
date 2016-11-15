@@ -6,7 +6,7 @@ import java.util.List;
 import coffee_machine.dao.AddonDao;
 import coffee_machine.model.entity.goods.Addon;
 
-public class AddonDaoImpl implements AddonDao {
+public class AddonDaoImpl extends AbstractDao<Addon> implements AddonDao {
 
 	private Connection connection;
 

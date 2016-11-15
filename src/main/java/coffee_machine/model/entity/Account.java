@@ -16,6 +16,10 @@ public class Account {
 		return amount;
 	}
 
+	public void setAmount(long amount) {
+		this.amount = amount;
+	}
+
 	public int getId() {
 		return id;
 	}

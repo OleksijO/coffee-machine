@@ -1,22 +1,13 @@
 package coffee_machine.dao.impl.jdbc;
 
+import coffee_machine.dao.*;
+import coffee_machine.dao.exception.DaoException;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
+import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.SQLException;
-
-import javax.sql.DataSource;
-
-import com.mchange.v2.c3p0.ComboPooledDataSource;
-
-import coffee_machine.dao.AbstractConnection;
-import coffee_machine.dao.AccountDao;
-import coffee_machine.dao.AddonDao;
-import coffee_machine.dao.AdminDao;
-import coffee_machine.dao.CoffeeMachineDao;
-import coffee_machine.dao.DaoFactory;
-import coffee_machine.dao.DrinkDao;
-import coffee_machine.dao.UserDao;
-import coffee_machine.dao.exception.DaoException;
 
 public class DaoFactoryImpl implements coffee_machine.dao.DaoFactory {
 	private static volatile DaoFactoryImpl instance;
@@ -74,7 +65,8 @@ public class DaoFactoryImpl implements coffee_machine.dao.DaoFactory {
 	@Override
 	public UserDao getUserDao(AbstractConnection connection) {
 		checkConnection(connection);
-		return new UserDaoImpl(getSqlConnection(connection));
+		Connection sqlConnection = getSqlConnection(connection);
+		return new UserDaoImpl(sqlConnection, new AccountDaoImpl(sqlConnection));
 	}
 
 	private Connection getSqlConnection(AbstractConnection connection) {
@@ -105,7 +97,7 @@ public class DaoFactoryImpl implements coffee_machine.dao.DaoFactory {
 	}
 
 	@Override
-	public AddonDao getAddonkDao(AbstractConnection connection) {
+	public AddonDao getAddonDao(AbstractConnection connection) {
 		checkConnection(connection);
 		return new AddonDaoImpl(getSqlConnection(connection));
 	}
