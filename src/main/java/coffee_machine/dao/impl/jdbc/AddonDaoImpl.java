@@ -15,33 +15,37 @@ public class AddonDaoImpl extends AbstractDao<Addon> implements AddonDao {
 	}
 
 	@Override
-	public Addon insert(Addon t) {
-		// TODO Auto-generated method stub
-		return t;
+	public Addon insert(Addon addon) {
+		return null;
 	}
 
 	@Override
-	public void update(Addon t) {
-		// TODO Auto-generated method stub
+	public void update(Addon addon) {
 
 	}
 
 	@Override
 	public List<Addon> getAll() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Addon getById(int id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void deleteById(int id) {
-		// TODO Auto-generated method stub
 
 	}
 
+	@Override
+	public List<Addon> getAllFromList(List<Addon> addons) {
+		return null;
+	}
+
+	@Override
+	public void updateAllInList(List<Addon> addons) {
+
+	}
 }

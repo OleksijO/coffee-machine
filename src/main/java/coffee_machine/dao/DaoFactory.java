@@ -14,4 +14,6 @@ public interface DaoFactory {
 
 	AccountDao getAccountDao(AbstractConnection connection);
 
+	HistoryRecordDao getHistoryRecordDao(AbstractConnection connection);
+
 }

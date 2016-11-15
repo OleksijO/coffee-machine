@@ -1,52 +1,52 @@
 package coffee_machine.model.entity.goods;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
-public class Drink extends AbstractGoods {
-	Map<Addon, Integer> addons;
+public class Drink extends AbstractGoods  {
+	Set<Addon> addons;
 
-	public Drink getBaseDrink() {
-		Drink baseDrink = new Drink();
-		baseDrink.setName(name);
-		baseDrink.setPrice(price);
-		Map<Addon, Integer> addonSet = new HashMap<>();
-		for (Addon addon : addons.keySet()) {
-			addonSet.put(addon, 0);
-		}
+	public Drink(Drink drink) {
+		super(drink);
+		this.addons = drink.getAddonsCopy();
+	}
+
+	public Drink getBaseDrink()  {
+		Drink baseDrink = new Drink(this);
+		baseDrink.getAddons().forEach(addon -> addon.setQuantity(0));
+		baseDrink.setQuantity(1);
 		return baseDrink;
-
 	}
 
 	@Override
 	public long getPrice() {
 		long totalPrice = price;
-		for (Addon addon : addons.keySet()) {
-			if (addons.get(addon) > 0) {
-				totalPrice += addon.getPrice() * addons.get(addon);
+		for (Addon addon : addons) {
+			if (addon.getQuantity() > 0) {
+				totalPrice += addon.getPrice() * addon.getQuantity();
 			}
 		}
 		return totalPrice;
 	}
 
-	public Map<Addon, Integer> getAddons() {
+	public Set<Addon> getAddons() {
 		return addons;
 	}
 
-	public void setAddons(Map<Addon, Integer> addons) {
+	public void setAddons(Set<Addon> addons) {
 		this.addons = addons;
 	}
 
 	@Override
 	public String toString() {
-		return "Drink [id=" + id + ", name=" + name + convertAddonsToString() + ", price=" + this.getPrice() + "]";
+		return "Drink ["+ name +", "+ convertAddonsToString() + ", price=" + this.getPrice() + "]";
 	}
 
 	private String convertAddonsToString() {
 		String addonList = "addons=[ ";
-		for (Addon addon : addons.keySet()) {
-			if (addons.get(addon) > 0) {
-				addonList += ", " + addon.getName() + "=" + addons.get(addon);
+		for (Addon addon : addons) {
+			if (addon.getQuantity() > 0) {
+				addonList += ", " + addon.getName() + "=" + addon.getQuantity();
 			}
 		}
 		return addonList.replaceFirst(", ", "") + "]";
@@ -77,4 +77,13 @@ public class Drink extends AbstractGoods {
 		return true;
 	}
 
+	private Set<Addon> getAddonsCopy()  {
+		Set<Addon> baseAddons = new HashSet<>();
+		for (Addon addon : addons) {
+			Addon addonCopy = new Addon(addon);
+
+			baseAddons.add(addonCopy);
+		}
+		return baseAddons;
+	}
 }

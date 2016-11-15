@@ -108,4 +108,9 @@ public class DaoFactoryImpl implements coffee_machine.dao.DaoFactory {
 		return new AccountDaoImpl(getSqlConnection(connection));
 	}
 
+    @Override
+    public HistoryRecordDao getHistoryRecordDao(AbstractConnection connection) {
+        //TODO
+        return null;
+    }
 }

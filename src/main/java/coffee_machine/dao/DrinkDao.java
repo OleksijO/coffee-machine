@@ -6,19 +6,7 @@ import java.util.List;
 
 public interface DrinkDao extends GenericDao<Drink> {
 
-	@Override
-	Drink insert(Drink drink);
+    List<Drink> getAllFromList(List<Drink> baseDrinks);
 
-	@Override
-	void update(Drink drink);
-
-	@Override
-	List<Drink> getAll();
-
-	@Override
-	Drink getById(int id);
-
-	@Override
-	void deleteById(int id);
-
+	void updateAllInList(List<Drink> baseDrinks);
 }

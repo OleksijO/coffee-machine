@@ -1,12 +1,24 @@
 package coffee_machine.model.entity;
 
+import java.util.Date;
+
 /**
  * Created by oleksij.onysymchuk@gmail on 15.11.2016.
  */
 public class HistoryRecord {
     private int id;
+    private Date date;
     private String orderDescription;
     private long amount;
+
+    public HistoryRecord() {
+    }
+
+    public HistoryRecord(Date date, String orderDescription, long amount) {
+        this.date = date;
+        this.orderDescription = orderDescription;
+        this.amount = amount;
+    }
 
     public int getId() {
         return id;
@@ -14,6 +26,14 @@ public class HistoryRecord {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public String getOrderDescription() {

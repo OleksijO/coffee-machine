@@ -1,10 +1,17 @@
 package coffee_machine.model.entity.goods;
 
-public class Addon extends AbstractGoods{
+public class Addon extends AbstractGoods {
 
-	@Override
-	public String toString() {
-		return "Addon [id=" + id + ", name=" + name + ", price=" + price + "]";
-	}
+    public Addon() {
+    }
+
+    public Addon(Addon addon) {
+        super(addon);
+    }
+
+    @Override
+    public String toString() {
+        return (quantity == 0) ? "" : "Addon [" + name + ", " + quantity + " pcs]";
+    }
 
 }

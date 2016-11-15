@@ -14,34 +14,39 @@ public class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
 		this.connection = connection;
 	}
 
+
 	@Override
-	public Drink insert(Drink t) {
-		// TODO Auto-generated method stub
-		return t;
+	public Drink insert(Drink drink) {
+		return null;
 	}
 
 	@Override
-	public void update(Drink t) {
-		// TODO Auto-generated method stub
+	public void update(Drink drink) {
 
 	}
 
 	@Override
 	public List<Drink> getAll() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Drink getById(int id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void deleteById(int id) {
-		// TODO Auto-generated method stub
 
 	}
 
+	@Override
+	public List<Drink> getAllFromList(List<Drink> baseDrinks) {
+		return null;
+	}
+
+	@Override
+	public void updateAllInList(List<Drink> baseDrinks) {
+
+	}
 }

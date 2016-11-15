@@ -4,14 +4,14 @@ import java.util.List;
 
 public interface GenericDao<T> {
 
-	T insert(T t);
+	T insert(T obj);
 
-	void update(T t);
+	void update(T obj);
 
 	List<T> getAll();
 
 	/**
-	 * Returns NULL if there is now entity with specified Id
+	 * Returns NULL if there is no entity with specified Id
 	 */
 	T getById(int id);
 

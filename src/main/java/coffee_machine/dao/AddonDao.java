@@ -6,19 +6,7 @@ import java.util.List;
 
 public interface AddonDao extends GenericDao<Addon> {
 
-	@Override
-	Addon insert(Addon addon);
+    List<Addon> getAllFromList(List<Addon> addons);
 
-	@Override
-	void update(Addon addon);
-
-	@Override
-	List<Addon> getAll();
-
-	@Override
-	Addon getById(int id);
-
-	@Override
-	void deleteById(int id);
-
+	void updateAllInList(List<Addon> addons);
 }
