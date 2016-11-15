@@ -1,16 +1,16 @@
 package coffee_machine.dao;
 
-import java.util.List;
-
 import coffee_machine.model.entity.user.Admin;
+
+import java.util.List;
 
 public interface AdminDao extends GenericDao<Admin> {
 
 	@Override
-	int insert(Admin t);
+	Admin insert(Admin admin);
 
 	@Override
-	void update(Admin t);
+	void update(Admin admin);
 
 	@Override
 	List<Admin> getAll();

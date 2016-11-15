@@ -16,9 +16,9 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 	}
 
 	@Override
-	public int insert(Account t) {
+	public Account insert(Account t) {
 		// TODO Auto-generated method stub
-		return 0;
+		return t;
 	}
 
 	@Override

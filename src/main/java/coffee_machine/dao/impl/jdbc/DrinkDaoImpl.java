@@ -1,10 +1,10 @@
 package coffee_machine.dao.impl.jdbc;
 
-import java.sql.Connection;
-import java.util.List;
-
 import coffee_machine.dao.DrinkDao;
 import coffee_machine.model.entity.goods.Drink;
+
+import java.sql.Connection;
+import java.util.List;
 
 public class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
 
@@ -15,9 +15,9 @@ public class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
 	}
 
 	@Override
-	public int insert(Drink t) {
+	public Drink insert(Drink t) {
 		// TODO Auto-generated method stub
-		return 0;
+		return t;
 	}
 
 	@Override

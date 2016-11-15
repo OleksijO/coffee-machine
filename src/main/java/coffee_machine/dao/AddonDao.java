@@ -1,16 +1,16 @@
 package coffee_machine.dao;
 
-import java.util.List;
-
 import coffee_machine.model.entity.goods.Addon;
+
+import java.util.List;
 
 public interface AddonDao extends GenericDao<Addon> {
 
 	@Override
-	int insert(Addon t);
+	Addon insert(Addon addon);
 
 	@Override
-	void update(Addon t);
+	void update(Addon addon);
 
 	@Override
 	List<Addon> getAll();

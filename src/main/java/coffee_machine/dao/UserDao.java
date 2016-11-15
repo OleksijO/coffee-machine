@@ -1,16 +1,16 @@
 package coffee_machine.dao;
 
-import java.util.List;
-
 import coffee_machine.model.entity.user.User;
+
+import java.util.List;
 
 public interface UserDao extends GenericDao<User> {
 
 	@Override
-	int insert(User t);
+	User insert(User user);
 
 	@Override
-	void update(User t);
+	void update(User user);
 
 	@Override
 	List<User> getAll();

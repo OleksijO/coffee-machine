@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface GenericDao<T> {
 
-	int insert(T t);
+	T insert(T t);
 
 	void update(T t);
 

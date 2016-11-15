@@ -1,7 +1,5 @@
 package coffee_machine.dao.impl.jdbc;
 
-import java.util.List;
-
 import coffee_machine.dao.GenericDao;
 
 abstract class AbstractDao<T> implements GenericDao<T> {
@@ -14,19 +12,6 @@ abstract class AbstractDao<T> implements GenericDao<T> {
 
 	static final String FIELD_ID = "id";
 
-	@Override
-	abstract public int insert(T t);
 
-	@Override
-	abstract public void update(T t);
-
-	@Override
-	abstract public List<T> getAll();
-
-	@Override
-	abstract public T getById(int id);
-
-	@Override
-	abstract public void deleteById(int id);
 
 }

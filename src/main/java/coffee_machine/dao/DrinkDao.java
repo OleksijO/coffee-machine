@@ -1,16 +1,16 @@
 package coffee_machine.dao;
 
-import java.util.List;
-
 import coffee_machine.model.entity.goods.Drink;
+
+import java.util.List;
 
 public interface DrinkDao extends GenericDao<Drink> {
 
 	@Override
-	int insert(Drink t);
+	Drink insert(Drink drink);
 
 	@Override
-	void update(Drink t);
+	void update(Drink drink);
 
 	@Override
 	List<Drink> getAll();

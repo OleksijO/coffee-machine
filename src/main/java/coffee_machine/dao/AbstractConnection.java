@@ -4,10 +4,6 @@ public interface AbstractConnection extends AutoCloseable {
 
 	void beginTransaction();
 
-	void setTransactionIsolationLevelToReadComitted();
-
-	void setTransactionIsolationLevelToNone();
-
 	void commitTransaction();
 
 	void rollbackTransaction();

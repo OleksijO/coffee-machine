@@ -103,12 +103,6 @@ public class DaoFactoryImpl implements coffee_machine.dao.DaoFactory {
 	}
 
 	@Override
-	public CoffeeMachineDao getCoffeeMachineDao(AbstractConnection connection) {
-		checkConnection(connection);
-		return new CoffeeMachineDaoImpl(getSqlConnection(connection));
-	}
-
-	@Override
 	public AccountDao getAccountDao(AbstractConnection connection) {
 		checkConnection(connection);
 		return new AccountDaoImpl(getSqlConnection(connection));

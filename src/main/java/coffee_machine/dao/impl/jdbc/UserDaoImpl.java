@@ -40,7 +40,7 @@ public class UserDaoImpl extends AbstractUserDao<User> implements UserDao {
     }
 
     @Override
-    public int insert(User user) {
+    public User insert(User user) {
         if (user == null) {
             throw new DaoException("User to be created can not be null.");
         }
@@ -48,7 +48,7 @@ public class UserDaoImpl extends AbstractUserDao<User> implements UserDao {
             throw new DaoException(ERROR_ID_MUST_BE_FROM_DBMS + "abstract_user");
         }
 
-        int accountId = accountDao.insert(user.getAccount());
+        int accountId = accountDao.insert(user.getAccount()).getId();
 
         try (PreparedStatement statementForAbstractUser =
                      connection.prepareStatement(INSERT_ABSTRACT_USER_SQL, Statement.RETURN_GENERATED_KEYS);
@@ -59,17 +59,15 @@ public class UserDaoImpl extends AbstractUserDao<User> implements UserDao {
             statementForAbstractUser.setString(3, user.getFullName());
 
             int abstractUserId = statementForAbstractUser.executeUpdate();
-
+            user.setId(abstractUserId);
             statementForUser.setInt(1, abstractUserId);
             statementForUser.setInt(2, accountId);
             statementForUser.executeUpdate();
 
-            return abstractUserId;
-
         } catch (SQLException e) {
-            logErrorAndThrowWrapperDaoException("Error while inserting record into abstract_user, user", e);
+            logErrorAndThrowWrapperDaoException("Error while persisting user=" + user, e);
         }
-        throw new DaoException("Unexpected end of method");     // stub for compilation
+        return user;
     }
 
     private void logErrorAndThrowWrapperDaoException(String message, Throwable e) {
@@ -102,7 +100,7 @@ public class UserDaoImpl extends AbstractUserDao<User> implements UserDao {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            logErrorAndThrowWrapperDaoException("Error while updating records in abstract_user, user", e);
+            logErrorAndThrowWrapperDaoException("Error while updating user=" + user, e);
         }
 
     }
@@ -173,7 +171,7 @@ public class UserDaoImpl extends AbstractUserDao<User> implements UserDao {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            logErrorAndThrowWrapperDaoException("Error while deleting record from abstract_user, user, account", e);
+            logErrorAndThrowWrapperDaoException("Error while deleting user" + user, e);
         }
         accountDao.deleteById(user.getAccount().getId());
     }
@@ -190,7 +188,7 @@ public class UserDaoImpl extends AbstractUserDao<User> implements UserDao {
             return userList == null || userList.isEmpty() ? null : userList.get(0);
 
         } catch (SQLException e) {
-            logErrorAndThrowWrapperDaoException("Error while deleting record from abstract_user, user, account", e);
+            logErrorAndThrowWrapperDaoException("Error getting user by login=" + login, e);
         }
         throw new DaoException("Unexpected end of method");     // stub for compilation
     }

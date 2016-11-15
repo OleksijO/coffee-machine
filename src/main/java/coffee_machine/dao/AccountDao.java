@@ -1,16 +1,16 @@
 package coffee_machine.dao;
 
-import java.util.List;
-
 import coffee_machine.model.entity.Account;
+
+import java.util.List;
 
 public interface AccountDao extends GenericDao<Account> {
 
 	@Override
-	int insert(Account t);
+	Account insert(Account account);
 
 	@Override
-	void update(Account t);
+	void update(Account account);
 
 	@Override
 	List<Account> getAll();

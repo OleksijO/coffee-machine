@@ -15,9 +15,9 @@ public class AdminDaoImpl extends AbstractUserDao<Admin> implements AdminDao {
 	}
 
 	@Override
-	public int insert(Admin t) {
+	public Admin insert(Admin t) {
 		// TODO Auto-generated method stub
-		return 0;
+		return t;
 	}
 
 	@Override

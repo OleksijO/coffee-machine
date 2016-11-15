@@ -19,6 +19,7 @@ public class AbstractConnectionImpl implements AbstractConnection {
 	@Override
 	public void beginTransaction() {
 		try {
+			connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 			connection.setAutoCommit(false);
 		} catch (SQLException e) {
 			logErrorAndThrowDaoException("Can not set autocommit to false", e);
@@ -32,29 +33,10 @@ public class AbstractConnectionImpl implements AbstractConnection {
 	}
 
 	@Override
-	public void setTransactionIsolationLevelToReadComitted() {
-		try {
-			connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-		} catch (SQLException e) {
-			logErrorAndThrowDaoException("Can not set transaction isolation level to READ COMITTED.", e);
-		}
-
-	}
-
-	@Override
-	public void setTransactionIsolationLevelToNone() {
-		try {
-			connection.setTransactionIsolation(Connection.TRANSACTION_NONE);
-		} catch (SQLException e) {
-			logErrorAndThrowDaoException("Can not set transaction isolation level to NONE.", e);
-		}
-
-	}
-
-	@Override
 	public void commitTransaction() {
 		try {
 			connection.commit();
+			connection.setAutoCommit(true);
 		} catch (SQLException e) {
 			logErrorAndThrowDaoException("Can not commit transaction.", e);
 		}
@@ -65,6 +47,7 @@ public class AbstractConnectionImpl implements AbstractConnection {
 	public void rollbackTransaction() {
 		try {
 			connection.rollback();
+			connection.setAutoCommit(true);
 		} catch (SQLException e) {
 			logErrorAndThrowDaoException("Can not rollback transaction.", e);
 		}
