@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by oleksij.onysymchuk@gmail on 15.11.2016.
@@ -121,6 +122,34 @@ public class DrinkServiceImpl implements DrinkService {
             }
             connection.commitTransaction();
         }
+    }
+
+    @Override
+    public void refill(Map<Integer, Integer> quantitiesById) {
+        try (AbstractConnection connection = daoFactory.getConnection()) {
+
+            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
+
+            try {
+                connection.beginTransaction();
+                quantitiesById.keySet().forEach(id -> {
+                    Drink drink = drinkDao.getById(id);
+                    drink.setQuantity(drink.getQuantity() + quantitiesById.get(id));
+                    drinkDao.update(drink);
+                });
+
+            } catch (DaoException e) {
+                connection.rollbackTransaction();
+                logErrorAndThrowWrapperServiceException(e.getMessage(), e);
+            }
+
+            connection.commitTransaction();
+        }
+    }
+
+    private void logErrorAndThrowNewServiceException(String message) {
+        logger.error(message);
+        throw new DaoException(message);
     }
 
 }

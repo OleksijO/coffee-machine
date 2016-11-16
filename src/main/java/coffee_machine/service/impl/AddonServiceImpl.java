@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by oleksij.onysymchuk@gmail on 15.11.2016.
@@ -119,6 +120,29 @@ public class AddonServiceImpl implements AddonService {
                 connection.rollbackTransaction();
                 logErrorAndThrowWrapperServiceException(e.getMessage(), e);
             }
+            connection.commitTransaction();
+        }
+    }
+
+    @Override
+    public void refill(Map<Integer, Integer> quantitiesById) {
+        try (AbstractConnection connection = daoFactory.getConnection()) {
+
+            AddonDao addonDao = daoFactory.getAddonDao(connection);
+
+            try {
+                connection.beginTransaction();
+                quantitiesById.keySet().forEach(id -> {
+                    Addon addon = addonDao.getById(id);
+                    addon.setQuantity(addon.getQuantity() + quantitiesById.get(id));
+                    addonDao.update(addon);
+                });
+
+            } catch (DaoException e) {
+                connection.rollbackTransaction();
+                logErrorAndThrowWrapperServiceException(e.getMessage(), e);
+            }
+
             connection.commitTransaction();
         }
     }

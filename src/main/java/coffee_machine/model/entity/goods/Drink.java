@@ -6,6 +6,9 @@ import java.util.Set;
 public class Drink extends AbstractGoods  {
 	Set<Addon> addons;
 
+	public Drink() {
+	}
+
 	public Drink(Drink drink) {
 		super(drink);
 		this.addons = drink.getAddonsCopy();

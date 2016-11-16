@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import static coffee_machine.controller.command.Pages.*;
 
-public class UserConfirmLoginCommand implements Command {
+public class UserLoginSubmitCommand implements Command {
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) {

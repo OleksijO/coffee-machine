@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import static coffee_machine.controller.command.Pages.ADMIN_LOGIN_FAILED_PAGE;
 import static coffee_machine.controller.command.Pages.ADMIN_LOGIN_SUCCESS_PAGE;
 
-public class AdminConfirmLoginCommand implements Command {
+public class AdminLoginSubmitCommand implements Command {
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
