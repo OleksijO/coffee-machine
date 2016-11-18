@@ -13,7 +13,7 @@ public class Admin extends AbstractUser {
 
 	@Override
 	public String toString() {
-		return "Admin [id=" + id + ", login=" + login + ", fullName=" + fullName + ", enabled=" + enabled + "]";
+		return "Admin [id=" + id + ", email=" + email + ", fullName=" + fullName + ", enabled=" + enabled + "]";
 	}
 
 }

@@ -41,7 +41,7 @@ public class User extends AbstractUser {
 
 	@Override
 	public String toString() {
-		return "User [accountId=" + account.getId() + ", id=" + id + ", login=" + login + ", fullName=" + fullName
+		return "User [accountId=" + account.getId() + ", id=" + id + ", email=" + email + ", fullName=" + fullName
 				+ "]";
 	}
 

@@ -25,7 +25,7 @@ public class UserDaoImpl extends AbstractUserDao<User> implements UserDao {
     private static final String DELETE_USER_SQL = DELETE_ABSTRACT_USER_SQL +
             "DELETE FROM users WHERE id = ?; ";
 
-    private static final String FIELD_LOGIN = "login";
+    private static final String FIELD_LOGIN = "email";
     private static final String FIELD_PASSWORD = "password";
     private static final String FIELD_FULL_NAME = "full_name";
     private static final String FIELD_ACCOUNT_ID = "account_id";
@@ -54,7 +54,7 @@ public class UserDaoImpl extends AbstractUserDao<User> implements UserDao {
                      connection.prepareStatement(INSERT_ABSTRACT_USER_SQL, Statement.RETURN_GENERATED_KEYS);
              PreparedStatement statementForUser = connection.prepareStatement(INSERT_USER_SQL)) {
 
-            statementForAbstractUser.setString(1, user.getLogin());
+            statementForAbstractUser.setString(1, user.getEmail());
             statementForAbstractUser.setString(2, user.getPassword());
             statementForAbstractUser.setString(3, user.getFullName());
 
@@ -88,7 +88,7 @@ public class UserDaoImpl extends AbstractUserDao<User> implements UserDao {
         try (PreparedStatement statement =
                      connection.prepareStatement(UPDATE_SQL);) {
 
-            statement.setString(1, user.getLogin());
+            statement.setString(1, user.getEmail());
             statement.setString(2, user.getPassword());
             statement.setString(3, user.getFullName());
             statement.setInt(4, user.getId());
@@ -124,7 +124,7 @@ public class UserDaoImpl extends AbstractUserDao<User> implements UserDao {
             User user = new User();
             user.setId(resultSet.getInt(FIELD_ID));
             user.setFullName(resultSet.getString(FIELD_FULL_NAME));
-            user.setLogin(resultSet.getString(FIELD_LOGIN));
+            user.setEmail(resultSet.getString(FIELD_LOGIN));
             user.setPassword(resultSet.getString(FIELD_PASSWORD));
             Account account = new Account();
             account.setId(resultSet.getInt(FIELD_ACCOUNT_ID));
@@ -188,7 +188,7 @@ public class UserDaoImpl extends AbstractUserDao<User> implements UserDao {
             return userList == null || userList.isEmpty() ? null : userList.get(0);
 
         } catch (SQLException e) {
-            logErrorAndThrowWrapperDaoException("Error getting user by login=" + login, e);
+            logErrorAndThrowWrapperDaoException("Error getting user by email=" + login, e);
         }
         throw new DaoException("Unexpected end of method");     // stub for compilation
     }

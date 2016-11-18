@@ -2,16 +2,14 @@ package coffee_machine.dao.impl.jdbc;
 
 import coffee_machine.dao.*;
 import coffee_machine.dao.exception.DaoException;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import javax.sql.DataSource;
-import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class DaoFactoryImpl implements coffee_machine.dao.DaoFactory {
 	private static volatile DaoFactoryImpl instance;
-	private DataSource dataSource = initDataSource();
+	private DataSource dataSource = JdbcPooledDataSource.getDataSource();
 
 	public static DaoFactory getInstance() {
 		DaoFactoryImpl localInstance = instance;
@@ -26,22 +24,7 @@ public class DaoFactoryImpl implements coffee_machine.dao.DaoFactory {
 		return localInstance;
 	}
 
-	private DataSource initDataSource() {
-		ComboPooledDataSource cpds = new ComboPooledDataSource();
-		try {
-			cpds.setDriverClass("com.mysql.jdbc.Driver");
-		} catch (PropertyVetoException e) {
-			// TODO log
-			throw new Error(e);
-		}
-		cpds.setJdbcUrl("jdbc:mysql://localhost:3306/coffee_machine");
-		cpds.setUser("root");
-		cpds.setPassword("root");
-		cpds.setMaxPoolSize(20);
-		cpds.setMinPoolSize(5);
-		cpds.setAcquireIncrement(5);
-		return cpds;
-	}
+
 
 	@Override
 	public AbstractConnection getConnection() {

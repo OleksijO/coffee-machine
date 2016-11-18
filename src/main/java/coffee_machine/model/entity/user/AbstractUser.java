@@ -2,7 +2,7 @@ package coffee_machine.model.entity.user;
 
 abstract class AbstractUser {
 	protected int id;
-	protected String login;
+	protected String email;
 	protected String password;
 	protected String fullName;
 
@@ -14,12 +14,12 @@ abstract class AbstractUser {
 		this.id = id;
 	}
 
-	public String getLogin() {
-		return login;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setLogin(String login) {
-		this.login = login;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {
@@ -44,7 +44,7 @@ abstract class AbstractUser {
 		int result = 1;
 		result = prime * result + ((fullName == null) ? 0 : fullName.hashCode());
 		result = prime * result + id;
-		result = prime * result + ((login == null) ? 0 : login.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		return result;
 	}
@@ -65,10 +65,10 @@ abstract class AbstractUser {
 			return false;
 		if (id != other.id)
 			return false;
-		if (login == null) {
-			if (other.login != null)
+		if (email == null) {
+			if (other.email != null)
 				return false;
-		} else if (!login.equals(other.login))
+		} else if (!email.equals(other.email))
 			return false;
 		if (password == null) {
 			if (other.password != null)
