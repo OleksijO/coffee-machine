@@ -1,4 +1,4 @@
-DROP SCHEMA coffee_machine;
+DROP SCHEMA IF EXISTS coffee_machine;
 
 CREATE DATABASE  IF NOT EXISTS coffee_machine ;
 USE coffee_machine;
