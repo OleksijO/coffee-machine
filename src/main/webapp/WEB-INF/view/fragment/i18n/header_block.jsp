@@ -18,9 +18,9 @@
         <c:if test="${locale.locale == fmt_locale}">]</b></c:if>
         &nbsp
     </c:forEach>
-
-
-    <!--<fmt:requestEncoding value="UTF-8" />-->
-    <fmt:setBundle basename="i18n.messages"/>
+<!--
+    <fmt:requestEncoding value="UTF-8" />
     <fmt:setLocale value="${fmt_locale}" scope="session"/>
+-->
+    <fmt:setBundle basename="i18n.messages"/>
 </div>
