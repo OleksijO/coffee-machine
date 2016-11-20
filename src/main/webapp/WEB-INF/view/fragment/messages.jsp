@@ -15,7 +15,7 @@
             <div align="center" style="width: 90%">
                 <hr>
                 <p style="color: red">
-                        ${err_message}
+                    <fmt:message key="${err_message}"/>
                 </p>
                 <hr>
             </div>
@@ -26,7 +26,7 @@
             <div align="center" style="width: 90%">
                 <hr>
                 <p style="color: darkgreen">
-                        ${usual_message}
+                    <fmt:message key="${usual_message}"/>
                 </p>
                 <hr>
             </div>
