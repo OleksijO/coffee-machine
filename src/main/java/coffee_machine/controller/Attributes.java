@@ -7,4 +7,6 @@ public interface Attributes {
     String REFILL_DRINKS = "drinks";
     String REFILL_ADDONS = "addons";
 
+    String USUAL_MESSAGE = "usual_message";
+    String ERROR_MESSAGE = "error_message";
 }
