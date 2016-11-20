@@ -4,6 +4,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
+import java.util.ResourceBundle;
 
 /**
  * Created by oleksij.onysymchuk@gmail on 17.11.2016.
@@ -16,17 +17,17 @@ public class JdbcPooledDataSource {
     }
 
     private static DataSource initDataSource() {
-
+        ResourceBundle jdbcProperties = ResourceBundle.getBundle("database");
         ComboPooledDataSource cpds = new ComboPooledDataSource();
         try {
-            cpds.setDriverClass("com.mysql.jdbc.Driver");
+            cpds.setDriverClass(jdbcProperties.getString("jdbc.driver"));
         } catch (PropertyVetoException e) {
             // TODO log
             throw new Error(e);
         }
-        cpds.setJdbcUrl("jdbc:mysql://localhost:3306/coffee_machine");
-        cpds.setUser("root");
-        cpds.setPassword("root");
+        cpds.setJdbcUrl(jdbcProperties.getString("jdbc.url"));
+        cpds.setUser(jdbcProperties.getString("jdbc.user"));
+        cpds.setPassword(jdbcProperties.getString("jdbc.password"));
         cpds.setMaxPoolSize(20);
         cpds.setMinPoolSize(5);
         cpds.setAcquireIncrement(5);
