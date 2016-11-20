@@ -5,4 +5,5 @@ public interface Parameters {
     String ADDON_PARAMETER_STARTS_WITH ="addon_";
     String LOGIN ="login";
     String PASSWORD="password";
+    String USER_LOCALE = "language";
 }

@@ -20,6 +20,7 @@ public class AuthentificationFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest req = ((HttpServletRequest) request);
 		HttpSession session = req.getSession();
+		logger.debug("Authentification Filter processing");
 		logger.debug("user_id = "+session.getAttribute(USER_ID));
 		logger.debug("admin_id = "+session.getAttribute(ADMIN_ID));
 		if ((req.getRequestURI().startsWith(ADMIN)) && (session.getAttribute(ADMIN_ID) == null)
