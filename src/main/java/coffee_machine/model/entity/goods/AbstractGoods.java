@@ -1,5 +1,7 @@
 package coffee_machine.model.entity.goods;
 
+import static coffee_machine.controller.Parameters.DB_MONEY_COEFF;
+
 abstract public class AbstractGoods {
 	protected int id;
 	protected String name;
@@ -34,6 +36,10 @@ abstract public class AbstractGoods {
 
 	public long getPrice() {
 		return price;
+	}
+
+	public double getRealPrice() {
+		return DB_MONEY_COEFF*price;
 	}
 
 	public void setPrice(long price) {

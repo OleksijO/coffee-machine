@@ -31,6 +31,7 @@ public class CommandHolderImpl implements CommandHolder {
         commands.put(USER_HOME_PATH, new UserHomeCommand());
         commands.put(USER_PURCHASE_PATH, new UserPurchaseCommand());
         commands.put(USER_PURCHASE_SUBMIT_PATH, new UserPurchaseSubmitCommand());
+        commands.put(USER_HISTORY_PATH, new UserHistoryCommand());
         commands.put(ADMIN_LOGIN_PATH, new AdminLoginCommand());
         commands.put(ADMIN_LOGOUT_PATH, new AdminLogoutCommand());
         commands.put(ADMIN_REFILL_PATH, new AdminRefillCommand());

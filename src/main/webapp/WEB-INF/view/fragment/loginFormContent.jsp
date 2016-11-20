@@ -14,8 +14,9 @@
     </tr>
     <tr>
         <td colspan="2">
+
             <fmt:message key="login.submit" var="mes_submit"/>
-            <div><input type="submit" value="${mes_submit}"></div>
+            <div align="center"><input type="submit" value="${mes_submit}"></div>
         </td>
     </tr>
 </table>

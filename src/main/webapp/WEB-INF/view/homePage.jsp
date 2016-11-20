@@ -13,7 +13,7 @@
 <%@ include file="/WEB-INF/view/fragment/header.jsp" %>
 
 
-        <fmt:message key="home.description"/>
+        <fmt:message key="home.description"/><br>
 
         <br> <a href="<%=USER_LOGIN_PATH%>"><fmt:message key="login.user.title"/></a>
         <br>

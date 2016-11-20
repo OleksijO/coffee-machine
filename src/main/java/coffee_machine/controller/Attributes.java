@@ -9,4 +9,5 @@ public interface Attributes {
 
     String USUAL_MESSAGE = "usual_message";
     String ERROR_MESSAGE = "error_message";
+    String USER_BALANCE = "user_balance";
 }

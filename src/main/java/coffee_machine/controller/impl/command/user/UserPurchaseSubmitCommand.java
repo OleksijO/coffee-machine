@@ -9,9 +9,8 @@ import coffee_machine.service.impl.DrinkServiceImpl;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static coffee_machine.controller.Attributes.REFILL_ADDONS;
-import static coffee_machine.controller.Attributes.REFILL_DRINKS;
-import static coffee_machine.controller.PagesPaths.USER_PURCHASE_PAGE;
+import static coffee_machine.Messages.TEST_USUAL_MESSAGE;
+import static coffee_machine.controller.Attributes.USUAL_MESSAGE;
 
 public class UserPurchaseSubmitCommand implements Command {
 	private DrinkService drinkService = DrinkServiceImpl.getInstance();
@@ -19,15 +18,13 @@ public class UserPurchaseSubmitCommand implements Command {
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
-		request.setAttribute(REFILL_DRINKS, drinkService.getAll());
-		request.setAttribute(REFILL_ADDONS, addonService.getAll());
-
-		// TODO DELETE HARDCODE
-
-		//TODO end of hardcode
 
 
-		return USER_PURCHASE_PAGE;
+
+		request.setAttribute(USUAL_MESSAGE, TEST_USUAL_MESSAGE);
+
+		//TODO remove hardcore harcode below )
+		return new UserPurchaseCommand().execute(request,response);
 	}
 
 }

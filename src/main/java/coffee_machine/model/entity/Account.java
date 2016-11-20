@@ -1,5 +1,7 @@
 package coffee_machine.model.entity;
 
+import static coffee_machine.controller.Parameters.DB_MONEY_COEFF;
+
 public class Account {
 	private int id;
 	private long amount;
@@ -14,6 +16,10 @@ public class Account {
 
 	public long getAmount() {
 		return amount;
+	}
+
+	public double getRealAmount() {
+		return DB_MONEY_COEFF*amount;
 	}
 
 	public void setAmount(long amount) {
