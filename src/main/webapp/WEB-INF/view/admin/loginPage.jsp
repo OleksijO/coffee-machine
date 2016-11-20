@@ -12,8 +12,9 @@
 <body>
 <%@ include file="/WEB-INF/view/fragment/header.jsp"%>
 
+
         <br>
-        <br><fmt:message key="login.admin.title"/><br>
+        <fmt:message key="login.admin.title"/><br>
         <form action="<%=ADMIN_LOGIN_SUBMIT_PATH%>" method="post">
             <%@ include file="/WEB-INF/view/fragment/loginFormContent.jsp"%>
         </form>

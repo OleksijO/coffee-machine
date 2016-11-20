@@ -10,6 +10,8 @@ public interface PagesPaths {
     String HOME_PATH = "/home";
     String SUBMIT = "/submit";
     String HISTORY = "/history";
+    String PURCHASE = "/purchase";
+    String REFILL = "/refill";
     String REDIRECTED = "REDIRECTED";
     String USER_LOGIN_PATH = USER + LOGIN;
     String USER_LOGOUT_PATH = USER + LOGOUT;
@@ -22,13 +24,16 @@ public interface PagesPaths {
     String PAGE = "Page" + JSP;
     String HOME_PAGE = VIEW_CLASSPATH + HOME_PATH + PAGE;
     String USER_HOME_PATH = USER + HOME_PATH;
+    String USER_PURCHASE_PATH = USER + PURCHASE;
+    String USER_PURCHASE_SUBMIT_PATH = USER + PURCHASE + SUBMIT;
+    String USER_PURCHASE_PAGE = USER + PURCHASE + PAGE;
     String USER_HOME_PAGE = VIEW_CLASSPATH + USER_HOME_PATH + PAGE;
     String ADMIN_HOME_PATH = ADMIN + HOME_PATH;
     String ADMIN_HOME_PAGE = VIEW_CLASSPATH + ADMIN_HOME_PATH + PAGE;
     String USER_HISTORY_PAGE = VIEW_CLASSPATH + USER + HISTORY + PAGE;
     String USER_LOGIN_PAGE = VIEW_CLASSPATH + USER_LOGIN_PATH + PAGE;
     String ADMIN_LOGIN_PAGE = VIEW_CLASSPATH + ADMIN_LOGIN_PATH + PAGE;
-    String REFILL = "/refill";
+
     String ADMIN_REFILL_PATH = ADMIN + REFILL;
     String ADMIN_REFILL_SUBMIT_PATH = ADMIN + SUBMIT + REFILL;
     String ADMIN_REFILL_PAGE = VIEW_CLASSPATH + ADMIN_REFILL_PATH + PAGE;

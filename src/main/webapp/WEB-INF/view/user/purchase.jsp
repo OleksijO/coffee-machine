@@ -9,12 +9,11 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/view/fragment/header.jsp"%>
-
-			<fmt:message key="user.history.description"/>
-			<br>
-			<br> <a href="<%=HOME_PATH%>">Home page</a>
+			<fmt:message key="user.purchase.description"/>
+			<br>Table with available goods with column to set wanted quantity to purchase. <br>
+			<br> <a href="<%=HOME_PATH%>"><fmt:message key="home.page"/></a>
 			<br> <a href="<%=USER_LOGOUT_PATH%>"><fmt:message key="logout"/></a>
 
-<%@ include file="/WEB-INF/view/fragment/footer.jsp" %>
+<%@ include file="/WEB-INF/view/fragment/footer.jsp"%>
 </body>
 </html>

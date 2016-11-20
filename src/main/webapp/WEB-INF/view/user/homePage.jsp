@@ -9,10 +9,7 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/view/fragment/header.jsp"%>
-
-			USER HOME PAGE <br>
-			HERE YOU CAN BUY SOME DRINKS <br>
-			or view <a href="<%=USER_HISTORY_PATH%>">your purchase history</a><br>
+			<fmt:message key="user.home.description"/>
 			<br>Table with available goods with column to set wanted quantity to purchase. <br>
 			<br> <a href="<%=HOME_PATH%>"><fmt:message key="home.page"/></a>
 			<br> <a href="<%=USER_LOGOUT_PATH%>"><fmt:message key="logout"/></a>

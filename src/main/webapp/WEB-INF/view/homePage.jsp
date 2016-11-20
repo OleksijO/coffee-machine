@@ -10,16 +10,16 @@
     <title><fmt:message key="home.page"/></title>
 </head>
 <body>
+<%@ include file="/WEB-INF/view/fragment/header.jsp" %>
 
 
-        <%@ include file="/WEB-INF/view/fragment/header.jsp"%>
+        <fmt:message key="home.description"/>
 
         <br> <a href="<%=USER_LOGIN_PATH%>"><fmt:message key="login.user.title"/></a>
         <br>
         <br> <a href="<%=ADMIN_LOGIN_PATH%>"><fmt:message key="login.admin.title"/></a>
 
-        <%@ include file="/WEB-INF/view/fragment/footer.jsp"%>
 
-
+<%@ include file="/WEB-INF/view/fragment/footer.jsp" %>
 </body>
 </html>

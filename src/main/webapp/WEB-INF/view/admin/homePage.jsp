@@ -12,9 +12,7 @@
 <%@include file="/WEB-INF/view/fragment/header.jsp"%>
 
 <br>
-<br>ADMIN HOME PAGE <br>
-<br>HERE YOU CAN :<br>
-<br> <a href="<%=ADMIN_REFILL_PATH%>">REFILL COFFEE MACHINE</a><br>
+<fmt:message key="admin.home.description"/>><br>
 <br> <a href="<%=HOME_PATH%>"><fmt:message key="home.page"/> </a><br>
 <br> <a href="<%=ADMIN_LOGOUT_PATH%>"><fmt:message key="logout"/></a><br>
 

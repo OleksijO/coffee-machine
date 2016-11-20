@@ -22,6 +22,7 @@
         <c:if test='${not empty sessionScope["user_id"]}'>
             <fmt:message key="logged.as.user"/> |
             <a href="<%=USER_HOME_PATH%>"><fmt:message key="user.home.page"/></a> |
+            <a href="<%=USER_PURCHASE_PATH%>"><fmt:message key="user.purchase.page"/></a> |
             <a href="<%=USER_HISTORY_PATH%>"><fmt:message key="user.history.page"/></a> |
             <a href="<%=USER_LOGOUT_PATH%>"><fmt:message key="logout"/></a> |
             <br><br>
