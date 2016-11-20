@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static coffee_machine.Messages.TEST_USUAL_MESSAGE;
+import static coffee_machine.controller.Attributes.USUAL_ADDITIONAL_MESSAGE;
 import static coffee_machine.controller.Attributes.USUAL_MESSAGE;
 
 public class UserPurchaseSubmitCommand implements Command {
@@ -22,6 +23,7 @@ public class UserPurchaseSubmitCommand implements Command {
 
 
 		request.setAttribute(USUAL_MESSAGE, TEST_USUAL_MESSAGE);
+		request.setAttribute(USUAL_ADDITIONAL_MESSAGE, "You purchased some set of drinks.....may be..."+request.getParameterNames());
 
 		//TODO remove hardcore harcode below )
 		return new UserPurchaseCommand().execute(request,response);
