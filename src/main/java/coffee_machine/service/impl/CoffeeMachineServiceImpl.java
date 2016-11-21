@@ -37,7 +37,8 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService {
     }
 
     @Override
-    public void prepareDrinksForUser(List<Drink> drinks, int userId) {
+    public HistoryRecord prepareDrinksForUser(List<Drink> drinks, int userId) {
+        HistoryRecord historyRecord=null;
         try (AbstractConnection connection = daoFactory.getConnection()) {
             List<Drink> users = null;
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
@@ -66,7 +67,8 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService {
                 Account coffeeMachineAccount = accountDao.getById(COFFEE_MACHINE_ACCOUNT_ID);
                 userAccount.withdrow(drinksPrice);
                 coffeeMachineAccount.add(drinksPrice);
-                historyDao.insert(new HistoryRecord(new Date(), drinks.toString(), drinksPrice));
+                historyRecord = new HistoryRecord(new Date(), drinks.toString(), drinksPrice);
+                historyDao.insert(historyRecord);
                 drinkDao.updateAllInList(baseDrinksAvailable);
                 addonDao.updateAllInList(addonsAvailable);
             } catch (DaoException e) {
@@ -74,6 +76,7 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService {
                 logErrorAndThrowWrapperServiceException(e.getMessage(), e);
             }
             connection.commitTransaction();
+            return historyRecord;
         }
     }
 

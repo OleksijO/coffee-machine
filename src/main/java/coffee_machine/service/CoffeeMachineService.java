@@ -1,5 +1,6 @@
 package coffee_machine.service;
 
+import coffee_machine.model.entity.HistoryRecord;
 import coffee_machine.model.entity.goods.Drink;
 
 import java.util.List;
@@ -9,6 +10,6 @@ import java.util.List;
  */
 public interface CoffeeMachineService {
 
-    void prepareDrinksForUser(List<Drink> drinks, int userId);
+    HistoryRecord prepareDrinksForUser(List<Drink> drinks, int userId);
 
 }
