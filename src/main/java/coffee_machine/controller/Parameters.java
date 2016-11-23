@@ -1,11 +1,11 @@
 package coffee_machine.controller;
 
-public interface Parameters {
-    Double DB_MONEY_COEFF = 0.01;
+public final class Parameters {
+	public static final Double DB_MONEY_COEFF = 0.01;
 
-    String DRINK_PARAMETER_STARTS_WITH = "drink_";
-    String ADDON_PARAMETER_STARTS_WITH = "addon_";
-    String LOGIN = "login";
-    String PASSWORD = "password";
-    String USER_LOCALE = "language";
+	public static final String DRINK_PARAMETER_STARTS_WITH = "drink_";
+	public static final String ADDON_PARAMETER_STARTS_WITH = "addon_";
+	public static final String LOGIN = "login";
+	public static final String PASSWORD = "password";
+	public static final String USER_LOCALE = "language";
 }

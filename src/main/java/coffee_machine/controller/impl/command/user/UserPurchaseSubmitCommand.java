@@ -1,6 +1,25 @@
 package coffee_machine.controller.impl.command.user;
 
+import static coffee_machine.controller.Attributes.ERROR_ADDITIONAL_MESSAGE;
+import static coffee_machine.controller.Attributes.ERROR_MESSAGE;
+import static coffee_machine.controller.Attributes.USER_BALANCE;
+import static coffee_machine.controller.Attributes.USER_ID;
+import static coffee_machine.controller.Attributes.USUAL_ADDITIONAL_MESSAGE;
+import static coffee_machine.controller.Attributes.USUAL_MESSAGE;
+
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import coffee_machine.Messages;
+import coffee_machine.controller.Attributes;
 import coffee_machine.controller.Command;
 import coffee_machine.controller.PagesPaths;
 import coffee_machine.controller.RegExp;
@@ -14,14 +33,6 @@ import coffee_machine.service.impl.AccountServiceImpl;
 import coffee_machine.service.impl.CoffeeMachineServiceImpl;
 import coffee_machine.service.impl.DrinkServiceImpl;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static coffee_machine.controller.Attributes.*;
-
 public class UserPurchaseSubmitCommand implements Command {
 	private DrinkService drinkService = DrinkServiceImpl.getInstance();
 	private AccountService accountService = AccountServiceImpl.getInstance();
@@ -32,6 +43,7 @@ public class UserPurchaseSubmitCommand implements Command {
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
+		request.setAttribute(Attributes.PAGE_TITLE, Messages.TITLE_USER_PURCHASE);
 		try {
 			List<Drink> drinksToBuy = getDrinksFromRequest(request);
 			int userId = (int) request.getSession().getAttribute(USER_ID);

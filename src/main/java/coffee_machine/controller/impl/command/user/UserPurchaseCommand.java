@@ -1,5 +1,23 @@
 package coffee_machine.controller.impl.command.user;
 
+import static coffee_machine.controller.Attributes.REFILL_ADDONS;
+import static coffee_machine.controller.Attributes.REFILL_DRINKS;
+import static coffee_machine.controller.Attributes.USER_BALANCE;
+import static coffee_machine.controller.Attributes.USER_ID;
+import static coffee_machine.controller.PagesPaths.USER_PURCHASE_PAGE;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+
+import coffee_machine.Messages;
+import coffee_machine.controller.Attributes;
 import coffee_machine.controller.Command;
 import coffee_machine.model.entity.goods.Addon;
 import coffee_machine.model.entity.goods.Drink;
@@ -9,20 +27,9 @@ import coffee_machine.service.DrinkService;
 import coffee_machine.service.impl.AccountServiceImpl;
 import coffee_machine.service.impl.AddonServiceImpl;
 import coffee_machine.service.impl.DrinkServiceImpl;
-import org.apache.log4j.Logger;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static coffee_machine.controller.Attributes.*;
-import static coffee_machine.controller.PagesPaths.USER_PURCHASE_PAGE;
 
 public class UserPurchaseCommand implements Command {
-	private static final Logger logger = Logger.getLogger( UserPurchaseCommand.class);
+	private static final Logger logger = Logger.getLogger(UserPurchaseCommand.class);
 	private DrinkService drinkService = DrinkServiceImpl.getInstance();
 	private AddonService addonService = AddonServiceImpl.getInstance();
 	private AccountService accountService = AccountServiceImpl.getInstance();
@@ -30,10 +37,10 @@ public class UserPurchaseCommand implements Command {
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
 
-
-		int userId = (int)request.getSession().getAttribute(USER_ID);
-
-		//request.setAttribute(USER_BALANCE, accountService.getByUserId(userId).getAmount()*DB_MONEY_COEFF);
+		int userId = (int) request.getSession().getAttribute(USER_ID);
+		request.setAttribute(Attributes.PAGE_TITLE, Messages.TITLE_USER_PURCHASE);
+		// request.setAttribute(USER_BALANCE,
+		// accountService.getByUserId(userId).getAmount()*DB_MONEY_COEFF);
 		request.setAttribute(USER_BALANCE, 150.);
 		request.setAttribute(REFILL_DRINKS, drinkService.getAll());
 		request.setAttribute(REFILL_ADDONS, addonService.getAll());
@@ -62,7 +69,7 @@ public class UserPurchaseCommand implements Command {
 		addon4.setQuantity(7);
 		addon4.setName("Lemon");
 		addon4.setPrice(300);
-		
+
 		Set<Addon> addons1Set = new HashSet<>();
 		addons1Set.add(addon1);
 		addons1Set.add(addon4);
@@ -117,8 +124,7 @@ public class UserPurchaseCommand implements Command {
 		request.setAttribute(REFILL_DRINKS, drinks);
 		request.setAttribute(REFILL_ADDONS, addons1Set);
 
-		//TODO end of hardcode
-
+		// TODO end of hardcode
 
 		return USER_PURCHASE_PAGE;
 	}

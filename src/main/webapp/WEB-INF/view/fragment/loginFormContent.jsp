@@ -1,22 +1,20 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page import="coffee_machine.controller.Parameters" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <table>
     <tr>
-        <td><br><fmt:message key="login.email"/><br><br></td>
-        <td><br><input type="text" name="<%=Parameters.LOGIN%>"><br><br></td>
+        <td><br><label for="login"><fmt:message key="login.email"/></label><br><br></td>
+        <td><br><input id="login" type="text" name="${Parameters.LOGIN}"/><br><br></td>
     </tr>
     <tr>
-        <td><br><fmt:message key="login.password"/><br><br></td>
-        <td><br><input type="password" name="<%=Parameters.PASSWORD%>"><br><br></td>
+        <td><br><label for="pswd"><fmt:message key="login.password"/></label><br><br></td>
+        <td><br><input id="pswd" type="password" name="${Parameters.PASSWORD}"/><br><br></td>
     </tr>
     <tr>
         <td colspan="2">
-
-            <fmt:message key="login.submit" var="mes_submit"/>
-            <div align="center"><input type="submit" value="${mes_submit}"></div>
+            <fmt:message key="login.submit" var="message_submit"/>
+            <div align="center"><input type="submit" value="${message_submit}"></div>
         </td>
     </tr>
 </table>

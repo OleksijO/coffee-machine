@@ -1,17 +1,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page import="static coffee_machine.controller.PagesPaths.*" %>
+<%@ page import="coffee_machine.controller.PagesPaths" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
-</head>
-<body>
+
 <%@ include file="/WEB-INF/view/fragment/header.jsp"%>
 			<fmt:message key="user.purchase.description"/> <br>
 <br>
-<form action="<%=USER_PURCHASE_SUBMIT_PATH%>" method="post">
+<form action="${PagesPaths.USER_PURCHASE_SUBMIT_PATH}" method="post">
 	<fmt:message key="user.purchase.your.balance.is"/> <fmt:formatNumber value="${user_balance}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
 	<fmt:message key="currency"/>.<br>
 	<br>
@@ -78,8 +72,8 @@
 		<tr>
 			<td colspan="4">
 				<br>
-				<fmt:message key="user.purchase.submit" var="mes_submit"/>
-				<div align="center"><input type="submit" value="${mes_submit}"></div>
+				<fmt:message key="user.purchase.submit" var="message_submit"/>
+				<div align="center"><input type="submit" value="${message_submit}"></div>
 				<br>
 			</td>
 		</tr>
@@ -89,5 +83,3 @@
 </form>
 
 <%@ include file="/WEB-INF/view/fragment/footer.jsp"%>
-</body>
-</html>
