@@ -69,8 +69,8 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService {
                 coffeeMachineAccount.add(drinksPrice);
                 historyRecord = new HistoryRecord(new Date(), drinks.toString(), drinksPrice);
                 historyDao.insert(historyRecord);
-                drinkDao.updateAllInList(baseDrinksAvailable);
-                addonDao.updateAllInList(addonsAvailable);
+                drinkDao.updateQuantityAllInList(baseDrinksAvailable);
+                addonDao.updateQuantityAllInList(addonsAvailable);
             } catch (DaoException e) {
                 connection.rollbackTransaction();
                 logErrorAndThrowWrapperServiceException(e.getMessage(), e);
@@ -115,7 +115,7 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService {
 
     private long getSummaryPrice(List<Drink> drinks) {
         final long price[] = new long[1];
-        drinks.forEach(drink -> price[0] += drink.getPrice());
+        drinks.forEach(drink -> price[0] += drink.getTotalPrice());
         return price[0];
     }
 

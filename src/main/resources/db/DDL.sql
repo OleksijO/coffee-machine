@@ -1,6 +1,6 @@
 DROP SCHEMA IF EXISTS coffee_machine;
 
-CREATE DATABASE  IF NOT EXISTS coffee_machine ;
+CREATE DATABASE IF NOT EXISTS coffee_machine ;
 USE coffee_machine;
 
 DROP TABLE IF EXISTS abstract_goods;
@@ -28,7 +28,7 @@ CREATE TABLE abstract_user (
 DROP TABLE IF EXISTS account;
 
 CREATE TABLE account (
-  id int(11) NOT NULL,
+  id int(11) NOT NULL AUTO_INCREMENT,
   amount bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -7,7 +7,7 @@ import coffee_machine.model.entity.user.Admin;
  */
 public enum Admins {
     A(1, "oleksij.onysymchuk@gmail.com", "630d82b1215e611e7aca66237834cd19", "Олексій Онисимчук", false),
-    C(3, "user@test.com", "630d82b1215e611e7aca66237834cd19", "Тестовий адміністратор", true);
+    C(3, "admin@test.com", "630d82b1215e611e7aca66237834cd19", "Тестовий адміністратор", true);
 
 
     public Admin admin;

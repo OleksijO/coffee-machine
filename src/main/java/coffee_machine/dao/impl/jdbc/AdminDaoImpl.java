@@ -1,32 +1,27 @@
 package coffee_machine.dao.impl.jdbc;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import coffee_machine.dao.AdminDao;
 import coffee_machine.dao.exception.DaoException;
 import coffee_machine.i18n.message.key.EntityKey;
 import coffee_machine.i18n.message.key.error.DaoErrorKey;
 import coffee_machine.model.entity.user.Admin;
+import org.apache.log4j.Logger;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdminDaoImpl extends AbstractUserDao<Admin> implements AdminDao {
 	private static final Logger logger = Logger.getLogger(AdminDaoImpl.class);
 
-	private static final String WHERE_ABSTRACT_USER_LOGIN = " WHERE abstract_user.login = ?";
+	private static final String WHERE_ABSTRACT_USER_LOGIN = " WHERE abstract_user.email = ?";
 	private static final String WHERE_ABSTRACT_USER_ID = " WHERE abstract_user.id = ?";
 
 	private static final String SELECT_ALL_SQL = String.format(SELECT_ALL_FROM_ABSTRACT_USER_SQL, ", admins.enabled")
-			+ " INNER JOIN admins ON abstract_user.id = admins.id ";
-	private static final String UPDATE_SQL = UPDATE_ABSTRACT_USER_SQL + "UPDATE admins SET enabled = ? WHERE id = ?;";
-	private static final String INSERT_SQL = "INSERT INTO admins (id, enabled) VALUES (?, ?);";
-	private static final String DELETE_SQL = DELETE_ABSTRACT_USER_SQL + "DELETE FROM admins WHERE id = ?; ";
+			+ " INNER JOIN admins ON abstract_user.id = admins.admin_id ";
+	private static final String UPDATE_SQL = UPDATE_ABSTRACT_USER_SQL + "UPDATE admins SET enabled = ? WHERE admin_id = ?;";
+	private static final String INSERT_SQL = "INSERT INTO admins (admin_id, enabled) VALUES (?, ?);";
+	private static final String DELETE_SQL = DELETE_ABSTRACT_USER_SQL + "DELETE FROM admins WHERE admin_id = ?; ";
 
 	private static final String FIELD_LOGIN = "email";
 	private static final String FIELD_PASSWORD = "password";
@@ -57,7 +52,7 @@ public class AdminDaoImpl extends AbstractUserDao<Admin> implements AdminDao {
 			statementForAbstractUser.setString(2, admin.getPassword());
 			statementForAbstractUser.setString(3, admin.getFullName());
 
-			int abstractUserId = statementForAbstractUser.executeUpdate();
+			int abstractUserId = executeInsertStatement(statementForAbstractUser);
 			admin.setId(abstractUserId);
 			statementForAdmin.setInt(1, abstractUserId);
 			statementForAdmin.setBoolean(2, admin.isEnabled());

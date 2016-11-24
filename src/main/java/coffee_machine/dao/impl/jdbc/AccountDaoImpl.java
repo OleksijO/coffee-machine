@@ -19,7 +19,7 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 	private static final String SELECT_BY_USER_ID_SQL = "SELECT id, amount FROM account "
 			+ "INNER JOIN users ON users.account_id = account.id WHERE users.user_id = ?";
 	private static final String WHERE_ID = " WHERE id = ?";
-	private static final String INSERT_SQL = "INSERT INTO account (id, amount) VALUES (?, ?);";
+	private static final String INSERT_SQL = "INSERT INTO account (amount) VALUES (?);";
 	private static final String UPDATE_SQL = "UPDATE account SET amount=? WHERE id=?;";
 	private static final String DELETE_SQL = "DELETE FROM account" + WHERE_ID + ";";
 
@@ -45,7 +45,8 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 
 			statement.setLong(1, account.getAmount());
 
-			int accountId = statement.executeUpdate();
+			int accountId = executeInsertStatement(statement);
+
 			account.setId(accountId);
 
 		} catch (SQLException e) {
@@ -68,8 +69,7 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 			statement.setLong(1, account.getAmount());
             statement.setInt(2, account.getId());
 
-			int accountId = statement.executeUpdate();
-			account.setId(accountId);
+			statement.executeUpdate();
 
 		} catch (SQLException e) {
 			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_UPDATING, e);

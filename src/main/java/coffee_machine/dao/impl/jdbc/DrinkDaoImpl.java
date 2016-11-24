@@ -1,23 +1,18 @@
 package coffee_machine.dao.impl.jdbc;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.log4j.Logger;
-
 import coffee_machine.dao.DrinkDao;
 import coffee_machine.dao.exception.DaoException;
 import coffee_machine.i18n.message.key.EntityKey;
 import coffee_machine.i18n.message.key.error.DaoErrorKey;
 import coffee_machine.model.entity.goods.Addon;
 import coffee_machine.model.entity.goods.Drink;
+import org.apache.log4j.Logger;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 	private static final Logger logger = Logger.getLogger(DrinkDaoImpl.class);
@@ -28,12 +23,12 @@ public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 			+ " INNER JOIN drink ON abstract_goods.id = drink.id ";
 	private static final String UPDATE_SQL = UPDATE_GOODS_SQL + "";
 	private static final String INSERT_SQL = "INSERT INTO drink (id) VALUES (?);";
-	private static final String DELETE_SQL = DELETE_GOODS_SQL + "DELETE FROM drink WHERE id = ?; ";
+	private static final String DELETE_SQL = DELETE_GOODS_SQL + "";
 
-	private static final String SELECT_ADDON_SET_SQL = "SELECT addon_id, name, price, quantity " + "FROM drink_addon "
-			+ "INNER JOIN addon ON addon_id=addon.id " + "WHERE drink_id = ? ;";
-	private static final String INSERT_ADDON_SQL = "INSERT INTO drink_addon (drink_id, addon_id) VALUES (?,?); ";
-	private static final String DELETE_ADDON_FROM_SET_SQL = "DELETE FROM drink_addon WHERE id = ?; ";
+	private static final String SELECT_ADDON_SET_SQL = "SELECT addon_id, name, price, quantity " + "FROM abstract_goods "
+			+ "INNER JOIN drink_addons ON addon_id=abstract_goods.id " + "WHERE drink_id = ? ;";
+	private static final String INSERT_ADDON_SQL = "INSERT INTO drink_addons (drink_id, addon_id) VALUES (?,?); ";
+	private static final String DELETE_ADDON_FROM_SET_SQL = "DELETE FROM drink_addons WHERE drink_id = ?; ";
 
 	private static final String FIELD_NAME = "name";
 	private static final String FIELD_PRICE = "price";
@@ -65,7 +60,7 @@ public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 			statementForGoods.setLong(2, drink.getPrice());
 			statementForGoods.setInt(3, drink.getQuantity());
 
-			int drinkId = statementForGoods.executeUpdate();
+			int drinkId = executeInsertStatement(statementForGoods);
 			drink.setId(drinkId);
 			statementForDrink.setInt(1, drinkId);
 
@@ -222,7 +217,6 @@ public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 						.prepareStatement(DELETE_ADDON_FROM_SET_SQL)) {
 
 			statement.setInt(1, id);
-			statement.setInt(2, id);
 			statement.executeUpdate();
 
 			statementForDeleteAddonsFromSet.setInt(1, drink.getId());
@@ -248,8 +242,8 @@ public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 	}
 
 	@Override
-	public void updateAllInList(List<Drink> drinks) {
-		drinks.forEach(addon -> update(addon));
+	public void updateQuantityAllInList(List<Drink> drinks) {
+		drinks.forEach(this::updateQuantity);
 	}
 
 }

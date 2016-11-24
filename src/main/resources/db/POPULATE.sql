@@ -1,6 +1,6 @@
 USE `coffee_machine`;
 
-INSERT INTO account (id, amount) VALUES (1, 0), (2, 9999999999), (3, 999999);
+INSERT INTO account (amount) VALUES (0), (9999999999), (999999);
 
 INSERT INTO abstract_user (id, email, password, full_name) VALUES
   (1, 'oleksij.onysymchuk@gmail.com', '630d82b1215e611e7aca66237834cd19', 'Олексій Онисимчук'),
@@ -17,7 +17,7 @@ INSERT INTO admins (admin_id, enabled) VALUES
 
 INSERT INTO abstract_goods (id, name, price, quantity) VALUES
   (1,'Вода',100, 20),
-  (2,'Божоми',500, 20),
+  (2,'Боржоми',500, 20),
   (3,'Чай без сахара',500, 10),
   (4,'Чай с сахаром',600, 20),
   (5,'Лимон',200, 20),

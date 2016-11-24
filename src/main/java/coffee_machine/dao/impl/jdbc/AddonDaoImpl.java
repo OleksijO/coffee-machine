@@ -21,7 +21,7 @@ public class AddonDaoImpl extends AbstractGoodsDao<Addon> implements AddonDao {
 			+ " INNER JOIN addon ON abstract_goods.id = addon.id ";
 	private static final String UPDATE_SQL = UPDATE_GOODS_SQL + "";
 	private static final String INSERT_SQL = "INSERT INTO addon (id) VALUES (?);";
-	private static final String DELETE_SQL = DELETE_GOODS_SQL + "DELETE FROM addon WHERE id = ?; ";
+	private static final String DELETE_SQL = DELETE_GOODS_SQL + "";
 
 	private static final String FIELD_NAME = "name";
 	private static final String FIELD_PRICE = "price";
@@ -51,7 +51,7 @@ public class AddonDaoImpl extends AbstractGoodsDao<Addon> implements AddonDao {
 			statementForGoods.setLong(2, addon.getPrice());
 			statementForGoods.setInt(3, addon.getQuantity());
 
-			int goodsId = statementForGoods.executeUpdate();
+			int goodsId = executeInsertStatement(statementForGoods);
 			addon.setId(goodsId);
 			statementForAddon.setInt(1, goodsId);
 
@@ -138,8 +138,8 @@ public class AddonDaoImpl extends AbstractGoodsDao<Addon> implements AddonDao {
 		try (PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
 
 			statement.setInt(1, id);
-			statement.setInt(2, id);
-			statement.executeUpdate();
+            System.out.println(DELETE_SQL);
+            statement.executeUpdate();
 
 		} catch (SQLException e) {
 			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_DELETING_BY_ID, addon, e);
@@ -161,8 +161,8 @@ public class AddonDaoImpl extends AbstractGoodsDao<Addon> implements AddonDao {
 	}
 
 	@Override
-	public void updateAllInList(List<Addon> addons) {
-		addons.forEach(addon -> update(addon));
+	public void updateQuantityAllInList(List<Addon> addons) {
+		addons.forEach(this::updateQuantity);
 	}
 
 	@Override

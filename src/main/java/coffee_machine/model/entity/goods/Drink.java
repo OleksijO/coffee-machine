@@ -21,8 +21,7 @@ public class Drink extends AbstractGoods  {
 		return baseDrink;
 	}
 
-	@Override
-	public long getPrice() {
+	public long getTotalPrice() {
 		long totalPrice = price;
 		for (Addon addon : addons) {
 			if (addon.getQuantity() > 0) {

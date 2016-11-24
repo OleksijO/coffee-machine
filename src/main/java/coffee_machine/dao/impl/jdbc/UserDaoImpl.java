@@ -1,15 +1,5 @@
 package coffee_machine.dao.impl.jdbc;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import coffee_machine.dao.AccountDao;
 import coffee_machine.dao.UserDao;
 import coffee_machine.dao.exception.DaoException;
@@ -17,21 +7,26 @@ import coffee_machine.i18n.message.key.EntityKey;
 import coffee_machine.i18n.message.key.error.DaoErrorKey;
 import coffee_machine.model.entity.Account;
 import coffee_machine.model.entity.user.User;
+import org.apache.log4j.Logger;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDaoImpl extends AbstractUserDao<User> implements UserDao {
 
 	private static final Logger logger = Logger.getLogger(UserDaoImpl.class);
 
-	private static final String WHERE_ABSTRACT_USER_LOGIN = " WHERE abstract_user.login = ?";
+	private static final String WHERE_ABSTRACT_USER_EMAIL = " WHERE abstract_user.email = ?";
 	private static final String WHERE_ABSTRACT_USER_ID = " WHERE abstract_user.id = ?";
 
 	private static final String SELECT_ALL_SQL = String.format(SELECT_ALL_FROM_ABSTRACT_USER_SQL,
-			", users.account_id, account.amount") + " INNER JOIN users ON abstract_user.id = users.id "
+			", users.account_id, account.amount") + " INNER JOIN users ON abstract_user.id = users.user_id "
 			+ " LEFT JOIN account ON users.account_id = account.id ";
-	private static final String UPDATE_SQL = UPDATE_ABSTRACT_USER_SQL + "UPDATE users SET account_id = ? WHERE id = ?;"
-			+ "UPDATE account SET amount = ? WHERE id = ?;";
-	private static final String INSERT_SQL = "INSERT INTO users (id, account_id) VALUES (?, ?);";
-	private static final String DELETE_SQL = DELETE_ABSTRACT_USER_SQL + "DELETE FROM users WHERE id = ?; ";
+	private static final String UPDATE_SQL = UPDATE_ABSTRACT_USER_SQL
+			+ " UPDATE account SET amount = ? WHERE id = ?;";
+	private static final String INSERT_SQL = "INSERT INTO users (user_id, account_id) VALUES (?, ?);";
+	private static final String DELETE_SQL = DELETE_ABSTRACT_USER_SQL + "";
 
 	private static final String FIELD_LOGIN = "email";
 	private static final String FIELD_PASSWORD = "password";
@@ -67,7 +62,7 @@ public class UserDaoImpl extends AbstractUserDao<User> implements UserDao {
 			statementForAbstractUser.setString(2, user.getPassword());
 			statementForAbstractUser.setString(3, user.getFullName());
 
-			int abstractUserId = statementForAbstractUser.executeUpdate();
+			int abstractUserId = executeInsertStatement(statementForAbstractUser);;
 			user.setId(abstractUserId);
 			statementForUser.setInt(1, abstractUserId);
 			statementForUser.setInt(2, accountId);
@@ -93,11 +88,9 @@ public class UserDaoImpl extends AbstractUserDao<User> implements UserDao {
 			statement.setString(2, user.getPassword());
 			statement.setString(3, user.getFullName());
 			statement.setInt(4, user.getId());
-			statement.setInt(5, user.getAccount().getId());
-			statement.setInt(6, user.getId());
-			statement.setLong(7, user.getId());
-			statement.setInt(8, user.getAccount().getId());
-
+			statement.setLong(5, user.getId());
+			statement.setInt(6, user.getAccount().getId());
+			System.out.println(UPDATE_SQL);
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
@@ -163,7 +156,6 @@ public class UserDaoImpl extends AbstractUserDao<User> implements UserDao {
 		try (PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
 
 			statement.setInt(1, id);
-			statement.setInt(2, id);
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
@@ -174,7 +166,7 @@ public class UserDaoImpl extends AbstractUserDao<User> implements UserDao {
 
 	@Override
 	public User getUserByLogin(String login) {
-		try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_ABSTRACT_USER_LOGIN)) {
+		try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_ABSTRACT_USER_EMAIL)) {
 
 			statement.setString(1, login);
 			List<User> userList = parseResultSet(statement.executeQuery());

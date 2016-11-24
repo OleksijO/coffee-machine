@@ -5,6 +5,9 @@ import coffee_machine.dao.exception.DaoException;
 import coffee_machine.i18n.SupportedLocale;
 import org.apache.log4j.Logger;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -50,6 +53,13 @@ abstract class AbstractDao<T> implements GenericDao<T> {
 		if ((list != null) && (list.size() > 1)) {
 			logErrorAndThrowNewDaoException("Unexpected multiple result set while requesting single record.");
 		}
+	}
+
+	protected int executeInsertStatement(PreparedStatement statement) throws SQLException {
+		statement.executeUpdate();
+		ResultSet keys = statement.getGeneratedKeys();
+		keys.next();
+		return keys.getInt(1);
 	}
 
 }
