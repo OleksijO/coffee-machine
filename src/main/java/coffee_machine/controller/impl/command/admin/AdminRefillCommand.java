@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import coffee_machine.controller.Attributes;
 import coffee_machine.controller.Command;
-import coffee_machine.i18n.Messages;
+import coffee_machine.i18n.message.key.General;
 import coffee_machine.model.entity.goods.Addon;
 import coffee_machine.model.entity.goods.Drink;
 import coffee_machine.service.AddonService;
@@ -28,7 +28,7 @@ public class AdminRefillCommand implements Command {
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
 		request.setAttribute(REFILL_DRINKS, drinkService.getAll());
 		request.setAttribute(REFILL_ADDONS, addonService.getAll());
-		request.setAttribute(Attributes.PAGE_TITLE, Messages.TITLE_ADMIN_REFILL);
+		request.setAttribute(Attributes.PAGE_TITLE, General.TITLE_ADMIN_REFILL);
 		// TODO DELETE HARDCODE
 		Addon addon1 = new Addon();
 		addon1.setId(1);

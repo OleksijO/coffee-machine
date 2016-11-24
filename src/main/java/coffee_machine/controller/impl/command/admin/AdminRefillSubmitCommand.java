@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import coffee_machine.controller.Attributes;
 import coffee_machine.controller.Command;
-import coffee_machine.i18n.Messages;
+import coffee_machine.i18n.message.key.General;
 import coffee_machine.service.AddonService;
 import coffee_machine.service.DrinkService;
 import coffee_machine.service.impl.AddonServiceImpl;
@@ -22,7 +22,7 @@ public class AdminRefillSubmitCommand implements Command {
 
 		// TODO refill logic
 
-		request.setAttribute(Attributes.PAGE_TITLE, Messages.TITLE_ADMIN_REFILL);
+		request.setAttribute(Attributes.PAGE_TITLE, General.TITLE_ADMIN_REFILL);
 
 		request.setAttribute("drink", drinkService.getAll());
 		request.setAttribute("addons", addonService.getAll());

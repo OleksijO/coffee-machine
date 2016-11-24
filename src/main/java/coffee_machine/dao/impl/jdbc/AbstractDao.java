@@ -1,17 +1,55 @@
 package coffee_machine.dao.impl.jdbc;
 
 import coffee_machine.dao.GenericDao;
+import coffee_machine.dao.exception.DaoException;
+import coffee_machine.i18n.SupportedLocale;
+import org.apache.log4j.Logger;
+
+import java.util.List;
+import java.util.ResourceBundle;
 
 abstract class AbstractDao<T> implements GenericDao<T> {
-	static final String ERROR_PARSE_RESULT_SET = "Error while parsing result set for ";
-	static final String ERROR_PREPARING_INSERT = "Error while preparing INSERT statement for ";
-	static final String ERROR_PREPARING_UPDATE = "Error while preparing UPDATE statement for ";
-	static final String ERROR_ID_MUST_BE_FROM_DBMS = "Id must be obtained from DB, cannot create record in ";
-	static final String ERROR_SELECT_ALL = "Error while reading all records";
-	static final String ERROR_SELECT_1 = "Error while reading record by key";
+	static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("i18n.messages",
+			SupportedLocale.EN.getLocale());
 
 	static final String FIELD_ID = "id";
 
+	private Logger logger;
+	private String errorMessageEntityPrefix;
 
+	public AbstractDao(Logger logger, String errorMessageEntityPrefix) {
+		this.logger = logger;
+		this.errorMessageEntityPrefix = errorMessageEntityPrefix;
+	}
+
+	protected void logErrorAndThrowDaoException(String message, Throwable e) {
+		String messageKey = errorMessageEntityPrefix + message;
+		logger.error(RESOURCE_BUNDLE.getString(messageKey), e);
+		throw new DaoException(messageKey, e);
+	}
+
+	protected void logErrorAndThrowDaoException(String message, Object entity, Throwable e) {
+		String messageKey = errorMessageEntityPrefix + message;
+		logger.error(RESOURCE_BUNDLE.getString(messageKey) + "\t" + entity.toString(), e);
+		throw new DaoException(messageKey, e);
+	}
+
+	protected void logErrorAndThrowNewDaoException(String message) {
+		String messageKey = errorMessageEntityPrefix + message;
+		logger.error(RESOURCE_BUNDLE.getString(messageKey));
+		throw new DaoException(messageKey);
+	}
+
+	protected void logErrorAndThrowNewDaoException(String message, Object entity) {
+		String messageKey = errorMessageEntityPrefix + message;
+		logger.error(RESOURCE_BUNDLE.getString(messageKey) + "\t" + entity.toString());
+		throw new DaoException(messageKey);
+	}
+
+	protected void checkSingleResult(List list) {
+		if ((list != null) && (list.size() > 1)) {
+			logErrorAndThrowNewDaoException("Unexpected multiple result set while requesting single record.");
+		}
+	}
 
 }

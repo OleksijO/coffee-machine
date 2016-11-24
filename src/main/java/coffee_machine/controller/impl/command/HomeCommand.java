@@ -3,8 +3,8 @@ package coffee_machine.controller.impl.command;
 import static coffee_machine.controller.Attributes.ERROR_MESSAGE;
 import static coffee_machine.controller.Attributes.USUAL_MESSAGE;
 import static coffee_machine.controller.PagesPaths.HOME_PAGE;
-import static coffee_machine.i18n.Messages.TEST_ERROR_MESSAGE;
-import static coffee_machine.i18n.Messages.TEST_USUAL_MESSAGE;
+import static coffee_machine.i18n.message.key.General.TEST_ERROR_MESSAGE;
+import static coffee_machine.i18n.message.key.General.TEST_USUAL_MESSAGE;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 
 import coffee_machine.controller.Attributes;
 import coffee_machine.controller.Command;
-import coffee_machine.i18n.Messages;
+import coffee_machine.i18n.message.key.General;
 
 public class HomeCommand implements Command {
 	private static final Logger logger = Logger.getLogger(HomeCommand.class);
@@ -31,7 +31,7 @@ public class HomeCommand implements Command {
 		}
 		counter++;
 		// TODO end of hardcode
-		request.setAttribute(Attributes.PAGE_TITLE, Messages.TITLE_HOME);
+		request.setAttribute(Attributes.PAGE_TITLE, General.TITLE_HOME);
 		return HOME_PAGE;
 	}
 

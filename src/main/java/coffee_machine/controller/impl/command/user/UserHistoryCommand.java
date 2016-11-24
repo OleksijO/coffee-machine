@@ -7,14 +7,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import coffee_machine.controller.Attributes;
 import coffee_machine.controller.Command;
-import coffee_machine.i18n.Messages;
+import coffee_machine.i18n.message.key.General;
 
 public class UserHistoryCommand implements Command {
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
-		request.setAttribute(Attributes.PAGE_TITLE, Messages.TITLE_USER_HISTORY);
+		request.setAttribute(Attributes.PAGE_TITLE, General.TITLE_USER_HISTORY);
 		return USER_HISTORY_PAGE;
 	}
 

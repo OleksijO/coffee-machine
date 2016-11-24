@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 
 import coffee_machine.controller.Attributes;
 import coffee_machine.controller.Command;
-import coffee_machine.i18n.Messages;
+import coffee_machine.i18n.message.key.General;
 import coffee_machine.model.entity.goods.Addon;
 import coffee_machine.model.entity.goods.Drink;
 import coffee_machine.service.AccountService;
@@ -38,7 +38,7 @@ public class UserPurchaseCommand implements Command {
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
 
 		int userId = (int) request.getSession().getAttribute(USER_ID);
-		request.setAttribute(Attributes.PAGE_TITLE, Messages.TITLE_USER_PURCHASE);
+		request.setAttribute(Attributes.PAGE_TITLE, General.TITLE_USER_PURCHASE);
 		// request.setAttribute(USER_BALANCE,
 		// accountService.getByUserId(userId).getAmount()*DB_MONEY_COEFF);
 		request.setAttribute(USER_BALANCE, 150.);

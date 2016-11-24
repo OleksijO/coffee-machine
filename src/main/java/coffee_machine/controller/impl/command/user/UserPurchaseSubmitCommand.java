@@ -22,7 +22,7 @@ import coffee_machine.controller.Attributes;
 import coffee_machine.controller.Command;
 import coffee_machine.controller.PagesPaths;
 import coffee_machine.controller.RegExp;
-import coffee_machine.i18n.Messages;
+import coffee_machine.i18n.message.key.General;
 import coffee_machine.model.entity.HistoryRecord;
 import coffee_machine.model.entity.goods.Drink;
 import coffee_machine.service.AccountService;
@@ -43,16 +43,16 @@ public class UserPurchaseSubmitCommand implements Command {
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
-		request.setAttribute(Attributes.PAGE_TITLE, Messages.TITLE_USER_PURCHASE);
+		request.setAttribute(Attributes.PAGE_TITLE, General.TITLE_USER_PURCHASE);
 		try {
 			List<Drink> drinksToBuy = getDrinksFromRequest(request);
 			int userId = (int) request.getSession().getAttribute(USER_ID);
 			HistoryRecord record = coffeeMachine.prepareDrinksForUser(drinksToBuy, userId);
 			request.setAttribute(USER_BALANCE, accountService.getByUserId(userId).getRealAmount());
-			request.setAttribute(USUAL_MESSAGE, Messages.PURCHASE_THANKS_MESSAGE);
+			request.setAttribute(USUAL_MESSAGE, General.PURCHASE_THANKS_MESSAGE);
 			request.setAttribute(USUAL_ADDITIONAL_MESSAGE, record.toString());
 		} catch (ServiceException e) {
-			request.setAttribute(ERROR_MESSAGE, Messages.ERROR_PURCHASE_DRINKS);
+			request.setAttribute(ERROR_MESSAGE, General.ERROR_PURCHASE_DRINKS);
 			// TODO remove hardcode
 			request.setAttribute(ERROR_ADDITIONAL_MESSAGE, "error.user.purchase.unknown");
 			// request.setAttribute(ERROR_ADDITIONAL_MESSAGE, e.getMessage()); /
