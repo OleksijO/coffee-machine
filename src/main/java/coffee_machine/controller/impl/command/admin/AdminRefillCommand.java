@@ -10,9 +10,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import coffee_machine.Messages;
 import coffee_machine.controller.Attributes;
 import coffee_machine.controller.Command;
+import coffee_machine.i18n.Messages;
 import coffee_machine.model.entity.goods.Addon;
 import coffee_machine.model.entity.goods.Drink;
 import coffee_machine.service.AddonService;

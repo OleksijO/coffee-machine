@@ -16,9 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import coffee_machine.Messages;
 import coffee_machine.controller.Attributes;
 import coffee_machine.controller.Command;
+import coffee_machine.i18n.Messages;
 import coffee_machine.model.entity.goods.Addon;
 import coffee_machine.model.entity.goods.Drink;
 import coffee_machine.service.AccountService;

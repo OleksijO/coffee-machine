@@ -5,9 +5,9 @@ import static coffee_machine.controller.PagesPaths.ADMIN_REFILL_PAGE;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import coffee_machine.Messages;
 import coffee_machine.controller.Attributes;
 import coffee_machine.controller.Command;
+import coffee_machine.i18n.Messages;
 import coffee_machine.service.AddonService;
 import coffee_machine.service.DrinkService;
 import coffee_machine.service.impl.AddonServiceImpl;

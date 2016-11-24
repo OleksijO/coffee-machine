@@ -18,11 +18,11 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import coffee_machine.Messages;
 import coffee_machine.controller.Attributes;
 import coffee_machine.controller.Command;
 import coffee_machine.controller.PagesPaths;
 import coffee_machine.controller.RegExp;
+import coffee_machine.i18n.Messages;
 import coffee_machine.model.entity.HistoryRecord;
 import coffee_machine.model.entity.goods.Drink;
 import coffee_machine.service.AccountService;

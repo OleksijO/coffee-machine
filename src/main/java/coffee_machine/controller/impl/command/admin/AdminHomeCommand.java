@@ -5,9 +5,9 @@ import static coffee_machine.controller.PagesPaths.ADMIN_HOME_PAGE;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import coffee_machine.Messages;
 import coffee_machine.controller.Attributes;
 import coffee_machine.controller.Command;
+import coffee_machine.i18n.Messages;
 
 public class AdminHomeCommand implements Command {
 
