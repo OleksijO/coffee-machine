@@ -7,6 +7,7 @@ abstract public class AbstractGoods {
 	protected String name;
 	protected long price;
 	protected int quantity;
+	private double field;
 
 	public AbstractGoods() {
 	}
@@ -54,8 +55,8 @@ abstract public class AbstractGoods {
 		this.quantity = quantity;
 	}
 
-	@Override
-	public boolean equals(Object o) {
+
+	public boolean equals1(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 
@@ -67,8 +68,8 @@ abstract public class AbstractGoods {
 
 	}
 
-	@Override
-	public int hashCode() {
+
+	public int hashCode1() {
 		int result = id;
 		result = 31 * result + (name != null ? name.hashCode() : 0);
 		result = 31 * result + (int) (price ^ (price >>> 32));

@@ -78,3 +78,16 @@ CREATE TABLE users (
   CONSTRAINT account_fk FOREIGN KEY (account_id) REFERENCES account (id) ON DELETE CASCADE,
   CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES abstract_user (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS history_record;
+
+CREATE TABLE history_record (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  user_id int(11) NOT NULL,
+  date_dime TIMESTAMP NOT NULL,
+  order_description TEXT NOT NULL,
+  amount bigint(20) NOT NULL DEFAULT '0',
+  UNIQUE KEY id_UNIQUE (id),
+  KEY user_fk1_idx (user_id),
+  CONSTRAINT user_fk1 FOREIGN KEY (user_id) REFERENCES abstract_user (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

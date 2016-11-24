@@ -1,112 +1,106 @@
 package coffee_machine.service.impl;
 
 import coffee_machine.dao.AbstractConnection;
+import coffee_machine.dao.AdminDao;
 import coffee_machine.dao.DaoFactory;
-import coffee_machine.dao.DrinkDao;
 import coffee_machine.dao.exception.DaoException;
 import coffee_machine.dao.impl.jdbc.DaoFactoryImpl;
-import coffee_machine.model.entity.goods.Drink;
-import coffee_machine.service.DrinkService;
+import coffee_machine.model.entity.user.Admin;
+import coffee_machine.service.AdminService;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by oleksij.onysymchuk@gmail on 15.11.2016.
  */
-public class DrinkServiceImpl extends AbstractService implements DrinkService {
-    private static final Logger logger = Logger.getLogger(DrinkServiceImpl.class);
+public class AdminServiceImpl extends AbstractService implements AdminService {
+    private static final Logger logger = Logger.getLogger(AdminServiceImpl.class);
 
     private static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
-    public DrinkServiceImpl() {
+    public AdminServiceImpl() {
         super(logger);
     }
 
     private static class InstanceHolder {
-        private static DrinkService instance = new DrinkServiceImpl();
+        private static AdminService instance = new AdminServiceImpl();
     }
 
-    public static DrinkService getInstance() {
+    public static AdminService getInstance() {
         return InstanceHolder.instance;
     }
 
-
-    public Drink create(Drink drink) {
+    public Admin create(Admin admin) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
-            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
+            AdminDao adminDao = daoFactory.getAdminDao(connection);
             try {
                 connection.beginTransaction();
-                drinkDao.insert(drink);
+                adminDao.insert(admin);
             } catch (DaoException e) {
                 connection.rollbackTransaction();
                 logErrorAndWrapException(e);
             }
             connection.commitTransaction();
         }
-        return drink;
+        return admin;
     }
 
-    public void update(Drink drink) {
+    public void update(Admin admin) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
-            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
+            AdminDao adminDao = daoFactory.getAdminDao(connection);
             try {
                 connection.beginTransaction();
-                drinkDao.update(drink);
+                adminDao.update(admin);
             } catch (DaoException e) {
                 connection.rollbackTransaction();
-                logErrorAndWrapException(e);
+                logErrorAndWrapException( e);
             }
             connection.commitTransaction();
         }
     }
 
-    @Override
-    public List<Drink> getAll() {
+    public List<Admin> getAll() {
         try (AbstractConnection connection = daoFactory.getConnection()) {
-            List<Drink> drinks = null;
-            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
+            List<Admin> admins = null;
+            AdminDao adminDao = daoFactory.getAdminDao(connection);
             try {
                 connection.beginTransaction();
-                drinks = drinkDao.getAll();
+                admins = adminDao.getAll();
             } catch (DaoException e) {
                 connection.rollbackTransaction();
                 logErrorAndWrapException(e);
             }
             connection.commitTransaction();
-            return (drinks == null) ? new ArrayList<>() : drinks;
+            return (admins == null) ? new ArrayList<>() : admins;
         }
     }
 
-
-    public Drink getById(int id) {
+    public Admin getById(int id) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
-            Drink drink = null;
-            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
+            Admin admin = null;
+            AdminDao adminDao = daoFactory.getAdminDao(connection);
             try {
                 connection.beginTransaction();
-                drink = drinkDao.getById(id);
+                admin = adminDao.getById(id);
             } catch (DaoException e) {
                 connection.rollbackTransaction();
                 logErrorAndWrapException(e);
             }
             connection.commitTransaction();
-            return drink;
+            return admin;
         }
 
     }
-
 
     public void delete(int id) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
-            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
+            AdminDao adminDao = daoFactory.getAdminDao(connection);
             try {
                 connection.beginTransaction();
-                drinkDao.deleteById(id);
+                adminDao.deleteById(id);
             } catch (DaoException e) {
                 connection.rollbackTransaction();
                 logErrorAndWrapException(e);
@@ -116,44 +110,19 @@ public class DrinkServiceImpl extends AbstractService implements DrinkService {
     }
 
     @Override
-    public void refill(Map<Integer, Integer> quantitiesById) {
+    public Admin getAdminByLogin(String login) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
-
-            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-
+            Admin admin = null;
+            AdminDao adminDao = daoFactory.getAdminDao(connection);
             try {
                 connection.beginTransaction();
-                quantitiesById.keySet().forEach(id -> {
-                    Drink drink = drinkDao.getById(id);
-                    drink.setQuantity(drink.getQuantity() + quantitiesById.get(id));
-                    drinkDao.update(drink);
-                });
-
+                admin = adminDao.getAdminByLogin(login);
             } catch (DaoException e) {
                 connection.rollbackTransaction();
-                logErrorAndWrapException(e);
-            }
-
-            connection.commitTransaction();
-        }
-    }
-
-    @Override
-    public List<Drink> getAllByIdSet(Set<Integer> drinkIds) {
-        try (AbstractConnection connection = daoFactory.getConnection()) {
-            List<Drink> drinks = null;
-            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-            try {
-                connection.beginTransaction();
-                drinks = drinkDao.getAllByIds(new ArrayList<>(drinkIds));
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException(e);
+                logErrorAndWrapException( e);
             }
             connection.commitTransaction();
-            return (drinks == null) ? new ArrayList<>() : drinks;
+            return admin;
         }
     }
-
-
 }

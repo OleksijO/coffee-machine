@@ -3,6 +3,7 @@ package coffee_machine.service.impl;
 import coffee_machine.dao.*;
 import coffee_machine.dao.exception.DaoException;
 import coffee_machine.dao.impl.jdbc.DaoFactoryImpl;
+import coffee_machine.i18n.message.key.error.ServiceErrorKey;
 import coffee_machine.model.entity.Account;
 import coffee_machine.model.entity.HistoryRecord;
 import coffee_machine.model.entity.goods.AbstractGoods;
@@ -17,28 +18,27 @@ import java.util.*;
 /**
  * Created by oleksij.onysymchuk@gmail on 15.11.2016.
  */
-public class CoffeeMachineServiceImpl implements CoffeeMachineService {
+public class CoffeeMachineServiceImpl extends AbstractService implements CoffeeMachineService {
     private static final Logger logger = Logger.getLogger(CoffeeMachineServiceImpl.class);
-    private static CoffeeMachineServiceImpl instance;
+
     private static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private static final int COFFEE_MACHINE_ACCOUNT_ID = 1;
 
+    public CoffeeMachineServiceImpl() {
+        super(logger);
+    }
+
+    private static class InstanceHolder {
+        private static CoffeeMachineService instance = new CoffeeMachineServiceImpl();
+    }
+
     public static CoffeeMachineService getInstance() {
-        CoffeeMachineServiceImpl localInstance = instance;
-        if (instance == null) {
-            synchronized (CoffeeMachineServiceImpl.class) {
-                localInstance = instance;
-                if (localInstance == null) {
-                    instance = localInstance = new CoffeeMachineServiceImpl();
-                }
-            }
-        }
-        return localInstance;
+        return InstanceHolder.instance;
     }
 
     @Override
     public HistoryRecord prepareDrinksForUser(List<Drink> drinks, int userId) {
-        HistoryRecord historyRecord=null;
+        HistoryRecord historyRecord = null;
         try (AbstractConnection connection = daoFactory.getConnection()) {
             List<Drink> users = null;
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
@@ -59,21 +59,21 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService {
                 if (userAccount.getAmount() < drinksPrice) {
                     connection.rollbackTransaction();
                     logErrorAndThrowNewServiceException(
-                            "Not enough money to perform the operation. " +
-                                    "Please, decrease quantity of drinks or select cheaper one.");
+                            ServiceErrorKey.NOT_ENOUGH_MONEY);
                 }
                 baseDrinksAvailable = deductGoodsToBuyFromAvailable(baseDrinksToBuy, baseDrinksAvailable);
                 addonsAvailable = deductGoodsToBuyFromAvailable(addonsToBuy, addonsAvailable);
                 Account coffeeMachineAccount = accountDao.getById(COFFEE_MACHINE_ACCOUNT_ID);
                 userAccount.withdrow(drinksPrice);
                 coffeeMachineAccount.add(drinksPrice);
+                accountDao.update(coffeeMachineAccount);
                 historyRecord = new HistoryRecord(new Date(), drinks.toString(), drinksPrice);
-                historyDao.insert(historyRecord);
+               // historyDao.insert(historyRecord);
                 drinkDao.updateQuantityAllInList(baseDrinksAvailable);
                 addonDao.updateQuantityAllInList(addonsAvailable);
-            } catch (DaoException e) {
+            } catch (DaoException | ServiceException e) {
                 connection.rollbackTransaction();
-                logErrorAndThrowWrapperServiceException(e.getMessage(), e);
+                logErrorAndWrapException(e);
             }
             connection.commitTransaction();
             return historyRecord;
@@ -121,34 +121,19 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService {
 
     private <T extends AbstractGoods> List<T> deductGoodsToBuyFromAvailable(List<T> goodsToBuy, List<T> goodsAvailable) {
         goodsAvailable.forEach(goods -> {
-            Optional<T> sameGoods = goodsAvailable.stream()
+            Optional<T> sameGoods = goodsToBuy.stream()
                     .filter(presentGoods -> presentGoods.equals(goods))
                     .findFirst();
             if (sameGoods.isPresent()) {
-                sameGoods.get().setQuantity(sameGoods.get().getQuantity() - goods.getQuantity());
+                sameGoods.get().setQuantity(goods.getQuantity() - sameGoods.get().getQuantity());
                 if (sameGoods.get().getQuantity() < 0) {
-                    logErrorAndThrowNewServiceException("Goods " + sameGoods.get() +
-                            " quantity is not enough to perform operation. " +
-                            "Please, decrease quantity or select another one.");
+                    logErrorAndThrowNewServiceException(ServiceErrorKey.NOT_ENOUGH_GOODS,goods.getName());
                 }
             } else {
-                logErrorAndThrowNewServiceException("Goods " + sameGoods.get() +
-                        " is no longer availible. Please, select another one.");
+                logErrorAndThrowNewServiceException(ServiceErrorKey.GOODS_NO_LONGER_AVAILABLE,goods.getName());
             }
         });
 
         return goodsAvailable;
     }
-
-    private void logErrorAndThrowNewServiceException(String message) {
-        logger.error(message);
-        throw new DaoException(message);
-    }
-
-    private void logErrorAndThrowWrapperServiceException(String message, Throwable e) {
-        logger.error(message, e);
-        throw new ServiceException(message, e);
-    }
-
-
 }

@@ -7,7 +7,6 @@ import coffee_machine.dao.exception.DaoException;
 import coffee_machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee_machine.model.entity.user.User;
 import coffee_machine.service.UserService;
-import coffee_machine.service.exception.ServiceException;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -16,26 +15,25 @@ import java.util.List;
 /**
  * Created by oleksij.onysymchuk@gmail on 15.11.2016.
  */
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends AbstractService implements UserService {
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
-    private static UserServiceImpl instance;
+
     private static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
+    public UserServiceImpl() {
+        super(logger);
+    }
+
+    private static class InstanceHolder {
+        private static UserService instance = new UserServiceImpl();
+    }
+
     public static UserService getInstance() {
-        UserServiceImpl localInstance = instance;
-        if (instance == null) {
-            synchronized (UserServiceImpl.class) {
-                localInstance = instance;
-                if (localInstance == null) {
-                    instance = localInstance = new UserServiceImpl();
-                }
-            }
-        }
-        return localInstance;
+        return InstanceHolder.instance;
     }
 
 
-    @Override
+
     public User create(User user) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
             UserDao userDao = daoFactory.getUserDao(connection);
@@ -44,20 +42,13 @@ public class UserServiceImpl implements UserService {
                 userDao.insert(user);
             } catch (DaoException e) {
                 connection.rollbackTransaction();
-                logErrorAndThrowWrapperServiceException(e.getMessage(), e);
+                logErrorAndWrapException(e);
             }
             connection.commitTransaction();
         }
         return user;
     }
 
-    private void logErrorAndThrowWrapperServiceException(String message, Throwable e) {
-        logger.error(message, e);
-        throw new ServiceException(message, e);
-    }
-
-
-    @Override
     public void update(User user) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
             UserDao userDao = daoFactory.getUserDao(connection);
@@ -66,13 +57,12 @@ public class UserServiceImpl implements UserService {
                 userDao.update(user);
             } catch (DaoException e) {
                 connection.rollbackTransaction();
-                logErrorAndThrowWrapperServiceException(e.getMessage(), e);
+                logErrorAndWrapException(e);
             }
             connection.commitTransaction();
         }
     }
 
-    @Override
     public List<User> getAll() {
         try (AbstractConnection connection = daoFactory.getConnection()) {
             List<User> users = null;
@@ -82,7 +72,7 @@ public class UserServiceImpl implements UserService {
                 users = userDao.getAll();
             } catch (DaoException e) {
                 connection.rollbackTransaction();
-                logErrorAndThrowWrapperServiceException(e.getMessage(), e);
+                logErrorAndWrapException(e);
             }
             connection.commitTransaction();
             return (users == null) ? new ArrayList<>() : users;
@@ -99,7 +89,7 @@ public class UserServiceImpl implements UserService {
                 user = userDao.getById(id);
             } catch (DaoException e) {
                 connection.rollbackTransaction();
-                logErrorAndThrowWrapperServiceException(e.getMessage(), e);
+                logErrorAndWrapException(e);
             }
             connection.commitTransaction();
             return user;
@@ -107,7 +97,6 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
     public void delete(int id) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
@@ -117,7 +106,7 @@ public class UserServiceImpl implements UserService {
                 userDao.deleteById(id);
             } catch (DaoException e) {
                 connection.rollbackTransaction();
-                logErrorAndThrowWrapperServiceException(e.getMessage(), e);
+                logErrorAndWrapException(e);
             }
             connection.commitTransaction();
         }

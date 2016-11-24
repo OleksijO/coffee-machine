@@ -26,7 +26,7 @@ public class UserDaoImpl extends AbstractUserDao<User> implements UserDao {
 	private static final String UPDATE_SQL = UPDATE_ABSTRACT_USER_SQL
 			+ " UPDATE account SET amount = ? WHERE id = ?;";
 	private static final String INSERT_SQL = "INSERT INTO users (user_id, account_id) VALUES (?, ?);";
-	private static final String DELETE_SQL = DELETE_ABSTRACT_USER_SQL + "";
+	private static final String DELETE_SQL = DELETE_ABSTRACT_USER_SQL + " ";
 
 	private static final String FIELD_LOGIN = "email";
 	private static final String FIELD_PASSWORD = "password";

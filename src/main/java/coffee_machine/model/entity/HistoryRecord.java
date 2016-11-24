@@ -2,6 +2,8 @@ package coffee_machine.model.entity;
 
 import java.util.Date;
 
+import static coffee_machine.controller.Parameters.DB_MONEY_COEFF;
+
 /**
  * Created by oleksij.onysymchuk@gmail on 15.11.2016.
  */
@@ -18,6 +20,10 @@ public class HistoryRecord {
         this.date = date;
         this.orderDescription = orderDescription;
         this.amount = amount;
+    }
+
+    public double getRealAmount() {
+        return DB_MONEY_COEFF * amount;
     }
 
     public int getId() {

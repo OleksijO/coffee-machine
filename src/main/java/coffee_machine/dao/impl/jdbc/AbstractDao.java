@@ -3,6 +3,7 @@ package coffee_machine.dao.impl.jdbc;
 import coffee_machine.dao.GenericDao;
 import coffee_machine.dao.exception.DaoException;
 import coffee_machine.i18n.SupportedLocale;
+import coffee_machine.i18n.message.key.error.DaoErrorKey;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -51,7 +52,7 @@ abstract class AbstractDao<T> implements GenericDao<T> {
 
 	protected void checkSingleResult(List list) {
 		if ((list != null) && (list.size() > 1)) {
-			logErrorAndThrowNewDaoException("Unexpected multiple result set while requesting single record.");
+			logErrorAndThrowNewDaoException(DaoErrorKey.DB_ERROR_UNEXPECTED_MULTIPLE_RESULT_WHILE_GETTING_BY_ID);
 		}
 	}
 

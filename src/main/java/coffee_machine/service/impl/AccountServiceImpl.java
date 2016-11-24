@@ -9,25 +9,24 @@ import org.apache.log4j.Logger;
 /**
  * Created by oleksij.onysymchuk@gmail on 15.11.2016.
  */
-public class AccountServiceImpl implements AccountService {
+public class AccountServiceImpl extends AbstractService implements AccountService {
     private static final Logger logger = Logger.getLogger(AccountServiceImpl.class);
-    private static AccountService instance;
+
     private static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
-    public static AccountService getInstance() {
-        AccountService localInstance = instance;
-        if (instance == null) {
-            synchronized (AddonServiceImpl.class) {
-                localInstance = instance;
-                if (localInstance == null) {
-                    instance = localInstance = new AccountServiceImpl();
-                }
-            }
-        }
-        return localInstance;
+    public AccountServiceImpl() {
+        super(logger);
     }
 
-    @Override
+    private static class InstanceHolder {
+        private static AccountService instance = new AccountServiceImpl();
+    }
+
+    public static AccountService getInstance() {
+        return AccountServiceImpl.InstanceHolder.instance;
+    }
+
+
     public void update(Account account) {
         //TODO
     }

@@ -6,7 +6,6 @@ import coffee_machine.model.entity.Account;
  * Created by oleksij.onysymchuk@gmail on 15.11.2016.
  */
 public interface AccountService {
-    void update(Account acoount);
 
     Account getById(int id);
 

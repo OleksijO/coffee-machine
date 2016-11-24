@@ -11,17 +11,11 @@ import java.util.Set;
  */
 public interface DrinkService {
 
-	Drink create(Drink drink);
 
-	void update(Drink drink);
 
 	List<Drink> getAll();
 
-	List<Drink> getAllByIdSet(Set<Integer> ids);
-
-	Drink getById(int id);
-
-	void delete(int id);
-
 	void refill(Map<Integer, Integer> quantitiesById);
+
+	List<Drink> getAllByIdSet(Set<Integer> integers);
 }
