@@ -24,4 +24,5 @@ public final class General {
 	public static final String TITLE_USER_PURCHASE = "title.user.purchase";
 	public static final Object TITLE_USER_LOGIN = "title.user.login";
 
+
 }
