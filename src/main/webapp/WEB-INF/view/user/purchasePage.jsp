@@ -36,7 +36,7 @@
 					<c:forEach items="${addons}" var="addon">
 						<c:if test='${addon.quantity>0}'>
 						[
-						${addon.name} (addon.quantity) - <fmt:formatNumber value="${addon.realPrice}" type="number"
+						${addon.name} (${addon.quantity}) - <fmt:formatNumber value="${addon.realPrice}" type="number"
 																		   minFractionDigits="2" maxFractionDigits="2"/>
 							<fmt:message key="currency"/>
 

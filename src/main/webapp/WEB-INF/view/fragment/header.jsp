@@ -11,7 +11,7 @@
 <body>
 <br>
 <div align="center">
-    <div style="max-width: 940px" align="center">
+    <div style="max-width: 1024px" align="center">
         <%@ include file="/WEB-INF/view/fragment/i18n/header_block.jsp" %>
         <br>
         <div align="center">
