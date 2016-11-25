@@ -17,7 +17,8 @@ public class HistoryRecord {
     public HistoryRecord() {
     }
 
-    public HistoryRecord(Date date, String orderDescription, long amount) {
+    public HistoryRecord(int userId, Date date, String orderDescription, long amount) {
+        this.userId = userId;
         this.date = date;
         this.orderDescription = orderDescription;
         this.amount = amount;

@@ -3,7 +3,6 @@ package coffee_machine.service.impl;
 import coffee_machine.dao.AbstractConnection;
 import coffee_machine.dao.DaoFactory;
 import coffee_machine.dao.DrinkDao;
-import coffee_machine.dao.exception.DaoException;
 import coffee_machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee_machine.model.entity.goods.Drink;
 import coffee_machine.service.DrinkService;
@@ -37,66 +36,51 @@ public class DrinkServiceImpl extends AbstractService implements DrinkService {
 
     public Drink create(Drink drink) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
+
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-            try {
-                connection.beginTransaction();
-                drinkDao.insert(drink);
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException(e);
-            }
+            connection.beginTransaction();
+            drinkDao.insert(drink);
             connection.commitTransaction();
+            return drink;
+
         }
-        return drink;
     }
 
     public void update(Drink drink) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
+
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-            try {
-                connection.beginTransaction();
-                drinkDao.update(drink);
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException(e);
-            }
+            connection.beginTransaction();
+            drinkDao.update(drink);
             connection.commitTransaction();
+
         }
     }
 
     @Override
     public List<Drink> getAll() {
         try (AbstractConnection connection = daoFactory.getConnection()) {
-            List<Drink> drinks = null;
+
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-            try {
-                connection.beginTransaction();
-                drinks = drinkDao.getAll();
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException(e);
-            }
+            connection.beginTransaction();
+            List<Drink> drinks = drinkDao.getAll();
             connection.commitTransaction();
             return (drinks == null) ? new ArrayList<>() : drinks;
+
         }
     }
 
 
     public Drink getById(int id) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
-            Drink drink = null;
+
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-            try {
-                connection.beginTransaction();
-                drink = drinkDao.getById(id);
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException(e);
-            }
+            connection.beginTransaction();
+            Drink drink = drinkDao.getById(id);
             connection.commitTransaction();
             return drink;
-        }
 
+        }
     }
 
 
@@ -104,14 +88,10 @@ public class DrinkServiceImpl extends AbstractService implements DrinkService {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-            try {
-                connection.beginTransaction();
-                drinkDao.deleteById(id);
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException(e);
-            }
+            connection.beginTransaction();
+            drinkDao.deleteById(id);
             connection.commitTransaction();
+
         }
     }
 
@@ -120,38 +100,27 @@ public class DrinkServiceImpl extends AbstractService implements DrinkService {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-
-            try {
-                connection.beginTransaction();
-                quantitiesById.keySet().forEach(id -> {
-                    Drink drink = drinkDao.getById(id);
-                    drink.setQuantity(drink.getQuantity() + quantitiesById.get(id));
-                    drinkDao.update(drink);
-                });
-
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException(e);
-            }
-
+            connection.beginTransaction();
+            quantitiesById.keySet().forEach(id -> {
+                Drink drink = drinkDao.getById(id);
+                drink.setQuantity(drink.getQuantity() + quantitiesById.get(id));
+                drinkDao.update(drink);
+            });
             connection.commitTransaction();
+
         }
     }
 
     @Override
     public List<Drink> getAllByIdSet(Set<Integer> drinkIds) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
-            List<Drink> drinks = null;
+
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-            try {
-                connection.beginTransaction();
-                drinks = drinkDao.getAllByIds(new ArrayList<>(drinkIds));
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException(e);
-            }
+            connection.beginTransaction();
+            List<Drink> drinks = drinkDao.getAllByIds(new ArrayList<>(drinkIds));
             connection.commitTransaction();
             return (drinks == null) ? new ArrayList<>() : drinks;
+
         }
     }
 

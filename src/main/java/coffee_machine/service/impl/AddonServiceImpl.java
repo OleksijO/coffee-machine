@@ -3,7 +3,6 @@ package coffee_machine.service.impl;
 import coffee_machine.dao.AbstractConnection;
 import coffee_machine.dao.AddonDao;
 import coffee_machine.dao.DaoFactory;
-import coffee_machine.dao.exception.DaoException;
 import coffee_machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee_machine.model.entity.goods.Addon;
 import coffee_machine.service.AddonService;
@@ -36,63 +35,49 @@ public class AddonServiceImpl extends AbstractService implements AddonService {
 
     public Addon create(Addon addon) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
+
             AddonDao addonDao = daoFactory.getAddonDao(connection);
-            try {
-                connection.beginTransaction();
-                addonDao.insert(addon);
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException(e);
-            }
+            connection.beginTransaction();
+            addonDao.insert(addon);
             connection.commitTransaction();
+            return addon;
+
         }
-        return addon;
     }
 
     public void update(Addon addon) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
+
             AddonDao addonDao = daoFactory.getAddonDao(connection);
-            try {
-                connection.beginTransaction();
-                addonDao.update(addon);
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException(e);
-            }
+            connection.beginTransaction();
+            addonDao.update(addon);
             connection.commitTransaction();
+
         }
     }
 
     @Override
     public List<Addon> getAll() {
         try (AbstractConnection connection = daoFactory.getConnection()) {
-            List<Addon> addons = null;
+
             AddonDao addonDao = daoFactory.getAddonDao(connection);
-            try {
-                connection.beginTransaction();
-                addons = addonDao.getAll();
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException(e);
-            }
+            connection.beginTransaction();
+            List<Addon> addons = addonDao.getAll();
             connection.commitTransaction();
             return (addons == null) ? new ArrayList<>() : addons;
+
         }
     }
 
     public Addon getById(int id) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
-            Addon addon = null;
+
             AddonDao addonDao = daoFactory.getAddonDao(connection);
-            try {
-                connection.beginTransaction();
-                addon = addonDao.getById(id);
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException(e);
-            }
+            connection.beginTransaction();
+            Addon addon = addonDao.getById(id);
             connection.commitTransaction();
             return addon;
+
         }
 
     }
@@ -101,14 +86,10 @@ public class AddonServiceImpl extends AbstractService implements AddonService {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             AddonDao addonDao = daoFactory.getAddonDao(connection);
-            try {
-                connection.beginTransaction();
-                addonDao.deleteById(id);
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException(e);
-            }
+            connection.beginTransaction();
+            addonDao.deleteById(id);
             connection.commitTransaction();
+
         }
     }
 
@@ -117,21 +98,14 @@ public class AddonServiceImpl extends AbstractService implements AddonService {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             AddonDao addonDao = daoFactory.getAddonDao(connection);
-
-            try {
-                connection.beginTransaction();
-                quantitiesById.keySet().forEach(id -> {
-                    Addon addon = addonDao.getById(id);
-                    addon.setQuantity(addon.getQuantity() + quantitiesById.get(id));
-                    addonDao.update(addon);
-                });
-
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException(e);
-            }
-
+            connection.beginTransaction();
+            quantitiesById.keySet().forEach(id -> {
+                Addon addon = addonDao.getById(id);
+                addon.setQuantity(addon.getQuantity() + quantitiesById.get(id));
+                addonDao.update(addon);
+            });
             connection.commitTransaction();
+
         }
     }
 

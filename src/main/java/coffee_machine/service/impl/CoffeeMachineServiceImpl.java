@@ -1,7 +1,6 @@
 package coffee_machine.service.impl;
 
 import coffee_machine.dao.*;
-import coffee_machine.dao.exception.DaoException;
 import coffee_machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee_machine.i18n.message.key.error.ServiceErrorKey;
 import coffee_machine.model.entity.Account;
@@ -10,7 +9,6 @@ import coffee_machine.model.entity.goods.AbstractGoods;
 import coffee_machine.model.entity.goods.Addon;
 import coffee_machine.model.entity.goods.Drink;
 import coffee_machine.service.CoffeeMachineService;
-import coffee_machine.service.exception.ServiceException;
 import org.apache.log4j.Logger;
 
 import java.util.*;
@@ -38,45 +36,60 @@ public class CoffeeMachineServiceImpl extends AbstractService implements CoffeeM
 
     @Override
     public HistoryRecord prepareDrinksForUser(List<Drink> drinks, int userId) {
-        HistoryRecord historyRecord = null;
         try (AbstractConnection connection = daoFactory.getConnection()) {
-            List<Drink> users = null;
+
+            /* getting needed DAO */
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
             AddonDao addonDao = daoFactory.getAddonDao(connection);
             UserDao userDao = daoFactory.getUserDao(connection);
             AccountDao accountDao = daoFactory.getAccountDao(connection);
             HistoryRecordDao historyDao = daoFactory.getHistoryRecordDao(connection);
+
+            /* getting separately drinks and addons */
             List<Drink> baseDrinksToBuy = getBaseDrinksFromDrinks(drinks);
             drinks.forEach(drink -> baseDrinksToBuy.add(drink.getBaseDrink()));
             List<Addon> addonsToBuy = getAddonsFromDrinks(drinks);
             long drinksPrice = getSummaryPrice(drinks);
-            try {
-                connection.beginTransaction();
-                List<Drink> baseDrinksAvailable = drinkDao.getAllFromList(baseDrinksToBuy);
-                List<Addon> addonsAvailable = addonDao.getAllFromList(addonsToBuy);
-                Account userAccount = userDao.getById(userId).getAccount();
-                if (userAccount.getAmount() < drinksPrice) {
-                    connection.rollbackTransaction();
-                    logErrorAndThrowNewServiceException(
-                            ServiceErrorKey.NOT_ENOUGH_MONEY);
-                }
-                baseDrinksAvailable = deductGoodsToBuyFromAvailable(baseDrinksToBuy, baseDrinksAvailable);
-                addonsAvailable = deductGoodsToBuyFromAvailable(addonsToBuy, addonsAvailable);
-                Account coffeeMachineAccount = accountDao.getById(COFFEE_MACHINE_ACCOUNT_ID);
-                userAccount.withdrow(drinksPrice);
-                coffeeMachineAccount.add(drinksPrice);
-                accountDao.update(coffeeMachineAccount);
-                historyRecord = new HistoryRecord(new Date(), drinks.toString(), drinksPrice);
-               // historyDao.insert(historyRecord);
-                drinkDao.updateQuantityAllInList(baseDrinksAvailable);
-                addonDao.updateQuantityAllInList(addonsAvailable);
-            } catch (DaoException | ServiceException e) {
+
+            connection.beginTransaction();
+
+            /*  check if user has enough money to buy selected drinks */
+            Account userAccount = userDao.getById(userId).getAccount();
+            if (userAccount.getAmount() < drinksPrice) {
                 connection.rollbackTransaction();
-                logErrorAndWrapException(e);
+                logErrorAndThrowNewServiceException(
+                        ServiceErrorKey.NOT_ENOUGH_MONEY);
             }
+
+            /*  getting available drinks and addons */
+            List<Drink> baseDrinksAvailable = drinkDao.getAllFromList(baseDrinksToBuy);
+            List<Addon> addonsAvailable = addonDao.getAllFromList(addonsToBuy);
+
+            /* checking if there is enough available quantity of drinks and addons to prepare selected drinks
+             * by deducting retrieved available goods quantities from the quantities of goods gotten in parameter */
+            baseDrinksAvailable = deductGoodsToBuyFromAvailable(baseDrinksToBuy, baseDrinksAvailable);
+            addonsAvailable = deductGoodsToBuyFromAvailable(addonsToBuy, addonsAvailable);
+
+            /* performing money exchange */
+            Account coffeeMachineAccount = accountDao.getById(COFFEE_MACHINE_ACCOUNT_ID);
+            userAccount.withdrow(drinksPrice);
+            coffeeMachineAccount.add(drinksPrice);
+            accountDao.update(coffeeMachineAccount);
+            accountDao.update(userAccount);
+
+            /* updating quantities of goods in machine */
+            drinkDao.updateQuantityAllInList(baseDrinksAvailable);
+            addonDao.updateQuantityAllInList(addonsAvailable);
+
+            /* forming history record of purchase to return */
+            HistoryRecord historyRecord = new HistoryRecord(userId, new Date(), drinks.toString(), drinksPrice);
+            historyDao.insert(historyRecord);
+
             connection.commitTransaction();
+
             return historyRecord;
         }
+
     }
 
     private List<Drink> getBaseDrinksFromDrinks(List<Drink> drinks) {
@@ -126,10 +139,10 @@ public class CoffeeMachineServiceImpl extends AbstractService implements CoffeeM
             if (sameGoods.isPresent()) {
                 sameGoods.get().setQuantity(goods.getQuantity() - sameGoods.get().getQuantity());
                 if (sameGoods.get().getQuantity() < 0) {
-                    logErrorAndThrowNewServiceException(ServiceErrorKey.NOT_ENOUGH_GOODS,goods.getName());
+                    logErrorAndThrowNewServiceException(ServiceErrorKey.NOT_ENOUGH_GOODS, goods.getName());
                 }
             } else {
-                logErrorAndThrowNewServiceException(ServiceErrorKey.GOODS_NO_LONGER_AVAILABLE,goods.getName());
+                logErrorAndThrowNewServiceException(ServiceErrorKey.GOODS_NO_LONGER_AVAILABLE, goods.getName());
             }
         });
 

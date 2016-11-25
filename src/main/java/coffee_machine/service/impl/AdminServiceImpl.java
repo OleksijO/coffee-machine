@@ -3,7 +3,6 @@ package coffee_machine.service.impl;
 import coffee_machine.dao.AbstractConnection;
 import coffee_machine.dao.AdminDao;
 import coffee_machine.dao.DaoFactory;
-import coffee_machine.dao.exception.DaoException;
 import coffee_machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee_machine.model.entity.user.Admin;
 import coffee_machine.service.AdminService;
@@ -34,62 +33,48 @@ public class AdminServiceImpl extends AbstractService implements AdminService {
 
     public Admin create(Admin admin) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
+
             AdminDao adminDao = daoFactory.getAdminDao(connection);
-            try {
-                connection.beginTransaction();
-                adminDao.insert(admin);
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException(e);
-            }
+            connection.beginTransaction();
+            adminDao.insert(admin);
             connection.commitTransaction();
+            return admin;
+
         }
-        return admin;
     }
 
     public void update(Admin admin) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
+
             AdminDao adminDao = daoFactory.getAdminDao(connection);
-            try {
-                connection.beginTransaction();
-                adminDao.update(admin);
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException( e);
-            }
+            connection.beginTransaction();
+            adminDao.update(admin);
             connection.commitTransaction();
+
         }
     }
 
     public List<Admin> getAll() {
         try (AbstractConnection connection = daoFactory.getConnection()) {
-            List<Admin> admins = null;
+
             AdminDao adminDao = daoFactory.getAdminDao(connection);
-            try {
-                connection.beginTransaction();
-                admins = adminDao.getAll();
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException(e);
-            }
+            connection.beginTransaction();
+            List<Admin> admins = adminDao.getAll();
             connection.commitTransaction();
             return (admins == null) ? new ArrayList<>() : admins;
+
         }
     }
 
     public Admin getById(int id) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
-            Admin admin = null;
+
             AdminDao adminDao = daoFactory.getAdminDao(connection);
-            try {
-                connection.beginTransaction();
-                admin = adminDao.getById(id);
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException(e);
-            }
+            connection.beginTransaction();
+            Admin admin = adminDao.getById(id);
             connection.commitTransaction();
             return admin;
+
         }
 
     }
@@ -98,31 +83,23 @@ public class AdminServiceImpl extends AbstractService implements AdminService {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             AdminDao adminDao = daoFactory.getAdminDao(connection);
-            try {
-                connection.beginTransaction();
-                adminDao.deleteById(id);
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException(e);
-            }
+            connection.beginTransaction();
+            adminDao.deleteById(id);
             connection.commitTransaction();
+
         }
     }
 
     @Override
     public Admin getAdminByLogin(String login) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
-            Admin admin = null;
+
             AdminDao adminDao = daoFactory.getAdminDao(connection);
-            try {
-                connection.beginTransaction();
-                admin = adminDao.getAdminByLogin(login);
-            } catch (DaoException e) {
-                connection.rollbackTransaction();
-                logErrorAndWrapException( e);
-            }
+            connection.beginTransaction();
+            Admin admin = adminDao.getAdminByLogin(login);
             connection.commitTransaction();
             return admin;
+
         }
     }
 }
