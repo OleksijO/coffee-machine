@@ -6,7 +6,6 @@ import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ResourceBundle;
 
 /**
@@ -28,22 +27,20 @@ public class TestDataBaseInitializer {
                 jdbcProperties.getString("jdbc.url"),
                 jdbcProperties.getString("jdbc.user"),
                 jdbcProperties.getString("jdbc.password"));
-        Statement stmt = null;
 
+        System.out.println("=============================================");
+        System.out.println("            Running SQL scripts");
+        System.out.println("=============================================");
 
-            System.out.println("=============================================");
-            ScriptRunner scriptRunner = new ScriptRunner(con, false, false);
-            Reader reader = new BufferedReader(
-                    new InputStreamReader(ddlSQL));
-            scriptRunner.runScript(reader);
-            System.out.println("run DDL script");
-            reader = new BufferedReader(
-                    new InputStreamReader(populateSQL));
-            scriptRunner.runScript(reader);
-            System.out.println("run populate script");
-            System.out.println("=============================================");
+        ScriptRunner scriptRunner = new ScriptRunner(con, false, false);
 
+        Reader reader = new BufferedReader(
+                new InputStreamReader(ddlSQL));
+        scriptRunner.runScript(reader);
 
+        reader = new BufferedReader(
+                new InputStreamReader(populateSQL));
+        scriptRunner.runScript(reader);
     }
 }
 
