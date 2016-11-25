@@ -80,7 +80,7 @@ public class CoffeeMachineServiceImpl extends AbstractService implements CoffeeM
     }
 
     private List<Drink> getBaseDrinksFromDrinks(List<Drink> drinks) {
-        Set<Drink> baseDrinks = new HashSet<>();
+        Set<Drink> baseDrinks = new TreeSet<>();
         drinks.forEach(drink -> {
             Drink baseDrinkToBuy = drink.getBaseDrink();
             Optional<Drink> sameBaseDrink = baseDrinks.stream()
@@ -96,7 +96,7 @@ public class CoffeeMachineServiceImpl extends AbstractService implements CoffeeM
     }
 
     private List<Addon> getAddonsFromDrinks(List<Drink> drinks) {
-        Set<Addon> addons = new HashSet<>();
+        Set<Addon> addons = new TreeSet<>();
         drinks.forEach(drink -> {
             drink.getAddons().forEach(addon -> {
                 Optional<Addon> sameAddon = addons.stream()

@@ -1,7 +1,7 @@
 package coffee_machine.model.entity.goods;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import static coffee_machine.controller.Parameters.DB_MONEY_COEFF;
 
@@ -86,7 +86,7 @@ public class Drink extends AbstractGoods {
     }
 
     private Set<Addon> getAddonsCopy() {
-        Set<Addon> baseAddons = new HashSet<>();
+        Set<Addon> baseAddons = new TreeSet<>();
         for (Addon addon : addons) {
             Addon addonCopy = new Addon(addon);
 

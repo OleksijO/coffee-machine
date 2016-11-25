@@ -140,8 +140,10 @@ public class AddonDaoTest {
 
         assertEquals("1", newQuantity, addonDao.getById(testAddon.getId()).getQuantity());
         addon.setQuantity(testAddon.getQuantity());
-        assertEquals("2", testAddon, addonDao.getById(testAddon.getId()));
         addonDao.updateQuantity(addon);
+        addon=addonDao.getById(testAddon.getId());
+        assertEquals("2", testAddon, addon);
+
 
     }
 

@@ -19,7 +19,7 @@ public class TestDataBaseInitializer {
         InputStream ddlSQL = this.getClass().getClassLoader()
                 .getResourceAsStream("DDL.sql");
         InputStream populateSQL = this.getClass().getClassLoader()
-                .getResourceAsStream("populate.sql");
+                .getResourceAsStream("POPULATE.sql");
 
         // Create MySql Connection
         Class.forName(jdbcProperties.getString("jdbc.driver"));

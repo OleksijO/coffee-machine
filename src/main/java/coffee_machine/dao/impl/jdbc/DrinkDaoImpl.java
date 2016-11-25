@@ -10,9 +10,9 @@ import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 	private static final Logger logger = Logger.getLogger(DrinkDaoImpl.class);
@@ -178,7 +178,7 @@ public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 	}
 
 	private Set<Addon> parseAddonSetResultSet(ResultSet resultSet) throws SQLException {
-		Set<Addon> addonSet = new HashSet<>();
+		Set<Addon> addonSet = new TreeSet<>();
 		while (resultSet.next()) {
 			Addon addon = new Addon();
 			addon.setId(resultSet.getInt(FIELD_ADDON_ID));
