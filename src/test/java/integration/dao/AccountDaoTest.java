@@ -47,6 +47,7 @@ public class AccountDaoTest {
 
     @After
     public void post() {
+        connection.commitTransaction();
         connection.close();
     }
 

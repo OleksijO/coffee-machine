@@ -84,7 +84,7 @@ DROP TABLE IF EXISTS history_record;
 CREATE TABLE history_record (
   id int(11) NOT NULL AUTO_INCREMENT,
   user_id int(11) NOT NULL,
-  date_dime TIMESTAMP NOT NULL,
+  date_time TIMESTAMP NOT NULL,
   order_description TEXT NOT NULL,
   amount bigint(20) NOT NULL DEFAULT '0',
   UNIQUE KEY id_UNIQUE (id),

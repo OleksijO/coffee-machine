@@ -9,6 +9,7 @@ import static coffee_machine.controller.Parameters.DB_MONEY_COEFF;
  */
 public class HistoryRecord {
     private int id;
+    private int userId;
     private Date date;
     private String orderDescription;
     private long amount;
@@ -32,6 +33,14 @@ public class HistoryRecord {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public Date getDate() {
@@ -66,7 +75,9 @@ public class HistoryRecord {
         HistoryRecord that = (HistoryRecord) o;
 
         if (id != that.id) return false;
+        if (userId != that.userId) return false;
         if (amount != that.amount) return false;
+        if (date != null ? !date.equals(that.date) : that.date != null) return false;
         return orderDescription != null ? orderDescription.equals(that.orderDescription) : that.orderDescription == null;
 
     }
@@ -74,6 +85,8 @@ public class HistoryRecord {
     @Override
     public int hashCode() {
         int result = id;
+        result = 31 * result + userId;
+        result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (orderDescription != null ? orderDescription.hashCode() : 0);
         result = 31 * result + (int) (amount ^ (amount >>> 32));
         return result;
@@ -83,6 +96,8 @@ public class HistoryRecord {
     public String toString() {
         return "HistoryRecord{" +
                 "id=" + id +
+                ", userId=" + userId +
+                ", date=" + date +
                 ", orderDescription='" + orderDescription + '\'' +
                 ", amount=" + amount +
                 '}';
