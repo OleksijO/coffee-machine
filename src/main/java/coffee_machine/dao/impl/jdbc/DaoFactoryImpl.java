@@ -8,23 +8,15 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class DaoFactoryImpl implements coffee_machine.dao.DaoFactory {
-	private static volatile DaoFactoryImpl instance;
-	private DataSource dataSource = JdbcPooledDataSource.getDataSource();
+	private DataSource dataSource = JdbcPooledDataSource.getInstance();
 
-	public static DaoFactory getInstance() {
-		DaoFactoryImpl localInstance = instance;
-		if (instance == null) {
-			synchronized (DaoFactoryImpl.class) {
-				localInstance = instance;
-				if (localInstance == null) {
-					instance = localInstance = new DaoFactoryImpl();
-				}
-			}
-		}
-		return localInstance;
+	private static class InstanceHolder {
+		private static final DaoFactory instance = new DaoFactoryImpl();
 	}
 
-
+	public static DaoFactory getInstance() {
+		return InstanceHolder.instance;
+	}
 
 	@Override
 	public AbstractConnection getConnection() {

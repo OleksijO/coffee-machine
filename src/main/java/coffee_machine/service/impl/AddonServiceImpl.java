@@ -26,7 +26,7 @@ public class AddonServiceImpl extends AbstractService implements AddonService {
     }
 
     private static class InstanceHolder {
-        private static AddonService instance = new AddonServiceImpl();
+        private static final AddonService instance = new AddonServiceImpl();
     }
 
     public static AddonService getInstance() {

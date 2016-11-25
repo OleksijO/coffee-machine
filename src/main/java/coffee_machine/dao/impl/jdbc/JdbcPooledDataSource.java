@@ -10,10 +10,13 @@ import java.util.ResourceBundle;
  * Created by oleksij.onysymchuk@gmail on 17.11.2016.
  */
 public class JdbcPooledDataSource {
-    private static DataSource dataSource = initDataSource();
 
-    public static DataSource getDataSource() {
-        return dataSource;
+    private static class InstanceHolder {
+        private static DataSource instance = initDataSource();
+    }
+
+    public static DataSource getInstance() {
+        return JdbcPooledDataSource.InstanceHolder.instance;
     }
 
     private static DataSource initDataSource() {

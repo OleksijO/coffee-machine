@@ -25,7 +25,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
     }
 
     private static class InstanceHolder {
-        private static UserService instance = new UserServiceImpl();
+        private static final UserService instance = new UserServiceImpl();
     }
 
     public static UserService getInstance() {

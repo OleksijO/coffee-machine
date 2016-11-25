@@ -29,7 +29,7 @@ public class CoffeeMachineServiceImpl extends AbstractService implements CoffeeM
     }
 
     private static class InstanceHolder {
-        private static CoffeeMachineService instance = new CoffeeMachineServiceImpl();
+        private static final CoffeeMachineService instance = new CoffeeMachineServiceImpl();
     }
 
     public static CoffeeMachineService getInstance() {
@@ -47,7 +47,6 @@ public class CoffeeMachineServiceImpl extends AbstractService implements CoffeeM
             AccountDao accountDao = daoFactory.getAccountDao(connection);
             HistoryRecordDao historyDao = daoFactory.getHistoryRecordDao(connection);
             List<Drink> baseDrinksToBuy = getBaseDrinksFromDrinks(drinks);
-            new ArrayList<>(drinks.size());
             drinks.forEach(drink -> baseDrinksToBuy.add(drink.getBaseDrink()));
             List<Addon> addonsToBuy = getAddonsFromDrinks(drinks);
             long drinksPrice = getSummaryPrice(drinks);

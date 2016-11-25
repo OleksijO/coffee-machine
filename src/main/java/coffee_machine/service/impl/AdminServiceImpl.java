@@ -25,7 +25,7 @@ public class AdminServiceImpl extends AbstractService implements AdminService {
     }
 
     private static class InstanceHolder {
-        private static AdminService instance = new AdminServiceImpl();
+        private static final AdminService instance = new AdminServiceImpl();
     }
 
     public static AdminService getInstance() {

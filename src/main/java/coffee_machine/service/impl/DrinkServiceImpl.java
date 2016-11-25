@@ -27,7 +27,7 @@ public class DrinkServiceImpl extends AbstractService implements DrinkService {
     }
 
     private static class InstanceHolder {
-        private static DrinkService instance = new DrinkServiceImpl();
+        private static final DrinkService instance = new DrinkServiceImpl();
     }
 
     public static DrinkService getInstance() {

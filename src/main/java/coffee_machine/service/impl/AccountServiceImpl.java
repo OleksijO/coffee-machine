@@ -22,7 +22,7 @@ public class AccountServiceImpl extends AbstractService implements AccountServic
     }
 
     private static class InstanceHolder {
-        private static AccountService instance = new AccountServiceImpl();
+        private static final AccountService instance = new AccountServiceImpl();
     }
 
     public static AccountService getInstance() {
@@ -31,13 +31,34 @@ public class AccountServiceImpl extends AbstractService implements AccountServic
 
 
     public void update(Account account) {
-        //TODO
+        try (AbstractConnection connection = daoFactory.getConnection()) {
+            AccountDao accountDao = daoFactory.getAccountDao(connection);
+            try {
+                connection.beginTransaction();
+                accountDao.update(account);
+                connection.commitTransaction();
+            } catch (DaoException e) {
+                connection.rollbackTransaction();
+                logErrorAndWrapException(e);
+            }
+        }
     }
 
     @Override
     public Account getById(int id) {
-        //TODO
-        throw new UnsupportedOperationException();
+        try (AbstractConnection connection = daoFactory.getConnection()) {
+            Account account=null;
+            AccountDao accountDao = daoFactory.getAccountDao(connection);
+            try {
+                connection.beginTransaction();
+                account = accountDao.getById(id);
+                connection.commitTransaction();
+            } catch (DaoException e) {
+                connection.rollbackTransaction();
+                logErrorAndWrapException(e);
+            }
+            return account;
+        }
     }
 
     @Override
@@ -48,12 +69,11 @@ public class AccountServiceImpl extends AbstractService implements AccountServic
             try {
                 connection.beginTransaction();
                 account = accountDao.getByUserId(userId);
+                connection.commitTransaction();
             } catch (DaoException e) {
                 connection.rollbackTransaction();
                 logErrorAndWrapException(e);
             }
-            connection.commitTransaction();
-
             return account;
         }
     }
