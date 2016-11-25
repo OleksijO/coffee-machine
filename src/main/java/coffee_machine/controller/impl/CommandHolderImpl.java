@@ -15,30 +15,39 @@ import static coffee_machine.controller.PagesPaths.*;
  * Created by oleksij.onysymchuk@gmail on 17.11.2016.
  */
 public class CommandHolderImpl implements CommandHolder {
-    private Map<String, Command> commands = new HashMap<>();
+    private Map<String, Command> getCommands = new HashMap<>();
+    private Map<String, Command> postCommands = new HashMap<>();
 
     @Override
     public Command get(String path) {
-        return commands.get(path);
+        return getCommands.get(path);
+    }
+
+    @Override
+    public Command post(String path) {
+        return postCommands.get(path);
     }
 
     @Override
     public void init(){
-        commands.put(HOME_PATH, new HomeCommand());
-        commands.put(USER_LOGIN_PATH, new UserLoginCommand());
-        commands.put(USER_LOGOUT_PATH, new UserLogoutCommand());
-        commands.put(USER_LOGIN_SUBMIT_PATH, new UserLoginSubmitCommand());
-        commands.put(USER_HOME_PATH, new UserHomeCommand());
-        commands.put(USER_PURCHASE_PATH, new UserPurchaseCommand());
-        commands.put(USER_PURCHASE_SUBMIT_PATH, new UserPurchaseSubmitCommand());
-        commands.put(USER_HISTORY_PATH, new UserHistoryCommand());
-        commands.put(ADMIN_LOGIN_PATH, new AdminLoginCommand());
-        commands.put(ADMIN_LOGOUT_PATH, new AdminLogoutCommand());
-        commands.put(ADMIN_REFILL_PATH, new AdminRefillCommand());
-        commands.put(ADMIN_REFILL_SUBMIT_PATH, new AdminRefillSubmitCommand());
-        commands.put(ADMIN_LOGIN_SUBMIT_PATH, new AdminLoginSubmitCommand());
-        commands.put(ADMIN_HOME_PATH, new AdminHomeCommand());
+        getCommands.put(HOME_PATH, new HomeCommand());
 
+        getCommands.put(USER_LOGIN_PATH, new UserLoginCommand());
+        getCommands.put(USER_LOGOUT_PATH, new UserLogoutCommand());
+        getCommands.put(USER_HOME_PATH, new UserHomeCommand());
+        getCommands.put(USER_PURCHASE_PATH, new UserPurchaseCommand());
+        getCommands.put(USER_HISTORY_PATH, new UserHistoryCommand());
+
+        getCommands.put(ADMIN_LOGIN_PATH, new AdminLoginCommand());
+        getCommands.put(ADMIN_LOGOUT_PATH, new AdminLogoutCommand());
+        getCommands.put(ADMIN_REFILL_PATH, new AdminRefillCommand());
+        getCommands.put(ADMIN_HOME_PATH, new AdminHomeCommand());
+
+        postCommands.put(USER_LOGIN_PATH, new UserLoginSubmitCommand());
+        postCommands.put(USER_PURCHASE_PATH, new UserPurchaseSubmitCommand());
+
+        postCommands.put(ADMIN_REFILL_PATH, new AdminRefillSubmitCommand());
+        postCommands.put(ADMIN_LOGIN_PATH, new AdminLoginSubmitCommand());
 
     }
 }

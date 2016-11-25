@@ -7,7 +7,7 @@
 
         <br>
 
-        <form action="${PagesPaths.ADMIN_LOGIN_SUBMIT_PATH}" method="post">
+        <form action="${PagesPaths.ADMIN_LOGIN_PATH}" method="post">
             <%@ include file="/WEB-INF/view/fragment/loginFormContent.jsp"%>
         </form>
 

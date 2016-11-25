@@ -27,12 +27,9 @@ public class MainController extends HttpServlet {
         commandHolder.init();
     }
 
-    private void processRequest(HttpServletRequest request, HttpServletResponse response)
+    private void processRequest(Command command, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
-        String uri = request.getRequestURI();
-        logger.debug("Requested uri = " + uri);
-        Command command = commandHolder.get(uri);
         if (command == null) {
             logger.debug("Command did not found. Redirecting to home page");
             response.sendRedirect(HOME_PATH);
@@ -41,7 +38,7 @@ public class MainController extends HttpServlet {
         String view = command.execute(request, response);
 
         /* redirected to reset uri */
-        if (REDIRECTED.equals(view)){
+        if (REDIRECTED.equals(view)) {
             return;
         }
         logger.debug("Forwarding to " + view);
@@ -51,15 +48,21 @@ public class MainController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String uri = getUri(request);
+        processRequest(commandHolder.get(uri), request, response);
+    }
 
-        processRequest(request, response);
+    private String getUri(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        logger.debug("Requested uri = " + uri);
+        return uri;
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        processRequest(request, response);
+        String uri = getUri(request);
+        processRequest(commandHolder.post(uri), request, response);
     }
 
 }

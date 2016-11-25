@@ -5,7 +5,7 @@
 <%@ include file="/WEB-INF/view/fragment/header.jsp"%>
 			<fmt:message key="user.purchase.description"/> <br>
 <br>
-<form action="${PagesPaths.USER_PURCHASE_SUBMIT_PATH}" method="post">
+<form action="${PagesPaths.USER_PURCHASE_PATH}" method="post">
 	<fmt:message key="user.purchase.your.balance.is"/> <fmt:formatNumber value="${user_balance}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
 	<fmt:message key="currency"/>.<br>
 	<br>

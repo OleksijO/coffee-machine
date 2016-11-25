@@ -8,7 +8,7 @@
 
 <fmt:message key="admin.refill.description"/> <br>
 
-<form action="${PagesPaths.ADMIN_REFILL_SUBMIT_PATH}" method="post">
+<form action="${PagesPaths.ADMIN_REFILL_PATH}" method="post">
 
     <table cellpadding="10" cellspacing="2" border="1">
         <tr>
