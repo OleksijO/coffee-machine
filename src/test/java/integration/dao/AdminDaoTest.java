@@ -6,11 +6,10 @@ import coffee_machine.dao.DaoFactory;
 import coffee_machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee_machine.model.entity.user.Admin;
 import data.Admins;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +30,11 @@ public class AdminDaoTest {
         for (Admins adminEnum : Admins.values()) {
             testAdmins.add(adminEnum.admin);
         }
+    }
+
+    @BeforeClass
+    public static void initTestDataBase() throws SQLException, ClassNotFoundException, InterruptedException, IOException {
+        new TestDataBaseInitializer().initTestJdbcDB();
     }
 
     @Before

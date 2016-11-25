@@ -6,11 +6,10 @@ import coffee_machine.dao.UserDao;
 import coffee_machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee_machine.model.entity.user.User;
 import data.Users;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +30,11 @@ public class UserDaoTest {
         for (Users userEnum : Users.values()) {
             testUsers.add(userEnum.user);
         }
+    }
+
+    @BeforeClass
+    public static void initTestDataBase() throws SQLException, ClassNotFoundException, InterruptedException, IOException {
+        new TestDataBaseInitializer().initTestJdbcDB();
     }
 
     @Before
