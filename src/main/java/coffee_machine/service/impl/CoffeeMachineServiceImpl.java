@@ -1,6 +1,6 @@
 package coffee_machine.service.impl;
 
-import coffee_machine.CoffeeMachineAccountConfig;
+import coffee_machine.CoffeeMachineConfig;
 import coffee_machine.dao.*;
 import coffee_machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee_machine.i18n.message.key.error.ServiceErrorKey;
@@ -21,7 +21,7 @@ public class CoffeeMachineServiceImpl extends AbstractService implements CoffeeM
     private static final Logger logger = Logger.getLogger(CoffeeMachineServiceImpl.class);
 
     private static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
-    private static final int COFFEE_MACHINE_ACCOUNT_ID = CoffeeMachineAccountConfig.ID;
+    private static final int COFFEE_MACHINE_ACCOUNT_ID = CoffeeMachineConfig.ACCOUNT_ID;
 
     public CoffeeMachineServiceImpl() {
         super(logger);

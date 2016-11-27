@@ -20,4 +20,7 @@ public final class Attributes {
 
     public static final String COFFEE_MACHINE_BALANCE = "coffee_machine_balance";
     public static final String USER_RECORD_HISTORY_LIST = "user_record_history_list";
+
+    public static final String LOGIN_FORM_TITLE = "login_form_title";
+    public static final String LOGIN_FORM_ACTION="login_from_action";
 }

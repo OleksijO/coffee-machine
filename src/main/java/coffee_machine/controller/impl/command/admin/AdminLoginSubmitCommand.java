@@ -8,6 +8,8 @@ import coffee_machine.i18n.message.key.GeneralKey;
 import coffee_machine.model.entity.user.Admin;
 import coffee_machine.service.AdminService;
 import coffee_machine.service.impl.AdminServiceImpl;
+import coffee_machine.view.Attributes;
+import coffee_machine.view.PagesPaths;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,18 +34,24 @@ public class AdminLoginSubmitCommand extends AbstractLoginCommand implements Com
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
+            request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_ADMIN_LOGIN);
+            request.setAttribute(Attributes.LOGIN_FORM_TITLE, GeneralKey.LOGIN_ADMIN_FORM_TITLE);
+            request.setAttribute(Attributes.LOGIN_FORM_ACTION, PagesPaths.ADMIN_LOGIN_PATH);
+
             String email = request.getParameter(LOGIN);
-            request.setAttribute(PREVIOUS_ENTERED_EMAIL, email);
             String password = request.getParameter(PASSWORD);
+
+            request.setAttribute(PREVIOUS_ENTERED_EMAIL, email);
+
             if (!checkLogin(email)) {
                 request.setAttribute(ERROR_MESSAGE, ERROR_LOGIN_EMAIL_DO_NOT_MATCH_PATTERN);
                 logger.info(TRY_FAILED_WRONG_EMAIL + email);
-                return ADMIN_LOGIN_PAGE;
+                return LOGIN_PAGE;
             }
             if (!checkPassword(password)) {
                 request.setAttribute(ERROR_MESSAGE, ERROR_LOGIN_PASSWORD_DO_NOT_MATCH_PATTERN);
                 logger.info(TRY_FAILED_WRONG_PASSWORD);
-                return ADMIN_LOGIN_PAGE;
+                return LOGIN_PAGE;
             }
 
             String encryptedPassword = PasswordEncryptor.encryptPassword(password);
@@ -72,7 +80,7 @@ public class AdminLoginSubmitCommand extends AbstractLoginCommand implements Com
             request.setAttribute(ERROR_MESSAGE, GeneralKey.ERROR_UNKNOWN);
         }
 
-        return ADMIN_LOGIN_PAGE;
+        return LOGIN_PAGE;
     }
 
 

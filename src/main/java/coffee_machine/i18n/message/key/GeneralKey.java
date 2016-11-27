@@ -23,6 +23,9 @@ public interface GeneralKey {
    String TITLE_USER_PURCHASE = "title.user.purchase";
    String TITLE_USER_LOGIN = "title.user.login";
 
+   String LOGIN_ADMIN_FORM_TITLE = "login.form.admin.title";
+   String LOGIN_USER_FORM_TITLE = "login.form.user.title";
+
 
 
 

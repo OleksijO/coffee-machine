@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE taglib
+        PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN"
+        "http://java.sun.com/j2ee/dtds/web-jsptaglibrary_1_1.dtd">
+<taglib>
+    <tlibversion>1.0</tlibversion>
+    <jspversion>1.1</jspversion>
+    <shortname>htl</shortname>
+    <uri>http://www.eckelobjects.com/tagtut/tags1.0</uri>
+    <info>
+        Library of tags on increasing complexity to demonstrate the use
+        of tag libraries.
+    </info>
+    <tag>
+        <name>loginForm</name>
+        <tagclass>coffee_machine.view.tag.LoginFormTag</tagclass>
+        <bodycontent>empty</bodycontent>
+        <info>
+            echo's login form to browser.
+        </info>
+
+        <attribute>
+            <name>cssClass</name>
+            <required>false</required>
+            <description>css class</description>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>formTitleMessageKey</name>
+            <required>true</required>
+            <description>title form message key</description>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>action</name>
+            <required>true</required>
+            <description>action uri for post method</description>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>loginLabelMessageKey</name>
+            <required>true</required>
+            <description>login label message key</description>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>parameterLogin</name>
+            <required>true</required>
+            <description>input login name</description>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>loginPreviosValue</name>
+            <required>true</required>
+            <description>login previos value</description>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>passwordLabelMessageKey</name>
+            <required>true</required>
+            <description>password label message key</description>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+
+
+        <attribute>
+            <name>parameterPassword</name>
+            <required>true</required>
+            <description>input password name</description>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>submitMessageKey</name>
+            <required>true</required>
+            <description>submit button message key</description>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+    </tag>
+</taglib>

@@ -1,0 +1,7 @@
+div.login_form
+{
+    background: lightgray;
+    border: 5px darkgray;
+    max-width: 30%;
+    align-content: center;
+}

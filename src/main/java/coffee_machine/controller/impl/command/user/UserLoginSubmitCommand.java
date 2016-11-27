@@ -8,6 +8,8 @@ import coffee_machine.i18n.message.key.GeneralKey;
 import coffee_machine.model.entity.user.User;
 import coffee_machine.service.UserService;
 import coffee_machine.service.impl.UserServiceImpl;
+import coffee_machine.view.Attributes;
+import coffee_machine.view.PagesPaths;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,18 +34,22 @@ public class UserLoginSubmitCommand extends AbstractLoginCommand implements Comm
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
+            request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_USER_LOGIN);
+            request.setAttribute(Attributes.LOGIN_FORM_TITLE, GeneralKey.LOGIN_USER_FORM_TITLE);
+            request.setAttribute(Attributes.LOGIN_FORM_ACTION, PagesPaths.USER_LOGIN_PATH);
+
             String email = request.getParameter(LOGIN);
             request.setAttribute(PREVIOUS_ENTERED_EMAIL, email);
             String password = request.getParameter(PASSWORD);
             if (!checkLogin(email)) {
                 request.setAttribute(ERROR_MESSAGE, ERROR_LOGIN_EMAIL_DO_NOT_MATCH_PATTERN);
                 logger.info(TRY_FAILED_WRONG_EMAIL + email);
-                return USER_LOGIN_PAGE;
+                return LOGIN_PAGE;
             }
             if (!checkPassword(password)) {
                 request.setAttribute(ERROR_MESSAGE, ERROR_LOGIN_PASSWORD_DO_NOT_MATCH_PATTERN);
                 logger.info(TRY_FAILED_WRONG_PASSWORD);
-                return USER_LOGIN_PAGE;
+                return LOGIN_PAGE;
             }
 
             String encryptedPassword = PasswordEncryptor.encryptPassword(password);
@@ -68,7 +74,7 @@ public class UserLoginSubmitCommand extends AbstractLoginCommand implements Comm
             request.setAttribute(ERROR_MESSAGE, GeneralKey.ERROR_UNKNOWN);
         }
 
-        return USER_LOGIN_PAGE;
+        return LOGIN_PAGE;
     }
 }
 

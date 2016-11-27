@@ -1,6 +1,6 @@
 package coffee_machine.controller.impl.command.admin;
 
-import coffee_machine.CoffeeMachineAccountConfig;
+import coffee_machine.CoffeeMachineConfig;
 import coffee_machine.view.Attributes;
 import coffee_machine.controller.Command;
 import coffee_machine.controller.RegExp;
@@ -71,7 +71,7 @@ public class AdminRefillSubmitCommand extends AbstractCommand implements Command
                 request.setAttribute(ERROR_MESSAGE, CommandErrorKey.ADMIN_REFILL_NOTHING_TO_ADD);
             }
 
-            request.setAttribute(COFFEE_MACHINE_BALANCE, accountService.getById(CoffeeMachineAccountConfig.ID)
+            request.setAttribute(COFFEE_MACHINE_BALANCE, accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)
                     .getRealAmount());
             request.setAttribute(REFILL_DRINKS, drinkService.getAll());
             request.setAttribute(REFILL_ADDONS, addonService.getAll());
