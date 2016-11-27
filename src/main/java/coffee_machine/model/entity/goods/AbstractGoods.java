@@ -1,6 +1,6 @@
 package coffee_machine.model.entity.goods;
 
-import static coffee_machine.controller.Parameters.DB_MONEY_COEFF;
+import static coffee_machine.view.Parameters.DB_MONEY_COEFF;
 
 abstract public class AbstractGoods implements Comparable<AbstractGoods> {
     protected int id;

@@ -1,9 +1,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page import="static coffee_machine.controller.PagesPaths.*" %>
-<%@ page import="static coffee_machine.controller.Attributes.*" %>
+<%@ page import="static coffee_machine.view.PagesPaths.*" %>
+<%@ page import="static coffee_machine.view.Attributes.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
-<%@ include file="/WEB-INF/view/fragment/header.jsp" %>
+<%@ include file="/WEB-INF/view/jsp/fragment/header.jsp" %>
 <br>
 <fmt:message key="user.history.description"/><br>
 <br>
@@ -45,4 +45,4 @@
 </table>
 
 
-<%@ include file="/WEB-INF/view/fragment/footer.jsp" %>
+<%@ include file="/WEB-INF/view/jsp/fragment/footer.jsp" %>

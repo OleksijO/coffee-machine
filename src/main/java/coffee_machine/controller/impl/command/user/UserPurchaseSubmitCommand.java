@@ -1,8 +1,8 @@
 package coffee_machine.controller.impl.command.user;
 
-import coffee_machine.controller.Attributes;
+import coffee_machine.view.Attributes;
 import coffee_machine.controller.Command;
-import coffee_machine.controller.PagesPaths;
+import coffee_machine.view.PagesPaths;
 import coffee_machine.controller.RegExp;
 import coffee_machine.controller.exception.ControllerException;
 import coffee_machine.controller.impl.command.abstracts.AbstractCommand;
@@ -26,7 +26,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static coffee_machine.controller.Attributes.*;
+import static coffee_machine.view.Attributes.*;
 
 public class UserPurchaseSubmitCommand extends AbstractCommand implements Command {
 	private static final Logger logger = Logger.getLogger(UserPurchaseSubmitCommand.class);

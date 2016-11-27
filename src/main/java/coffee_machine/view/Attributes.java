@@ -1,4 +1,4 @@
-package coffee_machine.controller;
+package coffee_machine.view;
 
 public final class Attributes {
     public final static String PAGE_TITLE = "page_title";

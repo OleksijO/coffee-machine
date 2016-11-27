@@ -1,7 +1,7 @@
 package coffee_machine.controller.impl.command.admin;
 
 import coffee_machine.CoffeeMachineAccountConfig;
-import coffee_machine.controller.Attributes;
+import coffee_machine.view.Attributes;
 import coffee_machine.controller.Command;
 import coffee_machine.controller.impl.command.abstracts.AbstractCommand;
 import coffee_machine.exception.ApplicationException;
@@ -17,8 +17,8 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static coffee_machine.controller.Attributes.*;
-import static coffee_machine.controller.PagesPaths.ADMIN_REFILL_PAGE;
+import static coffee_machine.view.Attributes.*;
+import static coffee_machine.view.PagesPaths.ADMIN_REFILL_PAGE;
 
 public class AdminRefillCommand extends AbstractCommand implements Command {
     private static final Logger logger = Logger.getLogger(AdminRefillCommand.class);

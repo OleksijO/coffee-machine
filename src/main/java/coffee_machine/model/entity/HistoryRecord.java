@@ -2,7 +2,7 @@ package coffee_machine.model.entity;
 
 import java.util.Date;
 
-import static coffee_machine.controller.Parameters.DB_MONEY_COEFF;
+import static coffee_machine.view.Parameters.DB_MONEY_COEFF;
 
 /**
  * Created by oleksij.onysymchuk@gmail on 15.11.2016.

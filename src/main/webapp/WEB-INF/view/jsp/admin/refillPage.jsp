@@ -1,10 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page import="coffee_machine.controller.PagesPaths" %>
-<%@ page import="coffee_machine.controller.Attributes" %>
+<%@ page import="coffee_machine.view.PagesPaths" %>
+<%@ page import="coffee_machine.view.Attributes" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
-<%@ include file="/WEB-INF/view/fragment/header.jsp" %>
+<%@ include file="/WEB-INF/view/jsp/fragment/header.jsp" %>
 
 <fmt:message key="admin.refill.description"/> <br><br>
 <fmt:message key="admin.refill.machine.balance"/> :
@@ -82,4 +82,4 @@ ${requestScope[Attributes.COFFEE_MACHINE_BALANCE]}
 </form>
 
 
-<%@ include file="/WEB-INF/view/fragment/footer.jsp" %>
+<%@ include file="/WEB-INF/view/jsp/fragment/footer.jsp" %>

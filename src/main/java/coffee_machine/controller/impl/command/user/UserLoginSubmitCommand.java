@@ -14,10 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static coffee_machine.controller.Attributes.*;
-import static coffee_machine.controller.PagesPaths.*;
-import static coffee_machine.controller.Parameters.LOGIN;
-import static coffee_machine.controller.Parameters.PASSWORD;
+import static coffee_machine.view.Attributes.*;
+import static coffee_machine.view.PagesPaths.*;
+import static coffee_machine.view.Parameters.LOGIN;
+import static coffee_machine.view.Parameters.PASSWORD;
 import static coffee_machine.i18n.message.key.error.CommandErrorKey.*;
 
 public class UserLoginSubmitCommand extends AbstractLoginCommand implements Command {

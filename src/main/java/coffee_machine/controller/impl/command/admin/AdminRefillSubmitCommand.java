@@ -1,7 +1,7 @@
 package coffee_machine.controller.impl.command.admin;
 
 import coffee_machine.CoffeeMachineAccountConfig;
-import coffee_machine.controller.Attributes;
+import coffee_machine.view.Attributes;
 import coffee_machine.controller.Command;
 import coffee_machine.controller.RegExp;
 import coffee_machine.controller.exception.ControllerException;
@@ -28,8 +28,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static coffee_machine.controller.Attributes.*;
-import static coffee_machine.controller.PagesPaths.ADMIN_REFILL_PAGE;
+import static coffee_machine.view.Attributes.*;
+import static coffee_machine.view.PagesPaths.ADMIN_REFILL_PAGE;
 
 public class AdminRefillSubmitCommand extends AbstractCommand implements Command {
     private static final Logger logger = Logger.getLogger(AdminRefillCommand.class);

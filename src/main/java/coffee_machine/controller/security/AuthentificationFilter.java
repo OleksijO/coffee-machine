@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static coffee_machine.controller.Attributes.ADMIN_ID;
-import static coffee_machine.controller.Attributes.USER_ID;
-import static coffee_machine.controller.PagesPaths.*;
+import static coffee_machine.view.Attributes.ADMIN_ID;
+import static coffee_machine.view.Attributes.USER_ID;
+import static coffee_machine.view.PagesPaths.*;
 
 //@WebFilter("/*")
 public class AuthentificationFilter implements Filter {

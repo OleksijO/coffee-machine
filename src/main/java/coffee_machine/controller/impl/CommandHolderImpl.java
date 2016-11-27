@@ -9,7 +9,7 @@ import coffee_machine.controller.impl.command.user.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static coffee_machine.controller.PagesPaths.*;
+import static coffee_machine.view.PagesPaths.*;
 
 /**
  * Created by oleksij.onysymchuk@gmail on 17.11.2016.

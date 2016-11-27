@@ -1,7 +1,7 @@
 package coffee_machine.controller.i18n;
 
-import coffee_machine.controller.Attributes;
-import coffee_machine.controller.Parameters;
+import coffee_machine.view.Attributes;
+import coffee_machine.view.Parameters;
 import coffee_machine.i18n.SupportedLocale;
 import org.apache.log4j.Logger;
 

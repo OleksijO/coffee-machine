@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page import="coffee_machine.controller.PagesPaths" %>
-<%@ page import="coffee_machine.controller.Attributes" %>
+<%@ page import="coffee_machine.view.PagesPaths" %>
+<%@ page import="coffee_machine.view.Attributes" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <hr>
 <div align="center">

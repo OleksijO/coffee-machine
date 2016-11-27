@@ -1,4 +1,4 @@
-package coffee_machine.controller;
+package coffee_machine.view;
 
 public final class Parameters {
 	public static final Double DB_MONEY_COEFF = 0.01;

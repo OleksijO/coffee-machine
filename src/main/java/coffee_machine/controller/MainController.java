@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static coffee_machine.controller.PagesPaths.*;
+import static coffee_machine.view.PagesPaths.*;
 
 /**
  * Servlet implementation class MainController

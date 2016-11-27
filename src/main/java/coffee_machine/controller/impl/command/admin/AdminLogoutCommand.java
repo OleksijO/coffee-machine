@@ -6,9 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static coffee_machine.controller.Attributes.ADMIN_ID;
-import static coffee_machine.controller.PagesPaths.HOME_PATH;
-import static coffee_machine.controller.PagesPaths.REDIRECTED;
+import static coffee_machine.view.Attributes.ADMIN_ID;
+import static coffee_machine.view.PagesPaths.HOME_PATH;
+import static coffee_machine.view.PagesPaths.REDIRECTED;
 
 public class AdminLogoutCommand implements Command {
 

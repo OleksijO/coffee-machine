@@ -1,6 +1,6 @@
 package coffee_machine.controller.impl.command;
 
-import coffee_machine.controller.Attributes;
+import coffee_machine.view.Attributes;
 import coffee_machine.controller.Command;
 import coffee_machine.i18n.message.key.GeneralKey;
 import org.apache.log4j.Logger;
@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-import static coffee_machine.controller.Attributes.ERROR_MESSAGE;
-import static coffee_machine.controller.Attributes.USUAL_MESSAGE;
-import static coffee_machine.controller.PagesPaths.HOME_PAGE;
+import static coffee_machine.view.Attributes.ERROR_MESSAGE;
+import static coffee_machine.view.Attributes.USUAL_MESSAGE;
+import static coffee_machine.view.PagesPaths.HOME_PAGE;
 import static coffee_machine.i18n.message.key.GeneralKey.TEST_ERROR_MESSAGE;
 import static coffee_machine.i18n.message.key.GeneralKey.TEST_USUAL_MESSAGE;
 

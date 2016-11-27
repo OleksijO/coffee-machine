@@ -1,6 +1,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page import="coffee_machine.controller.Parameters" %>
-<%@ page import="coffee_machine.controller.Attributes" %>
+<%@ page import="coffee_machine.view.Parameters" %>
+<%@ page import="coffee_machine.view.Attributes" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <table>
