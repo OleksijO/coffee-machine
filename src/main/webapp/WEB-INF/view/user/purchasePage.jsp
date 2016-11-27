@@ -3,6 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%@ include file="/WEB-INF/view/fragment/header.jsp"%>
+<%@ include file="/WEB-INF/view/fragment/purchaseDetails.jsp"%>
 			<fmt:message key="user.purchase.description"/> <br>
 <br>
 <form action="${PagesPaths.USER_PURCHASE_PATH}" method="post">

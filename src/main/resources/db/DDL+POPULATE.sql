@@ -95,9 +95,9 @@ CREATE TABLE history_record (
 INSERT INTO account (amount) VALUES (0), (9999999999), (999999);
 
 INSERT INTO abstract_user (id, email, password, full_name) VALUES
-  (1, 'oleksij.onysymchuk@gmail.com', '630d82b1215e611e7aca66237834cd19', 'Олексій Онисимчук'),
-  (2, 'user@test.com', '630d82b1215e611e7aca66237834cd19', 'Тестовий користувач'),
-  (3, 'admin@test.com', '630d82b1215e611e7aca66237834cd19', 'Тестовий адміністратор');
+  (1, 'oleksij.onysymchuk@gmail.com', '495286b908f344a71f0895d3258f5e4a', 'Олексій Онисимчук'),
+  (2, 'user@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий користувач'),
+  (3, 'admin@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий адміністратор');
 
 INSERT INTO users (user_id, account_id) VALUES
   (1, 2),

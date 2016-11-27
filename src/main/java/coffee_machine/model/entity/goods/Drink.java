@@ -47,7 +47,11 @@ public class Drink extends AbstractGoods {
 
     @Override
     public String toString() {
-        return "Drink [" + name + ", " + convertAddonsToString() + ", price=" + this.getRealTotalPrice() + "]";
+        return "Drink [" + name + ", " + convertAddonsToString() +
+                ", quantity=" + this.getQuantity() +
+                ", price=" + this.getRealTotalPrice()
+
+                + "]";
     }
 
     private String convertAddonsToString() {

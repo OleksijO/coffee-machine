@@ -2,7 +2,6 @@ package coffee_machine.dao.impl.jdbc;
 
 import coffee_machine.dao.AdminDao;
 import coffee_machine.dao.exception.DaoException;
-import coffee_machine.i18n.message.key.EntityKey;
 import coffee_machine.i18n.message.key.error.DaoErrorKey;
 import coffee_machine.model.entity.user.Admin;
 import org.apache.log4j.Logger;
@@ -31,7 +30,7 @@ public class AdminDaoImpl extends AbstractUserDao<Admin> implements AdminDao {
 	private Connection connection;
 
 	public AdminDaoImpl(Connection connection) {
-		super(logger, EntityKey.ADMIN);
+		super(logger);
 		this.connection = connection;
 	}
 

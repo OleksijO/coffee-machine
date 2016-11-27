@@ -1,37 +1,29 @@
 package coffee_machine.controller.impl.command.user;
 
-import static coffee_machine.controller.Attributes.ERROR_ADDITIONAL_MESSAGE;
-import static coffee_machine.controller.Attributes.ERROR_MESSAGE;
-import static coffee_machine.controller.Attributes.USER_BALANCE;
-import static coffee_machine.controller.Attributes.USER_ID;
-import static coffee_machine.controller.Attributes.USUAL_ADDITIONAL_MESSAGE;
-import static coffee_machine.controller.Attributes.USUAL_MESSAGE;
-
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import coffee_machine.controller.Attributes;
 import coffee_machine.controller.Command;
 import coffee_machine.controller.PagesPaths;
 import coffee_machine.controller.RegExp;
+import coffee_machine.controller.exception.ControllerException;
+import coffee_machine.exception.ApplicationException;
 import coffee_machine.i18n.message.key.General;
+import coffee_machine.i18n.message.key.error.CommandErrorKey;
 import coffee_machine.model.entity.HistoryRecord;
 import coffee_machine.model.entity.goods.Drink;
 import coffee_machine.service.AccountService;
 import coffee_machine.service.CoffeeMachineService;
 import coffee_machine.service.DrinkService;
-import coffee_machine.service.exception.ServiceException;
 import coffee_machine.service.impl.AccountServiceImpl;
 import coffee_machine.service.impl.CoffeeMachineServiceImpl;
 import coffee_machine.service.impl.DrinkServiceImpl;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static coffee_machine.controller.Attributes.*;
 
 public class UserPurchaseSubmitCommand implements Command {
 	private DrinkService drinkService = DrinkServiceImpl.getInstance();
@@ -50,14 +42,11 @@ public class UserPurchaseSubmitCommand implements Command {
 			HistoryRecord record = coffeeMachine.prepareDrinksForUser(drinksToBuy, userId);
 			request.setAttribute(USER_BALANCE, accountService.getByUserId(userId).getRealAmount());
 			request.setAttribute(USUAL_MESSAGE, General.PURCHASE_THANKS_MESSAGE);
-			request.setAttribute(USUAL_ADDITIONAL_MESSAGE, record.toString());
-		} catch (ServiceException e) {
-			request.setAttribute(ERROR_MESSAGE, General.ERROR_PURCHASE_DRINKS);
-			// TODO remove hardcode
-			request.setAttribute(ERROR_ADDITIONAL_MESSAGE, "error.user.purchase.unknown");
-			// request.setAttribute(ERROR_ADDITIONAL_MESSAGE, e.getMessage()); /
+			request.setAttribute(Attributes.HISTORY_RECORD, record);
+		} catch (ApplicationException e) {
+			request.setAttribute(ERROR_MESSAGE, e.getMessage());
+			request.setAttribute(ERROR_ADDITIONAL_MESSAGE, e.getAdditionalMessage());
 		}
-
 		return PagesPaths.USER_PURCHASE_PAGE;
 	}
 
@@ -96,7 +85,7 @@ public class UserPurchaseSubmitCommand implements Command {
 		try {
 			return Integer.parseInt(request.getParameter(param));
 		} catch (Exception e) {
-			throw new ServiceException("Error while getting int from request");
+			throw new ControllerException(CommandErrorKey.QUANTITY_SHOULD_BE_INT);
 		}
 
 	}
@@ -106,7 +95,7 @@ public class UserPurchaseSubmitCommand implements Command {
 		if (matcher.find(0)) {
 			return Integer.parseInt(param.substring(matcher.start(), matcher.end()));
 		} else {
-			throw new ServiceException("Here in param must be an id!");
+            throw new ControllerException(General.ERROR_UNKNOWN);
 		}
 	}
 
@@ -119,7 +108,7 @@ public class UserPurchaseSubmitCommand implements Command {
 				baseDrink.setQuantity(drinkQuantityByIds.get(drink.getId()));
 				baseDrinks.add(baseDrink);
 			} else {
-				throw new ServiceException("It can not be! Drink was in list of purchase and it should be in DB!");
+				throw new ControllerException(General.ERROR_UNKNOWN);
 			}
 		});
 		return drinks;
@@ -132,7 +121,7 @@ public class UserPurchaseSubmitCommand implements Command {
 		if (matcher.find(matcher.end())) {
 			return Integer.parseInt(param.substring(matcher.start(), matcher.end()));
 		} else {
-			throw new ServiceException("Here in param must be an id!");
+            throw new ControllerException(General.ERROR_UNKNOWN);
 		}
 	}
 

@@ -3,7 +3,6 @@ package coffee_machine.dao.impl.jdbc;
 import coffee_machine.dao.AccountDao;
 import coffee_machine.dao.UserDao;
 import coffee_machine.dao.exception.DaoException;
-import coffee_machine.i18n.message.key.EntityKey;
 import coffee_machine.i18n.message.key.error.DaoErrorKey;
 import coffee_machine.model.entity.Account;
 import coffee_machine.model.entity.user.User;
@@ -38,7 +37,7 @@ public class UserDaoImpl extends AbstractUserDao<User> implements UserDao {
 	private AccountDao accountDao;
 
 	public UserDaoImpl(Connection connection, AccountDao accountDao) {
-		super(logger, EntityKey.USER);
+		super(logger);
 		this.connection = connection;
 		this.accountDao = accountDao;
 	}

@@ -2,7 +2,6 @@ package coffee_machine.dao.impl.jdbc;
 
 import coffee_machine.dao.AddonDao;
 import coffee_machine.dao.exception.DaoException;
-import coffee_machine.i18n.message.key.EntityKey;
 import coffee_machine.i18n.message.key.error.DaoErrorKey;
 import coffee_machine.model.entity.goods.Addon;
 import org.apache.log4j.Logger;
@@ -30,7 +29,7 @@ public class AddonDaoImpl extends AbstractGoodsDao<Addon> implements AddonDao {
 	private Connection connection;
 
 	public AddonDaoImpl(Connection connection) {
-		super(logger, EntityKey.ADDON);
+		super(logger);
 		this.connection = connection;
 	}
 

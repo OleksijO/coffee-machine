@@ -1,27 +1,75 @@
 package coffee_machine.controller.impl.command.user;
 
 import coffee_machine.controller.Command;
+import coffee_machine.controller.impl.command.abstracts.AbstractLoginCommand;
+import coffee_machine.controller.security.PasswordEncryptor;
+import coffee_machine.exception.ApplicationException;
+import coffee_machine.i18n.message.key.General;
+import coffee_machine.model.entity.user.User;
+import coffee_machine.service.UserService;
+import coffee_machine.service.impl.UserServiceImpl;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static coffee_machine.controller.Attributes.USER_ID;
-import static coffee_machine.controller.PagesPaths.REDIRECTED;
-import static coffee_machine.controller.PagesPaths.USER_HOME_PATH;
+import static coffee_machine.controller.Attributes.*;
+import static coffee_machine.controller.PagesPaths.*;
 import static coffee_machine.controller.Parameters.LOGIN;
 import static coffee_machine.controller.Parameters.PASSWORD;
+import static coffee_machine.i18n.message.key.error.CommandErrorKey.*;
 
-public class UserLoginSubmitCommand implements Command {
+public class UserLoginSubmitCommand extends AbstractLoginCommand implements Command {
+    private static final Logger logger = Logger.getLogger(UserLoginSubmitCommand.class);
 
-	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-			String email = request.getParameter(LOGIN);
-			String password = request.getParameter(PASSWORD);
-			request.getSession().setAttribute(USER_ID, 1);
-			// TODO
-		    response.sendRedirect(USER_HOME_PATH);
-		return REDIRECTED;
-	}
+    UserService userService = UserServiceImpl.getInstance();
 
+    public UserLoginSubmitCommand() {
+        super(logger);
+    }
+
+    @Override
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            String email = request.getParameter(LOGIN);
+            request.setAttribute(PREVIOUS_ENTERED_EMAIL, email);
+            String password = request.getParameter(PASSWORD);
+            if (!checkLogin(email)) {
+                request.setAttribute(ERROR_MESSAGE, ERROR_LOGIN_EMAIL_DO_NOT_MATCH_PATTERN);
+                logger.info(TRY_FAILED_WRONG_EMAIL + email);
+                return USER_LOGIN_PAGE;
+            }
+            if (!checkPassword(password)) {
+                request.setAttribute(ERROR_MESSAGE, ERROR_LOGIN_PASSWORD_DO_NOT_MATCH_PATTERN);
+                logger.info(TRY_FAILED_WRONG_PASSWORD);
+                return USER_LOGIN_PAGE;
+            }
+
+            String encryptedPassword = PasswordEncryptor.encryptPassword(password);
+            User user = userService.getUserByLogin(email);
+
+            if ((user == null) || (!encryptedPassword.equals(user.getPassword()))) {
+                logger.info(TRY_FAILED_WRONG_EMAIL_OR_PASSWORD);
+                request.setAttribute(ERROR_MESSAGE, ERROR_LOGIN_NO_SUCH_COMBINATION);
+            } else {
+			
+                request.getSession().setAttribute(USER_ID, user.getId());
+                response.sendRedirect(USER_HOME_PATH);
+                return REDIRECTED;
+
+            }
+        } catch (ApplicationException e) {
+            logger.error(e.getMessage()+" : "+e.getAdditionalMessage(), e);
+            request.setAttribute(ERROR_MESSAGE, e.getMessage());
+            request.setAttribute(ERROR_ADDITIONAL_MESSAGE, e.getAdditionalMessage());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            request.setAttribute(ERROR_MESSAGE, General.ERROR_UNKNOWN);
+        }
+
+        return USER_LOGIN_PAGE;
+    }
 }
+
+

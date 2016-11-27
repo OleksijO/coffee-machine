@@ -54,7 +54,7 @@ public class MainController extends HttpServlet {
 
     private String getUri(HttpServletRequest request) {
         String uri = request.getRequestURI();
-        logger.debug("Requested uri = " + uri);
+        logger.debug(request.getMethod().toUpperCase()+" : uri = " + uri);
         return uri;
     }
 

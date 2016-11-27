@@ -19,33 +19,27 @@ abstract class AbstractDao<T> implements GenericDao<T> {
 	static final String FIELD_ID = "id";
 
 	private Logger logger;
-	private String errorMessageEntityPrefix;
 
-	public AbstractDao(Logger logger, String errorMessageEntityPrefix) {
+	public AbstractDao(Logger logger) {
 		this.logger = logger;
-		this.errorMessageEntityPrefix = errorMessageEntityPrefix;
 	}
 
-	protected void logErrorAndThrowDaoException(String message, Throwable e) {
-		String messageKey = errorMessageEntityPrefix + message;
+	protected void logErrorAndThrowDaoException(String messageKey, Throwable e) {
 		logger.error(RESOURCE_BUNDLE.getString(messageKey), e);
 		throw new DaoException(messageKey, e);
 	}
 
-	protected void logErrorAndThrowDaoException(String message, Object entity, Throwable e) {
-		String messageKey = errorMessageEntityPrefix + message;
+	protected void logErrorAndThrowDaoException(String messageKey, Object entity, Throwable e) {
 		logger.error(RESOURCE_BUNDLE.getString(messageKey) + "\t" + entity.toString(), e);
 		throw new DaoException(messageKey, e);
 	}
 
-	protected void logErrorAndThrowNewDaoException(String message) {
-		String messageKey = errorMessageEntityPrefix + message;
+	protected void logErrorAndThrowNewDaoException(String messageKey) {
 		logger.error(RESOURCE_BUNDLE.getString(messageKey));
 		throw new DaoException(messageKey);
 	}
 
-	protected void logErrorAndThrowNewDaoException(String message, Object entity) {
-		String messageKey = errorMessageEntityPrefix + message;
+	protected void logErrorAndThrowNewDaoException(String messageKey, Object entity) {
 		logger.error(RESOURCE_BUNDLE.getString(messageKey) + "\t" + entity.toString());
 		throw new DaoException(messageKey);
 	}

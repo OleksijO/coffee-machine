@@ -3,12 +3,14 @@
 <%@ page import="coffee_machine.controller.PagesPaths" %>
 <%@ page import="coffee_machine.controller.Attributes" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<hr>
 <div align="center">
     <h4>
         <fmt:message key="${requestScope[Attributes.PAGE_TITLE]}"/>
         <br>
     </h4>
 </div>
+<hr>
 <div align="center">
     <a href="${PagesPaths.HOME_PATH}"><fmt:message key="home.page"/></a>
 
@@ -28,7 +30,8 @@
         <a href="${PagesPaths.USER_LOGOUT_PATH}"><fmt:message key="logout"/></a> |
 
     </c:if>
-    <br> <br>
+    <br>
+    <hr>
 </div>
 
 

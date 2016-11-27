@@ -2,7 +2,6 @@ package coffee_machine.dao.impl.jdbc;
 
 import coffee_machine.dao.AccountDao;
 import coffee_machine.dao.exception.DaoException;
-import coffee_machine.i18n.message.key.EntityKey;
 import coffee_machine.i18n.message.key.error.DaoErrorKey;
 import coffee_machine.model.entity.Account;
 import org.apache.log4j.Logger;
@@ -28,7 +27,7 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 	private Connection connection;
 
 	AccountDaoImpl(Connection connection) {
-		super(logger, EntityKey.ACCOUNT);
+		super(logger);
 		this.connection = connection;
 	}
 

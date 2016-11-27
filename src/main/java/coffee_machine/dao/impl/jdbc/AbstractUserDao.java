@@ -12,8 +12,8 @@ abstract class AbstractUserDao<T> extends AbstractDao<T> {
 	protected static final String INSERT_ABSTRACT_USER_SQL = "INSERT INTO abstract_user (email, password, full_name) VALUES (?, ?, ?); ";
 	protected static final String DELETE_ABSTRACT_USER_SQL = "DELETE FROM abstract_user WHERE id = ?; ";
 
-	public AbstractUserDao(Logger logger, String errorMessageEntityPrefix) {
-		super(logger, errorMessageEntityPrefix);
+	public AbstractUserDao(Logger logger) {
+		super(logger);
 	}
 
 }

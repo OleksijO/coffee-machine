@@ -2,7 +2,6 @@ package coffee_machine.dao.impl.jdbc;
 
 import coffee_machine.dao.DrinkDao;
 import coffee_machine.dao.exception.DaoException;
-import coffee_machine.i18n.message.key.EntityKey;
 import coffee_machine.i18n.message.key.error.DaoErrorKey;
 import coffee_machine.model.entity.goods.Addon;
 import coffee_machine.model.entity.goods.Drink;
@@ -38,7 +37,7 @@ public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 	private Connection connection;
 
 	public DrinkDaoImpl(Connection connection) {
-		super(logger, EntityKey.ADDON);
+		super(logger);
 		this.connection = connection;
 	}
 

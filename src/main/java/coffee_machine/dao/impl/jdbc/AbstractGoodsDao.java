@@ -13,8 +13,8 @@ abstract class AbstractGoodsDao<T> extends AbstractDao<T> {
 	protected static final String INSERT_GOODS_SQL = "INSERT INTO abstract_goods (name, price, quantity) VALUES (?, ?, ?); ";
 	protected static final String DELETE_GOODS_SQL = "DELETE FROM abstract_goods WHERE id = ?; ";
 
-	public AbstractGoodsDao(Logger logger, String errorMessageEntityPrefix) {
-		super(logger, errorMessageEntityPrefix);
+	public AbstractGoodsDao(Logger logger) {
+		super(logger);
 	}
 
 }
