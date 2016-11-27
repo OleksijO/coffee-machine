@@ -36,7 +36,6 @@ public class MainController extends HttpServlet {
             return;
         }
         String view = command.execute(request, response);
-
         /* redirected to reset uri */
         if (REDIRECTED.equals(view)) {
             return;

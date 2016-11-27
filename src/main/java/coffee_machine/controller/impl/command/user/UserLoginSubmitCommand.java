@@ -59,7 +59,7 @@ public class UserLoginSubmitCommand extends AbstractLoginCommand implements Comm
                 logger.info(TRY_FAILED_WRONG_EMAIL_OR_PASSWORD);
                 request.setAttribute(ERROR_MESSAGE, ERROR_LOGIN_NO_SUCH_COMBINATION);
             } else {
-			
+                logger.info(String.format(USER_LOGGED_IN, user.getId()));
                 request.getSession().setAttribute(USER_ID, user.getId());
                 response.sendRedirect(USER_HOME_PATH);
                 return REDIRECTED;

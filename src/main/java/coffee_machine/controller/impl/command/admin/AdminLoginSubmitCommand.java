@@ -62,7 +62,7 @@ public class AdminLoginSubmitCommand extends AbstractLoginCommand implements Com
                 request.setAttribute(ERROR_MESSAGE, ERROR_LOGIN_NO_SUCH_COMBINATION);
             } else {
                 if (admin.isEnabled()) {
-
+                    logger.info(String.format(ADMIN_LOGGED_IN, admin.getId()));
                     request.getSession().setAttribute(ADMIN_ID, admin.getId());
                     response.sendRedirect(ADMIN_HOME_PATH);
                     return REDIRECTED;

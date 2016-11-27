@@ -1,4 +1,7 @@
 <jsp:directive.page errorPage="/error.html" />
+<%@page import="org.apache.log4j.Logger"%>
+<%! static Logger logger = Logger.getLogger("ERROR HANDLER"); %>
+<% logger.error("statuc code = " + pageContext.getErrorData().getStatusCode(), pageContext.getException()); %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="/WEB-INF/view/taglib/loginForm.tld" prefix="custom" %>
 <%@ page import="coffee_machine.view.PagesPaths" %>

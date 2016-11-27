@@ -12,11 +12,14 @@ public class AbstractLoginCommand extends AbstractCommand {
     private static final Pattern PATTERN_EMAIL = Pattern.compile(RegExp.REGEXP_EMAIL);
     private static final Pattern PATTERN_PASSWORD = Pattern.compile(RegExp.REGEXP_PASSWORD);
 
+
     protected static final String TRY_FAILED_WRONG_EMAIL_OR_PASSWORD =
             "LOGIN TRY FAILED: no such combination of email and password.";
 
     protected static final String TRY_FAILED_WRONG_EMAIL = " LOGIN TRY FAILED: wrong email: ";
     protected static final String TRY_FAILED_WRONG_PASSWORD = " LOGIN TRY FAILED: password do not matches pattern.";
+    protected static final String USER_LOGGED_IN = "USER id=%d LOGGED IN.";
+    protected static final String ADMIN_LOGGED_IN = "ADMIN id=%d LOGGED IN.";
 
     public AbstractLoginCommand(Logger logger) {
         super(logger);
