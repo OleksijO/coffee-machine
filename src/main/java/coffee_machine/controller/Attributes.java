@@ -17,4 +17,7 @@ public final class Attributes {
     public final static String ERROR_ADDITIONAL_MESSAGE = "error_additional_message";
 
     public static final String HISTORY_RECORD = "history_record";
+
+    public static final String COFFEE_MACHINE_BALANCE = "coffee_machine_balance";
+    public static final String USER_RECORD_HISTORY_LIST = "user_record_history_list";
 }

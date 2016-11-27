@@ -103,4 +103,14 @@ public class HistoryRecordDaoTest {
 
     }
 
+    @Test
+    public void testGetAllByUserId() {
+        List<HistoryRecord> resultList=new ArrayList<>();
+        resultList.addAll(historyRecordDao.getAllByUserId(1));
+        assertEquals("1.", 3, resultList.size());
+        resultList.addAll(historyRecordDao.getAllByUserId(2));
+        assertEquals("2.", 6, resultList.size());
+
+        assertEquals("3", testHistoryRecords, resultList);
+    }
 }

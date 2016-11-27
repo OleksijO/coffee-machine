@@ -6,28 +6,31 @@
 
 <%@ include file="/WEB-INF/view/fragment/header.jsp" %>
 
-<fmt:message key="admin.refill.description"/> <br>
+<fmt:message key="admin.refill.description"/> <br><br>
+<fmt:message key="admin.refill.machine.balance"/> :
+${requestScope[Attributes.COFFEE_MACHINE_BALANCE]}
+<fmt:message key="currency"/><br><br>
 
 <form action="${PagesPaths.ADMIN_REFILL_PATH}" method="post">
 
     <table cellpadding="10" cellspacing="2" border="1">
         <tr>
+            <td>
+                <div align="center"><b><fmt:message key="refill.goods.name"/></b></div>
+            </td>
+            <td>
+                <div align="center"><b><fmt:message key="refill.goods.available"/></b></div>
+            </td>
+            <td>
+                <div align="center"><b><fmt:message key="refill.goods.add.quantity"/></b></div>
+            </td>
 
-            <td>
-                <div align="center"><fmt:message key="refill.goods.name"/></div>
-            </td>
-            <td>
-                <div align="center"><fmt:message key="refill.goods.available"/></div>
-            </td>
-            <td>
-                <div align="center"><fmt:message key="refill.goods.add.quantity"/></div>
-            </td>
         </tr>
 
 
         <tr>
             <td colspan="3">
-                <div align="center"><fmt:message key="refill.base.drinks.title"/></div>
+                <div align="center"><b><fmt:message key="refill.base.drinks.title"/></b></div>
             </td>
         </tr>
         <c:forEach items="${requestScope[Attributes.REFILL_DRINKS]}" var="drink">
@@ -47,7 +50,7 @@
 
         <tr>
             <td colspan="3">
-                <div align="center"><fmt:message key="refill.addons.title"/></div>
+                <div align="center"><b><fmt:message key="refill.addons.title"/></b></div>
             </td>
         </tr>
         <c:forEach items="${requestScope[Attributes.REFILL_ADDONS]}" var="addon">
@@ -73,7 +76,6 @@
             </td>
         </tr>
     </table>
-
 
 
     <br>

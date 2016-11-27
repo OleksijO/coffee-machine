@@ -1,20 +1,32 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page import="coffee_machine.controller.Attributes" %>
-<%@ page import="coffee_machine.i18n.message.key.General" %>
+<%@ page import="coffee_machine.i18n.message.key.GeneralKey" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <c:set var="history_record" value="${requestScope[Attributes.HISTORY_RECORD]}"/>
 
 <c:if test='${not empty history_record}'>
     <div align="center" style="width: 90%; padding: 2px; margin: 2px; background: lightgreen; border: 3px darkgreen">
-        <p>
-            <fmt:message key="user.purchase.details"/>:<br>
-            <fmt:message key="user.purchase.details.date"/> :<br>
-            <fmt:formatDate type="both" value="${history_record.date}"/><br>
-            <fmt:message key="user.purchase.details.description"/>${history_record.orderDescription}<br>
-            <fmt:message key="user.purchase.details.amount"/> : ${history_record.realAmount} <fmt:message key="currency"/>
-        </p>
+        <table>
+            <tr>
+                <td><b><fmt:message key="user.purchase.details"/>:</b></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><fmt:message key="user.purchase.details.date"/> :</td>
+                <td>
+                    <fmt:formatDate type="both" value="${history_record.date}"/></td>
+            </tr>
+            <tr>
+                <td><fmt:message key="user.purchase.details.description"/>:</td>
+                <td>${history_record.orderDescription}</td>
+            </tr>
+            <tr>
+                <td><fmt:message key="user.purchase.details.amount"/> :</td>
+                <td>${history_record.realAmount} <fmt:message key="currency"/></td>
+            </tr>
+        </table>
     </div>
     <br>
     <hr>

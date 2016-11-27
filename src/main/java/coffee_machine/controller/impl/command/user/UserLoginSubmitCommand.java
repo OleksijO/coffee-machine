@@ -4,7 +4,7 @@ import coffee_machine.controller.Command;
 import coffee_machine.controller.impl.command.abstracts.AbstractLoginCommand;
 import coffee_machine.controller.security.PasswordEncryptor;
 import coffee_machine.exception.ApplicationException;
-import coffee_machine.i18n.message.key.General;
+import coffee_machine.i18n.message.key.GeneralKey;
 import coffee_machine.model.entity.user.User;
 import coffee_machine.service.UserService;
 import coffee_machine.service.impl.UserServiceImpl;
@@ -60,12 +60,12 @@ public class UserLoginSubmitCommand extends AbstractLoginCommand implements Comm
 
             }
         } catch (ApplicationException e) {
-            logger.error(e.getMessage()+" : "+e.getAdditionalMessage(), e);
+            logApplicationError(e);
             request.setAttribute(ERROR_MESSAGE, e.getMessage());
             request.setAttribute(ERROR_ADDITIONAL_MESSAGE, e.getAdditionalMessage());
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            request.setAttribute(ERROR_MESSAGE, General.ERROR_UNKNOWN);
+            logError(e);
+            request.setAttribute(ERROR_MESSAGE, GeneralKey.ERROR_UNKNOWN);
         }
 
         return USER_LOGIN_PAGE;

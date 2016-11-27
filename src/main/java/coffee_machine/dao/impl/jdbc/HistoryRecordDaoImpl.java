@@ -17,7 +17,7 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 
 	private static final String SELECT_ALL_SQL = "SELECT id, user_id, date_time, order_description, amount  FROM history_record";
 	private static final String SELECT_BY_USER_ID_SQL = "SELECT id, user_id, date_time, order_description, amount FROM history_record "
-			+ " WHERE users.user_id = ?";
+			+ " WHERE user_id = ?";
 	private static final String WHERE_ID = " WHERE id = ?";
 	private static final String INSERT_SQL = "INSERT INTO history_record (user_id, date_time, order_description, amount ) VALUES (?,?,?,?);";
 	private static final String UPDATE_SQL = "UPDATE history_record SET user_id=?, date_time=?, order_description=?, amount=?  WHERE id=?;";
@@ -151,4 +151,16 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 		}
 	}
 
+	@Override
+	public List<HistoryRecord> getAllByUserId(int userId) {
+		try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_USER_ID_SQL)) {
+
+			statement.setInt(1, userId);
+			return parseResultSet(statement.executeQuery());
+
+		} catch (SQLException e) {
+			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_GETTING_BY_ID, e);
+		}
+		throw new InternalError(); // STUB for compiler
+	}
 }

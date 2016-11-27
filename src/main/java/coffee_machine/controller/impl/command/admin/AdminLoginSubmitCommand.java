@@ -4,7 +4,7 @@ import coffee_machine.controller.Command;
 import coffee_machine.controller.impl.command.abstracts.AbstractLoginCommand;
 import coffee_machine.controller.security.PasswordEncryptor;
 import coffee_machine.exception.ApplicationException;
-import coffee_machine.i18n.message.key.General;
+import coffee_machine.i18n.message.key.GeneralKey;
 import coffee_machine.model.entity.user.Admin;
 import coffee_machine.service.AdminService;
 import coffee_machine.service.impl.AdminServiceImpl;
@@ -69,7 +69,7 @@ public class AdminLoginSubmitCommand extends AbstractLoginCommand implements Com
             request.setAttribute(ERROR_ADDITIONAL_MESSAGE, e.getAdditionalMessage());
         } catch (Exception e) {
             logError(e);
-            request.setAttribute(ERROR_MESSAGE, General.ERROR_UNKNOWN);
+            request.setAttribute(ERROR_MESSAGE, GeneralKey.ERROR_UNKNOWN);
         }
 
         return ADMIN_LOGIN_PAGE;

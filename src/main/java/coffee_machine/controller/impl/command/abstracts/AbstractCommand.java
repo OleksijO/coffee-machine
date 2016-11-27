@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
 /**
  * Created by oleksij.onysymchuk@gmail on 27.11.2016.
  */
-public class AbstractCommand {
+abstract public class AbstractCommand {
     static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("i18n.messages",
             SupportedLocale.EN.getLocale());
     private Logger logger;
