@@ -2,6 +2,10 @@ package data;
 
 import coffee_machine.model.entity.goods.Addon;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by oleksij.onysymchuk@gmail on 24.11.2016.
  */
@@ -21,6 +25,30 @@ public enum Addons {
         addon.setName(name);
         addon.setPrice(price);
         addon.setQuantity(quantity);
+    }
+
+    public static List<Addon> getAllAddons() {
+        List<Addon> addons = new ArrayList<>();
+        Arrays.stream(values()).forEach(record -> addons.add(record.addon));
+        return addons;
+    }
+
+    public Addon getCopy() {
+        Addon newAddon = new Addon();
+        newAddon.setId(addon.getId());
+        newAddon.setQuantity(addon.getQuantity());
+        newAddon.setName(addon.getName());
+        newAddon.setPrice(addon.getPrice());
+        return newAddon;
+    }
+
+    public static Addon getCopyById(int id){
+        for (Addons rec:values()){
+            if (rec.addon.getId()==id){
+                return rec.getCopy();
+            }
+        }
+        return null;
     }
 }
 
