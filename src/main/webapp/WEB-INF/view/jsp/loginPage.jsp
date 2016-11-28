@@ -1,5 +1,5 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib uri="/WEB-INF/view/taglib/loginForm.tld" prefix="custom"%>
+<%@ taglib uri="/WEB-INF/view/taglib/loginForm.tld" prefix="custom" %>
 <%@ page import="coffee_machine.view.PagesPaths" %>
 <%@ page import="coffee_machine.i18n.message.key.GeneralKey" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
@@ -16,5 +16,14 @@
                   parameterPassword="${Parameters.PASSWORD}"
                   submitMessageKey="login.submit"
 />
+<h5>
+    <br>
+    login / password
+    <br>
+    user@test.com / 1234
+    <br>
+    admin@test.com / 1234
+</h5>
+
 
 <%@ include file="/WEB-INF/view/jsp/fragment/footer.jsp" %>
