@@ -33,8 +33,8 @@ public class UserDaoImpl extends AbstractUserDao<User> implements UserDao {
 	private static final String FIELD_ACCOUNT_ID = "account_id";
 	private static final String FIELD_ACCOUNT_AMOUNT = "amount";
 
-	private Connection connection;
-	private AccountDao accountDao;
+	private final Connection connection;
+	private final AccountDao accountDao;
 
 	public UserDaoImpl(Connection connection, AccountDao accountDao) {
 		super(logger);

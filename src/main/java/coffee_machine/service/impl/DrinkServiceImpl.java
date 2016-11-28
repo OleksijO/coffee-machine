@@ -19,7 +19,7 @@ import java.util.Set;
 public class DrinkServiceImpl extends AbstractService implements DrinkService {
     private static final Logger logger = Logger.getLogger(DrinkServiceImpl.class);
 
-    private static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+    static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
     public DrinkServiceImpl() {
         super(logger);

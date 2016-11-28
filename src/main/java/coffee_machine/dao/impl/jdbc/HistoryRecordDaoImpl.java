@@ -27,7 +27,7 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 	private static final String FIELD_DATE_TIME = "date_time";
 	private static final String FIELD_ORDER_DESCRIPTION = "order_description";
 	private static final String FIELD_AMOUNT = "amount";
-	private Connection connection;
+	private final Connection connection;
 
 	HistoryRecordDaoImpl(Connection connection) {
 		super(logger);

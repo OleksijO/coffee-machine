@@ -21,7 +21,7 @@ public enum Drinks {
     MOCACCINO(11, "Мокачино", 1000, 50, SUGAR.getCopy(), MILK.getCopy(), CREAM.getCopy(), CINNAMON.getCopy()),
     LATTE(12, "Латте", 1200, 100, SUGAR.getCopy(), CINNAMON.getCopy());
 
-    public Drink drink;
+    public final Drink drink;
 
     Drinks(int id, String name, long price, int quantity, Addon... addons) {
         drink = new Drink();

@@ -15,7 +15,7 @@ public enum Addons {
     CINNAMON(13, "Корица", 150, 75);
 
 
-    public Addon addon;
+    public final Addon addon;
 
     Addons(int id, String name, long price, int quantity) {
         addon = new Addon();

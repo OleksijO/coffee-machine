@@ -23,9 +23,9 @@ import static coffee_machine.view.PagesPaths.ADMIN_REFILL_PAGE;
 public class AdminRefillCommand extends AbstractCommand implements Command {
     private static final Logger logger = Logger.getLogger(AdminRefillCommand.class);
 
-    private DrinkService drinkService = DrinkServiceImpl.getInstance();
-    private AddonService addonService = AddonServiceImpl.getInstance();
-    private AccountService accountService = AccountServiceImpl.getInstance();
+    private final DrinkService drinkService = DrinkServiceImpl.getInstance();
+    private final AddonService addonService = AddonServiceImpl.getInstance();
+    private final AccountService accountService = AccountServiceImpl.getInstance();
 
 
     public AdminRefillCommand() {

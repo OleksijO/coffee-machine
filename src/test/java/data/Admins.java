@@ -10,7 +10,7 @@ public enum Admins {
     C(3, "admin@test.com", "630d82b1215e611e7aca66237834cd19", "Тестовий адміністратор", true);
 
 
-    public Admin admin;
+    public final Admin admin;
 
     Admins(int id, String email, String password, String fullName, boolean enabled) {
         admin = new Admin();

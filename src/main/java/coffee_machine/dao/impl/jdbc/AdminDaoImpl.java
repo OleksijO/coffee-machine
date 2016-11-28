@@ -27,7 +27,7 @@ public class AdminDaoImpl extends AbstractUserDao<Admin> implements AdminDao {
 	private static final String FIELD_FULL_NAME = "full_name";
 	private static final String FIELD_ENABLED = "enabled";
 
-	private Connection connection;
+	private final Connection connection;
 
 	public AdminDaoImpl(Connection connection) {
 		super(logger);

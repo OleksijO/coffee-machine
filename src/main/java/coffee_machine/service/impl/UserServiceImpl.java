@@ -17,7 +17,7 @@ import java.util.List;
 public class UserServiceImpl extends AbstractService implements UserService {
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
 
-    private static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+    static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
     public UserServiceImpl() {
         super(logger);

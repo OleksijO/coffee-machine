@@ -25,7 +25,7 @@ import static coffee_machine.i18n.message.key.error.CommandErrorKey.*;
 
 public class AdminLoginSubmitCommand extends AbstractLoginCommand implements Command {
     private static final Logger logger = Logger.getLogger(AdminLoginSubmitCommand.class);
-    AdminService adminService = AdminServiceImpl.getInstance();
+    final AdminService adminService = AdminServiceImpl.getInstance();
 
     public AdminLoginSubmitCommand() {
         super(logger);

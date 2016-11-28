@@ -16,7 +16,7 @@ import java.util.List;
 public class HistoryRecordServiceImpl extends AbstractService implements HistoryRecordService {
     private static final Logger logger = Logger.getLogger(HistoryRecordServiceImpl.class);
 
-    private static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+    static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
     public HistoryRecordServiceImpl() {
         super(logger);

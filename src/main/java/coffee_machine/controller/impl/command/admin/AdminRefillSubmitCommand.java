@@ -1,7 +1,6 @@
 package coffee_machine.controller.impl.command.admin;
 
 import coffee_machine.CoffeeMachineConfig;
-import coffee_machine.view.Attributes;
 import coffee_machine.controller.Command;
 import coffee_machine.controller.RegExp;
 import coffee_machine.controller.exception.ControllerException;
@@ -10,20 +9,19 @@ import coffee_machine.exception.ApplicationException;
 import coffee_machine.i18n.message.key.CommandKey;
 import coffee_machine.i18n.message.key.GeneralKey;
 import coffee_machine.i18n.message.key.error.CommandErrorKey;
-import coffee_machine.model.entity.goods.Drink;
 import coffee_machine.service.AccountService;
 import coffee_machine.service.AddonService;
 import coffee_machine.service.DrinkService;
 import coffee_machine.service.impl.AccountServiceImpl;
 import coffee_machine.service.impl.AddonServiceImpl;
 import coffee_machine.service.impl.DrinkServiceImpl;
+import coffee_machine.view.Attributes;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,13 +32,13 @@ import static coffee_machine.view.PagesPaths.ADMIN_REFILL_PAGE;
 public class AdminRefillSubmitCommand extends AbstractCommand implements Command {
     private static final Logger logger = Logger.getLogger(AdminRefillCommand.class);
 
-    private DrinkService drinkService = DrinkServiceImpl.getInstance();
-    private AddonService addonService = AddonServiceImpl.getInstance();
-    private AccountService accountService = AccountServiceImpl.getInstance();
+    private final DrinkService drinkService = DrinkServiceImpl.getInstance();
+    private final AddonService addonService = AddonServiceImpl.getInstance();
+    private final AccountService accountService = AccountServiceImpl.getInstance();
 
-    private Pattern patternNumber = Pattern.compile(RegExp.REGEXP_NUMBER);
-    private Pattern patternDrink = Pattern.compile(RegExp.REGEXP_DRINK_PARAM);
-    private Pattern patternAddon = Pattern.compile(RegExp.REGEXP_ADDON_PARAM);
+    private final Pattern patternNumber = Pattern.compile(RegExp.REGEXP_NUMBER);
+    private final Pattern patternDrink = Pattern.compile(RegExp.REGEXP_DRINK_PARAM);
+    private final Pattern patternAddon = Pattern.compile(RegExp.REGEXP_ADDON_PARAM);
 
     public AdminRefillSubmitCommand() {
         super(logger);
@@ -126,10 +124,6 @@ public class AdminRefillSubmitCommand extends AbstractCommand implements Command
         } else {
             throw new ControllerException(GeneralKey.ERROR_UNKNOWN);
         }
-    }
-
-    private List<Drink> getDrinksFromRequest(HttpServletRequest request) {
-        return null;
     }
 
 }

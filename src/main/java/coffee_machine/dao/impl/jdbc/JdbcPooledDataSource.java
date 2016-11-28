@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
 public class JdbcPooledDataSource {
 
     private static class InstanceHolder {
-        private static DataSource instance = initDataSource();
+        private static final DataSource instance = initDataSource();
     }
 
     public static DataSource getInstance() {

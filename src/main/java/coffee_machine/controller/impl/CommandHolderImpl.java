@@ -15,8 +15,8 @@ import static coffee_machine.view.PagesPaths.*;
  * Created by oleksij.onysymchuk@gmail on 17.11.2016.
  */
 public class CommandHolderImpl implements CommandHolder {
-    private Map<String, Command> getCommands = new HashMap<>();
-    private Map<String, Command> postCommands = new HashMap<>();
+    private final Map<String, Command> getCommands = new HashMap<>();
+    private final Map<String, Command> postCommands = new HashMap<>();
 
     @Override
     public Command get(String path) {

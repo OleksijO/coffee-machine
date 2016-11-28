@@ -17,7 +17,7 @@ import java.util.List;
 public class AdminServiceImpl extends AbstractService implements AdminService {
     private static final Logger logger = Logger.getLogger(AdminServiceImpl.class);
 
-    private static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+    static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
     public AdminServiceImpl() {
         super(logger);

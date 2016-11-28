@@ -34,7 +34,7 @@ public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 	private static final String FIELD_QUANTITY = "quantity";
 	private static final String FIELD_ADDON_ID = "addon_id";
 
-	private Connection connection;
+	private final Connection connection;
 
 	public DrinkDaoImpl(Connection connection) {
 		super(logger);

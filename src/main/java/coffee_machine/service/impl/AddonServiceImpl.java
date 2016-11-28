@@ -18,7 +18,7 @@ import java.util.Map;
 public class AddonServiceImpl extends AbstractService implements AddonService {
     private static final Logger logger = Logger.getLogger(AddonServiceImpl.class);
 
-    private static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+    static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
     public AddonServiceImpl() {
         super(logger);

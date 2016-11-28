@@ -8,7 +8,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class DaoFactoryImpl implements coffee_machine.dao.DaoFactory {
-	private DataSource dataSource = JdbcPooledDataSource.getInstance();
+	private final DataSource dataSource = JdbcPooledDataSource.getInstance();
 
 	private static class InstanceHolder {
 		private static final DaoFactory instance = new DaoFactoryImpl();

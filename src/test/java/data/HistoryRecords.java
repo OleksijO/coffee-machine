@@ -18,15 +18,15 @@ public enum HistoryRecords {
     A6(6, 2, new Date(YEAR2016 + 6 * MONTH + 12 * HOUR + 55 * MIN), "Some order description 6", 6000);
 
 
-    public HistoryRecord historyRecord;
+    public final HistoryRecord historyRecord;
 
     static class ConstHolder {
-        static long YEAR = 365L * 24 * 3600 * 1000;
-        static long MONTH = 30L * 24 * 3600 * 1000;
-        static long DAY = 24L * 3600 * 1000;
-        static long HOUR = 3600L * 1000;
-        static long MIN = 60L * 1000;
-        static long YEAR2016 = YEAR * (2016 - 1970);
+        static final long YEAR = 365L * 24 * 3600 * 1000;
+        static final long MONTH = 30L * 24 * 3600 * 1000;
+        static final long DAY = 24L * 3600 * 1000;
+        static final long HOUR = 3600L * 1000;
+        static final long MIN = 60L * 1000;
+        static final long YEAR2016 = YEAR * (2016 - 1970);
     }
 
 
