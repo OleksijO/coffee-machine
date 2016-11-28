@@ -14,14 +14,10 @@ import java.util.List;
 /**
  * Created by oleksij.onysymchuk@gmail on 15.11.2016.
  */
-public class UserServiceImpl extends AbstractService implements UserService {
+public class UserServiceImpl implements UserService {
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
 
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
-
-    public UserServiceImpl() {
-        super(logger);
-    }
 
     private static class InstanceHolder {
         private static final UserService instance = new UserServiceImpl();

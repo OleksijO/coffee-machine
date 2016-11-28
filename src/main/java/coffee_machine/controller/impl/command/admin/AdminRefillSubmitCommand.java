@@ -4,7 +4,7 @@ import coffee_machine.CoffeeMachineConfig;
 import coffee_machine.controller.Command;
 import coffee_machine.controller.RegExp;
 import coffee_machine.controller.exception.ControllerException;
-import coffee_machine.controller.impl.command.abstracts.AbstractCommand;
+import coffee_machine.controller.logging.ControllerErrorLogging;
 import coffee_machine.exception.ApplicationException;
 import coffee_machine.i18n.message.key.CommandKey;
 import coffee_machine.i18n.message.key.GeneralKey;
@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 import static coffee_machine.view.Attributes.*;
 import static coffee_machine.view.PagesPaths.ADMIN_REFILL_PAGE;
 
-public class AdminRefillSubmitCommand extends AbstractCommand implements Command {
+public class AdminRefillSubmitCommand implements Command, ControllerErrorLogging {
     private static final Logger logger = Logger.getLogger(AdminRefillCommand.class);
 
     private final DrinkService drinkService = DrinkServiceImpl.getInstance();
@@ -40,9 +40,7 @@ public class AdminRefillSubmitCommand extends AbstractCommand implements Command
     private final Pattern patternDrink = Pattern.compile(RegExp.REGEXP_DRINK_PARAM);
     private final Pattern patternAddon = Pattern.compile(RegExp.REGEXP_ADDON_PARAM);
 
-    public AdminRefillSubmitCommand() {
-        super(logger);
-    }
+
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
@@ -75,14 +73,13 @@ public class AdminRefillSubmitCommand extends AbstractCommand implements Command
             request.setAttribute(REFILL_ADDONS, addonService.getAll());
 
         } catch (ApplicationException e) {
-            logApplicationError(e);
+            logApplicationError(logger, request, e);
             request.setAttribute(ERROR_MESSAGE, e.getMessage());
             request.setAttribute(ERROR_ADDITIONAL_MESSAGE, e.getAdditionalMessage());
         } catch (Exception e) {
-            logError(e);
+            logError(logger, request, e);
             request.setAttribute(ERROR_MESSAGE, GeneralKey.ERROR_UNKNOWN);
         }
-
 
         return ADMIN_REFILL_PAGE;
     }
@@ -106,7 +103,6 @@ public class AdminRefillSubmitCommand extends AbstractCommand implements Command
         }
         return goodsQuantityByIds;
     }
-
 
     private int getIntFromRequestByParameter(String param, HttpServletRequest request) {
         try {

@@ -3,29 +3,30 @@ package coffee_machine.service.impl;
 import coffee_machine.CoffeeMachineConfig;
 import coffee_machine.dao.*;
 import coffee_machine.dao.impl.jdbc.DaoFactoryImpl;
-import coffee_machine.i18n.message.key.error.ServiceErrorKey;
 import coffee_machine.model.entity.Account;
 import coffee_machine.model.entity.HistoryRecord;
 import coffee_machine.model.entity.goods.AbstractGoods;
 import coffee_machine.model.entity.goods.Addon;
 import coffee_machine.model.entity.goods.Drink;
 import coffee_machine.service.CoffeeMachineService;
+import coffee_machine.service.logging.ServiceErrorProcessing;
 import org.apache.log4j.Logger;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
+import static coffee_machine.i18n.message.key.error.ServiceErrorKey.*;
 
 /**
  * Created by oleksij.onysymchuk@gmail on 15.11.2016.
  */
-public class CoffeeMachineServiceImpl extends AbstractService implements CoffeeMachineService {
+public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceErrorProcessing {
     private static final Logger logger = Logger.getLogger(CoffeeMachineServiceImpl.class);
 
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private static final int COFFEE_MACHINE_ACCOUNT_ID = CoffeeMachineConfig.ACCOUNT_ID;
-
-    public CoffeeMachineServiceImpl() {
-        super(logger);
-    }
 
     private static class InstanceHolder {
         private static final CoffeeMachineService instance = new CoffeeMachineServiceImpl();
@@ -56,7 +57,7 @@ public class CoffeeMachineServiceImpl extends AbstractService implements CoffeeM
             List<Drink> baseDrinksToBuy = getBaseDrinksFromDrinks(drinks);
             logger.debug("got base drinks: " + baseDrinksToBuy);
             if (baseDrinksToBuy.size() == 0) {
-                logErrorAndThrowNewServiceException(ServiceErrorKey.YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY);
+                logErrorAndThrowNewServiceException(logger, YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY);
             }
             List<Addon> addonsToBuy = getAddonsFromDrinks(drinks);
             logger.debug("got addons from drinks: " + addonsToBuy);
@@ -69,8 +70,7 @@ public class CoffeeMachineServiceImpl extends AbstractService implements CoffeeM
             logger.debug("user account amount : " + userAccount.getAmount());
             if (userAccount.getAmount() < drinksPrice) {
                 connection.rollbackTransaction();
-                logErrorAndThrowNewServiceException(
-                        ServiceErrorKey.NOT_ENOUGH_MONEY);
+                logErrorAndThrowNewServiceException(logger, NOT_ENOUGH_MONEY);
             }
 
             /*  getting available drinks and addons */
@@ -159,7 +159,7 @@ public class CoffeeMachineServiceImpl extends AbstractService implements CoffeeM
 
     private long getSummaryPrice(List<Drink> drinks) {
         final long price[] = new long[1];
-        drinks.forEach(drink -> price[0] += drink.getTotalPrice()*drink.getQuantity());
+        drinks.forEach(drink -> price[0] += drink.getTotalPrice() * drink.getQuantity());
         return price[0];
     }
 
@@ -180,11 +180,11 @@ public class CoffeeMachineServiceImpl extends AbstractService implements CoffeeM
                 availableQuantity = goodsAvailableQuantity.get(goods1ToBuy.getId());
             }
             if (availableQuantity <= 0) {
-                logErrorAndThrowNewServiceException(ServiceErrorKey.NOT_ENOUGH_GOODS, goods1ToBuy.getName());
+                logErrorAndThrowNewServiceException(logger, NOT_ENOUGH_GOODS, goods1ToBuy.getName());
             }
             availableQuantity -= goods1ToBuy.getQuantity();
             if (availableQuantity <= 0) {
-                logErrorAndThrowNewServiceException(ServiceErrorKey.GOODS_NO_LONGER_AVAILABLE, goods1ToBuy.getName());
+                logErrorAndThrowNewServiceException(logger, GOODS_NO_LONGER_AVAILABLE, goods1ToBuy.getName());
             }
             goodsAvailableQuantity.put(goods1ToBuy.getId(), availableQuantity);
         });

@@ -1,11 +1,18 @@
-<jsp:directive.page errorPage="/error.html" />
-<%@page import="org.apache.log4j.Logger"%>
+<jsp:directive.page errorPage="/error.html"/>
+<%@page import="org.apache.log4j.Logger" %>
 <%! static final Logger logger = Logger.getLogger("ERROR HANDLER"); %>
-<% logger.error("statuc code = " + pageContext.getErrorData().getStatusCode(), pageContext.getException()); %>
+<% logger.error(String
+        .format(ErrorMessage.JSP_HANDLER_MASSAGE_FORMAT,
+                (int) pageContext.getSession().getAttribute(Attributes.USER_ID),
+                (int) pageContext.getSession().getAttribute(Attributes.ADMIN_ID),
+                pageContext.getErrorData().getStatusCode(),
+                pageContext.getException().getMessage()), pageContext.getException()); %>
+
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="/WEB-INF/view/taglib/loginForm.tld" prefix="custom" %>
 <%@ page import="coffee_machine.view.PagesPaths" %>
 <%@ page import="coffee_machine.i18n.message.key.GeneralKey" %>
+<%@ page import="coffee_machine.exception.ErrorMessage" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%@ include file="/WEB-INF/view/jsp/fragment/header.jsp" %>

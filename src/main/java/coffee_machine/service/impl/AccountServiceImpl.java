@@ -11,14 +11,10 @@ import org.apache.log4j.Logger;
 /**
  * Created by oleksij.onysymchuk@gmail on 15.11.2016.
  */
-public class AccountServiceImpl extends AbstractService implements AccountService {
+public class AccountServiceImpl implements AccountService {
     private static final Logger logger = Logger.getLogger(AccountServiceImpl.class);
 
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
-
-    public AccountServiceImpl() {
-        super(logger);
-    }
 
     private static class InstanceHolder {
         private static final AccountService instance = new AccountServiceImpl();

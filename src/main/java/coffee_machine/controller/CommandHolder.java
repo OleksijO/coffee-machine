@@ -6,5 +6,4 @@ public interface CommandHolder {
 
 	Command post(String path);
 
-	void init();
 }

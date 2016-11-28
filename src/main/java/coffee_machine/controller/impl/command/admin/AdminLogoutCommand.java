@@ -12,19 +12,18 @@ import static coffee_machine.view.PagesPaths.HOME_PATH;
 import static coffee_machine.view.PagesPaths.REDIRECTED;
 
 public class AdminLogoutCommand implements Command {
-	private static final Logger logger = Logger.getLogger(AdminLogoutCommand.class);
+    private static final Logger logger = Logger.getLogger(AdminLogoutCommand.class);
 
-	private static final String ADMIN_LOGGED_OUT = "ADMIN id=%d LOGGED OUT.";
-	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private static final String ADMIN_LOGGED_OUT = "ADMIN id=%d LOGGED OUT.";
 
-		logger.info(String.format(ADMIN_LOGGED_OUT, (int) request.getSession().getAttribute(ADMIN_ID)));
+    @Override
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		request.getSession().removeAttribute(ADMIN_ID);
+        logger.info(String.format(ADMIN_LOGGED_OUT, (int) request.getSession().getAttribute(ADMIN_ID)));
 
-		response.sendRedirect(HOME_PATH);
-
-		return REDIRECTED;
-	}
+        request.getSession().removeAttribute(ADMIN_ID);
+        response.sendRedirect(HOME_PATH);
+        return REDIRECTED;
+    }
 
 }

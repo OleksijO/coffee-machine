@@ -1,9 +1,8 @@
 package coffee_machine.controller.impl.command.admin;
 
 import coffee_machine.CoffeeMachineConfig;
-import coffee_machine.view.Attributes;
 import coffee_machine.controller.Command;
-import coffee_machine.controller.impl.command.abstracts.AbstractCommand;
+import coffee_machine.controller.logging.ControllerErrorLogging;
 import coffee_machine.exception.ApplicationException;
 import coffee_machine.i18n.message.key.GeneralKey;
 import coffee_machine.service.AccountService;
@@ -12,6 +11,7 @@ import coffee_machine.service.DrinkService;
 import coffee_machine.service.impl.AccountServiceImpl;
 import coffee_machine.service.impl.AddonServiceImpl;
 import coffee_machine.service.impl.DrinkServiceImpl;
+import coffee_machine.view.Attributes;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,17 +20,12 @@ import javax.servlet.http.HttpServletResponse;
 import static coffee_machine.view.Attributes.*;
 import static coffee_machine.view.PagesPaths.ADMIN_REFILL_PAGE;
 
-public class AdminRefillCommand extends AbstractCommand implements Command {
+public class AdminRefillCommand implements Command, ControllerErrorLogging {
     private static final Logger logger = Logger.getLogger(AdminRefillCommand.class);
 
     private final DrinkService drinkService = DrinkServiceImpl.getInstance();
     private final AddonService addonService = AddonServiceImpl.getInstance();
     private final AccountService accountService = AccountServiceImpl.getInstance();
-
-
-    public AdminRefillCommand() {
-        super(logger);
-    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
@@ -43,11 +38,11 @@ public class AdminRefillCommand extends AbstractCommand implements Command {
             request.setAttribute(REFILL_DRINKS, drinkService.getAll());
             request.setAttribute(REFILL_ADDONS, addonService.getAll());
         } catch (ApplicationException e) {
-            logApplicationError(e);
+            logApplicationError(logger, request, e);
             request.setAttribute(ERROR_MESSAGE, e.getMessage());
             request.setAttribute(ERROR_ADDITIONAL_MESSAGE, e.getAdditionalMessage());
         } catch (Exception e) {
-            logError(e);
+            logError(logger, request, e);
             request.setAttribute(ERROR_MESSAGE, GeneralKey.ERROR_UNKNOWN);
         }
 

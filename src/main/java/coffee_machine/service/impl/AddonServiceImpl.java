@@ -15,14 +15,10 @@ import java.util.Map;
 /**
  * Created by oleksij.onysymchuk@gmail on 15.11.2016.
  */
-public class AddonServiceImpl extends AbstractService implements AddonService {
+public class AddonServiceImpl implements AddonService {
     private static final Logger logger = Logger.getLogger(AddonServiceImpl.class);
 
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
-
-    public AddonServiceImpl() {
-        super(logger);
-    }
 
     private static class InstanceHolder {
         private static final AddonService instance = new AddonServiceImpl();

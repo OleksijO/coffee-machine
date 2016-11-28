@@ -16,14 +16,10 @@ import java.util.Set;
 /**
  * Created by oleksij.onysymchuk@gmail on 15.11.2016.
  */
-public class DrinkServiceImpl extends AbstractService implements DrinkService {
+public class DrinkServiceImpl implements DrinkService {
     private static final Logger logger = Logger.getLogger(DrinkServiceImpl.class);
 
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
-
-    public DrinkServiceImpl() {
-        super(logger);
-    }
 
     private static class InstanceHolder {
         private static final DrinkService instance = new DrinkServiceImpl();

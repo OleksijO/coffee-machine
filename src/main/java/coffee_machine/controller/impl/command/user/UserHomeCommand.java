@@ -13,7 +13,6 @@ public class UserHomeCommand implements Command {
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
 		request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_USER_HOME);
 		return USER_HOME_PAGE;
 	}

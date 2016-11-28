@@ -40,17 +40,9 @@ public class AdminLoginSubmitCommand extends AbstractLoginCommand implements Com
 
             String email = request.getParameter(LOGIN);
             String password = request.getParameter(PASSWORD);
-
             request.setAttribute(PREVIOUS_ENTERED_EMAIL, email);
 
-            if (!checkLogin(email)) {
-                request.setAttribute(ERROR_MESSAGE, ERROR_LOGIN_EMAIL_DO_NOT_MATCH_PATTERN);
-                logger.info(TRY_FAILED_WRONG_EMAIL + email);
-                return LOGIN_PAGE;
-            }
-            if (!checkPassword(password)) {
-                request.setAttribute(ERROR_MESSAGE, ERROR_LOGIN_PASSWORD_DO_NOT_MATCH_PATTERN);
-                logger.info(TRY_FAILED_WRONG_PASSWORD);
+            if (!processLoginForm(request, email, password)) {
                 return LOGIN_PAGE;
             }
 
@@ -72,11 +64,11 @@ public class AdminLoginSubmitCommand extends AbstractLoginCommand implements Com
                 }
             }
         } catch (ApplicationException e) {
-            logApplicationError(e);
+            logApplicationError(logger, request, e);
             request.setAttribute(ERROR_MESSAGE, e.getMessage());
             request.setAttribute(ERROR_ADDITIONAL_MESSAGE, e.getAdditionalMessage());
         } catch (Exception e) {
-            logError(e);
+            logError(logger, request, e);
             request.setAttribute(ERROR_MESSAGE, GeneralKey.ERROR_UNKNOWN);
         }
 

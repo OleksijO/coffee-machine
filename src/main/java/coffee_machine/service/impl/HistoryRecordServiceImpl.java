@@ -13,14 +13,10 @@ import java.util.List;
 /**
  * Created by oleksij.onysymchuk@gmail on 15.11.2016.
  */
-public class HistoryRecordServiceImpl extends AbstractService implements HistoryRecordService {
+public class HistoryRecordServiceImpl implements HistoryRecordService {
     private static final Logger logger = Logger.getLogger(HistoryRecordServiceImpl.class);
 
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
-
-    public HistoryRecordServiceImpl() {
-        super(logger);
-    }
 
     private static class InstanceHolder {
         private static final HistoryRecordService instance = new HistoryRecordServiceImpl();
