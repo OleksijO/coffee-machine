@@ -11,7 +11,7 @@ public enum Accounts {
     USER_B(3,999999);
 
 
-    public Account account;
+    public final Account account;
 
     Accounts(int id, long amount) {
         account=new Account();

@@ -18,7 +18,7 @@ abstract class AbstractDao<T> implements GenericDao<T> {
 
 	static final String FIELD_ID = "id";
 
-	private Logger logger;
+	private final Logger logger;
 
 	public AbstractDao(Logger logger) {
 		this.logger = logger;

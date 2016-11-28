@@ -49,6 +49,8 @@ public class CoffeeMachineServiceImpl extends AbstractService implements CoffeeM
             AddonDao addonDao = daoFactory.getAddonDao(connection);
             AccountDao accountDao = daoFactory.getAccountDao(connection);
             HistoryRecordDao historyDao = daoFactory.getHistoryRecordDao(connection);
+             /* calculationg order price */
+            long drinksPrice = getSummaryPrice(drinks);
 
             /* getting separately drinks and addons */
             List<Drink> baseDrinksToBuy = getBaseDrinksFromDrinks(drinks);
@@ -58,7 +60,7 @@ public class CoffeeMachineServiceImpl extends AbstractService implements CoffeeM
             }
             List<Addon> addonsToBuy = getAddonsFromDrinks(drinks);
             logger.debug("got addons from drinks: " + addonsToBuy);
-            long drinksPrice = getSummaryPrice(drinks);
+
             logger.debug("drinks summary price: " + drinksPrice);
             connection.beginTransaction();
 
@@ -140,7 +142,7 @@ public class CoffeeMachineServiceImpl extends AbstractService implements CoffeeM
                 if (!addons.containsKey(addon)) {
                     addons.put(addon, 0);
                 }
-                addons.put(addon, addons.get(addon) + quantity);
+                addons.put(addon, addons.get(addon) + quantity * drink.getQuantity());
             });
         });
         List<Addon> addonsWithQuantity = new ArrayList<>();
@@ -157,7 +159,7 @@ public class CoffeeMachineServiceImpl extends AbstractService implements CoffeeM
 
     private long getSummaryPrice(List<Drink> drinks) {
         final long price[] = new long[1];
-        drinks.forEach(drink -> price[0] += drink.getTotalPrice());
+        drinks.forEach(drink -> price[0] += drink.getTotalPrice()*drink.getQuantity());
         return price[0];
     }
 

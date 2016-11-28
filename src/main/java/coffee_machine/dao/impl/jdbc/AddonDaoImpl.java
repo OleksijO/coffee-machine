@@ -26,7 +26,7 @@ public class AddonDaoImpl extends AbstractGoodsDao<Addon> implements AddonDao {
 	private static final String FIELD_PRICE = "price";
 	private static final String FIELD_QUANTITY = "quantity";
 
-	private Connection connection;
+	private final Connection connection;
 
 	public AddonDaoImpl(Connection connection) {
 		super(logger);

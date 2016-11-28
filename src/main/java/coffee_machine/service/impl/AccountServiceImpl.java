@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 public class AccountServiceImpl extends AbstractService implements AccountService {
     private static final Logger logger = Logger.getLogger(AccountServiceImpl.class);
 
-    private static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+    private static final DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
     public AccountServiceImpl() {
         super(logger);

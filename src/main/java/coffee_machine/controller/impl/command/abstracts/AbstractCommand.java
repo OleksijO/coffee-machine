@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
 abstract public class AbstractCommand {
     static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("i18n.messages",
             SupportedLocale.EN.getLocale());
-    private Logger logger;
+    private final Logger logger;
 
     public AbstractCommand(Logger logger) {
         this.logger = logger;

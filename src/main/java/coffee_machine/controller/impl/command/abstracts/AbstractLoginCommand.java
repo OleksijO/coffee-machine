@@ -35,10 +35,7 @@ public class AbstractLoginCommand extends AbstractCommand {
     }
 
     private boolean checkToPattern(Pattern pattern, String stringToCheck){
-        if ((stringToCheck!=null)&&(pattern.matcher(stringToCheck).matches())){
-            return true;
-        }
-        return false;
+        return (stringToCheck != null) && (pattern.matcher(stringToCheck).matches());
     }
 
 

@@ -54,9 +54,7 @@ public class Account {
 		Account other = (Account) obj;
 		if (amount != other.amount)
 			return false;
-		if (id != other.id)
-			return false;
-		return true;
+		return id == other.id;
 	}
 
 	@Override

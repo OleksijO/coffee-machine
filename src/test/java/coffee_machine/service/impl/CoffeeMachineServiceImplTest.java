@@ -5,6 +5,7 @@ import coffee_machine.model.entity.Account;
 import coffee_machine.model.entity.goods.Addon;
 import coffee_machine.model.entity.goods.Drink;
 import coffee_machine.service.CoffeeMachineService;
+import coffee_machine.service.exception.ServiceException;
 import data.Accounts;
 import data.Addons;
 import data.Drinks;
@@ -16,11 +17,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static coffee_machine.i18n.message.key.error.ServiceErrorKey.NOT_ENOUGH_MONEY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -50,6 +54,7 @@ public class CoffeeMachineServiceImplTest {
     private CoffeeMachineService service;
 
     Map<Integer, Integer> drinkQuantitiesById = Drinks.getQuantitiesByIds();
+    Map<Integer, Integer>  addonQuantitiesById =Addons.getQuantitiesByIds();
 
 
     @Before
@@ -74,13 +79,12 @@ public class CoffeeMachineServiceImplTest {
         when(drinkDao.getAllFromList(any())).thenReturn(baseDrinksToBuy);
 
         List<Addon> addonsToBuy = new ArrayList<>();
-        addonsToBuy.add(Addons.CINNAMON.addon);
         addonsToBuy.add(Addons.MILK.addon);
         addonsToBuy.add(Addons.SUGAR.addon);
         when(addonDao.getAllFromList(any())).thenReturn(addonsToBuy);
 
         service = CoffeeMachineServiceImpl.getInstance();
-        ((CoffeeMachineServiceImpl) service).daoFactory = daoFactory;
+        CoffeeMachineServiceImpl.daoFactory = daoFactory;
 
     }
 
@@ -92,10 +96,7 @@ public class CoffeeMachineServiceImplTest {
         long userAccountInitialAmount = Accounts.USER_A.account.getAmount();
         long cmAccountAmount = Accounts.COFFEE_MACHINE.account.getAmount();
 
-        List<Drink> drinksToBuy = new ArrayList<>();
-        drinksToBuy.add(Drinks.BORJOMI.getCopy().getBaseDrink());
-        drinksToBuy.add(Drinks.ESPRESSO.getCopy().getBaseDrink());
-        drinksToBuy.add(Drinks.MOCACCINO.getCopy().getBaseDrink());
+        List<Drink> drinksToBuy = getTestDrinksWithoutAddons();
 
         setDrinksQuantity(drinksToBuy, drinkQuantity);
 
@@ -113,7 +114,7 @@ public class CoffeeMachineServiceImplTest {
         //List<Addon> updatedAddons = addonListCaptor.getValue();
 
 
-       // assertNull("List of addons to update shuold be null", updatedAddons);
+        // assertNull("List of addons to update shuold be null", updatedAddons);
         assertNotNull("List of drinks to update should be not null", updatedDrinks);
         updatedDrinks.forEach(drink -> {
             assertEquals("Drink quantity should decrease on " + drinkQuantity + " drink id=" + drink.getId(),
@@ -121,32 +122,46 @@ public class CoffeeMachineServiceImplTest {
                     drink.getQuantity());
         });
 
-        assertEquals("CM balance", cmAccountAmount+sumAmount, cmAccount.getAmount());
+        assertEquals("CM balance", cmAccountAmount + sumAmount, cmAccount.getAmount());
         assertEquals("User balance", userAccountInitialAmount - sumAmount, userAccount.getAmount());
+    }
+
+    private List<Drink> getTestDrinksWithoutAddons(){
+        List<Drink> drinks = new ArrayList<>();
+        drinks.add(Drinks.BORJOMI.getCopy().getBaseDrink());
+        drinks.add(Drinks.ESPRESSO.getCopy().getBaseDrink());
+        drinks.add(Drinks.MOCACCINO.getCopy().getBaseDrink());
+        return drinks;
+    }
+
+    private void setDrinksQuantity(List<Drink> drinks, int quantity) {
+        for (Drink drink : drinks) {
+            drink.setQuantity(quantity);
+        }
+    }
+
+    private long getSumAmount(List<Drink> drinks) {
+        long sumAmount = 0;
+        for (Drink drink : drinks) {
+            sumAmount += drink.getTotalPrice()*drink.getQuantity();
+        }
+        return sumAmount;
     }
 
     @Test
     public void testPrepareDrinksForUserWithAddons() throws Exception {
         int drinkQuantity = 4;
+        int addonQuantity = 1;
         int userId = 2;
         long userAccountInitialAmount = Accounts.USER_A.account.getAmount();
         long cmAccountAmount = Accounts.COFFEE_MACHINE.account.getAmount();
 
 
-        List<Drink> drinksToBuy = new ArrayList<>();
-        drinksToBuy.add(Drinks.BORJOMI.drink.getBaseDrink());
-        Drink drink = Drinks.ESPRESSO.drink.getBaseDrink();
-        drink.getAddons().iterator().next().setQuantity(2);
-        drinksToBuy.add(drink);
-        drink =Drinks.MOCACCINO.drink.getBaseDrink();
-        drink.getAddons().iterator().next();
-        drink.getAddons().iterator().next().setQuantity(1);
-        drinksToBuy.add(drink);
+        List<Drink> drinksToBuy = getTestDrinksWithAddons(addonQuantity);
         setDrinksQuantity(drinksToBuy, drinkQuantity);
 
-
-
         long sumAmount = getSumAmount(drinksToBuy);
+        System.out.println("sumAmount = "+sumAmount);
         service.prepareDrinksForUser(drinksToBuy, userId);
 
         verify(drinkDao).updateQuantityAllInList(drinkListCaptor.capture());
@@ -168,24 +183,80 @@ public class CoffeeMachineServiceImplTest {
                     drink1.getQuantity());
         });
 
-        assertEquals("CM balance", cmAccountAmount+sumAmount, cmAccount.getAmount());
-        assertEquals("User balance", userAccountInitialAmount - sumAmount, userAccount.getAmount()); }
+        updatedAddons.forEach(addon -> {
+            assertEquals("Addon quantity should decrease on " + addonQuantity + " addon id=" + addon.getId(),
+                    addonQuantitiesById.get(addon.getId()) - addonQuantity*drinkQuantity,
+                    addon.getQuantity());
+        });
 
-
-
-
-    private void setDrinksQuantity(List<Drink> drinks, int quantity) {
-        for (Drink drink : drinks) {
-            drink.setQuantity(quantity);
-        }
+        assertEquals("CM balance", cmAccountAmount + sumAmount, cmAccount.getAmount());
+        assertEquals("User balance", userAccountInitialAmount - sumAmount, userAccount.getAmount());
     }
 
-    private long getSumAmount(List<Drink> drinks) {
-        long sumAmount = 0;
-        for (Drink drink : drinks) {
-            sumAmount += drink.getTotalPrice();
-        }
-        return sumAmount;
+    private List<Drink> getTestDrinksWithAddons(int addonQuantity){
+        List<Drink> drinks = new ArrayList<>();
+        drinks.add(Drinks.BORJOMI.drink.getBaseDrink());
+        Drink drink = Drinks.ESPRESSO.drink.getBaseDrink();
+        drink.getAddons().iterator().next().setQuantity(addonQuantity);
+        drinks.add(drink);
+        drink = Drinks.MOCACCINO.drink.getBaseDrink();
+        Iterator<Addon> iterator = drink.getAddons().iterator();
+        iterator.next();
+        iterator.next().setQuantity(addonQuantity);
+        drinks.add(drink);
+        return drinks;
+
     }
+
+
+    @Test
+    public void testPrepareDrinksForUserNotEnoughMoney() throws Exception {
+        int drinkQuantity = 4;
+        int userId = 2;
+        int addonQuantity = 1;
+
+        long userAccountInitialAmount = Accounts.USER_A.account.getAmount();
+        long cmAccountAmount = Accounts.COFFEE_MACHINE.account.getAmount();
+        Accounts.USER_A.account.setAmount(0);
+
+        List<Drink> drinksToBuy = new ArrayList<>();
+        drinksToBuy.add(Drinks.BORJOMI.drink.getBaseDrink());
+        Drink drink = Drinks.ESPRESSO.drink.getBaseDrink();
+        drink.getAddons().iterator().next().setQuantity(2);
+        drinksToBuy.add(drink);
+        drink = Drinks.MOCACCINO.drink.getBaseDrink();
+        drink.getAddons().iterator().next();
+        drink.getAddons().iterator().next().setQuantity(1);
+        drinksToBuy.add(drink);
+        setDrinksQuantity(drinksToBuy, drinkQuantity);
+
+
+        long sumAmount = getSumAmount(drinksToBuy);
+        try {
+            service.prepareDrinksForUser(drinksToBuy, userId);
+        } catch (ServiceException e){
+            assertEquals(NOT_ENOUGH_MONEY, e.getMessage());
+        } catch (Exception e){
+            e.printStackTrace();
+            fail("Here should be application exception");
+        } finally {
+            Accounts.USER_A.account.setAmount(userAccountInitialAmount);
+        }
+
+
+        verify(drinkDao, times(0)).updateQuantityAllInList(drinkListCaptor.capture());
+        verify(addonDao,times(0)).updateQuantityAllInList(addonListCaptor.capture());
+        verify(accountDao, times(0)).update(accountCaptor.capture());
+
+
+
+
+
+    }
+
+
+    
+    
+   
 
 }

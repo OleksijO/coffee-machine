@@ -24,7 +24,7 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 
 	private static final String FIELD_ID = "id";
 	private static final String FIELD_AMOUNT = "amount";
-	private Connection connection;
+	private final Connection connection;
 
 	AccountDaoImpl(Connection connection) {
 		super(logger);

@@ -2,9 +2,7 @@ package data;
 
 import coffee_machine.model.entity.goods.Addon;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by oleksij.onysymchuk@gmail on 24.11.2016.
@@ -49,6 +47,12 @@ public enum Addons {
             }
         }
         return null;
+    }
+
+    public static Map<Integer,Integer> getQuantitiesByIds() {
+        Map<Integer, Integer> initialQuantitiesById = new HashMap<>();
+        Arrays.stream(values()).forEach(record -> initialQuantitiesById.put(record.addon.getId(),record.addon.getQuantity()));
+        return initialQuantitiesById;
     }
 }
 

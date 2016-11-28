@@ -10,7 +10,7 @@ abstract class AbstractService  {
 	static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("i18n.messages",
 			SupportedLocale.EN.getLocale());
 
-	private Logger logger;
+	private final Logger logger;
 
 	public AbstractService(Logger logger) {
 		this.logger = logger;
