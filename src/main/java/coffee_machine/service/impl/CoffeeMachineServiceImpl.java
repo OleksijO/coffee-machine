@@ -179,9 +179,6 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
             if (goodsAvailableQuantity.containsKey(goods1ToBuy.getId())) {
                 availableQuantity = goodsAvailableQuantity.get(goods1ToBuy.getId());
             }
-            if (availableQuantity <= 0) {
-                logErrorAndThrowNewServiceException(logger, NOT_ENOUGH_GOODS, goods1ToBuy.getName());
-            }
             availableQuantity -= goods1ToBuy.getQuantity();
             if (availableQuantity < 0) {
                 logErrorAndThrowNewServiceException(logger, GOODS_NO_LONGER_AVAILABLE, goods1ToBuy.getName());
