@@ -1,5 +1,6 @@
 package coffee_machine.controller.impl.command.abstracts;
 
+import coffee_machine.controller.Command;
 import coffee_machine.controller.RegExp;
 import coffee_machine.controller.logging.ControllerErrorLogging;
 import org.apache.log4j.Logger;
@@ -14,7 +15,7 @@ import static coffee_machine.view.Attributes.ERROR_MESSAGE;
 /**
  * Created by oleksij.onysymchuk@gmail on 27.11.2016.
  */
-public class AbstractLoginCommand implements ControllerErrorLogging {
+public abstract class AbstractLoginCommand implements Command, ControllerErrorLogging {
     private static final Pattern PATTERN_EMAIL = Pattern.compile(RegExp.REGEXP_EMAIL);
     private static final Pattern PATTERN_PASSWORD = Pattern.compile(RegExp.REGEXP_PASSWORD);
     private final Logger logger;

@@ -22,9 +22,8 @@ import static coffee_machine.view.PagesPaths.REDIRECTED;
  */
 
 public class MainController extends HttpServlet implements ControllerErrorLogging {
-    private static final Logger logger = Logger.getLogger(MainController.class);
-    private static final long serialVersionUID = 1L;
-    private CommandHolder commandHolder;
+    static final Logger logger = Logger.getLogger(MainController.class);
+    CommandHolder commandHolder;
 
     @Override
     public void init() throws ServletException {
@@ -32,21 +31,20 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
         commandHolder = new CommandHolderImpl();
     }
 
-    private void processRequest(Command command, HttpServletRequest request, HttpServletResponse response)
+    void processRequest(Command command, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         try {
 
             if (command == null) {
-                logger.debug("Command did not found. Redirecting to home page");
                 response.sendRedirect(HOME_PATH);
                 return;
             }
             String view = command.execute(request, response);
+
             /* redirected to reset uri */
             if (REDIRECTED.equals(view)) {
                 return;
             }
-            logger.debug("Forwarding to " + view);
             request.getRequestDispatcher(view).forward(request, response);
 
         } catch (ApplicationException e) {
