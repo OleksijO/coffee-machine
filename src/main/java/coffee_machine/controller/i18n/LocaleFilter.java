@@ -1,5 +1,6 @@
 package coffee_machine.controller.i18n;
 
+import coffee_machine.CoffeeMachineConfig;
 import coffee_machine.view.Attributes;
 import coffee_machine.view.Parameters;
 import coffee_machine.i18n.SupportedLocale;
@@ -21,40 +22,39 @@ public class LocaleFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest req = ((HttpServletRequest) request);
         HttpSession session = req.getSession();
-        logger.debug("Locale Filter processing");
+
+        /* setting up resource bundle for jsp fmt */
+        if (req.getSession().getAttribute(Attributes.BUNDLE_FILE) == null) {
+            req.getSession().setAttribute(Attributes.BUNDLE_FILE, CoffeeMachineConfig.MESSAGES);
+        }
+
+        /* changing user locale by request query parameter */
         if (req.getParameter(Parameters.USER_LOCALE) != null) {
-            logger.debug("Requested locale = " + req.getParameter(Parameters.USER_LOCALE));
             Locale locale = SupportedLocale.getDefault();
             for (SupportedLocale loc : SupportedLocale.values()) {
                 if (loc.getParam().equals(req.getParameter(Parameters.USER_LOCALE))) {
                     locale = loc.getLocale();
-                    logger.debug("Found supported locale = " + locale );
                     break;
                 }
             }
-
-            logger.debug("Set locale = " + locale );
             session.setAttribute(Attributes.USER_LOCALE, locale);
 
         }
 
+        /* initially set up user locale be locale in request if supported or default if not*/
         if (session.getAttribute(Attributes.USER_LOCALE) == null) {
-            logger.debug("Locale does not set. Request Locale = " + req.getLocale());
             Locale locale = null;
             for (SupportedLocale loc : SupportedLocale.values()) {
                 if (loc.getLocale().toString().equals(request.getLocale().toString())) {
                     locale = loc.getLocale();
-                    logger.debug("Found supported locale = " + locale );
                     break;
                 }
             }
             if (locale == null) {
                 locale = SupportedLocale.getDefault();
-                logger.debug("Did not found request locale. Set default = " + locale );
             }
             session.setAttribute(Attributes.USER_LOCALE, locale);
         }
-        logger.debug("User locale is = " + session.getAttribute(Attributes.USER_LOCALE));
         chain.doFilter(request, response);
     }
 

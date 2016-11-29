@@ -5,11 +5,12 @@
 <%@ page import="coffee_machine.view.Parameters" %>
 <%@ page import="coffee_machine.i18n.SupportedLocale" %>
 <%@ page import="coffee_machine.view.Attributes" %>
+<%@ page import="coffee_machine.CoffeeMachineConfig" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
-<!-- there is no neet to use fmt setLocale, because native session scoped attribute already set in LocaleFilter -->
+<!-- there is no need to use fmt setLocale, because native session scoped attribute already set in LocaleFilter -->
 <fmt:requestEncoding value="UTF-8" />
-<fmt:setBundle basename="i18n.messages"/>
+<fmt:setBundle basename="${sessionScope[Attributes.BUNDLE_FILE]}"/>
 
 <div align="right">
     <c:forEach items="${SupportedLocale.values()}" var="locale">

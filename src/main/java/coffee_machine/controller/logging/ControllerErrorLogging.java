@@ -31,10 +31,12 @@ public interface ControllerErrorLogging extends ApplicationErrorLogging {
     default String getRequestData(HttpServletRequest request) {
         return new StringBuilder()
                 .append("\nState:\t")
-                .append("\tUser ID =").append(request.getSession().getAttribute(Attributes.USER_ID))
-                .append("\tAdmin ID =").append(request.getSession().getAttribute(Attributes.ADMIN_ID))
-                .append("\tRequest URI = ").append(request.getRequestURI())
-                .append("\tRequest query = ").append(request.getQueryString()).toString();
+                .append("\tUser_ID=").append(request.getSession().getAttribute(Attributes.USER_ID))
+                .append("\tAdmin_ID=").append(request.getSession().getAttribute(Attributes.ADMIN_ID))
+                .append("\tRequest_URI=").append(request.getRequestURI())
+                .append("\tRequest_query=").append(request.getQueryString())
+                .append("\tUser_locale=").append(request.getSession().getAttribute(Attributes.USER_LOCALE))
+                .toString();
     }
 
 }
