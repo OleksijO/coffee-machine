@@ -4,7 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%@ include file="/WEB-INF/view/jsp/fragment/header.jsp" %>
-
+<br>
 <fmt:message key="home.description"/><br>
 <h2>
     <br> <a href="${PagesPaths.USER_LOGIN_PATH}"><fmt:message key="login.user.title"/></a>

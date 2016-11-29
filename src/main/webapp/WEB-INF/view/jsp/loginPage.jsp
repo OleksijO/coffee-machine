@@ -5,7 +5,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%@ include file="/WEB-INF/view/jsp/fragment/header.jsp" %>
-
+<br>
 <custom:loginForm formTitleMessageKey="${requestScope[Attributes.LOGIN_FORM_TITLE]}"
                   cssClass="login_form"
                   action="${requestScope[Attributes.LOGIN_FORM_ACTION]}"

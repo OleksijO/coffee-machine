@@ -1,11 +1,9 @@
-package data;
+package data.entity;
 
 import coffee_machine.model.entity.goods.Addon;
 import coffee_machine.model.entity.goods.Drink;
 
 import java.util.*;
-
-import static data.Addons.*;
 
 
 /**
@@ -14,12 +12,12 @@ import static data.Addons.*;
 public enum Drinks {
     WATER(1, "Вода", 100, 20),
     BORJOMI(2, "Боржоми", 500, 20),
-    TEA_WITHOUT_SUGAR(3, "Чай без сахара", 500, 10, LEMON.getCopy()),
-    TEA_WITH_SUGAR(4, "Чай с сахаром", 600, 20, LEMON.getCopy(), SUGAR.getCopy()),
-    ESPRESSO(6, "Эспрессо", 700, 50, SUGAR.getCopy(), MILK.getCopy(), CREAM.getCopy(), CINNAMON.getCopy()),
-    AMERICANO(10, "Американо", 800, 150, SUGAR.getCopy(), MILK.getCopy(), CREAM.getCopy(), CINNAMON.getCopy()),
-    MOCACCINO(11, "Мокачино", 1000, 50, SUGAR.getCopy(), MILK.getCopy(), CREAM.getCopy(), CINNAMON.getCopy()),
-    LATTE(12, "Латте", 1200, 100, SUGAR.getCopy(), CINNAMON.getCopy());
+    TEA_WITHOUT_SUGAR(3, "Чай без сахара", 500, 10, Addons.LEMON.getCopy()),
+    TEA_WITH_SUGAR(4, "Чай с сахаром", 600, 20, Addons.LEMON.getCopy(), Addons.SUGAR.getCopy()),
+    ESPRESSO(6, "Эспрессо", 700, 50, Addons.SUGAR.getCopy(), Addons.MILK.getCopy(), Addons.CREAM.getCopy(), Addons.CINNAMON.getCopy()),
+    AMERICANO(10, "Американо", 800, 150, Addons.SUGAR.getCopy(), Addons.MILK.getCopy(), Addons.CREAM.getCopy(), Addons.CINNAMON.getCopy()),
+    MOCACCINO(11, "Мокачино", 1000, 50, Addons.SUGAR.getCopy(), Addons.MILK.getCopy(), Addons.CREAM.getCopy(), Addons.CINNAMON.getCopy()),
+    LATTE(12, "Латте", 1200, 100, Addons.SUGAR.getCopy(), Addons.CINNAMON.getCopy());
 
     public final Drink drink;
 

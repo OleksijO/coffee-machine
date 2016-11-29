@@ -1,13 +1,12 @@
 package coffee_machine.controller.impl.command.user;
 
 import coffee_machine.controller.Command;
-import coffee_machine.controller.RegExp;
-import coffee_machine.controller.exception.ControllerException;
+import coffee_machine.controller.impl.command.parser.PurchaseFormParser;
+import coffee_machine.controller.impl.command.parser.impl.PurchaseFormParserImpl;
 import coffee_machine.controller.logging.ControllerErrorLogging;
 import coffee_machine.exception.ApplicationException;
 import coffee_machine.i18n.message.key.CommandKey;
 import coffee_machine.i18n.message.key.GeneralKey;
-import coffee_machine.i18n.message.key.error.CommandErrorKey;
 import coffee_machine.model.entity.HistoryRecord;
 import coffee_machine.model.entity.goods.Drink;
 import coffee_machine.service.AccountService;
@@ -22,9 +21,8 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.List;
+import java.util.Map;
 
 import static coffee_machine.view.Attributes.*;
 
@@ -34,9 +32,8 @@ public class UserPurchaseSubmitCommand implements Command, ControllerErrorLoggin
     private DrinkService drinkService = DrinkServiceImpl.getInstance();
     private AccountService accountService = AccountServiceImpl.getInstance();
     private CoffeeMachineService coffeeMachine = CoffeeMachineServiceImpl.getInstance();
-    private Pattern patternNumber = Pattern.compile(RegExp.REGEXP_NUMBER);
-    private Pattern patternDrink = Pattern.compile(RegExp.REGEXP_DRINK_PARAM);
-    private Pattern patternAddonInDrink = Pattern.compile(RegExp.REGEXP_ADDON_IN_DRINK_PARAM);
+
+    private PurchaseFormParser formParser = new PurchaseFormParserImpl();
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
@@ -60,84 +57,39 @@ public class UserPurchaseSubmitCommand implements Command, ControllerErrorLoggin
         return PagesPaths.USER_PURCHASE_PAGE;
     }
 
-    private List<Drink> getDrinksFromRequest(HttpServletRequest request) {
-        Enumeration<String> params = request.getParameterNames();
-        Map<Integer, Integer> drinkQuantityByIds = new HashMap<>();
-        while (params.hasMoreElements()) {
-            String param = params.nextElement();
-            Matcher matcher = patternDrink.matcher(param);
-            if (matcher.matches()) {
-                int drinkQuantity = getIntFromRequestByParameter(param, request);
-                if (drinkQuantity > 0) {
-                    int drinkId = getDrinkIdFromParam(param);
-                    drinkQuantityByIds.put(drinkId, drinkQuantity);
-                }
-            }
-        }
-        List<Drink> drinks = drinkService.getAllByIdSet(drinkQuantityByIds.keySet());
-        drinks = getBaseDrinkListAndSetDrinkQuantities(drinks, drinkQuantityByIds);
-        params = request.getParameterNames();
-        while (params.hasMoreElements()) {
-            String param = params.nextElement();
-            Matcher matcher = patternAddonInDrink.matcher(param);
-            if (matcher.matches()) {
-                int addonQuantity = getIntFromRequestByParameter(param, request);
-                if (addonQuantity > 0) {
-                    int drinkId = getDrinkIdFromParam(param);
-                    addAddonToDrinkInList(drinkId, getAddonIdFromParam(param), addonQuantity, drinks);
-                }
-            }
-        }
+    List<Drink> getDrinksFromRequest(HttpServletRequest request) {
+
+        Map<Integer, Integer> drinkQuantityByIds = formParser.getDrinksQuantityByIdFromRequest(request);
+        List<Drink> drinks = drinkService.getAllBaseByIdSet(drinkQuantityByIds.keySet());
+        setDrinkQuantities(drinks, drinkQuantityByIds);
+        Map<Integer, Map<Integer, Integer>> addonsQuantityInDrinksById =
+                formParser.getAddonsQuantityInDrinksByIdFromRequest(request);
+        setAddonsQuantityInDrinks(addonsQuantityInDrinksById, drinks);
+
+
         return drinks;
     }
 
-    private int getIntFromRequestByParameter(String param, HttpServletRequest request) {
-        try {
-            return Integer.parseInt(request.getParameter(param));
-        } catch (Exception e) {
-            throw new ControllerException(CommandErrorKey.QUANTITY_SHOULD_BE_INT);
-        }
 
-    }
-
-    private int getDrinkIdFromParam(String param) {
-        Matcher matcher = patternNumber.matcher(param);
-        matcher.find(0);
-        return Integer.parseInt(param.substring(matcher.start(), matcher.end()));
-
-    }
-
-    private List<Drink> getBaseDrinkListAndSetDrinkQuantities(List<Drink> drinks,
-                                                              Map<Integer, Integer> drinkQuantityByIds) {
-        List<Drink> baseDrinks = new ArrayList<>();
+    void setDrinkQuantities(List<Drink> drinks, Map<Integer, Integer> drinkQuantityByIds) {
         drinks.forEach(drink -> {
-            Drink baseDrink = drink.getBaseDrink();
-            baseDrink.setQuantity(drinkQuantityByIds.get(drink.getId()));
-            baseDrinks.add(baseDrink);
+            drink.setQuantity(drinkQuantityByIds.get(drink.getId()));
         });
-        return baseDrinks;
-
     }
 
-    private int getAddonIdFromParam(String param) {
-        Matcher matcher = patternNumber.matcher(param);
-        matcher.find(0);                                    // passing drink id
-        matcher.find(matcher.end());
-        return Integer.parseInt(param.substring(matcher.start(), matcher.end()));
-    }
-
-    private void addAddonToDrinkInList(int drinkId, int addonId, int addonQuantity, List<Drink> drinks) {
-
+    void setAddonsQuantityInDrinks(Map<Integer, Map<Integer, Integer>> addonsQuantityInDrinksById, List<Drink> drinks) {
         drinks.forEach(drink -> {
-            if (drink.getId() == drinkId) {
+            Map<Integer, Integer> addonsQuantityById = addonsQuantityInDrinksById.get(drink.getId());
+            if (addonsQuantityById != null) {
                 drink.getAddons().forEach(addon -> {
-                    if (addon.getId() == addonId) {
-                        addon.setQuantity(addon.getQuantity() + addonQuantity);
+                    Integer quantity = addonsQuantityById.get(addon.getId());
+                    if (quantity != null) {
+                        addon.setQuantity(quantity);
                     }
                 });
             }
         });
-
     }
+
 
 }

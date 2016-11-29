@@ -1,17 +1,14 @@
-package data;
+package data.entity;
 
 import coffee_machine.model.entity.Account;
 import coffee_machine.model.entity.user.User;
-
-import static data.Accounts.USER_A;
-import static data.Accounts.USER_B;
 
 /**
  * Created by oleksij.onysymchuk@gmail on 24.11.2016.
  */
 public enum Users {
-    A(1, "oleksij.onysymchuk@gmail.com", "630d82b1215e611e7aca66237834cd19", "Олексій Онисимчук", USER_A.account),
-    B(2, "user@test.com", "630d82b1215e611e7aca66237834cd19", "Тестовий користувач", USER_B.account);
+    A(1, "oleksij.onysymchuk@gmail.com", "630d82b1215e611e7aca66237834cd19", "Олексій Онисимчук", Accounts.USER_A.account),
+    B(2, "user@test.com", "630d82b1215e611e7aca66237834cd19", "Тестовий користувач", Accounts.USER_B.account);
 
     public final User user;
 

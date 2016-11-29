@@ -1,9 +1,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page import="coffee_machine.view.PagesPaths" %>
+<%@ page import="coffee_machine.view.Parameters" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%@ include file="/WEB-INF/view/jsp/fragment/header.jsp" %>
 <%@ include file="/WEB-INF/view/jsp/fragment/purchaseDetails.jsp" %>
+<br>
 <fmt:message key="user.purchase.description"/> <br>
 <br>
 <form action="${PagesPaths.USER_PURCHASE_PATH}" method="post">
@@ -48,8 +50,11 @@
                                                         maxFractionDigits="2"/>)
                                 </td>
                                 <td>
-                                    <select name="<%=Parameters.DRINK_PARAMETER_STARTS_WITH%>${drink.id}
-								<%=Parameters.ADDON_PARAMETER_STARTS_WITH%>${addon.id}"
+                                    <select
+                                            name="${Parameters.DRINK_PARAMETER_STARTS_WITH
+                                                    .concat(drink.id)
+                                                    .concat(Parameters.ADDON_PARAMETER_STARTS_WITH)
+                                                     .concat(addon.id)}"
                                             style="width: 30pt">
                                         <option selected value="0">0</option>
                                         <option value="1">1</option>

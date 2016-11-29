@@ -120,5 +120,15 @@ public class DrinkServiceImpl implements DrinkService {
         }
     }
 
+    @Override
+    public List<Drink> getAllBaseByIdSet(Set<Integer> drinkIds) {
+
+        List<Drink> drinks = getAllByIdSet(drinkIds);
+        List<Drink> baseDrinks = new ArrayList();
+        drinks.forEach(drink->baseDrinks.add(drink.getBaseDrink()));
+        return baseDrinks;
+
+    }
+
 
 }

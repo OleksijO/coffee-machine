@@ -16,7 +16,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%@ include file="/WEB-INF/view/jsp/fragment/header.jsp" %>
-
+<br>
 <div align="center">
     <br><br><br><br>
     <h2><fmt:message key="internal.error"/></h2>

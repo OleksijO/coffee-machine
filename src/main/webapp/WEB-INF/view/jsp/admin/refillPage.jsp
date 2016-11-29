@@ -5,7 +5,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%@ include file="/WEB-INF/view/jsp/fragment/header.jsp" %>
-
+<br>
 <fmt:message key="admin.refill.description"/> <br><br>
 <fmt:message key="admin.refill.machine.balance"/> :
 ${requestScope[Attributes.COFFEE_MACHINE_BALANCE]}

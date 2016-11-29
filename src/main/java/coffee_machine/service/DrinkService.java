@@ -18,4 +18,6 @@ public interface DrinkService {
 	void refill(Map<Integer, Integer> quantitiesById);
 
 	List<Drink> getAllByIdSet(Set<Integer> integers);
+
+    List<Drink> getAllBaseByIdSet(Set<Integer> drinkIds);
 }

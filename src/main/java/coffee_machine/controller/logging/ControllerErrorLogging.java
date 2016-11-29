@@ -34,7 +34,7 @@ public interface ControllerErrorLogging extends ApplicationErrorLogging {
                 .append("\tUser ID =").append(request.getSession().getAttribute(Attributes.USER_ID))
                 .append("\tAdmin ID =").append(request.getSession().getAttribute(Attributes.ADMIN_ID))
                 .append("\tRequest URI = ").append(request.getRequestURI())
-                .append("\tRequest params = ").append(request.getQueryString()).toString();
+                .append("\tRequest query = ").append(request.getQueryString()).toString();
     }
 
 }

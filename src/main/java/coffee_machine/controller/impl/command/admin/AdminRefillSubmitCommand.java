@@ -2,8 +2,8 @@ package coffee_machine.controller.impl.command.admin;
 
 import coffee_machine.CoffeeMachineConfig;
 import coffee_machine.controller.Command;
-import coffee_machine.controller.RegExp;
-import coffee_machine.controller.exception.ControllerException;
+import coffee_machine.controller.impl.command.parser.RefillFormParser;
+import coffee_machine.controller.impl.command.parser.impl.RefillFormParserImpl;
 import coffee_machine.controller.logging.ControllerErrorLogging;
 import coffee_machine.exception.ApplicationException;
 import coffee_machine.i18n.message.key.CommandKey;
@@ -20,11 +20,7 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static coffee_machine.view.Attributes.*;
 import static coffee_machine.view.PagesPaths.ADMIN_REFILL_PAGE;
@@ -36,9 +32,7 @@ public class AdminRefillSubmitCommand implements Command, ControllerErrorLogging
     private final AddonService addonService = AddonServiceImpl.getInstance();
     private final AccountService accountService = AccountServiceImpl.getInstance();
 
-    private final Pattern patternNumber = Pattern.compile(RegExp.REGEXP_NUMBER);
-    private final Pattern patternDrink = Pattern.compile(RegExp.REGEXP_DRINK_PARAM);
-    private final Pattern patternAddon = Pattern.compile(RegExp.REGEXP_ADDON_PARAM);
+    private final RefillFormParser formParser = new RefillFormParserImpl();
 
 
 
@@ -46,8 +40,8 @@ public class AdminRefillSubmitCommand implements Command, ControllerErrorLogging
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_ADMIN_REFILL);
         try {
-            Map<Integer, Integer> drinkAddQuantityByIds = getGoodsQuantityByIdFromRequest(request, patternDrink);
-            Map<Integer, Integer> addonAddQuantityByIds = getGoodsQuantityByIdFromRequest(request, patternAddon);
+            Map<Integer, Integer> drinkAddQuantityByIds = formParser.getDrinksQuantityByIdFromRequest(request);
+            Map<Integer, Integer> addonAddQuantityByIds = formParser.getAddonsQuantityByIdFromRequest(request);
 
             boolean drinksAdded = false;
             boolean addonsAdded = false;
@@ -84,42 +78,8 @@ public class AdminRefillSubmitCommand implements Command, ControllerErrorLogging
         return ADMIN_REFILL_PAGE;
     }
 
-    private Map<Integer, Integer> getGoodsQuantityByIdFromRequest(HttpServletRequest request,
-                                                                  Pattern goodsParameterPattern) {
-        Enumeration<String> params = request.getParameterNames();
-        Map<Integer, Integer> goodsQuantityByIds = new HashMap<>();
-        while (params.hasMoreElements()) {
-            String param = params.nextElement();
-            Matcher matcher = goodsParameterPattern.matcher(param);
-            if (matcher.matches()) {
-                int goodsQuantity = getIntFromRequestByParameter(param, request);
-                if (goodsQuantity > 0) {
-                    int goodsId = getGoodsIdFromParam(param);
-                    goodsQuantityByIds.put(goodsId, goodsQuantity);
-                } else if (goodsQuantity < 0) {
-                    throw new ControllerException(CommandErrorKey.QUANTITY_SHOULD_BE_NON_NEGATIVE);
-                }
-            }
-        }
-        return goodsQuantityByIds;
-    }
 
-    private int getIntFromRequestByParameter(String param, HttpServletRequest request) {
-        try {
-            return Integer.parseInt(request.getParameter(param));
-        } catch (Exception e) {
-            throw new ControllerException(CommandErrorKey.QUANTITY_SHOULD_BE_INT);
-        }
 
-    }
 
-    private int getGoodsIdFromParam(String param) {
-        Matcher matcher = patternNumber.matcher(param);
-        if (matcher.find(0)) {
-            return Integer.parseInt(param.substring(matcher.start(), matcher.end()));
-        } else {
-            throw new ControllerException(GeneralKey.ERROR_UNKNOWN);
-        }
-    }
 
 }

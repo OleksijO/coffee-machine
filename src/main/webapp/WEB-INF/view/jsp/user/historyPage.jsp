@@ -37,7 +37,8 @@
                 <div align="left"> ${drink.orderDescription} </div>
             </td>
             <td>
-                <div align="right"> ${drink.realAmount} </div>
+                <div align="right"> <fmt:formatNumber value="${drink.realAmount}" type="number"
+                                                      minFractionDigits="2" maxFractionDigits="2"/> </div>
             </td>
         </tr>
     </c:forEach>

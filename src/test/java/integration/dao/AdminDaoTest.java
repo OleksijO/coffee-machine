@@ -5,7 +5,7 @@ import coffee_machine.dao.AdminDao;
 import coffee_machine.dao.DaoFactory;
 import coffee_machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee_machine.model.entity.user.Admin;
-import data.Admins;
+import data.entity.Admins;
 import org.junit.*;
 
 import java.io.IOException;

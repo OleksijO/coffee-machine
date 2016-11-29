@@ -1,10 +1,10 @@
-package data;
+package data.entity;
 
 import coffee_machine.model.entity.HistoryRecord;
 
 import java.util.Date;
 
-import static data.HistoryRecords.ConstHolder.*;
+import static data.entity.HistoryRecords.ConstHolder.*;
 
 /**
  * Created by oleksij.onysymchuk@gmail on 24.11.2016.

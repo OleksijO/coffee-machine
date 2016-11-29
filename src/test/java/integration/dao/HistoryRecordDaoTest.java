@@ -5,7 +5,7 @@ import coffee_machine.dao.DaoFactory;
 import coffee_machine.dao.HistoryRecordDao;
 import coffee_machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee_machine.model.entity.HistoryRecord;
-import data.HistoryRecords;
+import data.entity.HistoryRecords;
 import org.junit.*;
 
 import java.io.IOException;
