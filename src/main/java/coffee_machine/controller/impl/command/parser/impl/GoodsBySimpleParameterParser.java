@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
  */
 public class GoodsBySimpleParameterParser {
     private final Pattern patternNumber = Pattern.compile(RegExp.REGEXP_NUMBER);
+
     Map<Integer, Integer> getGoodsQuantityByIdFromRequest(HttpServletRequest request,
                                                           Pattern goodsParameterPattern) {
         Enumeration<String> params = request.getParameterNames();

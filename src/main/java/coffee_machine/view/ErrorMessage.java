@@ -1,4 +1,4 @@
-package coffee_machine.exception;
+package coffee_machine.view;
 
 /**
  * Created by oleksij.onysymchuk@gmail on 28.11.2016.

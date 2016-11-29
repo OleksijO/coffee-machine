@@ -33,56 +33,62 @@
 
         <c:set var="drinks_attr" value="<%=Attributes.REFILL_DRINKS%>"/>
         <c:forEach items="${requestScope[drinks_attr]}" var="drink">
-            <tr>
-                <td><b>${drink.name}</b>
-                    <table>
-                        <c:set var="addons" value="${drink.addons}"/>
+            <c:if test="${drink.quantity gt 0}">
+                <tr>
+                    <td><b>${drink.name}</b>
+                        <table>
+                            <c:set var="addons" value="${drink.addons}"/>
 
-                        <c:forEach items="${addons}" var="addon">
-                            <tr>
-                                <td>
-                                <td test='${addon.quantity>0}'>
-                                    <b>+</b>
-                                        ${addon.name}</td>
-                                <td>(+<fmt:formatNumber value="${addon.realPrice}"
-                                                        type="number"
-                                                        minFractionDigits="2"
-                                                        maxFractionDigits="2"/>)
-                                </td>
-                                <td>
-                                    <select
-                                            name="${Parameters.DRINK_PARAMETER_STARTS_WITH
+                            <c:forEach items="${addons}" var="addon">
+                                <c:if test="${addon.quantity gt 0}">
+                                    <tr>
+                                        <td>
+                                        <td test='${addon.quantity>0}'>
+                                            <b>+</b>
+                                                ${addon.name}</td>
+                                        <td>(+<fmt:formatNumber value="${addon.realPrice}"
+                                                                type="number"
+                                                                minFractionDigits="2"
+                                                                maxFractionDigits="2"/>)
+                                        </td>
+                                        <td>
+                                            <select
+                                                    name="${Parameters.DRINK_PARAMETER_STARTS_WITH
                                                     .concat(drink.id)
                                                     .concat(Parameters.ADDON_PARAMETER_STARTS_WITH)
                                                      .concat(addon.id)}"
-                                            style="width: 30pt">
-                                        <option selected value="0">0</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    [${addon.quantity}]
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </table>
-                </td>
-                <td>
-                    <div align="center"><fmt:formatNumber value="${drink.realPrice}" type="number"
-                                                          minFractionDigits="2" maxFractionDigits="2"/></div>
-                </td>
-                <td>
-                    <div align="center">${drink.quantity}</div>
-                </td>
-                <td>
-                    <div align="center">
-                        <input type="text" value="0"
-                               name="<%=Parameters.DRINK_PARAMETER_STARTS_WITH%>${drink.id}"
-                               style="width: 20pt">
-                    </div>
-                </td>
-            </tr>
+                                                    style="width: 30pt">
+                                                <option selected value="0">0</option>
+                                                <option value="1">1</option>
+                                                <c:if test="${addon.quantity gt 1}">
+                                                    <option value="2">2</option>
+                                                </c:if>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            [${addon.quantity}]
+                                        </td>
+                                    </tr>
+                                </c:if>
+                            </c:forEach>
+                        </table>
+                    </td>
+                    <td>
+                        <div align="center"><fmt:formatNumber value="${drink.realPrice}" type="number"
+                                                              minFractionDigits="2" maxFractionDigits="2"/></div>
+                    </td>
+                    <td>
+                        <div align="center">${drink.quantity}</div>
+                    </td>
+                    <td>
+                        <div align="center">
+                            <input type="text" value="0"
+                                   name="<%=Parameters.DRINK_PARAMETER_STARTS_WITH%>${drink.id}"
+                                   style="width: 20pt">
+                        </div>
+                    </td>
+                </tr>
+            </c:if>
         </c:forEach>
 
         <tr>

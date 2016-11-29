@@ -12,7 +12,7 @@
 <%@ taglib uri="/WEB-INF/view/taglib/loginForm.tld" prefix="custom" %>
 <%@ page import="coffee_machine.view.PagesPaths" %>
 <%@ page import="coffee_machine.i18n.message.key.GeneralKey" %>
-<%@ page import="coffee_machine.exception.ErrorMessage" %>
+<%@ page import="coffee_machine.view.ErrorMessage" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%@ include file="/WEB-INF/view/jsp/fragment/header.jsp" %>
