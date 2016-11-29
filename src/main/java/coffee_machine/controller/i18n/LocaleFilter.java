@@ -1,9 +1,9 @@
 package coffee_machine.controller.i18n;
 
 import coffee_machine.CoffeeMachineConfig;
+import coffee_machine.i18n.SupportedLocale;
 import coffee_machine.view.Attributes;
 import coffee_machine.view.Parameters;
-import coffee_machine.i18n.SupportedLocale;
 import org.apache.log4j.Logger;
 
 import javax.servlet.*;
@@ -13,13 +13,13 @@ import java.io.IOException;
 import java.util.Locale;
 
 
-//@WebFilter("/*")
 public class LocaleFilter implements Filter {
     private static final Logger logger = Logger.getLogger(LocaleFilter.class);
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+
         HttpServletRequest req = ((HttpServletRequest) request);
         HttpSession session = req.getSession();
 
@@ -38,16 +38,18 @@ public class LocaleFilter implements Filter {
                 }
             }
             session.setAttribute(Attributes.USER_LOCALE, locale);
-
         }
 
         /* initially set up user locale be locale in request if supported or default if not*/
         if (session.getAttribute(Attributes.USER_LOCALE) == null) {
             Locale locale = null;
-            for (SupportedLocale loc : SupportedLocale.values()) {
-                if (loc.getLocale().toString().equals(request.getLocale().toString())) {
-                    locale = loc.getLocale();
-                    break;
+            Locale requeslLocale = request.getLocale();
+            if (requeslLocale != null) {
+                for (SupportedLocale loc : SupportedLocale.values()) {
+                    if (loc.getLocale().toString().equals(requeslLocale.toString())) {
+                        locale = loc.getLocale();
+                        break;
+                    }
                 }
             }
             if (locale == null) {
@@ -55,6 +57,7 @@ public class LocaleFilter implements Filter {
             }
             session.setAttribute(Attributes.USER_LOCALE, locale);
         }
+
         chain.doFilter(request, response);
     }
 

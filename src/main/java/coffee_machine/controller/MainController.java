@@ -20,7 +20,7 @@ import static coffee_machine.view.PagesPaths.REDIRECTED;
 /**
  * Servlet implementation class MainController
  */
-// @WebServlet("/*")
+
 public class MainController extends HttpServlet implements ControllerErrorLogging {
     private static final Logger logger = Logger.getLogger(MainController.class);
     private static final long serialVersionUID = 1L;

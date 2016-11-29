@@ -11,7 +11,6 @@ import static coffee_machine.view.Attributes.ADMIN_ID;
 import static coffee_machine.view.Attributes.USER_ID;
 import static coffee_machine.view.PagesPaths.*;
 
-//@WebFilter("/*")
 public class AuthentificationFilter implements Filter {
     private static final Logger logger = Logger.getLogger(AuthentificationFilter.class);
 
