@@ -183,7 +183,7 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
                 logErrorAndThrowNewServiceException(logger, NOT_ENOUGH_GOODS, goods1ToBuy.getName());
             }
             availableQuantity -= goods1ToBuy.getQuantity();
-            if (availableQuantity <= 0) {
+            if (availableQuantity < 0) {
                 logErrorAndThrowNewServiceException(logger, GOODS_NO_LONGER_AVAILABLE, goods1ToBuy.getName());
             }
             goodsAvailableQuantity.put(goods1ToBuy.getId(), availableQuantity);

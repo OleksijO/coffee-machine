@@ -2,7 +2,6 @@ package coffee_machine.dao.impl.jdbc;
 
 import coffee_machine.dao.AdminDao;
 import coffee_machine.dao.exception.DaoException;
-import coffee_machine.i18n.message.key.error.DaoErrorKey;
 import coffee_machine.model.entity.user.Admin;
 import org.apache.log4j.Logger;
 
@@ -12,6 +11,7 @@ import java.util.List;
 
 public class AdminDaoImpl extends AbstractUserDao<Admin> implements AdminDao {
 	private static final Logger logger = Logger.getLogger(AdminDaoImpl.class);
+	private static final String DB_ERROR_WHILE_GETTING_BY_LOGIN = "Database error while getting user by login";
 
 	private static final String WHERE_ABSTRACT_USER_LOGIN = " WHERE abstract_user.email = ?";
 	private static final String WHERE_ABSTRACT_USER_ID = " WHERE abstract_user.id = ?";
@@ -37,10 +37,10 @@ public class AdminDaoImpl extends AbstractUserDao<Admin> implements AdminDao {
 	@Override
 	public Admin insert(Admin admin) {
 		if (admin == null) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_CREATE_EMPTY);
+			throw new DaoException(CAN_NOT_CREATE_EMPTY);
 		}
 		if (admin.getId() != 0) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_CREATE_ALREADY_SAVED);
+			throw new DaoException(CAN_NOT_CREATE_ALREADY_SAVED);
 		}
 
 		try (PreparedStatement statementForAbstractUser = connection.prepareStatement(INSERT_ABSTRACT_USER_SQL,
@@ -58,7 +58,7 @@ public class AdminDaoImpl extends AbstractUserDao<Admin> implements AdminDao {
 			statementForAdmin.executeUpdate();
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_INSERTING, admin, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_INSERTING, admin, e);
 		}
 		return admin;
 	}
@@ -66,10 +66,10 @@ public class AdminDaoImpl extends AbstractUserDao<Admin> implements AdminDao {
 	@Override
 	public void update(Admin admin) {
 		if (admin == null) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_UPDATE_EMPTY);
+			throw new DaoException(CAN_NOT_UPDATE_EMPTY);
 		}
 		if (admin.getId() == 0) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_UPDATE_UNSAVED);
+			throw new DaoException(CAN_NOT_UPDATE_UNSAVED);
 		}
 		try (PreparedStatement statement = connection.prepareStatement(UPDATE_SQL);) {
 
@@ -83,7 +83,7 @@ public class AdminDaoImpl extends AbstractUserDao<Admin> implements AdminDao {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_UPDATING, admin, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_UPDATING, admin, e);
 		}
 	}
 
@@ -95,7 +95,7 @@ public class AdminDaoImpl extends AbstractUserDao<Admin> implements AdminDao {
 			return parseResultSet(resultSet);
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_GETTING_ALL, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_GETTING_ALL, e);
 		}
 		throw new InternalError(); // STUB for compiler
 	}
@@ -126,7 +126,7 @@ public class AdminDaoImpl extends AbstractUserDao<Admin> implements AdminDao {
 			return adminList == null || adminList.isEmpty() ? null : adminList.get(0);
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_GETTING_BY_ID, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_GETTING_BY_ID, e);
 		}
 		throw new InternalError(); // STUB for compiler
 	}
@@ -144,7 +144,7 @@ public class AdminDaoImpl extends AbstractUserDao<Admin> implements AdminDao {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_DELETING_BY_ID, admin, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_DELETING_BY_ID, admin, e);
 		}
 	}
 
@@ -159,7 +159,7 @@ public class AdminDaoImpl extends AbstractUserDao<Admin> implements AdminDao {
 			return adminList == null || adminList.isEmpty() ? null : adminList.get(0);
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_GETTING_BY_LOGIN, login, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_GETTING_BY_LOGIN, login, e);
 		}
 		throw new InternalError(); // STUB for compiler
 	}

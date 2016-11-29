@@ -36,10 +36,10 @@ public class AddonDaoImpl extends AbstractGoodsDao<Addon> implements AddonDao {
 	@Override
 	public Addon insert(Addon addon) {
 		if (addon == null) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_CREATE_EMPTY);
+			throw new DaoException(CAN_NOT_CREATE_EMPTY);
 		}
 		if (addon.getId() != 0) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_CREATE_ALREADY_SAVED);
+			throw new DaoException(CAN_NOT_CREATE_ALREADY_SAVED);
 		}
 
 		try (PreparedStatement statementForGoods = connection.prepareStatement(INSERT_GOODS_SQL,
@@ -57,7 +57,7 @@ public class AddonDaoImpl extends AbstractGoodsDao<Addon> implements AddonDao {
 			statementForAddon.executeUpdate();
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_INSERTING, addon, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_INSERTING, addon, e);
 		}
 		return addon;
 	}
@@ -65,10 +65,10 @@ public class AddonDaoImpl extends AbstractGoodsDao<Addon> implements AddonDao {
 	@Override
 	public void update(Addon addon) {
 		if (addon == null) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_UPDATE_EMPTY);
+			throw new DaoException(CAN_NOT_UPDATE_EMPTY);
 		}
 		if (addon.getId() == 0) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_UPDATE_UNSAVED);
+			throw new DaoException(CAN_NOT_UPDATE_UNSAVED);
 		}
 		try (PreparedStatement statement = connection.prepareStatement(UPDATE_SQL);) {
 
@@ -80,7 +80,7 @@ public class AddonDaoImpl extends AbstractGoodsDao<Addon> implements AddonDao {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_UPDATING, addon, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_UPDATING, addon, e);
 		}
 
 	}
@@ -93,7 +93,7 @@ public class AddonDaoImpl extends AbstractGoodsDao<Addon> implements AddonDao {
 			return parseResultSet(resultSet);
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_GETTING_ALL, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_GETTING_ALL, e);
 		}
 		throw new InternalError(); // STUB for compiler
 
@@ -123,7 +123,7 @@ public class AddonDaoImpl extends AbstractGoodsDao<Addon> implements AddonDao {
 			return addonList == null || addonList.isEmpty() ? null : addonList.get(0);
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_GETTING_BY_ID, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_GETTING_BY_ID, e);
 		}
 		throw new InternalError(); // STUB for compiler
 	}
@@ -141,7 +141,7 @@ public class AddonDaoImpl extends AbstractGoodsDao<Addon> implements AddonDao {
             statement.executeUpdate();
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_DELETING_BY_ID, addon, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_DELETING_BY_ID, addon, e);
 		}
 	}
 
@@ -167,10 +167,10 @@ public class AddonDaoImpl extends AbstractGoodsDao<Addon> implements AddonDao {
 	@Override
 	public void updateQuantity(Addon addon) {
 		if (addon == null) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_UPDATE_EMPTY);
+			throw new DaoException(CAN_NOT_UPDATE_EMPTY);
 		}
 		if (addon.getId() == 0) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_UPDATE_UNSAVED);
+			throw new DaoException(CAN_NOT_UPDATE_UNSAVED);
 		}
 		try (PreparedStatement statement = connection.prepareStatement(UPDATE_GOODS_QUANTITY_SQL)) {
 
@@ -179,7 +179,7 @@ public class AddonDaoImpl extends AbstractGoodsDao<Addon> implements AddonDao {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_UPDATING, addon, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_UPDATING, addon, e);
 		}
 	}
 

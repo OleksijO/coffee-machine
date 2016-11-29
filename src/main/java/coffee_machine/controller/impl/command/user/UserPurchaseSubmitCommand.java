@@ -115,13 +115,13 @@ public class UserPurchaseSubmitCommand implements Command, ControllerErrorLoggin
             baseDrink.setQuantity(drinkQuantityByIds.get(drink.getId()));
             baseDrinks.add(baseDrink);
         });
-        return drinks;
+        return baseDrinks;
 
     }
 
     private int getAddonIdFromParam(String param) {
         Matcher matcher = patternNumber.matcher(param);
-        matcher.find(0);     // passing drink id
+        matcher.find(0);                                    // passing drink id
         matcher.find(matcher.end());
         return Integer.parseInt(param.substring(matcher.start(), matcher.end()));
     }

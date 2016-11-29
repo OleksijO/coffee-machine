@@ -2,7 +2,6 @@ package coffee_machine.dao.impl.jdbc;
 
 import coffee_machine.dao.HistoryRecordDao;
 import coffee_machine.dao.exception.DaoException;
-import coffee_machine.i18n.message.key.error.DaoErrorKey;
 import coffee_machine.model.entity.HistoryRecord;
 import org.apache.log4j.Logger;
 
@@ -37,10 +36,10 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 	@Override
 	public HistoryRecord insert(HistoryRecord historyRecord) {
 		if (historyRecord == null) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_CREATE_EMPTY);
+			throw new DaoException(CAN_NOT_CREATE_EMPTY);
 		}
 		if (historyRecord.getId() != 0) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_CREATE_ALREADY_SAVED);
+			throw new DaoException(CAN_NOT_CREATE_ALREADY_SAVED);
 		}
 
 		try (PreparedStatement statement = connection.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
@@ -55,7 +54,7 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 			historyRecord.setId(historyRecordId);
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_INSERTING, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_INSERTING, e);
 		}
 		return historyRecord;
 	}
@@ -63,10 +62,10 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 	@Override
 	public void update(HistoryRecord historyRecord) {
 		if (historyRecord == null) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_UPDATE_EMPTY);
+			throw new DaoException(CAN_NOT_UPDATE_EMPTY);
 		}
 		if (historyRecord.getId() == 0) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_UPDATE_UNSAVED);
+			throw new DaoException(CAN_NOT_UPDATE_UNSAVED);
 		}
 
 		try (PreparedStatement statement = connection.prepareStatement(UPDATE_SQL)) {
@@ -79,7 +78,7 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_UPDATING, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_UPDATING, e);
 		}
 	}
 
@@ -95,7 +94,7 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 			return parseResultSet(resultSet);
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_GETTING_ALL, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_GETTING_ALL, e);
 		}
 		throw new InternalError(); // STUB for compiler
 
@@ -129,7 +128,7 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 			return historyRecordList == null || historyRecordList.isEmpty() ? null : historyRecordList.get(0);
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_GETTING_BY_ID, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_GETTING_BY_ID, e);
 		}
 		throw new InternalError(); // STUB for compiler
 
@@ -147,7 +146,7 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_DELETING_BY_ID, historyRecord, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_DELETING_BY_ID, historyRecord, e);
 		}
 	}
 
@@ -159,7 +158,7 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 			return parseResultSet(statement.executeQuery());
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_GETTING_BY_ID, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_GETTING_BY_ID, e);
 		}
 		throw new InternalError(); // STUB for compiler
 	}

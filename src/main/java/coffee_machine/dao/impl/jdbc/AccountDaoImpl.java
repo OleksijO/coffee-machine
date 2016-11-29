@@ -2,7 +2,6 @@ package coffee_machine.dao.impl.jdbc;
 
 import coffee_machine.dao.AccountDao;
 import coffee_machine.dao.exception.DaoException;
-import coffee_machine.i18n.message.key.error.DaoErrorKey;
 import coffee_machine.model.entity.Account;
 import org.apache.log4j.Logger;
 
@@ -24,6 +23,10 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 
 	private static final String FIELD_ID = "id";
 	private static final String FIELD_AMOUNT = "amount";
+
+
+
+
 	private final Connection connection;
 
 	AccountDaoImpl(Connection connection) {
@@ -34,10 +37,10 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 	@Override
 	public Account insert(Account account) {
 		if (account == null) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_CREATE_EMPTY);
+			throw new DaoException(CAN_NOT_CREATE_EMPTY);
 		}
 		if (account.getId() != 0) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_CREATE_ALREADY_SAVED);
+			throw new DaoException(CAN_NOT_CREATE_ALREADY_SAVED);
 		}
 
 		try (PreparedStatement statement = connection.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
@@ -49,7 +52,7 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 			account.setId(accountId);
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_INSERTING, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_INSERTING, e);
 		}
 		return account;
 	}
@@ -57,10 +60,10 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 	@Override
 	public void update(Account account) {
 		if (account == null) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_UPDATE_EMPTY);
+			throw new DaoException(CAN_NOT_UPDATE_EMPTY);
 		}
 		if (account.getId() == 0) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_UPDATE_UNSAVED);
+			throw new DaoException(CAN_NOT_UPDATE_UNSAVED);
 		}
 
 		try (PreparedStatement statement = connection.prepareStatement(UPDATE_SQL)) {
@@ -71,7 +74,7 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_UPDATING, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_UPDATING, e);
 		}
 	}
 
@@ -83,7 +86,7 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 			return parseResultSet(resultSet);
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_GETTING_ALL, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_GETTING_ALL, e);
 		}
 		throw new InternalError(); // STUB for compiler
 
@@ -111,7 +114,7 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 			return accountList == null || accountList.isEmpty() ? null : accountList.get(0);
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_GETTING_BY_ID, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_GETTING_BY_ID, e);
 		}
 		throw new InternalError(); // STUB for compiler
 
@@ -120,7 +123,6 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 	@Override
 	public Account getByUserId(int userId) {
 		try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_USER_ID_SQL)) {
-
 			statement.setInt(1, userId);
 			List<Account> accountList = parseResultSet(statement.executeQuery());
 			checkSingleResult(accountList);
@@ -128,7 +130,7 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 			return accountList == null || accountList.isEmpty() ? null : accountList.get(0);
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_GETTING_BY_ID, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_GETTING_BY_ID, e);
 		}
 		throw new InternalError(); // STUB for compiler
 
@@ -146,7 +148,7 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_DELETING_BY_ID, account, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_DELETING_BY_ID, account, e);
 		}
 	}
 

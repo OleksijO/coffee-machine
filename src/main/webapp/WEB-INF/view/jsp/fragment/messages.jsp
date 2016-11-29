@@ -13,7 +13,7 @@
        <p>
             <fmt:message key="${err_message}"/>
             <c:if test='${not empty error_additional_message}'>
-                <br> <fmt:message key="${error_additional_message}"/>
+                <br> ${error_additional_message}
             </c:if>
         </p>
     </div>

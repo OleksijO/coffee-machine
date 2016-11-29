@@ -1,5 +1,8 @@
 package coffee_machine.dao.impl.jdbc;
 
+import coffee_machine.dao.exception.DaoException;
+import coffee_machine.dao.logging.DaoErrorProcessing;
+import coffee_machine.i18n.message.key.error.DaoErrorKey;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import javax.sql.DataSource;
@@ -9,7 +12,7 @@ import java.util.ResourceBundle;
 /**
  * Created by oleksij.onysymchuk@gmail on 17.11.2016.
  */
-public class JdbcPooledDataSource {
+public class JdbcPooledDataSource implements DaoErrorProcessing {
 
     private static class InstanceHolder {
         private static final DataSource instance = initDataSource();
@@ -25,8 +28,7 @@ public class JdbcPooledDataSource {
         try {
             cpds.setDriverClass(jdbcProperties.getString("jdbc.driver"));
         } catch (PropertyVetoException e) {
-            // TODO log
-            throw new Error(e);
+           throw new DaoException(DaoErrorKey.DAO_ERROR, e);
         }
         cpds.setJdbcUrl(jdbcProperties.getString("jdbc.url"));
         cpds.setUser(jdbcProperties.getString("jdbc.user"));

@@ -18,6 +18,10 @@ public interface ApplicationErrorLogging {
         logger.error(e);
     }
 
+    default void logError(Logger logger, String message) {
+        logger.error(message);
+    }
+
     default void logApplicationError(Logger logger,
                                      String messageKey,
                                      Exception e) {

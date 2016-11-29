@@ -44,10 +44,10 @@ public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 	@Override
 	public Drink insert(Drink drink) {
 		if (drink == null) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_CREATE_EMPTY);
+			throw new DaoException(CAN_NOT_CREATE_EMPTY);
 		}
 		if (drink.getId() != 0) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_CREATE_ALREADY_SAVED);
+			throw new DaoException(CAN_NOT_CREATE_ALREADY_SAVED);
 		}
 
 		try (PreparedStatement statementForGoods = connection.prepareStatement(INSERT_GOODS_SQL,
@@ -76,7 +76,7 @@ public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 			}
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_INSERTING, drink, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_INSERTING, drink, e);
 		}
 		return drink;
 	}
@@ -84,10 +84,10 @@ public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 	@Override
 	public void updateQuantity(Drink drink) {
 		if (drink == null) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_UPDATE_EMPTY);
+			throw new DaoException(CAN_NOT_UPDATE_EMPTY);
 		}
 		if (drink.getId() == 0) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_UPDATE_UNSAVED);
+			throw new DaoException(CAN_NOT_UPDATE_UNSAVED);
 		}
 		try (PreparedStatement statement = connection.prepareStatement(UPDATE_GOODS_QUANTITY_SQL)) {
 
@@ -96,17 +96,17 @@ public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_UPDATING, drink, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_UPDATING, drink, e);
 		}
 	}
 
 	@Override
 	public void update(Drink drink) {
 		if (drink == null) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_UPDATE_EMPTY);
+			throw new DaoException(CAN_NOT_UPDATE_EMPTY);
 		}
 		if (drink.getId() == 0) {
-			throw new DaoException(DaoErrorKey.CAN_NOT_UPDATE_UNSAVED);
+			throw new DaoException(CAN_NOT_UPDATE_UNSAVED);
 		}
 
 		try (PreparedStatement statement = connection.prepareStatement(UPDATE_SQL);
@@ -132,7 +132,7 @@ public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 				}
 			}
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_UPDATING, drink, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_UPDATING, drink, e);
 		}
 	}
 
@@ -144,7 +144,7 @@ public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 			return parseResultSet(resultSet);
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_GETTING_ALL, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_GETTING_ALL, e);
 		}
 		throw new InternalError(); // STUB for compiler
 	}
@@ -171,7 +171,7 @@ public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 			return addonSet;
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_UPDATING, drinkId, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_UPDATING, drinkId, e);
 		}
 		throw new InternalError(); // STUB for compiler
 	}
@@ -200,7 +200,7 @@ public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 			return drinkList == null || drinkList.isEmpty() ? null : drinkList.get(0);
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_GETTING_BY_ID, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_GETTING_BY_ID, e);
 		}
 		throw new InternalError(); // STUB for compiler
 	}
@@ -222,7 +222,7 @@ public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 			statementForDeleteAddonsFromSet.executeUpdate();
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DaoErrorKey.DB_ERROR_WHILE_DELETING_BY_ID, drink, e);
+			logErrorAndThrowDaoException(DB_ERROR_WHILE_DELETING_BY_ID, drink, e);
 		}
 	}
 
