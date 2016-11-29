@@ -12,29 +12,28 @@ import static coffee_machine.view.Attributes.USER_ID;
 import static coffee_machine.view.PagesPaths.*;
 
 public class AuthentificationFilter implements Filter {
-    private static final Logger logger = Logger.getLogger(AuthentificationFilter.class);
+    static final Logger logger = Logger.getLogger(AuthentificationFilter.class);
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest req = ((HttpServletRequest) request);
         HttpSession session = req.getSession();
-        logger.debug("Authentification Filter processing");
-        logger.debug("user_id = " + session.getAttribute(USER_ID));
-        logger.debug("admin_id = " + session.getAttribute(ADMIN_ID));
+
+        /* in case of not logged admin and try to go on any admin page - forwarding to admin login path */
         if ((req.getRequestURI().startsWith(ADMIN)) && (session.getAttribute(ADMIN_ID) == null)
                 && (!req.getRequestURI().startsWith(ADMIN_LOGIN_PATH))) {
-            logger.debug("Admin not authentificated. redirectiong to admin email page");
             req.getRequestDispatcher(ADMIN_LOGIN_PATH).forward(request, response);
             return;
         }
 
+        /* in case of not logged user and try to go on any user page - forwarding to user login path */
         if ((req.getRequestURI().startsWith(USER)) && (session.getAttribute(USER_ID) == null)
                 && (!req.getRequestURI().startsWith(USER_LOGIN_PATH))) {
-            logger.debug("User not authentificated. redirectiong to user email page");
             req.getRequestDispatcher(USER_LOGIN_PATH).forward(request, response);
             return;
         }
+
         chain.doFilter(request, response);
     }
 
