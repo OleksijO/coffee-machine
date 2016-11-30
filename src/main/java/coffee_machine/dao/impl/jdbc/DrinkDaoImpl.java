@@ -35,12 +35,10 @@ public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 	private static final String FIELD_ADDON_ID = "addon_id";
 
 	private final Connection connection;
-	private AddonDao addonDao;
 
 	public DrinkDaoImpl(Connection connection) {
 		super(logger);
 		this.connection = connection;
-		addonDao = new AddonDaoImpl(connection);
 	}
 
 	@Override
@@ -131,7 +129,6 @@ public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
 					statementForInsertAddonToSet.setInt(1, drink.getId());
 					statementForInsertAddonToSet.setInt(2, addon.getId());
 					statementForInsertAddonToSet.executeUpdate();
-					addonDao.update(addon);
 				}
 			}
 		} catch (SQLException e) {
