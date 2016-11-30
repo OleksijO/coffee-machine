@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 /**
  * Created by oleksij.onysymchuk@gmail on 29.11.2016.
  */
-abstract class GoodsBySimpleParameterParser {
+class GoodsBySimpleParameterParser {
     private final Pattern patternNumber = Pattern.compile(RegExp.REGEXP_NUMBER);
 
     Map<Integer, Integer> getGoodsQuantityByIdFromRequest(HttpServletRequest request,

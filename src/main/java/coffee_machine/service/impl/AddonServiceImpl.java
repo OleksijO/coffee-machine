@@ -43,18 +43,19 @@ public class AddonServiceImpl implements AddonService {
 
     @Override
     public void refill(Map<Integer, Integer> quantitiesById) {
+        if ((quantitiesById == null) || (quantitiesById.size() == 0)) {
+            return;
+        }
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             AddonDao addonDao = daoFactory.getAddonDao(connection);
             connection.beginTransaction();
-            quantitiesById.keySet().forEach(id -> {
-                Addon addon = addonDao.getById(id);
-                addon.setQuantity(addon.getQuantity() + quantitiesById.get(id));
-                addonDao.update(addon);
-            });
+            List<Addon> addonsToUpdate = addonDao.getAllByIds(new ArrayList<>(quantitiesById.keySet()));
+            addonsToUpdate.forEach(
+                    addon -> addon.setQuantity(addon.getQuantity() + quantitiesById.get(addon.getId())));
+            addonDao.updateQuantityAllInList(addonsToUpdate);
             connection.commitTransaction();
 
         }
     }
-
 }

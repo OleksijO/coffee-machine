@@ -44,15 +44,17 @@ public class DrinkServiceImpl implements DrinkService {
 
     @Override
     public void refill(Map<Integer, Integer> quantitiesById) {
+        if ((quantitiesById == null) || (quantitiesById.size() == 0)) {
+            return;
+        }
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
             connection.beginTransaction();
-            quantitiesById.keySet().forEach(id -> {
-                Drink drink = drinkDao.getById(id);
-                drink.setQuantity(drink.getQuantity() + quantitiesById.get(id));
-                drinkDao.update(drink);
-            });
+            List<Drink> drinksToUpdate = drinkDao.getAllByIds(new ArrayList<>(quantitiesById.keySet()));
+            drinksToUpdate.forEach(
+                    drink -> drink.setQuantity(drink.getQuantity() + quantitiesById.get(drink.getId())));
+            drinkDao.updateQuantityAllInList(drinksToUpdate);
             connection.commitTransaction();
 
         }
@@ -76,7 +78,7 @@ public class DrinkServiceImpl implements DrinkService {
 
         List<Drink> drinks = getAllByIdSet(drinkIds);
         List<Drink> baseDrinks = new ArrayList();
-        drinks.forEach(drink->baseDrinks.add(drink.getBaseDrink()));
+        drinks.forEach(drink -> baseDrinks.add(drink.getBaseDrink()));
         return baseDrinks;
 
     }
