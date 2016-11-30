@@ -24,18 +24,6 @@ public class AccountServiceImpl implements AccountService {
         return AccountServiceImpl.InstanceHolder.instance;
     }
 
-
-    public void update(Account account) {
-        try (AbstractConnection connection = daoFactory.getConnection()) {
-
-            AccountDao accountDao = daoFactory.getAccountDao(connection);
-            connection.beginTransaction();
-            accountDao.update(account);
-            connection.commitTransaction();
-
-        }
-    }
-
     @Override
     public Account getById(int id) {
         try (AbstractConnection connection = daoFactory.getConnection()) {

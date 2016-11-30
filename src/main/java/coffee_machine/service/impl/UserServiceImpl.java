@@ -8,9 +8,6 @@ import coffee_machine.model.entity.user.User;
 import coffee_machine.service.UserService;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by oleksij.onysymchuk@gmail on 15.11.2016.
  */
@@ -27,43 +24,6 @@ public class UserServiceImpl implements UserService {
         return InstanceHolder.instance;
     }
 
-
-    public User create(User user) {
-        try (AbstractConnection connection = daoFactory.getConnection()) {
-
-            UserDao userDao = daoFactory.getUserDao(connection);
-            connection.beginTransaction();
-            userDao.insert(user);
-            connection.commitTransaction();
-            return user;
-
-        }
-
-    }
-
-    public void update(User user) {
-        try (AbstractConnection connection = daoFactory.getConnection()) {
-
-            UserDao userDao = daoFactory.getUserDao(connection);
-            connection.beginTransaction();
-            userDao.update(user);
-            connection.commitTransaction();
-
-        }
-    }
-
-    public List<User> getAll() {
-        try (AbstractConnection connection = daoFactory.getConnection()) {
-
-            UserDao userDao = daoFactory.getUserDao(connection);
-            connection.beginTransaction();
-            List<User> users = userDao.getAll();
-            connection.commitTransaction();
-            return (users == null) ? new ArrayList<>() : users;
-
-        }
-    }
-
     @Override
     public User getById(int id) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
@@ -72,17 +32,6 @@ public class UserServiceImpl implements UserService {
             User user = userDao.getById(id);
             connection.commitTransaction();
             return user;
-
-        }
-    }
-
-    public void delete(int id) {
-        try (AbstractConnection connection = daoFactory.getConnection()) {
-
-            UserDao userDao = daoFactory.getUserDao(connection);
-            connection.beginTransaction();
-            userDao.deleteById(id);
-            connection.commitTransaction();
 
         }
     }

@@ -29,30 +29,6 @@ public class DrinkServiceImpl implements DrinkService {
         return InstanceHolder.instance;
     }
 
-
-    public Drink create(Drink drink) {
-        try (AbstractConnection connection = daoFactory.getConnection()) {
-
-            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-            connection.beginTransaction();
-            drinkDao.insert(drink);
-            connection.commitTransaction();
-            return drink;
-
-        }
-    }
-
-    public void update(Drink drink) {
-        try (AbstractConnection connection = daoFactory.getConnection()) {
-
-            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-            connection.beginTransaction();
-            drinkDao.update(drink);
-            connection.commitTransaction();
-
-        }
-    }
-
     @Override
     public List<Drink> getAll() {
         try (AbstractConnection connection = daoFactory.getConnection()) {
@@ -62,31 +38,6 @@ public class DrinkServiceImpl implements DrinkService {
             List<Drink> drinks = drinkDao.getAll();
             connection.commitTransaction();
             return (drinks == null) ? new ArrayList<>() : drinks;
-
-        }
-    }
-
-
-    public Drink getById(int id) {
-        try (AbstractConnection connection = daoFactory.getConnection()) {
-
-            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-            connection.beginTransaction();
-            Drink drink = drinkDao.getById(id);
-            connection.commitTransaction();
-            return drink;
-
-        }
-    }
-
-
-    public void delete(int id) {
-        try (AbstractConnection connection = daoFactory.getConnection()) {
-
-            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-            connection.beginTransaction();
-            drinkDao.deleteById(id);
-            connection.commitTransaction();
 
         }
     }
@@ -129,6 +80,5 @@ public class DrinkServiceImpl implements DrinkService {
         return baseDrinks;
 
     }
-
 
 }

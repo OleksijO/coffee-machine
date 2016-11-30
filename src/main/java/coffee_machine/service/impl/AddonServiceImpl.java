@@ -28,30 +28,6 @@ public class AddonServiceImpl implements AddonService {
         return InstanceHolder.instance;
     }
 
-
-    public Addon create(Addon addon) {
-        try (AbstractConnection connection = daoFactory.getConnection()) {
-
-            AddonDao addonDao = daoFactory.getAddonDao(connection);
-            connection.beginTransaction();
-            addonDao.insert(addon);
-            connection.commitTransaction();
-            return addon;
-
-        }
-    }
-
-    public void update(Addon addon) {
-        try (AbstractConnection connection = daoFactory.getConnection()) {
-
-            AddonDao addonDao = daoFactory.getAddonDao(connection);
-            connection.beginTransaction();
-            addonDao.update(addon);
-            connection.commitTransaction();
-
-        }
-    }
-
     @Override
     public List<Addon> getAll() {
         try (AbstractConnection connection = daoFactory.getConnection()) {
@@ -61,30 +37,6 @@ public class AddonServiceImpl implements AddonService {
             List<Addon> addons = addonDao.getAll();
             connection.commitTransaction();
             return (addons == null) ? new ArrayList<>() : addons;
-
-        }
-    }
-
-    public Addon getById(int id) {
-        try (AbstractConnection connection = daoFactory.getConnection()) {
-
-            AddonDao addonDao = daoFactory.getAddonDao(connection);
-            connection.beginTransaction();
-            Addon addon = addonDao.getById(id);
-            connection.commitTransaction();
-            return addon;
-
-        }
-
-    }
-
-    public void delete(int id) {
-        try (AbstractConnection connection = daoFactory.getConnection()) {
-
-            AddonDao addonDao = daoFactory.getAddonDao(connection);
-            connection.beginTransaction();
-            addonDao.deleteById(id);
-            connection.commitTransaction();
 
         }
     }

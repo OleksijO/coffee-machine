@@ -11,8 +11,6 @@ import java.util.Set;
  */
 public interface DrinkService {
 
-
-
 	List<Drink> getAll();
 
 	void refill(Map<Integer, Integer> quantitiesById);
@@ -20,4 +18,5 @@ public interface DrinkService {
 	List<Drink> getAllByIdSet(Set<Integer> integers);
 
     List<Drink> getAllBaseByIdSet(Set<Integer> drinkIds);
+
 }
