@@ -49,7 +49,7 @@ public class UserLoginSubmitCommand extends AbstractLoginCommand implements Comm
             String encryptedPassword = PasswordEncryptor.encryptPassword(password);
             User user = userService.getUserByLogin(email);
 
-            if ((user == null) || (!encryptedPassword.equals(user.getPassword()))) {
+            if ((user == null) || (!encryptedPassword.equals(user.getPassword())) || (user.isAdmin())) {
                 logger.info(TRY_FAILED_WRONG_EMAIL_OR_PASSWORD);
                 request.setAttribute(ERROR_MESSAGE, ERROR_LOGIN_NO_SUCH_COMBINATION);
             } else {

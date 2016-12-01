@@ -1,7 +1,6 @@
 package coffee_machine.dao.impl.jdbc;
 
 import coffee_machine.dao.*;
-import coffee_machine.dao.exception.DaoException;
 import coffee_machine.dao.logging.DaoErrorProcessing;
 import org.apache.log4j.Logger;
 
@@ -14,6 +13,8 @@ public class DaoFactoryImpl implements DaoFactory, DaoErrorProcessing {
 
     private static final String SQL_CONNECTION_CAN_NOT_BE_NULL =
             "SQL connection can not be null. Datasource returned no connection.";
+    public static final String CONNECTION_CAN_NOT_BE_NULL = "Connection can not be null.";
+    public static final String CONNECTION_IS_NOT_AN_ABSTRACT_CONNECTION_IMPL_FOR_JDBC = "Connection is not an AbstractConnectionImpl for JDBC.";
 
     private final DataSource dataSource = JdbcPooledDataSource.getInstance();
 
@@ -55,19 +56,14 @@ public class DaoFactoryImpl implements DaoFactory, DaoErrorProcessing {
     }
 
     private void checkConnection(AbstractConnection connection) {
+
         if (connection == null) {
-            throw new DaoException("Connection can not be null.");
+            logErrorAndThrowDaoException(logger, CONNECTION_CAN_NOT_BE_NULL);
         }
         if (!(connection instanceof AbstractConnectionImpl)) {
-            throw new DaoException("Connection is not a AbstractConnectionIml for JDBC.");
+            logErrorAndThrowDaoException(logger, CONNECTION_IS_NOT_AN_ABSTRACT_CONNECTION_IMPL_FOR_JDBC);
         }
 
-    }
-
-    @Override
-    public AdminDao getAdminDao(AbstractConnection connection) {
-        checkConnection(connection);
-        return new AdminDaoImpl(getSqlConnection(connection));
     }
 
     @Override

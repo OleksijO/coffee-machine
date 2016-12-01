@@ -1,27 +1,16 @@
 package coffee_machine.dao.exception;
 
 import coffee_machine.exception.ApplicationException;
+import coffee_machine.i18n.message.key.error.DaoErrorKey;
 
 public class DaoException extends ApplicationException {
 
-
-	public DaoException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public DaoException(String message) {
-		super(message);
-	}
-
-	public DaoException(String message, String additionalMessage) {
-		super(message, additionalMessage);
-	}
-
-	public DaoException(String message, String additionalMessage, Throwable cause) {
-		super(message, additionalMessage, cause);
+	public DaoException(){
+		super(DaoErrorKey.DAO_ERROR);
 	}
 
 	public DaoException(Throwable cause) {
-		super(cause);
+		super(DaoErrorKey.DAO_ERROR, cause);
 	}
+
 }

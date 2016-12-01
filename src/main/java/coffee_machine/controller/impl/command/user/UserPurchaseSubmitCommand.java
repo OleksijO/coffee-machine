@@ -1,14 +1,14 @@
 package coffee_machine.controller.impl.command.user;
 
 import coffee_machine.controller.Command;
-import coffee_machine.controller.impl.command.parser.PurchaseFormParser;
-import coffee_machine.controller.impl.command.parser.impl.PurchaseFormParserImpl;
+import coffee_machine.controller.impl.command.request.data.extractor.PurchaseFormDataExtractor;
+import coffee_machine.controller.impl.command.request.data.extractor.impl.PurchaseFormExtractorImpl;
 import coffee_machine.controller.logging.ControllerErrorLogging;
 import coffee_machine.exception.ApplicationException;
 import coffee_machine.i18n.message.key.CommandKey;
 import coffee_machine.i18n.message.key.GeneralKey;
 import coffee_machine.model.entity.HistoryRecord;
-import coffee_machine.model.entity.goods.Drink;
+import coffee_machine.model.entity.item.Drink;
 import coffee_machine.service.AccountService;
 import coffee_machine.service.CoffeeMachineService;
 import coffee_machine.service.DrinkService;
@@ -33,7 +33,7 @@ public class UserPurchaseSubmitCommand implements Command, ControllerErrorLoggin
     private AccountService accountService = AccountServiceImpl.getInstance();
     private CoffeeMachineService coffeeMachine = CoffeeMachineServiceImpl.getInstance();
 
-    private PurchaseFormParser formParser = new PurchaseFormParserImpl();
+    private PurchaseFormDataExtractor formExtractor = new PurchaseFormExtractorImpl();
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
@@ -45,6 +45,7 @@ public class UserPurchaseSubmitCommand implements Command, ControllerErrorLoggin
             request.setAttribute(USER_BALANCE, accountService.getByUserId(userId).getRealAmount());
             request.setAttribute(USUAL_MESSAGE, CommandKey.PURCHASE_THANKS_MESSAGE);
             request.setAttribute(Attributes.HISTORY_RECORD, record);
+            request.setAttribute(DRINKS, drinkService.getAll());
         } catch (ApplicationException e) {
             logApplicationError(logger, request, e);
             request.setAttribute(ERROR_MESSAGE, e.getMessage());
@@ -59,13 +60,14 @@ public class UserPurchaseSubmitCommand implements Command, ControllerErrorLoggin
 
     List<Drink> getDrinksFromRequest(HttpServletRequest request) {
 
-        Map<Integer, Integer> drinkQuantityByIds = formParser.getDrinksQuantityByIdFromRequest(request);
+        Map<Integer, Integer> drinkQuantityByIds = formExtractor.getDrinksQuantityByIdFromRequest(request);
+        logger.debug ("========="+drinkQuantityByIds);
         List<Drink> drinks = drinkService.getAllBaseByIdSet(drinkQuantityByIds.keySet());
+        logger.debug ("========="+drinks);
         setDrinkQuantities(drinks, drinkQuantityByIds);
         Map<Integer, Map<Integer, Integer>> addonsQuantityInDrinksById =
-                formParser.getAddonsQuantityInDrinksByIdFromRequest(request);
+                formExtractor.getAddonsQuantityInDrinksByIdFromRequest(request);
         setAddonsQuantityInDrinks(addonsQuantityInDrinksById, drinks);
-
 
         return drinks;
     }

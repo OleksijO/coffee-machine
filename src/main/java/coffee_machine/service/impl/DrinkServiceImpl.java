@@ -4,7 +4,7 @@ import coffee_machine.dao.AbstractConnection;
 import coffee_machine.dao.DaoFactory;
 import coffee_machine.dao.DrinkDao;
 import coffee_machine.dao.impl.jdbc.DaoFactoryImpl;
-import coffee_machine.model.entity.goods.Drink;
+import coffee_machine.model.entity.item.Drink;
 import coffee_machine.service.DrinkService;
 import org.apache.log4j.Logger;
 
@@ -51,7 +51,7 @@ public class DrinkServiceImpl implements DrinkService {
 
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
             connection.beginTransaction();
-            List<Drink> drinksToUpdate = drinkDao.getAllByIds(new ArrayList<>(quantitiesById.keySet()));
+            List<Drink> drinksToUpdate = drinkDao.getAllByIds(quantitiesById.keySet());
             drinksToUpdate.forEach(
                     drink -> drink.setQuantity(drink.getQuantity() + quantitiesById.get(drink.getId())));
             drinkDao.updateQuantityAllInList(drinksToUpdate);
@@ -66,7 +66,7 @@ public class DrinkServiceImpl implements DrinkService {
 
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
             connection.beginTransaction();
-            List<Drink> drinks = drinkDao.getAllByIds(new ArrayList<>(drinkIds));
+            List<Drink> drinks = drinkDao.getAllByIds(drinkIds);
             connection.commitTransaction();
             return (drinks == null) ? new ArrayList<>() : drinks;
 
@@ -77,7 +77,7 @@ public class DrinkServiceImpl implements DrinkService {
     public List<Drink> getAllBaseByIdSet(Set<Integer> drinkIds) {
 
         List<Drink> drinks = getAllByIdSet(drinkIds);
-        List<Drink> baseDrinks = new ArrayList();
+        List<Drink> baseDrinks = new ArrayList<>();
         drinks.forEach(drink -> baseDrinks.add(drink.getBaseDrink()));
         return baseDrinks;
 

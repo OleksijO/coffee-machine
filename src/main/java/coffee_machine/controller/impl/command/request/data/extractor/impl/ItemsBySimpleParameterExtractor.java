@@ -1,4 +1,4 @@
-package coffee_machine.controller.impl.command.parser.impl;
+package coffee_machine.controller.impl.command.request.data.extractor.impl;
 
 import coffee_machine.controller.RegExp;
 import coffee_machine.controller.exception.ControllerException;
@@ -15,27 +15,27 @@ import java.util.regex.Pattern;
 /**
  * Created by oleksij.onysymchuk@gmail on 29.11.2016.
  */
-class GoodsBySimpleParameterParser {
+class ItemsBySimpleParameterExtractor {
     private final Pattern patternNumber = Pattern.compile(RegExp.REGEXP_NUMBER);
 
     Map<Integer, Integer> getGoodsQuantityByIdFromRequest(HttpServletRequest request,
-                                                          Pattern goodsParameterPattern) {
+                                                          Pattern itemParameterPattern) {
         Enumeration<String> params = request.getParameterNames();
-        Map<Integer, Integer> goodsQuantityByIds = new HashMap<>();
+        Map<Integer, Integer> itemQuantityByIds = new HashMap<>();
         while (params.hasMoreElements()) {
             String param = params.nextElement();
-            Matcher matcher = goodsParameterPattern.matcher(param);
+            Matcher matcher = itemParameterPattern.matcher(param);
             if (matcher.matches()) {
-                int goodsQuantity = getIntFromRequestByParameter(param, request);
-                if (goodsQuantity > 0) {
-                    int goodsId = getGoodsIdFromParam(param);
-                    goodsQuantityByIds.put(goodsId, goodsQuantity);
-                } else if (goodsQuantity < 0) {
+                int itemQuantity = getIntFromRequestByParameter(param, request);
+                if (itemQuantity > 0) {
+                    int itemId = getGoodsIdFromParam(param);
+                    itemQuantityByIds.put(itemId, itemQuantity);
+                } else if (itemQuantity < 0) {
                     throw new ControllerException(CommandErrorKey.QUANTITY_SHOULD_BE_NON_NEGATIVE);
                 }
             }
         }
-        return goodsQuantityByIds;
+        return itemQuantityByIds;
     }
 
     private int getIntFromRequestByParameter(String param, HttpServletRequest request) {

@@ -2,8 +2,8 @@ package coffee_machine.service.impl;
 
 import coffee_machine.dao.*;
 import coffee_machine.model.entity.Account;
-import coffee_machine.model.entity.goods.Addon;
-import coffee_machine.model.entity.goods.Drink;
+import coffee_machine.model.entity.item.Drink;
+import coffee_machine.model.entity.item.Item;
 import coffee_machine.service.CoffeeMachineService;
 import coffee_machine.service.exception.ServiceException;
 import data.entity.Accounts;
@@ -21,9 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static coffee_machine.i18n.message.key.error.ServiceErrorKey.GOODS_NO_LONGER_AVAILABLE;
-import static coffee_machine.i18n.message.key.error.ServiceErrorKey.NOT_ENOUGH_MONEY;
-import static coffee_machine.i18n.message.key.error.ServiceErrorKey.YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY;
+import static coffee_machine.i18n.message.key.error.ServiceErrorKey.*;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -49,7 +47,7 @@ public class CoffeeMachineServiceImplTest {
     @Captor
     private ArgumentCaptor<List<Drink>> drinkListCaptor;
     @Captor
-    private ArgumentCaptor<List<Addon>> addonListCaptor;
+    private ArgumentCaptor<List<Item>> addonListCaptor;
 
     private CoffeeMachineService service;
 
@@ -86,7 +84,7 @@ public class CoffeeMachineServiceImplTest {
         baseDrinksToBuy.add(Drinks.MOCACCINO.drink);
         when(drinkDao.getAllFromList(any())).thenReturn(baseDrinksToBuy);
 
-        List<Addon> addonsToBuy = new ArrayList<>();
+        List<Item> addonsToBuy = new ArrayList<>();
         addonsToBuy.add(Addons.MILK.addon);
         addonsToBuy.add(Addons.SUGAR.addon);
         when(addonDao.getAllFromList(any())).thenReturn(addonsToBuy);
@@ -206,7 +204,7 @@ public class CoffeeMachineServiceImplTest {
     }
 
     private void verifyTestResultsWithAddons() {
-        List<Addon> updatedAddons = addonListCaptor.getValue();
+        List<Item> updatedAddons = addonListCaptor.getValue();
         assertNotNull("List of addons to update should be not null", updatedAddons);
         if (addonQuantity > 0) {
             updatedAddons.forEach(addon -> {
@@ -271,7 +269,7 @@ public class CoffeeMachineServiceImplTest {
         drink.getAddons().iterator().next().setQuantity(addonQuantity);
         drinks.add(drink);
         drink = Drinks.MOCACCINO.drink.getBaseDrink();
-        Iterator<Addon> iterator = drink.getAddons().iterator();
+        Iterator<Item> iterator = drink.getAddons().iterator();
         iterator.next();
         iterator.next().setQuantity(addonQuantity);
         drinks.add(drink);

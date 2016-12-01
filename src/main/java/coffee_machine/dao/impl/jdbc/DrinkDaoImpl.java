@@ -1,248 +1,173 @@
 package coffee_machine.dao.impl.jdbc;
 
-import coffee_machine.dao.AddonDao;
 import coffee_machine.dao.DrinkDao;
-import coffee_machine.dao.exception.DaoException;
-import coffee_machine.model.entity.goods.Addon;
-import coffee_machine.model.entity.goods.Drink;
+import coffee_machine.model.entity.item.Drink;
+import coffee_machine.model.entity.item.Item;
+import coffee_machine.model.entity.item.ItemType;
 import org.apache.log4j.Logger;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
-public class DrinkDaoImpl extends AbstractGoodsDao<Drink> implements DrinkDao {
-	private static final Logger logger = Logger.getLogger(DrinkDaoImpl.class);
+public class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
+    private static final Logger logger = Logger.getLogger(DrinkDaoImpl.class);
+    static final String DB_ERROR_WHILE_INSERTING_ADDONS = "Database error while inserting addons of drink: ";
+    private static final String SELECT_ADDON_SET_SQL = "SELECT id, name, price, quantity, type " + "FROM item "
+            + "INNER JOIN drink_addons ON addon_id=item.id " + "WHERE drink_id = ? ;";
+    private static final String INSERT_ADDON_SQL = "INSERT INTO drink_addons (drink_id, addon_id) VALUES (?,?); ";
+    private static final String DELETE_ADDON_FROM_SET_SQL = "DELETE FROM drink_addons WHERE drink_id = ?; ";
 
-	private static final String WHERE_GOODS_ID = " WHERE abstract_goods.id = ?";
+    private static final String DB_ERROR_WHILE_GETTING_ADDON_SET_OF_DRINK_WITH_ID = "Database error while getting addon set of drink with id=";
 
-	private static final String SELECT_ALL_SQL = String.format(SELECT_ALL_FROM_GOODS_SQL, "")
-			+ " INNER JOIN drink ON abstract_goods.id = drink.id ";
-	private static final String UPDATE_SQL = UPDATE_GOODS_SQL + "";
-	private static final String INSERT_SQL = "INSERT INTO drink (id) VALUES (?);";
-	private static final String DELETE_SQL = DELETE_GOODS_SQL + "";
+    private final Connection connection;
+    private ItemDaoImpl itemDao;
 
-	private static final String SELECT_ADDON_SET_SQL = "SELECT addon_id, name, price, quantity " + "FROM abstract_goods "
-			+ "INNER JOIN drink_addons ON addon_id=abstract_goods.id " + "WHERE drink_id = ? ;";
-	private static final String INSERT_ADDON_SQL = "INSERT INTO drink_addons (drink_id, addon_id) VALUES (?,?); ";
-	private static final String DELETE_ADDON_FROM_SET_SQL = "DELETE FROM drink_addons WHERE drink_id = ?; ";
+    public DrinkDaoImpl(Connection connection) {
+        this.connection = connection;
+        itemDao = new ItemDaoImpl(connection);
+    }
 
-	private static final String FIELD_NAME = "name";
-	private static final String FIELD_PRICE = "price";
-	private static final String FIELD_QUANTITY = "quantity";
-	private static final String FIELD_ADDON_ID = "addon_id";
 
-	private final Connection connection;
+    @Override
+    public Drink insert(Drink drink) {
+        if (drink == null) {
+            logErrorAndThrowDaoException(logger, CAN_NOT_CREATE_EMPTY);
+        }
+        if (drink.getId() != 0) {
+            logErrorAndThrowDaoException(logger, CAN_NOT_CREATE_ALREADY_SAVED);
+        }
 
-	public DrinkDaoImpl(Connection connection) {
-		super(logger);
-		this.connection = connection;
-	}
+        itemDao.insert(drink);
+        insertAddonSet(drink); // Addons as Items should be put in 'item' table earlier
 
-	@Override
-	public Drink insert(Drink drink) {
-		if (drink == null) {
-			throw new DaoException(CAN_NOT_CREATE_EMPTY);
-		}
-		if (drink.getId() != 0) {
-			throw new DaoException(CAN_NOT_CREATE_ALREADY_SAVED);
-		}
+        return drink;
+    }
 
-		try (PreparedStatement statementForGoods = connection.prepareStatement(INSERT_GOODS_SQL,
-				Statement.RETURN_GENERATED_KEYS);
-				PreparedStatement statementForDrink = connection.prepareStatement(INSERT_SQL);
-				PreparedStatement statementForInsertAddonToSet = connection.prepareStatement(INSERT_ADDON_SQL)) {
+    private void insertAddonSet(Drink drink) {
+        try (PreparedStatement statementForInsertAddonToSet = connection.prepareStatement(INSERT_ADDON_SQL)) {
+            Set<Item> addons = drink.getAddons();
+            if ((addons != null) && (!addons.isEmpty())) {
+                for (Item addon : addons) {
+                    statementForInsertAddonToSet.setInt(1, drink.getId());
+                    statementForInsertAddonToSet.setInt(2, addon.getId());
+                    statementForInsertAddonToSet.executeUpdate();
+                }
+            }
+        } catch (SQLException e) {
+            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_INSERTING_ADDONS, drink, e);
+        }
+    }
 
-			statementForGoods.setString(1, drink.getName());
-			statementForGoods.setLong(2, drink.getPrice());
-			statementForGoods.setInt(3, drink.getQuantity());
 
-			int drinkId = executeInsertStatement(statementForGoods);
-			drink.setId(drinkId);
-			statementForDrink.setInt(1, drinkId);
+    @Override
+    public void updateQuantity(Drink drink) {
+        itemDao.updateQuantity(drink);
+    }
 
-			statementForDrink.executeUpdate();
+    @Override
+    public void update(Drink drink) {
+        itemDao.update(drink);
+        updateDrinkAddons(drink);
+    }
 
-			Set<Addon> addons = drink.getAddons();
-			if ((addons != null) && (!addons.isEmpty())) {
-				for (Addon addon : addons) {
-					statementForInsertAddonToSet.setInt(1, drinkId);
-					statementForInsertAddonToSet.setInt(2, addon.getId());
-					statementForInsertAddonToSet.executeUpdate();
-				}
-				;
-			}
+    private void updateDrinkAddons(Drink drink) {
+        deleteDrinkAddons(drink);
+        insertAddonSet(drink);
+    }
 
-		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DB_ERROR_WHILE_INSERTING, drink, e);
-		}
-		return drink;
-	}
+    private void deleteDrinkAddons(Drink drink) {
+        try (PreparedStatement statementForDeleteAddonsFromSet =
+                     connection.prepareStatement(DELETE_ADDON_FROM_SET_SQL)) {
 
-	@Override
-	public void updateQuantity(Drink drink) {
-		if (drink == null) {
-			throw new DaoException(CAN_NOT_UPDATE_EMPTY);
-		}
-		if (drink.getId() == 0) {
-			throw new DaoException(CAN_NOT_UPDATE_UNSAVED);
-		}
-		try (PreparedStatement statement = connection.prepareStatement(UPDATE_GOODS_QUANTITY_SQL)) {
+            statementForDeleteAddonsFromSet.setInt(1, drink.getId());
+            statementForDeleteAddonsFromSet.executeUpdate();
 
-			statement.setInt(1, drink.getQuantity());
-			statement.setInt(2, drink.getId());
-			statement.executeUpdate();
+        } catch (SQLException e) {
+            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_UPDATING, drink, e);
+        }
+    }
 
-		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DB_ERROR_WHILE_UPDATING, drink, e);
-		}
-	}
+    @Override
+    public List<Drink> getAll() {
 
-	@Override
-	public void update(Drink drink) {
-		if (drink == null) {
-			throw new DaoException(CAN_NOT_UPDATE_EMPTY);
-		}
-		if (drink.getId() == 0) {
-			throw new DaoException(CAN_NOT_UPDATE_UNSAVED);
-		}
+        List<Item> items = itemDao.getAll(ItemType.DRINK);
+        List<Drink> drinks = new ArrayList<>();
+        items.forEach(item -> {
+            Drink drinkRef = (Drink) item;
+            drinkRef.setAddons(getAddonSet(drinkRef.getId()));
+            drinks.add(drinkRef);
+        });
+        return drinks;
+    }
 
-		try (PreparedStatement statement = connection.prepareStatement(UPDATE_SQL);
-				PreparedStatement statementForInsertAddonToSet = connection.prepareStatement(INSERT_ADDON_SQL);
-				PreparedStatement statementForDeleteAddonsFromSet = connection
-						.prepareStatement(DELETE_ADDON_FROM_SET_SQL)) {
+    private Set<Item> getAddonSet(int drinkId) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ADDON_SET_SQL)) {
 
-			statement.setString(1, drink.getName());
-			statement.setLong(2, drink.getPrice());
-			statement.setInt(3, drink.getQuantity());
-			statement.setInt(4, drink.getId());
-			statement.executeUpdate();
+            statement.setInt(1, drinkId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return new HashSet<>(itemDao.parseResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_ADDON_SET_OF_DRINK_WITH_ID, drinkId, e);
+        }
+        throw new InternalError(); // STUB for compiler
+    }
 
-			statementForDeleteAddonsFromSet.setInt(1, drink.getId());
-			statementForDeleteAddonsFromSet.executeUpdate();
+    @Override
+    public Drink getById(int id) {
+        Drink drink = (Drink) itemDao.getById(id);
+        if (drink != null) {
+            drink.setAddons(getAddonSet(id));
+        }
+        return drink;
 
-			Set<Addon> addons = drink.getAddons();
-			if ((addons != null) && (!addons.isEmpty())) {
-				for (Addon addon : addons) {
-					statementForInsertAddonToSet.setInt(1, drink.getId());
-					statementForInsertAddonToSet.setInt(2, addon.getId());
-					statementForInsertAddonToSet.executeUpdate();
-				}
-			}
-		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DB_ERROR_WHILE_UPDATING, drink, e);
-		}
-	}
+    }
 
-	@Override
-	public List<Drink> getAll() {
-		try (Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery(SELECT_ALL_SQL)) {
+    @Override
+    public void deleteById(int id) {
+        Drink drink = getById(id);
+        if (drink == null) {
+            return;
+        }
+        deleteDrinkAddons(drink);
+        itemDao.deleteById(id);
+    }
 
-			return parseResultSet(resultSet);
+    @Override
+    public List<Drink> getAllFromList(List<Drink> drinksToGet) {
+        List<Drink> items = new ArrayList<>();
+        drinksToGet.forEach(drink -> {
+            if (drink != null) {
+                Drink updatedDrink = getById(drink.getId());
+                if (updatedDrink != null) {
+                    items.add(updatedDrink);
+                }
+            }
+        });
+        return items;
+    }
 
-		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DB_ERROR_WHILE_GETTING_ALL, e);
-		}
-		throw new InternalError(); // STUB for compiler
-	}
+    @Override
+    public List<Drink> getAllByIds(Set<Integer> itemIds) {
+        List<Drink> drinks = new ArrayList<>();
+        itemIds.forEach(id -> {
+            Drink updatedDrink = getById(id);
+            if (updatedDrink != null) {
+                drinks.add(updatedDrink);
+            }
+        });
+        return drinks;
+    }
 
-	private List<Drink> parseResultSet(ResultSet resultSet) throws SQLException {
-		List<Drink> drinkList = new ArrayList<>();
-		while (resultSet.next()) {
-			Drink drink = new Drink();
-			drink.setId(resultSet.getInt(FIELD_ID));
-			drink.setName(resultSet.getString(FIELD_NAME));
-			drink.setPrice(resultSet.getLong(FIELD_PRICE));
-			drink.setQuantity(resultSet.getInt(FIELD_QUANTITY));
-			drink.setAddons(getAddonSet(drink.getId()));
-			drinkList.add(drink);
-		}
-		return drinkList;
-	}
-
-	private Set<Addon> getAddonSet(int drinkId) {
-		try (PreparedStatement statement = connection.prepareStatement(SELECT_ADDON_SET_SQL)) {
-
-			statement.setInt(1, drinkId);
-			Set<Addon> addonSet = parseAddonSetResultSet(statement.executeQuery());
-			return addonSet;
-
-		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DB_ERROR_WHILE_UPDATING, drinkId, e);
-		}
-		throw new InternalError(); // STUB for compiler
-	}
-
-	private Set<Addon> parseAddonSetResultSet(ResultSet resultSet) throws SQLException {
-		Set<Addon> addonSet = new TreeSet<>();
-		while (resultSet.next()) {
-			Addon addon = new Addon();
-			addon.setId(resultSet.getInt(FIELD_ADDON_ID));
-			addon.setName(resultSet.getString(FIELD_NAME));
-			addon.setPrice(resultSet.getLong(FIELD_PRICE));
-			addon.setQuantity(resultSet.getInt(FIELD_QUANTITY));
-			addonSet.add(addon);
-		}
-		return addonSet;
-	}
-
-	@Override
-	public Drink getById(int id) {
-		try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_GOODS_ID)) {
-
-			statement.setInt(1, id);
-			List<Drink> drinkList = parseResultSet(statement.executeQuery());
-			checkSingleResult(drinkList);
-
-			return drinkList == null || drinkList.isEmpty() ? null : drinkList.get(0);
-
-		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DB_ERROR_WHILE_GETTING_BY_ID, e);
-		}
-		throw new InternalError(); // STUB for compiler
-	}
-
-	@Override
-	public void deleteById(int id) {
-		Drink drink = getById(id);
-		if (drink == null) {
-			return;
-		}
-		try (PreparedStatement statement = connection.prepareStatement(DELETE_SQL);
-				PreparedStatement statementForDeleteAddonsFromSet = connection
-						.prepareStatement(DELETE_ADDON_FROM_SET_SQL)) {
-
-			statement.setInt(1, id);
-			statement.executeUpdate();
-
-			statementForDeleteAddonsFromSet.setInt(1, drink.getId());
-			statementForDeleteAddonsFromSet.executeUpdate();
-
-		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DB_ERROR_WHILE_DELETING_BY_ID, drink, e);
-		}
-	}
-
-	@Override
-	public List<Drink> getAllFromList(List<Drink> drinks) {
-		List<Drink> updatedDrinks = new ArrayList<>();
-		drinks.forEach(drink -> updatedDrinks.add(getById(drink.getId())));
-		return updatedDrinks;
-	}
-
-	@Override
-	public List<Drink> getAllByIds(List<Integer> drinkIds) {
-		List<Drink> drinks = new ArrayList<>();
-		drinkIds.forEach(id -> drinks.add(getById(id)));
-		return drinks;
-	}
-
-	@Override
-	public void updateQuantityAllInList(List<Drink> drinks) {
-		drinks.forEach(this::updateQuantity);
-	}
+    @Override
+    public void updateQuantityAllInList(List<Drink> items) {
+        items.forEach(this::updateQuantity);
+    }
 
 }

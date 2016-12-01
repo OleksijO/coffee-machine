@@ -1,16 +1,17 @@
 package coffee_machine.dao;
 
-import coffee_machine.model.entity.goods.Addon;
+import coffee_machine.model.entity.item.Item;
 
 import java.util.List;
+import java.util.Set;
 
-public interface AddonDao extends GenericDao<Addon> {
+public interface AddonDao extends GenericDao<Item> {
 
-	List<Addon> getAllFromList(List<Addon> addons);
+	void updateQuantityAllInList(List<Item> items);
 
-	void updateQuantityAllInList(List<Addon> addons);
+	void updateQuantity(Item drink);
 
-	List<Addon> getAllByIds(List<Integer> addonIds);
+	List<Item> getAllFromList(List<Item> addons);
 
-	void updateQuantity(Addon addon);
+	List<Item> getAllByIds(Set<Integer> itemIds);
 }

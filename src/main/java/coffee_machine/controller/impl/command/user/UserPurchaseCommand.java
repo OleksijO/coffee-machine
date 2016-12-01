@@ -34,8 +34,7 @@ public class UserPurchaseCommand implements Command, ControllerErrorLogging {
 			int userId = (int) request.getSession().getAttribute(USER_ID);
 			request.setAttribute(USER_BALANCE,
 					accountService.getByUserId(userId).getRealAmount());
-			request.setAttribute(REFILL_DRINKS, drinkService.getAll());
-			request.setAttribute(REFILL_ADDONS, addonService.getAll());
+			request.setAttribute(DRINKS, drinkService.getAll());
 		} catch (ApplicationException e) {
 			logApplicationError(logger, request, e);
 			request.setAttribute(ERROR_MESSAGE, e.getMessage());

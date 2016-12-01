@@ -1,7 +1,6 @@
 package coffee_machine.dao.impl.jdbc;
 
 import coffee_machine.dao.HistoryRecordDao;
-import coffee_machine.dao.exception.DaoException;
 import coffee_machine.model.entity.HistoryRecord;
 import org.apache.log4j.Logger;
 
@@ -29,17 +28,16 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 	private final Connection connection;
 
 	HistoryRecordDaoImpl(Connection connection) {
-		super(logger);
 		this.connection = connection;
 	}
 
 	@Override
 	public HistoryRecord insert(HistoryRecord historyRecord) {
 		if (historyRecord == null) {
-			throw new DaoException(CAN_NOT_CREATE_EMPTY);
+			logErrorAndThrowDaoException(logger, CAN_NOT_CREATE_EMPTY);
 		}
 		if (historyRecord.getId() != 0) {
-			throw new DaoException(CAN_NOT_CREATE_ALREADY_SAVED);
+			logErrorAndThrowDaoException(logger, CAN_NOT_CREATE_ALREADY_SAVED);
 		}
 
 		try (PreparedStatement statement = connection.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
@@ -54,7 +52,7 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 			historyRecord.setId(historyRecordId);
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DB_ERROR_WHILE_INSERTING, e);
+			logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_INSERTING, e);
 		}
 		return historyRecord;
 	}
@@ -62,10 +60,10 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 	@Override
 	public void update(HistoryRecord historyRecord) {
 		if (historyRecord == null) {
-			throw new DaoException(CAN_NOT_UPDATE_EMPTY);
+			logErrorAndThrowDaoException(logger, CAN_NOT_UPDATE_EMPTY);
 		}
 		if (historyRecord.getId() == 0) {
-			throw new DaoException(CAN_NOT_UPDATE_UNSAVED);
+			logErrorAndThrowDaoException(logger, CAN_NOT_UPDATE_UNSAVED);
 		}
 
 		try (PreparedStatement statement = connection.prepareStatement(UPDATE_SQL)) {
@@ -78,7 +76,7 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DB_ERROR_WHILE_UPDATING, e);
+			logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_UPDATING, e);
 		}
 	}
 
@@ -94,7 +92,7 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 			return parseResultSet(resultSet);
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DB_ERROR_WHILE_GETTING_ALL, e);
+			logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_ALL, e);
 		}
 		throw new InternalError(); // STUB for compiler
 
@@ -122,13 +120,14 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 		try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_ID)) {
 
 			statement.setInt(1, id);
-			List<HistoryRecord> historyRecordList = parseResultSet(statement.executeQuery());
-			checkSingleResult(historyRecordList);
+			try(ResultSet resultSet = statement.executeQuery()) {
+				List<HistoryRecord> historyRecordList = parseResultSet(resultSet);
+				checkSingleResult(historyRecordList);
 
-			return historyRecordList == null || historyRecordList.isEmpty() ? null : historyRecordList.get(0);
-
+				return historyRecordList == null || historyRecordList.isEmpty() ? null : historyRecordList.get(0);
+			}
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DB_ERROR_WHILE_GETTING_BY_ID, e);
+			logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_BY_ID, e);
 		}
 		throw new InternalError(); // STUB for compiler
 
@@ -146,7 +145,7 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DB_ERROR_WHILE_DELETING_BY_ID, historyRecord, e);
+			logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_DELETING_BY_ID, historyRecord, e);
 		}
 	}
 
@@ -155,10 +154,11 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 		try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_USER_ID_SQL)) {
 
 			statement.setInt(1, userId);
-			return parseResultSet(statement.executeQuery());
-
+			try(ResultSet resultSet = statement.executeQuery()) {
+				return parseResultSet(resultSet);
+			}
 		} catch (SQLException e) {
-			logErrorAndThrowDaoException(DB_ERROR_WHILE_GETTING_BY_ID, e);
+			logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_BY_ID, e);
 		}
 		throw new InternalError(); // STUB for compiler
 	}

@@ -1,4 +1,4 @@
-package coffee_machine.controller.impl.command.parser.impl;
+package coffee_machine.controller.impl.command.request.data.extractor.impl;
 
 import coffee_machine.view.Parameters;
 

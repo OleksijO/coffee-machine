@@ -1,17 +1,19 @@
 package integration.dao;
 
 import coffee_machine.dao.AbstractConnection;
-import coffee_machine.dao.DrinkDao;
 import coffee_machine.dao.DaoFactory;
+import coffee_machine.dao.DrinkDao;
 import coffee_machine.dao.impl.jdbc.DaoFactoryImpl;
-import coffee_machine.model.entity.goods.Drink;
+import coffee_machine.model.entity.item.Drink;
 import data.entity.Drinks;
 import org.junit.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -145,6 +147,29 @@ public class DrinkDaoTest {
         assertEquals("2", testDrink, drinkDao.getById(testDrink.getId()));
         drinkDao.updateQuantity(drink);
 
+    }
+
+
+    @Test
+    public void testGetAllFromList() throws Exception {
+        List<Drink> itemsToRetrieve = new ArrayList<>();
+        Drink addon = Drinks.BORJOMI.getCopy();
+        addon.setQuantity(4);
+        itemsToRetrieve.add(addon);
+        addon = Drinks.MOCACCINO.getCopy();
+        addon.setQuantity(4);
+        itemsToRetrieve.add(addon);
+        assertEquals(itemsToRetrieve, drinkDao.getAllFromList(itemsToRetrieve));
+    }
+
+    @Test
+    public void testGetAllByIds() throws Exception {
+        List<Drink> itemsToRetrive = new ArrayList<Drink>() {{
+            add(Drinks.BORJOMI.getCopy());
+            add(Drinks.MOCACCINO.getCopy());
+        }};
+        Set<Integer> ids = new HashSet<Integer>(){{add(2);add(11);}};
+        assertEquals(itemsToRetrive, drinkDao.getAllByIds(ids));
     }
 
 }

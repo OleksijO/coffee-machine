@@ -82,8 +82,7 @@ public class UserDaoTest {
         System.out.println(testUsers.get(userTestListId));
         System.out.println(user);
         assertEquals("Not null", testUsers.get(userTestListId), user);
-        user = userDao.getById(456);
-        assertNull("Null", user);
+
     }
 
     @Test
@@ -115,7 +114,6 @@ public class UserDaoTest {
         user.setEmail(user.getEmail()+".ua");
         user.getAccount().setId(0);
         int newUserId = userDao.insert(user).getId();
-        user.setId(newUserId);
         User userToTest = userDao.getById(newUserId);
         assertEquals("1", user, userToTest);
         user.setEmail(user.getEmail().replace(".ua",""));

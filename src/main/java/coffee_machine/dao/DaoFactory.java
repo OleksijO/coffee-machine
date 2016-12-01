@@ -6,8 +6,6 @@ public interface DaoFactory {
 
 	UserDao getUserDao(AbstractConnection connection);
 
-	AdminDao getAdminDao(AbstractConnection connection);
-
 	DrinkDao getDrinkDao(AbstractConnection connection);
 
 	AddonDao getAddonDao(AbstractConnection connection);

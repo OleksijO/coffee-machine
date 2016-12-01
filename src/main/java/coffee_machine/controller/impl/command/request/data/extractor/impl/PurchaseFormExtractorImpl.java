@@ -1,8 +1,8 @@
-package coffee_machine.controller.impl.command.parser.impl;
+package coffee_machine.controller.impl.command.request.data.extractor.impl;
 
 import coffee_machine.controller.RegExp;
 import coffee_machine.controller.exception.ControllerException;
-import coffee_machine.controller.impl.command.parser.PurchaseFormParser;
+import coffee_machine.controller.impl.command.request.data.extractor.PurchaseFormDataExtractor;
 import coffee_machine.i18n.message.key.GeneralKey;
 import coffee_machine.i18n.message.key.error.CommandErrorKey;
 
@@ -16,17 +16,17 @@ import java.util.regex.Pattern;
 /**
  * Created by oleksij.onysymchuk@gmail on 29.11.2016.
  */
-public class PurchaseFormParserImpl implements PurchaseFormParser {
+public class PurchaseFormExtractorImpl implements PurchaseFormDataExtractor {
     private Pattern patternNumber = Pattern.compile(RegExp.REGEXP_NUMBER);
     private Pattern patternDrink = Pattern.compile(RegExp.REGEXP_DRINK_PARAM);
     private Pattern patternAddonInDrink = Pattern.compile(RegExp.REGEXP_ADDON_IN_DRINK_PARAM);
 
 
-    private GoodsBySimpleParameterParser simpleParameterParser = new GoodsBySimpleParameterParser();
+    private ItemsBySimpleParameterExtractor simpleParameterExtractor = new ItemsBySimpleParameterExtractor();
 
     @Override
     public Map<Integer, Integer> getDrinksQuantityByIdFromRequest(HttpServletRequest request) {
-        return simpleParameterParser.getGoodsQuantityByIdFromRequest(request, patternDrink);
+        return simpleParameterExtractor.getGoodsQuantityByIdFromRequest(request, patternDrink);
     }
 
     @Override

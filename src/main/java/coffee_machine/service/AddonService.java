@@ -1,6 +1,7 @@
 package coffee_machine.service;
 
-import coffee_machine.model.entity.goods.Addon;
+
+import coffee_machine.model.entity.item.Item;
 
 import java.util.List;
 import java.util.Map;
@@ -10,9 +11,7 @@ import java.util.Map;
  */
 public interface AddonService {
 
-
-
-    List<Addon> getAll();
+    List<Item> getAll();
 
     void refill(Map<Integer, Integer> quantitiesById);
 

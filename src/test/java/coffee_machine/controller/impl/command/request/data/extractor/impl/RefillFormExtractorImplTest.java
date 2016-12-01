@@ -1,47 +1,44 @@
-package coffee_machine.controller.impl.command.parser.impl;
+package coffee_machine.controller.impl.command.request.data.extractor.impl;
 
-import coffee_machine.controller.impl.command.parser.RefillFormParser;
+import coffee_machine.controller.impl.command.request.data.extractor.RefillFormDataExtractor;
 import org.junit.Assert;
 import org.junit.Test;
-
-import static coffee_machine.controller.impl.command.parser.impl.TestData.EMPTY_TEST;
-import static coffee_machine.controller.impl.command.parser.impl.TestData.FULL_TEST;
 
 /**
  * Created by oleksij.onysymchuk@gmail on 29.11.2016.
  */
-public class RefillFormParserImplTest extends AbstractParserTest {
-    private final RefillFormParser parser = new RefillFormParserImpl();
+public class RefillFormExtractorImplTest extends AbstractExtractorTest {
+    private final RefillFormDataExtractor parser = new RefillFormExtractorImpl();
 
     @Test
     public void testGetDrinksQuantityByIdFromRequestEmptyRequest() throws Exception {
-        setupRequestParams(EMPTY_TEST);
+        setupRequestParams(TestData.EMPTY_TEST);
         Assert.assertEquals(
-                EMPTY_TEST.drinksQuantity,
+                TestData.EMPTY_TEST.drinksQuantity,
                 parser.getDrinksQuantityByIdFromRequest(request));
     }
 
     @Test
     public void testGetDrinksQuantityByIdFromRequestNonEmptyRequest() throws Exception {
-        setupRequestParams(FULL_TEST);
+        setupRequestParams(TestData.FULL_TEST);
         Assert.assertEquals(
-                FULL_TEST.drinksQuantity,
+                TestData.FULL_TEST.drinksQuantity,
                 parser.getDrinksQuantityByIdFromRequest(request));
     }
 
     @Test
     public void testGetAddonsQuantityByIdFromRequestEmptyRequest() throws Exception {
-        setupRequestParams(EMPTY_TEST);
+        setupRequestParams(TestData.EMPTY_TEST);
         Assert.assertEquals(
-                EMPTY_TEST.addonsQuantity,
+                TestData.EMPTY_TEST.addonsQuantity,
                 parser.getAddonsQuantityByIdFromRequest(request));
     }
 
     @Test
     public void testGetAddonsQuantityByIdFromRequestNonEmptyRequest() throws Exception {
-        setupRequestParams(FULL_TEST);
+        setupRequestParams(TestData.FULL_TEST);
         Assert.assertEquals(
-                FULL_TEST.addonsQuantity,
+                TestData.FULL_TEST.addonsQuantity,
                 parser.getAddonsQuantityByIdFromRequest(request));
     }
 

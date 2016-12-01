@@ -31,7 +31,7 @@
             </td>
         </tr>
 
-        <c:set var="drinks_attr" value="<%=Attributes.REFILL_DRINKS%>"/>
+        <c:set var="drinks_attr" value="<%=Attributes.DRINKS%>"/>
         <c:forEach items="${requestScope[drinks_attr]}" var="drink">
             <c:if test="${drink.quantity gt 0}">
                 <tr>

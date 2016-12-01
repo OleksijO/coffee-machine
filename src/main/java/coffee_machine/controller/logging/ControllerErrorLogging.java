@@ -22,21 +22,26 @@ public interface ControllerErrorLogging extends ApplicationErrorLogging {
     }
 
     default void logApplicationError(Logger logger, HttpServletRequest request, ApplicationException e) {
-        logApplicationError(logger,
-                e.getMessage(),
-                ((e.getAdditionalMessage() == null) ? e.getAdditionalMessage() : null) + getRequestData(request),
-                e);
+        logApplicationError(logger, e.getMessage(),
+                ((e.getAdditionalMessage() == null) ? e.getAdditionalMessage() : null) + getRequestData(request), e);
     }
 
     default String getRequestData(HttpServletRequest request) {
-        return new StringBuilder()
-                .append("\nState:\t")
-                .append("\tUser_ID=").append(request.getSession().getAttribute(Attributes.USER_ID))
-                .append("\tAdmin_ID=").append(request.getSession().getAttribute(Attributes.ADMIN_ID))
+        StringBuilder messageBuilder = new StringBuilder().append("\nState:\t");
+        int userId = (int) request.getSession().getAttribute(Attributes.USER_ID);
+        if (userId > 0) {
+            messageBuilder.append("\tUser_ID=").append(userId);
+        }
+        int adminId = (int) request.getSession().getAttribute(Attributes.ADMIN_ID);
+        if (adminId > 0) {
+            messageBuilder.append("\tAdmin_ID=").append(userId);
+        }
+        messageBuilder
                 .append("\tRequest_URI=").append(request.getRequestURI())
                 .append("\tRequest_query=").append(request.getQueryString())
-                .append("\tUser_locale=").append(request.getSession().getAttribute(Attributes.USER_LOCALE))
-                .toString();
+                .append("\tUser_locale=").append(request.getSession().getAttribute(Attributes.USER_LOCALE));
+
+        return messageBuilder.toString();
     }
 
 }

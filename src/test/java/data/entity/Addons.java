@@ -1,6 +1,7 @@
 package data.entity;
 
-import coffee_machine.model.entity.goods.Addon;
+import coffee_machine.model.entity.item.Item;
+import coffee_machine.model.entity.item.ItemType;
 
 import java.util.*;
 
@@ -15,24 +16,25 @@ public enum Addons {
     CINNAMON(13, "Корица", 150, 75);
 
 
-    public final Addon addon;
+    public final Item addon;
 
     Addons(int id, String name, long price, int quantity) {
-        addon = new Addon();
+        addon = new Item();
         addon.setId(id);
         addon.setName(name);
+        addon.setType(ItemType.ADDON);
         addon.setPrice(price);
         addon.setQuantity(quantity);
     }
 
-    public static List<Addon> getAllAddons() {
-        List<Addon> addons = new ArrayList<>();
+    public static List<Item> getAllAddons() {
+        List<Item> addons = new ArrayList<>();
         Arrays.stream(values()).forEach(record -> addons.add(record.addon));
         return addons;
     }
 
-    public Addon getCopy() {
-        Addon newAddon = new Addon();
+    public Item getCopy() {
+        Item newAddon = new Item();
         newAddon.setId(addon.getId());
         newAddon.setQuantity(addon.getQuantity());
         newAddon.setName(addon.getName());
@@ -40,7 +42,7 @@ public enum Addons {
         return newAddon;
     }
 
-    public static Addon getCopyById(int id){
+    public static Item getCopyById(int id){
         for (Addons rec:values()){
             if (rec.addon.getId()==id){
                 return rec.getCopy();

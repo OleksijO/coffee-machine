@@ -1,21 +1,20 @@
 package coffee_machine.dao.impl.jdbc;
 
 import coffee_machine.dao.AbstractConnection;
-import coffee_machine.dao.exception.DaoException;
+import coffee_machine.dao.logging.DaoErrorProcessing;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
 
-
-public class AbstractConnectionImpl implements AbstractConnection {
+public class AbstractConnectionImpl implements AbstractConnection, DaoErrorProcessing {
     private static final Logger logger = Logger.getLogger(AbstractConnectionImpl.class);
 
     private static final String CAN_NOT_BEGIN_TRANSACTION = "Can not begin transaction.";
-    private static final String CAN_NOT_COMMIT_TRANSACTION = "Can not commit transaction" ;
+    private static final String CAN_NOT_COMMIT_TRANSACTION = "Can not commit transaction";
     private static final String CAN_NOT_ROLLBACK_TRANSACTION = "Can not rollback transaction";
-    private static final String CAN_NOT_CLOSE_CONNECTION = "Can not close connection" ;
+    private static final String CAN_NOT_CLOSE_CONNECTION = "Can not close connection";
 
     private Connection connection;
     private boolean transactionBegin = false;
@@ -32,14 +31,9 @@ public class AbstractConnectionImpl implements AbstractConnection {
             connection.setAutoCommit(false);
             transactionBegin = true;
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(CAN_NOT_BEGIN_TRANSACTION, e);
+            logErrorAndThrowDaoException(logger, CAN_NOT_BEGIN_TRANSACTION, e);
         }
 
-    }
-
-    private void logErrorAndThrowDaoException(String message, Throwable e) {
-        logger.error(message, e);
-        throw new DaoException(message, e);
     }
 
     @Override
@@ -49,7 +43,7 @@ public class AbstractConnectionImpl implements AbstractConnection {
             connection.setAutoCommit(true);
             transactionCommitted = true;
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(CAN_NOT_COMMIT_TRANSACTION, e);
+            logErrorAndThrowDaoException(logger, CAN_NOT_COMMIT_TRANSACTION, e);
         }
 
     }
@@ -61,7 +55,7 @@ public class AbstractConnectionImpl implements AbstractConnection {
             connection.setAutoCommit(true);
             transactionCommitted = true;
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(CAN_NOT_ROLLBACK_TRANSACTION, e);
+            logErrorAndThrowDaoException(logger, CAN_NOT_ROLLBACK_TRANSACTION, e);
         }
     }
 
@@ -73,7 +67,7 @@ public class AbstractConnectionImpl implements AbstractConnection {
             }
             connection.close();
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(CAN_NOT_CLOSE_CONNECTION, e);
+            logErrorAndThrowDaoException(logger, CAN_NOT_CLOSE_CONNECTION, e);
         }
     }
 

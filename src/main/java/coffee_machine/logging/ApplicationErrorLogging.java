@@ -10,17 +10,10 @@ import java.util.ResourceBundle;
  * Created by oleksij.onysymchuk@gmail on 28.11.2016.
  */
 public interface ApplicationErrorLogging {
+    String MESSAGE_SEPARATOR = " : ";
     ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("i18n.messages",
             SupportedLocale.EN.getLocale());
 
-
-    default void logError(Logger logger, Exception e) {
-        logger.error(e);
-    }
-
-    default void logError(Logger logger, String message) {
-        logger.error(message);
-    }
 
     default void logApplicationError(Logger logger,
                                      String messageKey,
@@ -32,13 +25,13 @@ public interface ApplicationErrorLogging {
                                      String messageKey,
                                      String additionalMessage,
                                      Exception e) {
-        logger.error(RESOURCE_BUNDLE.getString(messageKey) + additionalMessage, e);
+        logger.error(RESOURCE_BUNDLE.getString(messageKey) + MESSAGE_SEPARATOR + additionalMessage, e);
     }
 
     default void logApplicationError(Logger logger,
                                      String messageKey,
                                      String additionalMessage) {
-        logger.error(RESOURCE_BUNDLE.getString(messageKey) + additionalMessage);
+        logger.error(RESOURCE_BUNDLE.getString(messageKey) + MESSAGE_SEPARATOR + additionalMessage);
     }
 
     default void logApplicationError(Logger logger,

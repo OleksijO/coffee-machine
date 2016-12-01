@@ -1,4 +1,4 @@
-package coffee_machine.controller.impl.command.parser.impl;
+package coffee_machine.controller.impl.command.request.data.extractor.impl;
 
 import org.junit.Before;
 import org.mockito.Mock;
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 /**
  * Created by oleksij.onysymchuk@gmail on 29.11.2016.
  */
-abstract class AbstractParserTest {
+abstract class AbstractExtractorTest {
 
     @Mock
     protected HttpServletRequest request;

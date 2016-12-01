@@ -1,7 +1,6 @@
 package coffee_machine.dao.logging;
 
 import coffee_machine.dao.exception.DaoException;
-import coffee_machine.i18n.message.key.error.DaoErrorKey;
 import coffee_machine.logging.ApplicationErrorLogging;
 import org.apache.log4j.Logger;
 
@@ -11,28 +10,23 @@ import org.apache.log4j.Logger;
 public interface DaoErrorProcessing extends ApplicationErrorLogging {
 
     default void logErrorAndThrowDaoException(Logger logger, String message, Exception e) {
-        logApplicationError(logger, message, e);
-        throw new DaoException(DaoErrorKey.DAO_ERROR, e);
+        logger.error(message, e);
+        throw new DaoException(e);
     }
 
     default void logErrorAndThrowDaoException(Logger logger, String message, Object entity, Exception e) {
         logApplicationError(logger, message, entity.toString(), e);
-        throw new DaoException(DaoErrorKey.DAO_ERROR, e);
-    }
-
-    default void logErrorAndThrowNewDaoException(Logger logger, String message) {
-        logApplicationError(logger, message);
-        throw new DaoException(DaoErrorKey.DAO_ERROR);
+        throw new DaoException(e);
     }
 
     default void logErrorAndThrowDaoException(Logger logger, Exception e) {
-        logError(logger, e);
-        throw new DaoException(DaoErrorKey.DAO_ERROR, e);
+        logger.error(e);
+        throw new DaoException(e);
     }
 
     default void logErrorAndThrowDaoException(Logger logger, String message) {
-        logError(logger, message);
-        throw new DaoException(DaoErrorKey.DAO_ERROR);
+        logger.error(message);
+        throw new DaoException();
     }
 
 }

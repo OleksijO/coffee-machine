@@ -4,7 +4,7 @@ import coffee_machine.dao.AbstractConnection;
 import coffee_machine.dao.AddonDao;
 import coffee_machine.dao.DaoFactory;
 import coffee_machine.dao.impl.jdbc.DaoFactoryImpl;
-import coffee_machine.model.entity.goods.Addon;
+import coffee_machine.model.entity.item.Item;
 import coffee_machine.service.AddonService;
 import org.apache.log4j.Logger;
 
@@ -29,12 +29,12 @@ public class AddonServiceImpl implements AddonService {
     }
 
     @Override
-    public List<Addon> getAll() {
+    public List<Item> getAll() {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             AddonDao addonDao = daoFactory.getAddonDao(connection);
             connection.beginTransaction();
-            List<Addon> addons = addonDao.getAll();
+            List<Item> addons = addonDao.getAll();
             connection.commitTransaction();
             return (addons == null) ? new ArrayList<>() : addons;
 
@@ -50,7 +50,7 @@ public class AddonServiceImpl implements AddonService {
 
             AddonDao addonDao = daoFactory.getAddonDao(connection);
             connection.beginTransaction();
-            List<Addon> addonsToUpdate = addonDao.getAllByIds(new ArrayList<>(quantitiesById.keySet()));
+            List<Item> addonsToUpdate = addonDao.getAllByIds(quantitiesById.keySet());
             addonsToUpdate.forEach(
                     addon -> addon.setQuantity(addon.getQuantity() + quantitiesById.get(addon.getId())));
             addonDao.updateQuantityAllInList(addonsToUpdate);
