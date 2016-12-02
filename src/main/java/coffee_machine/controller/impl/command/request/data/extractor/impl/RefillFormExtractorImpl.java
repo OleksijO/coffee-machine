@@ -14,16 +14,16 @@ public class RefillFormExtractorImpl implements RefillFormDataExtractor {
     private final Pattern patternDrink = Pattern.compile(RegExp.REGEXP_DRINK_PARAM);
     private final Pattern patternAddon = Pattern.compile(RegExp.REGEXP_ADDON_PARAM);
 
-    private ItemsBySimpleParameterExtractor simpleParameterParser = new ItemsBySimpleParameterExtractor();
+    private ItemsBySimpleParameterExtractor simpleParameterExtractor = new ItemsBySimpleParameterExtractor();
 
     @Override
     public Map<Integer,Integer> getDrinksQuantityByIdFromRequest(HttpServletRequest request) {
-        return simpleParameterParser.getGoodsQuantityByIdFromRequest(request, patternDrink);
+        return simpleParameterExtractor.getGoodsQuantityByIdFromRequest(request, patternDrink);
     }
 
     @Override
     public Map<Integer,Integer> getAddonsQuantityByIdFromRequest(HttpServletRequest request) {
-        return simpleParameterParser.getGoodsQuantityByIdFromRequest(request, patternAddon);
+        return simpleParameterExtractor.getGoodsQuantityByIdFromRequest(request, patternAddon);
     }
 
 

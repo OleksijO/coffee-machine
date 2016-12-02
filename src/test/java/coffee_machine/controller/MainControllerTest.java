@@ -46,6 +46,7 @@ public class MainControllerTest {
         controller = new MainController();
         controller.commandHolder = commandHolder;
         when(request.getSession()).thenReturn(session);
+        when(session.getAttribute(anyString())).thenReturn(1);
         when(request.getRequestDispatcher(dispatcherArgCaptor.capture())).thenReturn(requestDispatcher);
 
     }

@@ -1,4 +1,4 @@
-package coffee_machine.controller.impl.command.abstracts;
+package coffee_machine.controller.impl.command;
 
 import coffee_machine.controller.Command;
 import coffee_machine.controller.RegExp;

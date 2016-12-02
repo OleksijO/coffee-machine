@@ -39,6 +39,7 @@ public class UserPurchaseSubmitCommand implements Command, ControllerErrorLoggin
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_USER_PURCHASE);
         try {
+
             List<Drink> drinksToBuy = getDrinksFromRequest(request);
             int userId = (int) request.getSession().getAttribute(USER_ID);
             HistoryRecord record = coffeeMachine.prepareDrinksForUser(drinksToBuy, userId);
@@ -46,6 +47,7 @@ public class UserPurchaseSubmitCommand implements Command, ControllerErrorLoggin
             request.setAttribute(USUAL_MESSAGE, CommandKey.PURCHASE_THANKS_MESSAGE);
             request.setAttribute(Attributes.HISTORY_RECORD, record);
             request.setAttribute(DRINKS, drinkService.getAll());
+
         } catch (ApplicationException e) {
             logApplicationError(logger, request, e);
             request.setAttribute(ERROR_MESSAGE, e.getMessage());

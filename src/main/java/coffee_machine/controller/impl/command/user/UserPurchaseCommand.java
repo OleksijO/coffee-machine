@@ -20,31 +20,32 @@ import static coffee_machine.view.Attributes.*;
 import static coffee_machine.view.PagesPaths.USER_PURCHASE_PAGE;
 
 public class UserPurchaseCommand implements Command, ControllerErrorLogging {
-	private static final Logger logger = Logger.getLogger(UserPurchaseCommand.class);
-	private DrinkService drinkService = DrinkServiceImpl.getInstance();
-	private AddonService addonService = AddonServiceImpl.getInstance();
-	private AccountService accountService = AccountServiceImpl.getInstance();
+    private static final Logger logger = Logger.getLogger(UserPurchaseCommand.class);
+    private DrinkService drinkService = DrinkServiceImpl.getInstance();
+    private AddonService addonService = AddonServiceImpl.getInstance();
+    private AccountService accountService = AccountServiceImpl.getInstance();
 
-	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) {
+    @Override
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
 
-		request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_USER_PURCHASE);
+        request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_USER_PURCHASE);
 
-		try {
-			int userId = (int) request.getSession().getAttribute(USER_ID);
-			request.setAttribute(USER_BALANCE,
-					accountService.getByUserId(userId).getRealAmount());
-			request.setAttribute(DRINKS, drinkService.getAll());
-		} catch (ApplicationException e) {
-			logApplicationError(logger, request, e);
-			request.setAttribute(ERROR_MESSAGE, e.getMessage());
-			request.setAttribute(ERROR_ADDITIONAL_MESSAGE, e.getAdditionalMessage());
-		} catch (Exception e) {
-			logError(logger, request, e);
-			request.setAttribute(ERROR_MESSAGE, GeneralKey.ERROR_UNKNOWN);
-		}
+        try {
 
-		return USER_PURCHASE_PAGE;
-	}
+            int userId = (int) request.getSession().getAttribute(USER_ID);
+            request.setAttribute(USER_BALANCE, accountService.getByUserId(userId).getRealAmount());
+            request.setAttribute(DRINKS, drinkService.getAll());
+
+        } catch (ApplicationException e) {
+            logApplicationError(logger, request, e);
+            request.setAttribute(ERROR_MESSAGE, e.getMessage());
+            request.setAttribute(ERROR_ADDITIONAL_MESSAGE, e.getAdditionalMessage());
+        } catch (Exception e) {
+            logError(logger, request, e);
+            request.setAttribute(ERROR_MESSAGE, GeneralKey.ERROR_UNKNOWN);
+        }
+
+        return USER_PURCHASE_PAGE;
+    }
 
 }

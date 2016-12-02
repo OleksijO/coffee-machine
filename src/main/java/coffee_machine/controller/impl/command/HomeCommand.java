@@ -15,8 +15,10 @@ public class HomeCommand implements Command {
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
+
 		request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_HOME);
 		return HOME_PAGE;
+
 	}
 
 }

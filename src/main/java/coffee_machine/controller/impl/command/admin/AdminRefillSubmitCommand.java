@@ -32,7 +32,7 @@ public class AdminRefillSubmitCommand implements Command, ControllerErrorLogging
     private final AddonService addonService = AddonServiceImpl.getInstance();
     private final AccountService accountService = AccountServiceImpl.getInstance();
 
-    private final RefillFormDataExtractor formExtractor = new RefillFormExtractorImpl();
+    private final RefillFormDataExtractor formParser = new RefillFormExtractorImpl();
 
 
 
@@ -40,31 +40,8 @@ public class AdminRefillSubmitCommand implements Command, ControllerErrorLogging
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_ADMIN_REFILL);
         try {
-            Map<Integer, Integer> drinkAddQuantityByIds = formExtractor.getDrinksQuantityByIdFromRequest(request);
-            Map<Integer, Integer> addonAddQuantityByIds = formExtractor.getAddonsQuantityByIdFromRequest(request);
 
-            boolean drinksAdded = false;
-            boolean addonsAdded = false;
-            if ((drinkAddQuantityByIds != null) && (drinkAddQuantityByIds.size() > 0)) {
-                drinkService.refill(drinkAddQuantityByIds);
-                drinksAdded = true;
-            }
-            if ((addonAddQuantityByIds != null) && (addonAddQuantityByIds.size() > 0)) {
-                addonService.refill(addonAddQuantityByIds);
-                addonsAdded = true;
-            }
-
-            if (drinksAdded || addonsAdded) {
-                request.setAttribute(USUAL_MESSAGE, CommandKey.ADMIN_REFILL_SUCCESSFULL);
-
-            } else {
-                request.setAttribute(ERROR_MESSAGE, CommandErrorKey.ADMIN_REFILL_NOTHING_TO_ADD);
-            }
-
-            request.setAttribute(COFFEE_MACHINE_BALANCE, accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)
-                    .getRealAmount());
-            request.setAttribute(DRINKS, drinkService.getAll());
-            request.setAttribute(ADDONS, addonService.getAll());
+            return performExecute(request);
 
         } catch (ApplicationException e) {
             logApplicationError(logger, request, e);
@@ -78,8 +55,35 @@ public class AdminRefillSubmitCommand implements Command, ControllerErrorLogging
         return ADMIN_REFILL_PAGE;
     }
 
+    private String performExecute(HttpServletRequest request) {
+        Map<Integer, Integer> drinkAddQuantityByIds = formParser.getDrinksQuantityByIdFromRequest(request);
+        Map<Integer, Integer> addonAddQuantityByIds = formParser.getAddonsQuantityByIdFromRequest(request);
 
+        boolean drinksAdded = false;
+        boolean addonsAdded = false;
+        if ((drinkAddQuantityByIds != null) && (drinkAddQuantityByIds.size() > 0)) {
+            drinkService.refill(drinkAddQuantityByIds);
+            drinksAdded = true;
+        }
+        if ((addonAddQuantityByIds != null) && (addonAddQuantityByIds.size() > 0)) {
+            addonService.refill(addonAddQuantityByIds);
+            addonsAdded = true;
+        }
 
+        if (drinksAdded || addonsAdded) {
+            request.setAttribute(USUAL_MESSAGE, CommandKey.ADMIN_REFILL_SUCCESSFULL);
+
+        } else {
+            request.setAttribute(ERROR_MESSAGE, CommandErrorKey.ADMIN_REFILL_NOTHING_TO_ADD);
+        }
+
+        request.setAttribute(COFFEE_MACHINE_BALANCE, accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)
+                .getRealAmount());
+        request.setAttribute(DRINKS, drinkService.getAll());
+        request.setAttribute(ADDONS, addonService.getAll());
+
+        return ADMIN_REFILL_PAGE;
+    }
 
 
 }

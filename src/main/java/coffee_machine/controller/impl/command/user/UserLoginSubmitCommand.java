@@ -1,7 +1,7 @@
 package coffee_machine.controller.impl.command.user;
 
 import coffee_machine.controller.Command;
-import coffee_machine.controller.impl.command.abstracts.AbstractLoginCommand;
+import coffee_machine.controller.impl.command.AbstractLoginCommand;
 import coffee_machine.controller.security.PasswordEncryptor;
 import coffee_machine.exception.ApplicationException;
 import coffee_machine.i18n.message.key.GeneralKey;
@@ -34,31 +34,9 @@ public class UserLoginSubmitCommand extends AbstractLoginCommand implements Comm
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_USER_LOGIN);
-            request.setAttribute(Attributes.LOGIN_FORM_TITLE, GeneralKey.LOGIN_USER_FORM_TITLE);
-            request.setAttribute(Attributes.LOGIN_FORM_ACTION, PagesPaths.USER_LOGIN_PATH);
 
-            String email = request.getParameter(LOGIN);
-            request.setAttribute(PREVIOUS_ENTERED_EMAIL, email);
-            String password = request.getParameter(PASSWORD);
+            return performExecute(request, response);
 
-            if (!processLoginForm(request, email, password)) {
-                return LOGIN_PAGE;
-            }
-
-            String encryptedPassword = PasswordEncryptor.encryptPassword(password);
-            User user = userService.getUserByLogin(email);
-
-            if ((user == null) || (!encryptedPassword.equals(user.getPassword())) || (user.isAdmin())) {
-                logger.info(TRY_FAILED_WRONG_EMAIL_OR_PASSWORD);
-                request.setAttribute(ERROR_MESSAGE, ERROR_LOGIN_NO_SUCH_COMBINATION);
-            } else {
-                logger.info(String.format(USER_LOGGED_IN, user.getId()));
-                request.getSession().setAttribute(USER_ID, user.getId());
-                response.sendRedirect(USER_HOME_PATH);
-                return REDIRECTED;
-
-            }
         } catch (ApplicationException e) {
             logApplicationError(logger, request, e);
             request.setAttribute(ERROR_MESSAGE, e.getMessage());
@@ -66,6 +44,36 @@ public class UserLoginSubmitCommand extends AbstractLoginCommand implements Comm
         } catch (Exception e) {
             logError(logger, request, e);
             request.setAttribute(ERROR_MESSAGE, GeneralKey.ERROR_UNKNOWN);
+        }
+
+        return LOGIN_PAGE;
+    }
+
+    private String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_USER_LOGIN);
+        request.setAttribute(Attributes.LOGIN_FORM_TITLE, GeneralKey.LOGIN_USER_FORM_TITLE);
+        request.setAttribute(Attributes.LOGIN_FORM_ACTION, PagesPaths.USER_LOGIN_PATH);
+
+        String email = request.getParameter(LOGIN);
+        request.setAttribute(PREVIOUS_ENTERED_EMAIL, email);
+        String password = request.getParameter(PASSWORD);
+
+        if (!processLoginForm(request, email, password)) {
+            return LOGIN_PAGE;
+        }
+
+        String encryptedPassword = PasswordEncryptor.encryptPassword(password);
+        User user = userService.getUserByLogin(email);
+
+        if ((user == null) || (!encryptedPassword.equals(user.getPassword())) || (user.isAdmin())) {
+            logger.info(TRY_FAILED_WRONG_EMAIL_OR_PASSWORD);
+            request.setAttribute(ERROR_MESSAGE, ERROR_LOGIN_NO_SUCH_COMBINATION);
+        } else {
+            logger.info(String.format(USER_LOGGED_IN, user.getId()));
+            request.getSession().setAttribute(USER_ID, user.getId());
+            response.sendRedirect(USER_HOME_PATH);
+            return REDIRECTED;
+
         }
 
         return LOGIN_PAGE;
