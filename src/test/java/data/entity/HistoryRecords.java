@@ -7,7 +7,7 @@ import java.util.Date;
 import static data.entity.HistoryRecords.ConstHolder.*;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 24.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 24.11.2016.
  */
 public enum HistoryRecords {
     A1(1, 1, new Date(YEAR2016 + 6 * MONTH + 12 * HOUR + 5 * MIN), "Some order description 1", 1000),

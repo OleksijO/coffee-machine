@@ -5,7 +5,7 @@ import coffee_machine.service.exception.ServiceException;
 import org.apache.log4j.Logger;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 28.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 28.11.2016.
  */
 public interface ServiceErrorProcessing extends ApplicationErrorLogging {
 

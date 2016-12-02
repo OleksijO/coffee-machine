@@ -8,7 +8,9 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 29.11.2016.
+ * This class represents implementation of parameter values from refill form extractor
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class RefillFormExtractorImpl implements RefillFormDataExtractor {
     private final Pattern patternDrink = Pattern.compile(RegExp.REGEXP_DRINK_PARAM);
@@ -18,12 +20,12 @@ public class RefillFormExtractorImpl implements RefillFormDataExtractor {
 
     @Override
     public Map<Integer,Integer> getDrinksQuantityByIdFromRequest(HttpServletRequest request) {
-        return simpleParameterExtractor.getGoodsQuantityByIdFromRequest(request, patternDrink);
+        return simpleParameterExtractor.getItemQuantityByIdFromRequest(request, patternDrink);
     }
 
     @Override
     public Map<Integer,Integer> getAddonsQuantityByIdFromRequest(HttpServletRequest request) {
-        return simpleParameterExtractor.getGoodsQuantityByIdFromRequest(request, patternAddon);
+        return simpleParameterExtractor.getItemQuantityByIdFromRequest(request, patternAddon);
     }
 
 

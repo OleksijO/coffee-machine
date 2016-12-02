@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 15.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 15.11.2016.
  */
 public class AddonServiceImpl implements AddonService {
     private static final Logger logger = Logger.getLogger(AddonServiceImpl.class);

@@ -4,7 +4,7 @@ import coffee_machine.model.entity.Account;
 import coffee_machine.model.entity.user.User;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 24.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 24.11.2016.
  */
 public enum Users {
     A(1, "oleksij.onysymchuk@gmail.com", "495286b908f344a71f0895d3258f5e4a", "Олексій Онисимчук", Accounts.USER_A.account, true),

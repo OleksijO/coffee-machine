@@ -10,6 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import static coffee_machine.view.PagesPaths.HOME_PAGE;
 
+/**
+ * This class represents home page handler command.
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class HomeCommand implements Command {
 	private static final Logger logger = Logger.getLogger(HomeCommand.class);
 

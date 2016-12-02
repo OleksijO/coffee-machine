@@ -6,7 +6,7 @@ import coffee_machine.model.entity.item.Drink;
 import java.util.List;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 15.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 15.11.2016.
  */
 public interface CoffeeMachineService {
 

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 29.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 29.11.2016.
  */
 enum TestData {
     EMPTY_TEST(

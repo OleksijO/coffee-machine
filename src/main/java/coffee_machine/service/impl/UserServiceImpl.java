@@ -9,7 +9,7 @@ import coffee_machine.service.UserService;
 import org.apache.log4j.Logger;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 15.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 15.11.2016.
  */
 public class UserServiceImpl implements UserService {
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class);

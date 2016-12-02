@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import java.util.ResourceBundle;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 28.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 28.11.2016.
  */
 public interface ApplicationErrorLogging {
     String MESSAGE_SEPARATOR = " : ";

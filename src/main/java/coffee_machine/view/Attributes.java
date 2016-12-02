@@ -1,5 +1,10 @@
 package coffee_machine.view;
 
+/**
+ * This class is a constant holder for attribute names, used in java classes and jsp view pages.
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public final class Attributes {
     public final static String PAGE_TITLE = "page_title";
     public final static String ADMIN_ID = "admin_id";

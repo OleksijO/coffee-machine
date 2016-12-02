@@ -21,7 +21,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 28.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 28.11.2016.
  */
 public class DrinkServiceImplTest {
     @Mock

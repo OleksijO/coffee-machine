@@ -12,7 +12,16 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Locale;
 
-
+/**
+ * This class represents locale filter.
+ * It changes and sets up user's current session locale depends on request parameters. Initially tries to set up
+ * locale to locale of request if it is supported by application (or sets up default), later changes on demand by
+ * request query parameter.
+ *
+ * Also, sets up message resource budle for the view pages.
+ *
+ *  @author oleksij.onysymchuk@gmail.com
+ */
 public class LocaleFilter implements Filter {
     private static final Logger logger = Logger.getLogger(LocaleFilter.class);
 

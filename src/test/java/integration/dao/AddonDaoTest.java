@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 24.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 24.11.2016.
  */
 @Ignore
 public class AddonDaoTest {

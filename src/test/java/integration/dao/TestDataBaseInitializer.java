@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 25.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 25.11.2016.
  */
 public class TestDataBaseInitializer {
     public void initTestJdbcDB() throws ClassNotFoundException, SQLException, InterruptedException, IOException {

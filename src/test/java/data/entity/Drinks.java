@@ -8,7 +8,7 @@ import java.util.*;
 
 
 /**
- * Created by oleksij.onysymchuk@gmail on 24.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 24.11.2016.
  */
 public enum Drinks {
     WATER(1, "Вода", 100, 20),

@@ -1,7 +1,7 @@
 package coffee_machine.i18n.message.key;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 20.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 20.11.2016.
  */
 public interface GeneralKey {
    String ERROR_UNKNOWN = "error.unknown";

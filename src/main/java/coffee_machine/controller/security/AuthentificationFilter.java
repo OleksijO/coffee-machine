@@ -11,6 +11,12 @@ import static coffee_machine.view.Attributes.ADMIN_ID;
 import static coffee_machine.view.Attributes.USER_ID;
 import static coffee_machine.view.PagesPaths.*;
 
+/**
+ * This class represents security filter to restrict access of unauthorized users and admins to pages,
+ * where they should not be. If filter detects mentioned access it redirects to login page for that access area.
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class AuthentificationFilter implements Filter {
     static final Logger logger = Logger.getLogger(AuthentificationFilter.class);
 

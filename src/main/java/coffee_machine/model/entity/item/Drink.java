@@ -3,7 +3,7 @@ package coffee_machine.model.entity.item;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static coffee_machine.view.Parameters.DB_MONEY_COEFF;
+import static coffee_machine.CoffeeMachineConfig.DB_MONEY_COEFF;
 
 public class Drink extends Item {
     Set<Item> addons;
