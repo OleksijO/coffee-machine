@@ -9,6 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import static coffee_machine.view.PagesPaths.ADMIN_HOME_PAGE;
 
+/**
+ * This class represents administrator home page handler command.
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class AdminHomeCommand implements Command {
 
 	@Override

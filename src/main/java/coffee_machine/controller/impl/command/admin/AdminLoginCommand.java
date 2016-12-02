@@ -10,6 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import static coffee_machine.view.PagesPaths.LOGIN_PAGE;
 
+/**
+ * This class represents admin login get request page handler command.
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class AdminLoginCommand implements Command {
 
 	@Override

@@ -21,6 +21,11 @@ import static coffee_machine.view.PagesPaths.*;
 import static coffee_machine.view.Parameters.LOGIN;
 import static coffee_machine.view.Parameters.PASSWORD;
 
+/**
+ * This class represents user login post request page handler command.
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class UserLoginSubmitCommand extends AbstractLoginCommand implements Command {
     private static final Logger logger = Logger.getLogger(UserLoginSubmitCommand.class);
 

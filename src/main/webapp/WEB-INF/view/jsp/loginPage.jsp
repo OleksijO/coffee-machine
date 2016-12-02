@@ -11,7 +11,7 @@
                   action="${requestScope[Attributes.LOGIN_FORM_ACTION]}"
                   loginLabelMessageKey="login.email"
                   parameterLogin="${Parameters.LOGIN}"
-                  loginPreviosValue="${sessionScope[Attributes.PREVIOUS_ENTERED_EMAIL]}"
+                  loginPreviosValue="${requestScope[Attributes.PREVIOUS_ENTERED_EMAIL]}"
                   passwordLabelMessageKey="login.password"
                   parameterPassword="${Parameters.PASSWORD}"
                   submitMessageKey="login.submit"

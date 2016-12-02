@@ -9,6 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import static coffee_machine.view.PagesPaths.USER_HOME_PAGE;
 
+/**
+ * This class represents user home page handler command.
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class UserHomeCommand implements Command {
 
 	@Override
