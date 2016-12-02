@@ -3,7 +3,6 @@ package coffee_machine.controller.impl.command.admin;
 import coffee_machine.controller.Command;
 import coffee_machine.controller.impl.command.AbstractLoginCommand;
 import coffee_machine.controller.security.PasswordEncryptor;
-import coffee_machine.exception.ApplicationException;
 import coffee_machine.i18n.message.key.GeneralKey;
 import coffee_machine.model.entity.user.User;
 import coffee_machine.service.UserService;
@@ -27,29 +26,7 @@ public class AdminLoginSubmitCommand extends AbstractLoginCommand implements Com
     private static final Logger logger = Logger.getLogger(AdminLoginSubmitCommand.class);
     final UserService adminService = UserServiceImpl.getInstance();
 
-    public AdminLoginSubmitCommand() {
-        super(logger);
-    }
-
-    @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        try {
-
-            return performExecute(request, response);
-
-        } catch (ApplicationException e) {
-            logApplicationError(logger, request, e);
-            request.setAttribute(ERROR_MESSAGE, e.getMessage());
-            request.setAttribute(ERROR_ADDITIONAL_MESSAGE, e.getAdditionalMessage());
-        } catch (Exception e) {
-            logError(logger, request, e);
-            request.setAttribute(ERROR_MESSAGE, GeneralKey.ERROR_UNKNOWN);
-        }
-
-        return LOGIN_PAGE;
-    }
-
-    private String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_ADMIN_LOGIN);
         request.setAttribute(Attributes.LOGIN_FORM_TITLE, GeneralKey.LOGIN_ADMIN_FORM_TITLE);
         request.setAttribute(Attributes.LOGIN_FORM_ACTION, PagesPaths.ADMIN_LOGIN_PATH);

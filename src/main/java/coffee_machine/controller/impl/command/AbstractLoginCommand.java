@@ -3,22 +3,29 @@ package coffee_machine.controller.impl.command;
 import coffee_machine.controller.Command;
 import coffee_machine.controller.RegExp;
 import coffee_machine.controller.logging.ControllerErrorLogging;
+import coffee_machine.exception.ApplicationException;
+import coffee_machine.i18n.message.key.GeneralKey;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 import static coffee_machine.i18n.message.key.error.CommandErrorKey.ERROR_LOGIN_EMAIL_DO_NOT_MATCH_PATTERN;
 import static coffee_machine.i18n.message.key.error.CommandErrorKey.ERROR_LOGIN_PASSWORD_DO_NOT_MATCH_PATTERN;
+import static coffee_machine.view.Attributes.ERROR_ADDITIONAL_MESSAGE;
 import static coffee_machine.view.Attributes.ERROR_MESSAGE;
+import static coffee_machine.view.PagesPaths.LOGIN_PAGE;
 
 /**
  * Created by oleksij.onysymchuk@gmail on 27.11.2016.
  */
 public abstract class AbstractLoginCommand implements Command, ControllerErrorLogging {
+    private static final Logger logger = Logger.getLogger(AbstractLoginCommand.class);
+
     private static final Pattern PATTERN_EMAIL = Pattern.compile(RegExp.REGEXP_EMAIL);
     private static final Pattern PATTERN_PASSWORD = Pattern.compile(RegExp.REGEXP_PASSWORD);
-    private final Logger logger;
 
     protected static final String TRY_FAILED_WRONG_EMAIL_OR_PASSWORD =
             "LOGIN TRY FAILED: no such combination of email and password.";
@@ -28,9 +35,27 @@ public abstract class AbstractLoginCommand implements Command, ControllerErrorLo
     protected static final String USER_LOGGED_IN = "USER id=%d LOGGED IN.";
     protected static final String ADMIN_LOGGED_IN = "ADMIN id=%d LOGGED IN.";
 
-    public AbstractLoginCommand(Logger logger) {
-        this.logger = logger;
+    @Override
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+
+            return performExecute(request, response);
+
+        } catch (ApplicationException e) {
+            logApplicationError(logger, request, e);
+            request.setAttribute(ERROR_MESSAGE, e.getMessage());
+            request.setAttribute(ERROR_ADDITIONAL_MESSAGE, e.getAdditionalMessage());
+        } catch (Exception e) {
+            logError(logger, request, e);
+            request.setAttribute(ERROR_MESSAGE, GeneralKey.ERROR_UNKNOWN);
+        }
+
+        return LOGIN_PAGE;
     }
+
+    protected abstract String performExecute(HttpServletRequest request, HttpServletResponse response)
+            throws IOException;
+
 
     protected boolean checkPassword(String password) {
 
