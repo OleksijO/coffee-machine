@@ -1,5 +1,20 @@
 package coffee_machine.controller.impl.command.admin;
 
+import static coffee_machine.view.Attributes.ADDONS;
+import static coffee_machine.view.Attributes.COFFEE_MACHINE_BALANCE;
+import static coffee_machine.view.Attributes.DRINKS;
+import static coffee_machine.view.Attributes.ERROR_ADDITIONAL_MESSAGE;
+import static coffee_machine.view.Attributes.ERROR_MESSAGE;
+import static coffee_machine.view.Attributes.USUAL_MESSAGE;
+import static coffee_machine.view.PagesPaths.ADMIN_REFILL_PAGE;
+
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+
 import coffee_machine.CoffeeMachineConfig;
 import coffee_machine.controller.Command;
 import coffee_machine.controller.impl.command.request.data.extractor.RefillFormDataExtractor;
@@ -16,14 +31,6 @@ import coffee_machine.service.impl.AccountServiceImpl;
 import coffee_machine.service.impl.AddonServiceImpl;
 import coffee_machine.service.impl.DrinkServiceImpl;
 import coffee_machine.view.Attributes;
-import org.apache.log4j.Logger;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
-
-import static coffee_machine.view.Attributes.*;
-import static coffee_machine.view.PagesPaths.ADMIN_REFILL_PAGE;
 
 /**
  * This class represents admin refill page post method request handler command.
@@ -64,6 +71,7 @@ public class AdminRefillSubmitCommand implements Command, ControllerErrorLogging
         Map<Integer, Integer> drinkAddQuantityByIds = formParser.getDrinksQuantityByIdFromRequest(request);
         Map<Integer, Integer> addonAddQuantityByIds = formParser.getAddonsQuantityByIdFromRequest(request);
 
+		/* check if we do not perform updating drinks or addons */
         boolean drinksAdded = false;
         boolean addonsAdded = false;
         if ((drinkAddQuantityByIds != null) && (drinkAddQuantityByIds.size() > 0)) {
@@ -75,6 +83,7 @@ public class AdminRefillSubmitCommand implements Command, ControllerErrorLogging
             addonsAdded = true;
         }
 
+		/* placing correspondent message or error for view */
         if (drinksAdded || addonsAdded) {
             request.setAttribute(USUAL_MESSAGE, CommandKey.ADMIN_REFILL_SUCCESSFULL);
 
@@ -82,6 +91,7 @@ public class AdminRefillSubmitCommand implements Command, ControllerErrorLogging
             request.setAttribute(ERROR_MESSAGE, CommandErrorKey.ADMIN_REFILL_NOTHING_TO_ADD);
         }
 
+		/* placing necessary for view data */
         request.setAttribute(COFFEE_MACHINE_BALANCE, accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)
                 .getRealAmount());
         request.setAttribute(DRINKS, drinkService.getAll());

@@ -1,5 +1,20 @@
 package coffee_machine.controller.impl.command.user;
 
+import static coffee_machine.view.Attributes.DRINKS;
+import static coffee_machine.view.Attributes.ERROR_ADDITIONAL_MESSAGE;
+import static coffee_machine.view.Attributes.ERROR_MESSAGE;
+import static coffee_machine.view.Attributes.USER_BALANCE;
+import static coffee_machine.view.Attributes.USER_ID;
+import static coffee_machine.view.Attributes.USUAL_MESSAGE;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+
 import coffee_machine.controller.Command;
 import coffee_machine.controller.impl.command.request.data.extractor.PurchaseFormDataExtractor;
 import coffee_machine.controller.impl.command.request.data.extractor.impl.PurchaseFormExtractorImpl;
@@ -17,14 +32,6 @@ import coffee_machine.service.impl.CoffeeMachineServiceImpl;
 import coffee_machine.service.impl.DrinkServiceImpl;
 import coffee_machine.view.Attributes;
 import coffee_machine.view.PagesPaths;
-import org.apache.log4j.Logger;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Map;
-
-import static coffee_machine.view.Attributes.*;
 
 public class UserPurchaseSubmitCommand implements Command, ControllerErrorLogging {
     private static final Logger logger = Logger.getLogger(UserPurchaseSubmitCommand.class);
@@ -39,10 +46,14 @@ public class UserPurchaseSubmitCommand implements Command, ControllerErrorLoggin
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_USER_PURCHASE);
         try {
-
+			/* extracting drinks to buy from request */
             List<Drink> drinksToBuy = getDrinksFromRequest(request);
             int userId = (int) request.getSession().getAttribute(USER_ID);
+
+			/* performing purchase */
             HistoryRecord record = coffeeMachine.prepareDrinksForUser(drinksToBuy, userId);
+
+			/* putting data to show on view in request */
             request.setAttribute(USER_BALANCE, accountService.getByUserId(userId).getRealAmount());
             request.setAttribute(USUAL_MESSAGE, CommandKey.PURCHASE_THANKS_MESSAGE);
             request.setAttribute(Attributes.HISTORY_RECORD, record);
@@ -61,14 +72,20 @@ public class UserPurchaseSubmitCommand implements Command, ControllerErrorLoggin
     }
 
     List<Drink> getDrinksFromRequest(HttpServletRequest request) {
-
+		/* extracting drinks quantity */
         Map<Integer, Integer> drinkQuantityByIds = formExtractor.getDrinksQuantityByIdFromRequest(request);
-        logger.debug ("========="+drinkQuantityByIds);
+
+		/* loading entities from bd */
         List<Drink> drinks = drinkService.getAllBaseByIdSet(drinkQuantityByIds.keySet());
-        logger.debug ("========="+drinks);
+
+		/* setting actual drink quantities gotten from request */
         setDrinkQuantities(drinks, drinkQuantityByIds);
+
+		/* extracting quantity of addons in drinks */
         Map<Integer, Map<Integer, Integer>> addonsQuantityInDrinksById =
                 formExtractor.getAddonsQuantityInDrinksByIdFromRequest(request);
+
+		/* setting actual drink quantities gotten from request */
         setAddonsQuantityInDrinks(addonsQuantityInDrinksById, drinks);
 
         return drinks;
@@ -77,18 +94,23 @@ public class UserPurchaseSubmitCommand implements Command, ControllerErrorLoggin
 
     void setDrinkQuantities(List<Drink> drinks, Map<Integer, Integer> drinkQuantityByIds) {
         drinks.forEach(drink -> {
-            drink.setQuantity(drinkQuantityByIds.get(drink.getId()));
+
+			drink.setQuantity(drinkQuantityByIds.get(drink.getId()));
+
         });
     }
 
     void setAddonsQuantityInDrinks(Map<Integer, Map<Integer, Integer>> addonsQuantityInDrinksById, List<Drink> drinks) {
         drinks.forEach(drink -> {
             Map<Integer, Integer> addonsQuantityById = addonsQuantityInDrinksById.get(drink.getId());
+
             if (addonsQuantityById != null) {
                 drink.getAddons().forEach(addon -> {
-                    Integer quantity = addonsQuantityById.get(addon.getId());
+
+					Integer quantity = addonsQuantityById.get(addon.getId());
                     if (quantity != null) {
-                        addon.setQuantity(quantity);
+
+						addon.setQuantity(quantity);
                     }
                 });
             }

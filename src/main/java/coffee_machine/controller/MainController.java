@@ -1,22 +1,24 @@
 package coffee_machine.controller;
 
-import coffee_machine.controller.impl.CommandHolderImpl;
-import coffee_machine.controller.logging.ControllerErrorLogging;
-import coffee_machine.exception.ApplicationException;
-import coffee_machine.i18n.message.key.GeneralKey;
-import org.apache.log4j.Logger;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 import static coffee_machine.view.Attributes.ERROR_ADDITIONAL_MESSAGE;
 import static coffee_machine.view.Attributes.ERROR_MESSAGE;
 import static coffee_machine.view.PagesPaths.HOME_PAGE;
 import static coffee_machine.view.PagesPaths.HOME_PATH;
 import static coffee_machine.view.PagesPaths.REDIRECTED;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+
+import coffee_machine.controller.impl.CommandHolderImpl;
+import coffee_machine.controller.logging.ControllerErrorLogging;
+import coffee_machine.exception.ApplicationException;
+import coffee_machine.i18n.message.key.GeneralKey;
 
 /**
  * This class represents main request controller. It calls commands for correspondent request uri
@@ -32,10 +34,11 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
      */
     CommandHolder commandHolder;
 
-    /* initializing holder for commands by uri */
+
     @Override
     public void init() throws ServletException {
         super.init();
+		/* initializing holder for commands by uri */
         commandHolder = new CommandHolderImpl();
     }
 

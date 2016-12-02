@@ -9,24 +9,56 @@ import coffee_machine.logging.ApplicationErrorLogging;
 import coffee_machine.view.Attributes;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 28.11.2016.
+ * This interface represents utility methods for logging errors.
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public interface ControllerErrorLogging extends ApplicationErrorLogging {
 	String MESSAGE_IN_CASE_OF_EMPTY = "";
 
+	/**
+	 * @param logger
+	 *            logger instance of class
+	 * @param message
+	 *            text message
+	 * @param request
+	 *            request instance
+	 * @param e
+	 *            throwable instance
+	 */
 	default void logError(Logger logger, String message, HttpServletRequest request, Exception e) {
 		logger.error(message + getRequestData(request), e);
 	}
 
+	/**
+	 * @param logger
+	 *            logger instance of class
+	 * @param request
+	 *            request instance
+	 * @param e
+	 *            throwable instance
+	 */
 	default void logError(Logger logger, HttpServletRequest request, Exception e) {
 		logError(logger, MESSAGE_IN_CASE_OF_EMPTY, request, e);
 	}
 
+	/**
+	 * @param logger
+	 *            logger instance of class
+	 * @param request
+	 *            request instance
+	 * @param e
+	 *            throwable instance
+	 */
 	default void logApplicationError(Logger logger, HttpServletRequest request, ApplicationException e) {
 		logApplicationError(logger, e.getMessage(),
 				((e.getAdditionalMessage() == null) ? e.getAdditionalMessage() : null) + getRequestData(request), e);
 	}
 
+	/**
+	 * @param request
+	 *            request instance
+	 */
 	default String getRequestData(HttpServletRequest request) {
 		StringBuilder messageBuilder = new StringBuilder().append("\nState:\t");
 

@@ -1,18 +1,22 @@
 package coffee_machine.logging;
 
-import coffee_machine.exception.ApplicationException;
-import coffee_machine.i18n.SupportedLocale;
-import org.apache.log4j.Logger;
-
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
+
+import coffee_machine.exception.ApplicationException;
+import coffee_machine.i18n.SupportedLocale;
+
 /**
- * @author oleksij.onysymchuk@gmail.com 28.11.2016.
+ * This interface represents general utility methods for logging errors with
+ * user error messages.
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public interface ApplicationErrorLogging {
     String MESSAGE_SEPARATOR = " : ";
     ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("i18n.messages",
-            SupportedLocale.EN.getLocale());
+			SupportedLocale.getDefault());
 
 
     default void logApplicationError(Logger logger,
