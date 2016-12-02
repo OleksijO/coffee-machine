@@ -1,8 +1,11 @@
 package coffee_machine.view;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 28.11.2016.
+ * This class is a constant holder for exception handler message format of log record on jsp pages.
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
+
 public interface ErrorMessage {
     public static final String JSP_HANDLER_MASSAGE_FORMAT = "User id=%d, admin id=%d. Statuc code = %d. %s";
 }

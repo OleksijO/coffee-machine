@@ -2,10 +2,10 @@ package coffee_machine.model.entity;
 
 import java.util.Date;
 
-import static coffee_machine.view.Parameters.DB_MONEY_COEFF;
+import static coffee_machine.CoffeeMachineConfig.DB_MONEY_COEFF;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 15.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 15.11.2016.
  */
 public class HistoryRecord {
     private int id;

@@ -10,7 +10,7 @@ import java.beans.PropertyVetoException;
 import java.util.ResourceBundle;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 17.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 17.11.2016.
  */
 class JdbcPooledDataSource implements DaoErrorProcessing {
     private static final String CAN_NOT_READ_PROPERTY_FOR_MIN_JDBC_CONNECTION_POOL_SIZE =

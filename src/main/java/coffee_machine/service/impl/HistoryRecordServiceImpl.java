@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 import java.util.List;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 15.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 15.11.2016.
  */
 public class HistoryRecordServiceImpl implements HistoryRecordService {
     private static final Logger logger = Logger.getLogger(HistoryRecordServiceImpl.class);

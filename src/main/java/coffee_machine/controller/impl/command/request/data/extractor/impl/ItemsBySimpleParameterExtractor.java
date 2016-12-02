@@ -13,24 +13,32 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 29.11.2016.
+ * This class represents common functionality for form extractors
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 class ItemsBySimpleParameterExtractor {
     private final Pattern patternNumber = Pattern.compile(RegExp.REGEXP_NUMBER);
 
-    Map<Integer, Integer> getGoodsQuantityByIdFromRequest(HttpServletRequest request,
-                                                          Pattern itemParameterPattern) {
+    /**
+     * @param request request instance
+     * @return  The map of pairs (drinkId, specifiedQuantity) with nonZero quantity.
+     */
+    Map<Integer, Integer> getItemQuantityByIdFromRequest(HttpServletRequest request,
+                                                         Pattern itemParameterPattern) {
         Enumeration<String> params = request.getParameterNames();
         Map<Integer, Integer> itemQuantityByIds = new HashMap<>();
         while (params.hasMoreElements()) {
             String param = params.nextElement();
             Matcher matcher = itemParameterPattern.matcher(param);
             if (matcher.matches()) {
+                /*parameter matches specified pattern and we can process it*/
                 int itemQuantity = getIntFromRequestByParameter(param, request);
                 if (itemQuantity > 0) {
-                    int itemId = getGoodsIdFromParam(param);
+                    int itemId = getItemIdFromParam(param);
                     itemQuantityByIds.put(itemId, itemQuantity);
                 } else if (itemQuantity < 0) {
+                    /* validation error */
                     throw new ControllerException(CommandErrorKey.QUANTITY_SHOULD_BE_NON_NEGATIVE);
                 }
             }
@@ -40,19 +48,23 @@ class ItemsBySimpleParameterExtractor {
 
     private int getIntFromRequestByParameter(String param, HttpServletRequest request) {
         try {
+
             return Integer.parseInt(request.getParameter(param));
+
         } catch (Exception e) {
             throw new ControllerException(CommandErrorKey.QUANTITY_SHOULD_BE_INT);
         }
 
     }
 
-    private int getGoodsIdFromParam(String param) {
+    int getItemIdFromParam(String param) {
         Matcher matcher = patternNumber.matcher(param);
         if (matcher.find(0)) {
+
             return Integer.parseInt(param.substring(matcher.start(), matcher.end()));
+
         } else {
-            throw new ControllerException(GeneralKey.ERROR_UNKNOWN);
+            throw new ControllerException(GeneralKey.ERROR_UNKNOWN); //this normally should not ever happen
         }
     }
 }

@@ -3,7 +3,7 @@ package coffee_machine.service;
 import coffee_machine.model.entity.Account;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 15.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 15.11.2016.
  */
 public interface AccountService {
 

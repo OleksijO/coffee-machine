@@ -19,7 +19,7 @@ import java.util.List;
 import static coffee_machine.i18n.message.key.error.ServiceErrorKey.*;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 15.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 15.11.2016.
  */
 public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceErrorProcessing {
     private static final Logger logger = Logger.getLogger(CoffeeMachineServiceImpl.class);

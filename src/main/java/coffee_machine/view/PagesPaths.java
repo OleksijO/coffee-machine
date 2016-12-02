@@ -1,5 +1,10 @@
 package coffee_machine.view;
 
+/**
+ * This class is a constant holder for application uri paths and jsp pages.
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public final class PagesPaths {
 	public static final String JSP = ".jsp";
 	public static final String VIEW_JSP_CLASSPATH = "/WEB-INF/view/jsp";

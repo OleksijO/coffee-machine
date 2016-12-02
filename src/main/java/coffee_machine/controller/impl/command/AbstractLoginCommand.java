@@ -19,7 +19,10 @@ import static coffee_machine.view.Attributes.ERROR_MESSAGE;
 import static coffee_machine.view.PagesPaths.LOGIN_PAGE;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 27.11.2016.
+ * This class represents login page main functionality handler command.
+ * This is template for specific role user/admin login pages.
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public abstract class AbstractLoginCommand implements Command, ControllerErrorLogging {
     private static final Logger logger = Logger.getLogger(AbstractLoginCommand.class);
@@ -35,8 +38,14 @@ public abstract class AbstractLoginCommand implements Command, ControllerErrorLo
     protected static final String USER_LOGGED_IN = "USER id=%d LOGGED IN.";
     protected static final String ADMIN_LOGGED_IN = "ADMIN id=%d LOGGED IN.";
 
+    /**
+     *  This method determines common try-catch wrapper for child specific login commands
+     * {@inheritDoc}
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        /* common try-catch wrapper for specific login logic */
         try {
 
             return performExecute(request, response);
@@ -53,6 +62,14 @@ public abstract class AbstractLoginCommand implements Command, ControllerErrorLo
         return LOGIN_PAGE;
     }
 
+    /**
+     * This method should be overridden in childs and should perform specific logic of logging in
+     *
+     * @param request request instance
+     * @param response responce instance
+     * @return  Same as method execute()
+     * @throws IOException in case of troubles with redirect
+     */
     protected abstract String performExecute(HttpServletRequest request, HttpServletResponse response)
             throws IOException;
 
@@ -72,6 +89,7 @@ public abstract class AbstractLoginCommand implements Command, ControllerErrorLo
 
     protected boolean processLoginForm(HttpServletRequest request, String email, String password){
 
+        /* checking login and password field to match the patterns*/
         if (!checkLogin(email)) {
             request.setAttribute(ERROR_MESSAGE, ERROR_LOGIN_EMAIL_DO_NOT_MATCH_PATTERN);
             logger.info(TRY_FAILED_WRONG_EMAIL + email);

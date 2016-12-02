@@ -12,9 +12,14 @@ import java.util.Map;
 import static coffee_machine.view.PagesPaths.*;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 17.11.2016.
+ * This class is implementation of CommandHolder. It defines command for every supported request uri.
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class CommandHolderImpl implements CommandHolder {
+    /**
+     * Holder for GET commands
+     */
     private final Map<String, Command> getCommands = new HashMap<String, Command>() {
         {
             put(HOME_PATH, new HomeCommand());
@@ -31,6 +36,10 @@ public class CommandHolderImpl implements CommandHolder {
             put(ADMIN_HOME_PATH, new AdminHomeCommand());
         }
     };
+
+    /**
+     * Holder for POST commands
+     */
     private final Map<String, Command> postCommands = new HashMap<String, Command>() {
         {
             put(USER_LOGIN_PATH, new UserLoginSubmitCommand());

@@ -33,7 +33,7 @@ ${requestScope[Attributes.COFFEE_MACHINE_BALANCE]}
                 <div align="center"><b><fmt:message key="refill.base.drinks.title"/></b></div>
             </td>
         </tr>
-        <c:forEach items="${requestScope[Attributes.REFILL_DRINKS]}" var="drink">
+        <c:forEach items="${requestScope[Attributes.DRINKS]}" var="drink">
             <tr>
                 <td>${drink.name}</td>
                 <td>
@@ -53,7 +53,7 @@ ${requestScope[Attributes.COFFEE_MACHINE_BALANCE]}
                 <div align="center"><b><fmt:message key="refill.addons.title"/></b></div>
             </td>
         </tr>
-        <c:forEach items="${requestScope[Attributes.REFILL_ADDONS]}" var="addon">
+        <c:forEach items="${requestScope[Attributes.ADDONS]}" var="addon">
             <tr>
                 <td>${addon.name}</td>
                 <td>

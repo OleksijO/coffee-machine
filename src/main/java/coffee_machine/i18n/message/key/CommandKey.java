@@ -1,7 +1,7 @@
 package coffee_machine.i18n.message.key;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 27.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 27.11.2016.
  */
 public interface CommandKey {
     String ADMIN_REFILL_SUCCESSFULL = "refill.successful";

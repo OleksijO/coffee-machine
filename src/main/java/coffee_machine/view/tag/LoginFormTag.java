@@ -11,18 +11,47 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 27.11.2016.
+ * This class represent custom tag handler, which transforms tag to login form in HTML in user current locale.
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class LoginFormTag implements Tag {
     private PageContext pageContext;
+    /**
+     * form action path
+     */
     private String action;
+    /**
+     * css style class
+     */
     private String cssClass;
+    /**
+     * label to be shown above input fields - should be message key from resource bundle
+     */
     private String formTitleMessageKey;
+    /**
+     * label text for login field label
+     */
     private String loginLabelMessageKey;
+    /**
+     * login input name attribute - should be message key from resource bundle
+     */
     private String parameterLogin;
+    /**
+     * previous value of login - in case of login error should stay in input field
+     */
     private String loginPreviosValue;
+    /**
+     * label text for password field label - should be message key from resource bundle
+     */
     private String passwordLabelMessageKey;
+    /**
+     * password input name attribute
+     */
     private String parameterPassword;
+    /**
+     * submit button text - should be message key from resource bundle
+     */
     private String submitMessageKey;
 
 
@@ -40,17 +69,21 @@ public class LoginFormTag implements Tag {
                     "    <form action=\"" + action + "\" method=\"post\">\n" +
                     "        <table>\n" +
                     "            <tr>\n" +
-                    "                <td><br><label for=\"login\">" + bundle.getString(loginLabelMessageKey) + "</label>&nbsp;<br><br></td>\n" +
+                    "                <td><br><label for=\"login\">" + bundle.getString(loginLabelMessageKey)
+                                                                    + "</label>&nbsp;<br><br></td>\n" +
                     "                <td><br><input id=\"login\" type=\"text\" name=\"" + parameterLogin + "\"\n" +
                     "                               value=\"" + loginPreviosValue + "\"/><br><br></td>\n" +
                     "            </tr>\n" +
                     "            <tr>\n" +
-                    "                <td><br><label for=\"pswd\">" + bundle.getString(passwordLabelMessageKey) + "</label>&nbsp;<br><br></td>\n" +
-                    "                <td><br><input id=\"pswd\" type=\"password\" name=\"" + parameterPassword + "\"/><br><br></td>\n" +
+                    "                <td><br><label for=\"pswd\">" + bundle.getString(passwordLabelMessageKey)
+                                                                    + "</label>&nbsp;<br><br></td>\n" +
+                    "                <td><br><input id=\"pswd\" type=\"password\" name=\"" + parameterPassword
+                                                                                            + "\"/><br><br></td>\n" +
                     "            </tr>\n" +
                     "            <tr>\n" +
                     "                <td colspan=\"2\">\n" +
-                    "                    <div align=\"center\"><input type=\"submit\" value=\"" + bundle.getString(submitMessageKey) + "\"></div>\n" +
+                    "                    <div align=\"center\"><input type=\"submit\" value=\""
+                                                            + bundle.getString(submitMessageKey) + "\"></div>\n" +
                     "                </td>\n" +
                     "            </tr>\n" +
                     "        </table>\n" +
@@ -125,19 +158,4 @@ public class LoginFormTag implements Tag {
         this.submitMessageKey = submitMessageKey;
     }
 
-    @Override
-    public String toString() {
-        return "LoginFormTag{" +
-                "pageContext=" + pageContext +
-                ", action='" + action + '\'' +
-                ", cssClass='" + cssClass + '\'' +
-                ", formTitleMessageKey='" + formTitleMessageKey + '\'' +
-                ", loginLabelMessageKey='" + loginLabelMessageKey + '\'' +
-                ", parameterLogin='" + parameterLogin + '\'' +
-                ", loginPreviosValue='" + loginPreviosValue + '\'' +
-                ", passwordLabelMessageKey='" + passwordLabelMessageKey + '\'' +
-                ", parameterPassword='" + parameterPassword + '\'' +
-                ", submitMessageKey='" + submitMessageKey + '\'' +
-                '}';
-    }
 }

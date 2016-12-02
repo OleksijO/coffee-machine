@@ -1,6 +1,6 @@
 package coffee_machine.model.entity;
 
-import static coffee_machine.view.Parameters.DB_MONEY_COEFF;
+import static coffee_machine.CoffeeMachineConfig.DB_MONEY_COEFF;
 
 public class Account {
 	private int id;

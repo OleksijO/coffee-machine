@@ -20,7 +20,7 @@ import static coffee_machine.view.PagesPaths.REDIRECTED;
 import static org.mockito.Mockito.*;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 29.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 29.11.2016.
  */
 public class MainControllerTest {
     @Mock

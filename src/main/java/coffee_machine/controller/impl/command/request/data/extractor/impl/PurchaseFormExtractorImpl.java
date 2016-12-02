@@ -14,7 +14,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 29.11.2016.
+ * This class represents implementation of parameter values from purchase drinks form extractor
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class PurchaseFormExtractorImpl implements PurchaseFormDataExtractor {
     private Pattern patternNumber = Pattern.compile(RegExp.REGEXP_NUMBER);
@@ -26,21 +28,26 @@ public class PurchaseFormExtractorImpl implements PurchaseFormDataExtractor {
 
     @Override
     public Map<Integer, Integer> getDrinksQuantityByIdFromRequest(HttpServletRequest request) {
-        return simpleParameterExtractor.getGoodsQuantityByIdFromRequest(request, patternDrink);
+        return simpleParameterExtractor.getItemQuantityByIdFromRequest(request, patternDrink);
     }
 
     @Override
     public Map<Integer, Map<Integer, Integer>> getAddonsQuantityInDrinksByIdFromRequest(HttpServletRequest request) {
         Map<Integer, Map<Integer, Integer>> addonQuantityInDrinksById = new HashMap<>();
         Enumeration<String> params = request.getParameterNames();
+
         while (params.hasMoreElements()) {
             String param = params.nextElement();
             Matcher matcher = patternAddonInDrink.matcher(param);
+
             if (matcher.matches()) {
+                /* founded needed parameter, can process it */
                 int addonId = getAddonIdFromParam(param);
                 int addonQuantity = getIntFromRequestByParameter(param, request);
+
                 if (addonQuantity > 0) {
                     int drinkId = getDrinkIdFromParam(param);
+
                     addonQuantityInDrinksById.putIfAbsent(drinkId, new HashMap<>());
                     addonQuantityInDrinksById
                             .get(drinkId)
@@ -48,13 +55,16 @@ public class PurchaseFormExtractorImpl implements PurchaseFormDataExtractor {
                 }
             }
         }
+
         return addonQuantityInDrinksById;
     }
 
 
     private int getIntFromRequestByParameter(String param, HttpServletRequest request) {
         try {
+
             return Integer.parseInt(request.getParameter(param));
+
         } catch (Exception e) {
             throw new ControllerException(CommandErrorKey.QUANTITY_SHOULD_BE_INT);
         }
@@ -62,17 +72,16 @@ public class PurchaseFormExtractorImpl implements PurchaseFormDataExtractor {
     }
 
     private int getDrinkIdFromParam(String param) {
-        Matcher matcher = patternNumber.matcher(param);
-        if (matcher.find(0)) {
-            return Integer.parseInt(param.substring(matcher.start(), matcher.end()));
-        }
-        throw new ControllerException(GeneralKey.ERROR_UNKNOWN);
+
+       return simpleParameterExtractor.getItemIdFromParam(param);
     }
 
     private int getAddonIdFromParam(String param) {
         Matcher matcher = patternNumber.matcher(param);
+
         if (matcher.find(0)) {    // passing by drink id
             if (matcher.find(matcher.end())) {
+
                 return Integer.parseInt(param.substring(matcher.start(), matcher.end()));
             }
         }

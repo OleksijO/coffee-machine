@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 28.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 28.11.2016.
  */
 public interface ControllerErrorLogging extends ApplicationErrorLogging {
     String MESSAGE_IN_CASE_OF_EMPTY = "";

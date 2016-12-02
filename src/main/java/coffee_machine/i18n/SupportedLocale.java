@@ -3,7 +3,7 @@ package coffee_machine.i18n;
 import java.util.Locale;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 20.11.2016.
+ * @author oleksij.onysymchuk@gmail.com 20.11.2016.
  */
 public enum SupportedLocale {
 	RU(new Locale("ru", "RU"), "ru"), UA(new Locale("uk", "UA"), "ua"), EN(new Locale("en", "EN"), "en");
