@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import static coffee_machine.view.Attributes.ERROR_ADDITIONAL_MESSAGE;
 import static coffee_machine.view.Attributes.ERROR_MESSAGE;
+import static coffee_machine.view.PagesPaths.HOME_PAGE;
 import static coffee_machine.view.PagesPaths.HOME_PATH;
 import static coffee_machine.view.PagesPaths.REDIRECTED;
 
@@ -66,6 +67,7 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
 
             request.getRequestDispatcher(view).forward(request, response);
 
+            return;
         } catch (ApplicationException e) {
             logApplicationError(logger, request, e);
             request.setAttribute(ERROR_MESSAGE, e.getMessage());
@@ -74,6 +76,7 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
             logError(logger, request, e);
             request.setAttribute(ERROR_MESSAGE, GeneralKey.ERROR_UNKNOWN);
         }
+        request.getRequestDispatcher(HOME_PAGE).forward(request, response);
 
     }
 

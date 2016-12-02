@@ -20,6 +20,11 @@ import javax.servlet.http.HttpServletResponse;
 import static coffee_machine.view.Attributes.*;
 import static coffee_machine.view.PagesPaths.ADMIN_REFILL_PAGE;
 
+/**
+ * This class represents admin refill page get method request handler command.
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class AdminRefillCommand implements Command, ControllerErrorLogging {
     private static final Logger logger = Logger.getLogger(AdminRefillCommand.class);
 
@@ -33,6 +38,7 @@ public class AdminRefillCommand implements Command, ControllerErrorLogging {
         request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_ADMIN_REFILL);
 
         try {
+                /* just putting all needed for jsp data */
             request.setAttribute(COFFEE_MACHINE_BALANCE,
                     accountService.getById(CoffeeMachineConfig.ACCOUNT_ID).getRealAmount());
             request.setAttribute(DRINKS, drinkService.getAll());

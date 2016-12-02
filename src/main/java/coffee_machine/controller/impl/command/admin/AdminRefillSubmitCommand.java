@@ -25,6 +25,11 @@ import java.util.Map;
 import static coffee_machine.view.Attributes.*;
 import static coffee_machine.view.PagesPaths.ADMIN_REFILL_PAGE;
 
+/**
+ * This class represents admin refill page post method request handler command.
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class AdminRefillSubmitCommand implements Command, ControllerErrorLogging {
     private static final Logger logger = Logger.getLogger(AdminRefillCommand.class);
 

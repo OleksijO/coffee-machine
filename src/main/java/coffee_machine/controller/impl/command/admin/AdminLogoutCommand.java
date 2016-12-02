@@ -11,6 +11,11 @@ import static coffee_machine.view.Attributes.ADMIN_ID;
 import static coffee_machine.view.PagesPaths.HOME_PATH;
 import static coffee_machine.view.PagesPaths.REDIRECTED;
 
+/**
+ * This class represents admin logout request handler command.
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class AdminLogoutCommand implements Command {
     private static final Logger logger = Logger.getLogger(AdminLogoutCommand.class);
 

@@ -31,7 +31,7 @@ public class UserPurchaseCommand implements Command, ControllerErrorLogging {
         request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_USER_PURCHASE);
 
         try {
-
+                /* just putting all needed for jsp data */
             int userId = (int) request.getSession().getAttribute(USER_ID);
             request.setAttribute(USER_BALANCE, accountService.getByUserId(userId).getRealAmount());
             request.setAttribute(DRINKS, drinkService.getAll());
