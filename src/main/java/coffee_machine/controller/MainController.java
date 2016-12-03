@@ -1,24 +1,20 @@
 package coffee_machine.controller;
 
-import static coffee_machine.view.Attributes.ERROR_ADDITIONAL_MESSAGE;
-import static coffee_machine.view.Attributes.ERROR_MESSAGE;
-import static coffee_machine.view.PagesPaths.HOME_PAGE;
-import static coffee_machine.view.PagesPaths.HOME_PATH;
-import static coffee_machine.view.PagesPaths.REDIRECTED;
-
-import java.io.IOException;
+import coffee_machine.controller.impl.CommandHolderImpl;
+import coffee_machine.controller.logging.ControllerErrorLogging;
+import coffee_machine.exception.ApplicationException;
+import coffee_machine.i18n.message.key.GeneralKey;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-import org.apache.log4j.Logger;
-
-import coffee_machine.controller.impl.CommandHolderImpl;
-import coffee_machine.controller.logging.ControllerErrorLogging;
-import coffee_machine.exception.ApplicationException;
-import coffee_machine.i18n.message.key.GeneralKey;
+import static coffee_machine.view.Attributes.ERROR_ADDITIONAL_MESSAGE;
+import static coffee_machine.view.Attributes.ERROR_MESSAGE;
+import static coffee_machine.view.PagesPaths.*;
 
 /**
  * This class represents main request controller. It calls commands for correspondent request uri
@@ -38,7 +34,7 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
     @Override
     public void init() throws ServletException {
         super.init();
-		/* initializing holder for commands by uri */
+		// initializing holder for commands by uri
         commandHolder = new CommandHolderImpl();
     }
 
@@ -55,7 +51,7 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
             throws IOException, ServletException {
         try {
 
-            /* in case of unsupported uri redirecting to home page */
+            // in case of unsupported uri redirecting to home page
             if (command == null) {
                 response.sendRedirect(HOME_PATH);
                 return;
@@ -63,7 +59,7 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
 
             String view = command.execute(request, response);
 
-            /* redirected to reset uri */
+            // redirected to reset uri
             if (REDIRECTED.equals(view)) {
                 return;
             }
@@ -87,7 +83,7 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        /* getting command for GET requests */
+        // getting command for GET requests
 
         String uri = getUri(request);
         processRequest(commandHolder.get(uri), request, response);
@@ -103,7 +99,7 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        /* getting command for POST requests */
+        // getting command for POST requests
 
         String uri = getUri(request);
         processRequest(commandHolder.post(uri), request, response);

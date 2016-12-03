@@ -26,7 +26,6 @@ public class UserLogoutCommand implements Command {
 		logger.info(String.format(USER_LOGGED_OUT, (int) request.getSession().getAttribute(USER_ID)));
 
 		request.getSession().removeAttribute(USER_ID);
-
 		response.sendRedirect(HOME_PATH);
 
 		return REDIRECTED;

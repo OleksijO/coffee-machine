@@ -7,7 +7,10 @@ import org.apache.log4j.Logger;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-
+/**
+ * This class repesents JDBC implementation of AbstractConnection.
+ * It performs rollback if transaction began but was not committed before close method was called.
+ */
 public class AbstractConnectionImpl implements AbstractConnection, DaoErrorProcessing {
     private static final Logger logger = Logger.getLogger(AbstractConnectionImpl.class);
 

@@ -1,23 +1,7 @@
 package coffee_machine.service.impl;
 
-import static coffee_machine.i18n.message.key.error.ServiceErrorKey.GOODS_NO_LONGER_AVAILABLE;
-import static coffee_machine.i18n.message.key.error.ServiceErrorKey.NOT_ENOUGH_MONEY;
-import static coffee_machine.i18n.message.key.error.ServiceErrorKey.YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import coffee_machine.CoffeeMachineConfig;
-import coffee_machine.dao.AbstractConnection;
-import coffee_machine.dao.AccountDao;
-import coffee_machine.dao.AddonDao;
-import coffee_machine.dao.DaoFactory;
-import coffee_machine.dao.DrinkDao;
-import coffee_machine.dao.HistoryRecordDao;
+import coffee_machine.dao.*;
 import coffee_machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee_machine.model.entity.Account;
 import coffee_machine.model.entity.HistoryRecord;
@@ -25,6 +9,15 @@ import coffee_machine.model.entity.item.Drink;
 import coffee_machine.model.entity.item.Item;
 import coffee_machine.service.CoffeeMachineService;
 import coffee_machine.service.logging.ServiceErrorProcessing;
+import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
+import static coffee_machine.CoffeeMachineConfig.DB_MONEY_COEFF;
+import static coffee_machine.i18n.message.key.error.ServiceErrorKey.*;
 
 /**
  * @author oleksij.onysymchuk@gmail.com 15.11.2016.
@@ -46,7 +39,7 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
     @Override
     public HistoryRecord prepareDrinksForUser(List<Drink> drinks, int userId) {
 
-		try (AbstractConnection connection = daoFactory.getConnection()) {
+        try (AbstractConnection connection = daoFactory.getConnection()) {
 
             String orderDescription = drinks.toString();
 
@@ -70,7 +63,8 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
             /*  check if user has enough money to buy selected drinks */
             Account userAccount = accountDao.getByUserId(userId);
             if (userAccount.getAmount() < drinksPrice) {
-                logErrorAndThrowNewServiceException(logger, NOT_ENOUGH_MONEY);
+                logErrorAndThrowNewServiceException(
+                        logger, NOT_ENOUGH_MONEY, String.format("%.2f", drinksPrice * DB_MONEY_COEFF));
             }
 
             /*  getting available drinks and addons */

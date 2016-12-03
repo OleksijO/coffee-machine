@@ -65,9 +65,6 @@
                                                 </c:if>
                                             </select>
                                         </td>
-                                        <td>
-                                            [${addon.quantity}]
-                                        </td>
                                     </tr>
                                 </c:if>
                             </c:forEach>

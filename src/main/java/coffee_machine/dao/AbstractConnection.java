@@ -1,7 +1,11 @@
 package coffee_machine.dao;
 
 /**
- * This class represents abstract connection
+ * This class represents abstract connection.
+ *
+ * It should consider transaction's rollback necessary in close method.
+ * It MUST call ROLLBACK IF TRANSACTION has been begun
+ * but was NOT COMMITTED before close method was called.
  *
  * @author oleksij.onysymchuk@gmail.com
  */
@@ -24,6 +28,10 @@ public interface AbstractConnection extends AutoCloseable {
 
 	/**
 	 * Closes connection.
+	 *
+	 * IMPORTANT.
+	 * It MUST call ROLLBACK IF TRANSACTION has been begun
+	 * but was NOT COMMITTED before close method was called.
 	 */
 	@Override
 	void close();

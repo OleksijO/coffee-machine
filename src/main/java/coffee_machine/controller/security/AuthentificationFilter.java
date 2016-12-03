@@ -26,14 +26,14 @@ public class AuthentificationFilter implements Filter {
         HttpServletRequest req = ((HttpServletRequest) request);
         HttpSession session = req.getSession();
 
-        /* in case of not logged admin and try to go on any admin page - forwarding to admin login path */
+        // in case of not logged admin and try to go on any admin page - forwarding to admin login path
         if ((req.getRequestURI().startsWith(ADMIN)) && (session.getAttribute(ADMIN_ID) == null)
                 && (!req.getRequestURI().startsWith(ADMIN_LOGIN_PATH))) {
             req.getRequestDispatcher(ADMIN_LOGIN_PATH).forward(request, response);
             return;
         }
 
-        /* in case of not logged user and try to go on any user page - forwarding to user login path */
+        // in case of not logged user and try to go on any user page - forwarding to user login path
         if ((req.getRequestURI().startsWith(USER)) && (session.getAttribute(USER_ID) == null)
                 && (!req.getRequestURI().startsWith(USER_LOGIN_PATH))) {
             req.getRequestDispatcher(USER_LOGIN_PATH).forward(request, response);

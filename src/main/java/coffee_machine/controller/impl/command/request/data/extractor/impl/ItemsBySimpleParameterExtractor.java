@@ -32,13 +32,13 @@ class ItemsBySimpleParameterExtractor {
             String param = params.nextElement();
             Matcher matcher = itemParameterPattern.matcher(param);
             if (matcher.matches()) {
-                /*parameter matches specified pattern and we can process it*/
+                // parameter matches specified pattern and we can process it
                 int itemQuantity = getIntFromRequestByParameter(param, request);
                 if (itemQuantity > 0) {
                     int itemId = getItemIdFromParam(param);
                     itemQuantityByIds.put(itemId, itemQuantity);
                 } else if (itemQuantity < 0) {
-                    /* validation error */
+                    // validation error
                     throw new ControllerException(CommandErrorKey.QUANTITY_SHOULD_BE_NON_NEGATIVE);
                 }
             }

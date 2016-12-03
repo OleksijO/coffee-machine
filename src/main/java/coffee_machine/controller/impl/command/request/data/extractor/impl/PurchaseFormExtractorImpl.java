@@ -41,7 +41,7 @@ public class PurchaseFormExtractorImpl implements PurchaseFormDataExtractor {
             Matcher matcher = patternAddonInDrink.matcher(param);
 
             if (matcher.matches()) {
-                /* founded needed parameter, can process it */
+                //founded needed parameter, can process it
                 int addonId = getAddonIdFromParam(param);
                 int addonQuantity = getIntFromRequestByParameter(param, request);
 
