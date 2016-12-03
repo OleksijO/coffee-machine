@@ -7,5 +7,5 @@ package coffee.machine.view;
  */
 
 public interface ErrorMessage {
-    public static final String JSP_HANDLER_MASSAGE_FORMAT = "User id=%d, admin id=%d. Statuc code = %d. %s";
+    String JSP_HANDLER_MASSAGE_FORMAT = "User id=%d, admin id=%d. Statuc code = %d. %s";
 }

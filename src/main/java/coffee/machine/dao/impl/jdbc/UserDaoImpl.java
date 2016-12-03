@@ -88,7 +88,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
         if (user.getId() == 0) {
             logErrorAndThrowDaoException(logger, CAN_NOT_UPDATE_UNSAVED);
         }
-        try (PreparedStatement statement = connection.prepareStatement(UPDATE_SQL);) {
+        try (PreparedStatement statement = connection.prepareStatement(UPDATE_SQL)) {
 
             statement.setString(1, user.getEmail());
             statement.setString(2, user.getPassword());
