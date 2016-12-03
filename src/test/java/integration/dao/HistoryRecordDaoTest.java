@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 24.11.2016.
+ * @author oleksij.onysymchuk@gmail.com
  */
 @Ignore
 public class HistoryRecordDaoTest {
@@ -34,7 +34,7 @@ public class HistoryRecordDaoTest {
 
     @BeforeClass
     public static void initTestDataBase() throws SQLException, ClassNotFoundException, InterruptedException, IOException {
-        new TestDataBaseInitializer().initTestJdbcDB();
+        new TestDatabaseInitializer().initTestJdbcDB();
     }
 
     @Before

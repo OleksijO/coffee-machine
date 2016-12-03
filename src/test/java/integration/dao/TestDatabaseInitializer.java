@@ -9,9 +9,12 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 25.11.2016.
+ * For success perform of refilling database with test data it should be already created,
+ * because method connects directly to database, specified in database.properties.
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
-public class TestDataBaseInitializer {
+public class TestDatabaseInitializer {
     public void initTestJdbcDB() throws ClassNotFoundException, SQLException, InterruptedException, IOException {
         ResourceBundle jdbcProperties = ResourceBundle.getBundle("database");
 

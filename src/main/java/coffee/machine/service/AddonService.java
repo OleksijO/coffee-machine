@@ -7,12 +7,19 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 15.11.2016.
+ * This class represents addon service
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public interface AddonService {
 
     List<Item> getAll();
 
+    /**
+     * Adds specified quantity for every addon with specified id
+     *
+     * @param quantitiesById Map of pairs (addonId, quantityToAdd)
+     */
     void refill(Map<Integer, Integer> quantitiesById);
 
 }

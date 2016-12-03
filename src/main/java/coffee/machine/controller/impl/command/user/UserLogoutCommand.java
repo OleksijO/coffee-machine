@@ -2,12 +2,14 @@ package coffee.machine.controller.impl.command.user;
 
 import coffee.machine.controller.Command;
 import coffee.machine.view.Attributes;
-import coffee.machine.view.PagesPaths;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import static coffee.machine.view.PagesPaths.HOME_PATH;
+import static coffee.machine.view.PagesPaths.REDIRECTED;
 
 /**
  * This class represents user logout request handler command.
@@ -24,9 +26,9 @@ public class UserLogoutCommand implements Command {
 		logger.info(String.format(USER_LOGGED_OUT, (int) request.getSession().getAttribute(Attributes.USER_ID)));
 
 		request.getSession().removeAttribute(Attributes.USER_ID);
-		response.sendRedirect(PagesPaths.HOME_PATH);
+		response.sendRedirect(HOME_PATH);
 
-		return PagesPaths.REDIRECTED;
+		return REDIRECTED;
 	}
 
 }

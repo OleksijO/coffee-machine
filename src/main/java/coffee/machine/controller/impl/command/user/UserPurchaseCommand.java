@@ -26,7 +26,7 @@ public class UserPurchaseCommand extends CommandExecuteWrapper {
         // just putting all needed for jsp data
         request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_USER_PURCHASE);
         int userId = (int) request.getSession().getAttribute(Attributes.USER_ID);
-        request.setAttribute(Attributes.USER_BALANCE, accountService.getByUserId(userId).getRealAmount());
+        request.setAttribute(Attributes.USER_ACCOUNT, accountService.getByUserId(userId));
         request.setAttribute(Attributes.DRINKS, drinkService.getAll());
         return PagesPaths.USER_PURCHASE_PAGE;
     }

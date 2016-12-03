@@ -8,12 +8,19 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 15.11.2016.
+ * This class represents drink service
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public interface DrinkService {
 
 	List<Drink> getAll();
 
+	/**
+	 * Adds specified quantity for every drink with specified id
+	 *
+	 * @param quantitiesById Map of pairs (drinkId, quantityToAdd)
+	 */
 	void refill(Map<Integer, Integer> quantitiesById);
 
 	List<Drink> getAllByIdSet(Set<Integer> integers);

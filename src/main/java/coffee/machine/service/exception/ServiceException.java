@@ -2,25 +2,19 @@ package coffee.machine.service.exception;
 
 import coffee.machine.exception.ApplicationException;
 
+/**
+ * This class represents custom application exception for service layer.
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class ServiceException extends ApplicationException {
 
-	public ServiceException(String message, Throwable cause) {
-		super(message, cause);
+	public ServiceException(String messageKey) {
+		super(messageKey);
 	}
 
-	public ServiceException(String message) {
-		super(message);
+	public ServiceException(String messageKey, String additionalMessage) {
+		super(messageKey, additionalMessage);
 	}
 
-	public ServiceException(String message, String additionalMessage) {
-		super(message, additionalMessage);
-	}
-
-	public ServiceException(String message, String additionalMessage, Throwable cause) {
-		super(message, additionalMessage, cause);
-	}
-
-	public ServiceException(Throwable cause) {
-		super(cause);
-	}
 }

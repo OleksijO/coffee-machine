@@ -51,7 +51,7 @@ public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
             HistoryRecord record = coffeeMachine.prepareDrinksForUser(drinksToBuy, userId);
             request.setAttribute(Attributes.HISTORY_RECORD, record);
         } catch (ServiceException e){
-            request.setAttribute(Attributes.USER_BALANCE, accountService.getByUserId(userId).getRealAmount());
+            request.setAttribute(Attributes.USER_ACCOUNT, accountService.getByUserId(userId).getRealAmount());
             throw e;
         }
 

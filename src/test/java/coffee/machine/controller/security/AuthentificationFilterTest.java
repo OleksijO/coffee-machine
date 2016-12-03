@@ -19,7 +19,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 29.11.2016.
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class AuthentificationFilterTest {
     @Mock

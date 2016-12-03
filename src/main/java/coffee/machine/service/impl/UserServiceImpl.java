@@ -1,19 +1,18 @@
 package coffee.machine.service.impl;
 
-import coffee.machine.dao.UserDao;
 import coffee.machine.dao.AbstractConnection;
 import coffee.machine.dao.DaoFactory;
+import coffee.machine.dao.UserDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.user.User;
 import coffee.machine.service.UserService;
-import org.apache.log4j.Logger;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 15.11.2016.
+ * This class is an implementation of UserService
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class UserServiceImpl implements UserService {
-    private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
-
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
     private static class InstanceHolder {

@@ -8,8 +8,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is the implementation of Account entity DAO
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
-
     private static final Logger logger = Logger.getLogger(AccountDaoImpl.class);
 
     private static final String SELECT_ALL_SQL = "SELECT id, amount FROM account";
@@ -22,7 +26,6 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 
     private static final String FIELD_ID = "id";
     private static final String FIELD_AMOUNT = "amount";
-
 
     private final Connection connection;
 

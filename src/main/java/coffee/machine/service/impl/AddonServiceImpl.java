@@ -1,23 +1,22 @@
 package coffee.machine.service.impl;
 
-import coffee.machine.model.entity.item.Item;
-import coffee.machine.service.AddonService;
 import coffee.machine.dao.AbstractConnection;
 import coffee.machine.dao.AddonDao;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
-import org.apache.log4j.Logger;
+import coffee.machine.model.entity.item.Item;
+import coffee.machine.service.AddonService;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 15.11.2016.
+ * This class is an implementation of AddonService
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class AddonServiceImpl implements AddonService {
-    private static final Logger logger = Logger.getLogger(AddonServiceImpl.class);
-
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
     private static class InstanceHolder {

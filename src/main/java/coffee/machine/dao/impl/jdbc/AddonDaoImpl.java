@@ -3,16 +3,20 @@ package coffee.machine.dao.impl.jdbc;
 import coffee.machine.dao.AddonDao;
 import coffee.machine.model.entity.item.Item;
 import coffee.machine.model.entity.item.ItemType;
-import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * This class is the implementation of Addon entity DAO
+ *
+ * Mainly this is an adaptor for ItemDaoImpl, because Addon=Item, but extends it's functionality with some methods
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class AddonDaoImpl extends AbstractDao<Item> implements AddonDao {
-    private static final Logger logger = Logger.getLogger(AddonDaoImpl.class);
-
     private ItemDaoImpl itemDao;
 
     public AddonDaoImpl(Connection connection) {

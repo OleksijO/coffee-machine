@@ -9,6 +9,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * This class is the implementation of HistoryRecord entity DAO
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements HistoryRecordDao {
 
 	private static final Logger logger = Logger.getLogger(HistoryRecordDaoImpl.class);
@@ -25,6 +30,7 @@ public class HistoryRecordDaoImpl extends AbstractDao<HistoryRecord> implements 
 	private static final String FIELD_DATE_TIME = "date_time";
 	private static final String FIELD_ORDER_DESCRIPTION = "order_description";
 	private static final String FIELD_AMOUNT = "amount";
+
 	private final Connection connection;
 
 	HistoryRecordDaoImpl(Connection connection) {

@@ -10,9 +10,15 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is the implementation of User entity DAO
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
-
     private static final Logger logger = Logger.getLogger(UserDaoImpl.class);
+
+    private static final String DB_ERROR_WHILE_GETTING_BY_LOGIN = "Database error while getting user by login";
 
     private static final String SELECT_ALL_SQL =
             "SELECT users.id, email, password, full_name, account_id, amount, is_admin FROM users " +
@@ -23,10 +29,6 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
             "INSERT INTO users (email, password, full_name, account_id, is_admin) VALUES (?, ?, ?, ?, ?); ";
     private static final String DELETE_SQL =
             "DELETE FROM users WHERE id = ?; ";
-
-
-    private static final String DB_ERROR_WHILE_GETTING_BY_LOGIN = "Database error while getting user by login";
-
     private static final String WHERE_USER_EMAIL = " WHERE users.email = ?";
     private static final String WHERE_USER_ID = " WHERE users.id = ?";
 

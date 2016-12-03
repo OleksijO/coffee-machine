@@ -9,6 +9,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is common DAO for Item hierarchy.
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class ItemDaoImpl extends AbstractDao<Item> {
     private static final Logger logger = Logger.getLogger(ItemDaoImpl.class);
 

@@ -15,6 +15,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * This class is the implementation of Drink entity DAO
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
     private static final Logger logger = Logger.getLogger(DrinkDaoImpl.class);
     static final String DB_ERROR_WHILE_INSERTING_ADDONS = "Database error while inserting addons of drink: ";
@@ -23,7 +28,8 @@ public class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
     private static final String INSERT_ADDON_SQL = "INSERT INTO drink_addons (drink_id, addon_id) VALUES (?,?); ";
     private static final String DELETE_ADDON_FROM_SET_SQL = "DELETE FROM drink_addons WHERE drink_id = ?; ";
 
-    private static final String DB_ERROR_WHILE_GETTING_ADDON_SET_OF_DRINK_WITH_ID = "Database error while getting addon set of drink with id=";
+    private static final String DB_ERROR_WHILE_GETTING_ADDON_SET_OF_DRINK_WITH_ID =
+            "Database error while getting addon set of drink with id=";
 
     private final Connection connection;
     private ItemDaoImpl itemDao;

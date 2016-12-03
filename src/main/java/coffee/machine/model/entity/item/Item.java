@@ -2,6 +2,11 @@ package coffee.machine.model.entity.item;
 
 import static coffee.machine.CoffeeMachineConfig.DB_MONEY_COEFF;
 
+/**
+ * This class represents Addon entity. NOTE: Addon=Item.
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class Item implements Comparable<Item> {
     protected int id;
     protected String name;
@@ -12,11 +17,11 @@ public class Item implements Comparable<Item> {
     public Item() {
     }
 
-    public Item(Item goods) {
-        id = goods.getId();
-        name = goods.getName();
-        price = goods.getPrice();
-        quantity = goods.getQuantity();
+    protected Item(Item item) {
+        id = item.getId();
+        name = item.getName();
+        price = item.getPrice();
+        quantity = item.getQuantity();
     }
 
     public int getId() {

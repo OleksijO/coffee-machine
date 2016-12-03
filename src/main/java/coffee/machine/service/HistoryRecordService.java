@@ -5,7 +5,9 @@ import coffee.machine.model.entity.HistoryRecord;
 import java.util.List;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 27.11.2016.
+ * This class represents history record service
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public interface HistoryRecordService {
     List<HistoryRecord> getAllByUserId(int userId);

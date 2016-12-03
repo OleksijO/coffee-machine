@@ -3,7 +3,9 @@ package coffee.machine.service;
 import coffee.machine.model.entity.Account;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 15.11.2016.
+ * This class represents account service
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public interface AccountService {
 

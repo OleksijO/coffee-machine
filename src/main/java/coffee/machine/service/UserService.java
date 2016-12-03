@@ -3,7 +3,9 @@ package coffee.machine.service;
 import coffee.machine.model.entity.user.User;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 15.11.2016.
+ * This class represents user service
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public interface UserService {
 

@@ -14,7 +14,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 29.11.2016.
+ * @author oleksij.onysymchuk@gmail.com
  */
 abstract class AbstractExtractorTest {
 

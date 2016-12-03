@@ -12,9 +12,6 @@
 <table cellpadding="10" cellspacing="2" border="1">
     <tr>
         <td>
-            <div align="center"><fmt:message key="user.history.record..id"/></div>
-        </td>
-        <td>
             <div align="center"><fmt:message key="user.history.record.date"/></div>
         </td>
         <td>
@@ -25,19 +22,17 @@
         </td>
     </tr>
 
-    <c:forEach items="${requestScope[Attributes.USER_RECORD_HISTORY_LIST]}" var="drink">
+    <c:forEach items="${requestScope[Attributes.USER_RECORD_HISTORY_LIST]}" var="record">
         <tr>
+
             <td>
-                <div align="center">${drink.id}</div>
+                <div align="center"><fmt:formatDate type="both" value="${record.date}"/></div>
             </td>
             <td>
-                <div align="left"><fmt:formatDate type="both" value="${drink.date}"/></div>
+                <div align="left"> ${record.orderDescription} </div>
             </td>
             <td>
-                <div align="left"> ${drink.orderDescription} </div>
-            </td>
-            <td>
-                <div align="right"> <fmt:formatNumber value="${drink.realAmount}" type="number"
+                <div align="right"> <fmt:formatNumber value="${record.realAmount}" type="number"
                                                       minFractionDigits="2" maxFractionDigits="2"/> </div>
             </td>
         </tr>

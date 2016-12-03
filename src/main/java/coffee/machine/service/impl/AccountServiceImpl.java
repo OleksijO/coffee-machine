@@ -1,19 +1,18 @@
 package coffee.machine.service.impl;
 
-import coffee.machine.dao.AccountDao;
-import coffee.machine.service.AccountService;
 import coffee.machine.dao.AbstractConnection;
+import coffee.machine.dao.AccountDao;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Account;
-import org.apache.log4j.Logger;
+import coffee.machine.service.AccountService;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 15.11.2016.
+ * This class is an implementation of AccountService
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class AccountServiceImpl implements AccountService {
-    private static final Logger logger = Logger.getLogger(AccountServiceImpl.class);
-
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
     private static class InstanceHolder {

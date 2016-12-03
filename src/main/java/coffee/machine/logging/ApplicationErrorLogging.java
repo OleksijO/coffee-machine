@@ -16,6 +16,12 @@ public interface ApplicationErrorLogging {
     ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("i18n.messages",
             SupportedLocale.EN.getLocale());
 
+    /**
+     * @param logger logger instance of class
+     * @param messageKey text message resource bundle key
+     * @param additionalMessage additional text message
+     * @param e throwable instance
+     */
     default void logApplicationError(Logger logger,
                                      String messageKey,
                                      String additionalMessage,
@@ -24,6 +30,11 @@ public interface ApplicationErrorLogging {
                 + ((additionalMessage == null) ? "" : additionalMessage), e);
     }
 
+    /**
+     * @param logger logger instance of class
+     * @param messageKey text message resource bundle key
+     * @param additionalMessage additional text message
+     */
     default void logApplicationError(Logger logger,
                                      String messageKey,
                                      String additionalMessage) {
@@ -31,6 +42,10 @@ public interface ApplicationErrorLogging {
                 + ((additionalMessage == null) ? "" : additionalMessage));
     }
 
+    /**
+     * @param logger logger instance of class
+     * @param messageKey text message resource bundle key
+     */
     default void logApplicationError(Logger logger,
                                      String messageKey) {
         logger.error(RESOURCE_BUNDLE.getString(messageKey));

@@ -1,18 +1,14 @@
 package coffee.machine.i18n.message.key;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 20.11.2016.
+ * This interface is a holder for bundle keys of general messages
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public interface GeneralKey {
    String ERROR_UNKNOWN = "error.unknown";
-   String INTERNAL_ERROR = "error.internal";
-
-   String TEST_ERROR_MESSAGE = "test.error.message";
-   String TEST_USUAL_MESSAGE = "test.usual.message";
-
 
    String TITLE_HOME = "title.home";
-
 
    String TITLE_ADMIN_HOME = "title.admin.home";
    String TITLE_ADMIN_REFILL = "title.admin.refill";

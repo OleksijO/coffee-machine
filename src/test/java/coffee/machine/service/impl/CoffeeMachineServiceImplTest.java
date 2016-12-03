@@ -28,7 +28,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 28.11.2016.
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class CoffeeMachineServiceImplTest {
     @Mock
@@ -154,7 +154,7 @@ public class CoffeeMachineServiceImplTest {
             service.prepareDrinksForUser(drinksToBuy, userId);
         } catch (ServiceException e) {
             e.printStackTrace();
-            Assert.assertEquals(ServiceErrorKey.GOODS_NO_LONGER_AVAILABLE, e.getMessage());
+            Assert.assertEquals(ServiceErrorKey.ITEM_NO_LONGER_AVAILABLE, e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             fail("Here should be application exception");

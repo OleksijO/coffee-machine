@@ -5,7 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 29.11.2016.
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class RefillFormExtractorImplTest extends AbstractExtractorTest {
     private final RefillFormDataExtractor parser = new RefillFormExtractorImpl();

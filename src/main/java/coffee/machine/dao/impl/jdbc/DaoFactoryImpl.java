@@ -8,6 +8,11 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * This class defines DAO Factory
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class DaoFactoryImpl implements DaoFactory, DaoErrorProcessing {
     private static final Logger logger = Logger.getLogger(DaoFactoryImpl.class);
 

@@ -6,7 +6,6 @@ import coffee.machine.dao.DrinkDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.service.DrinkService;
-import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +13,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 15.11.2016.
+ * This class is an implementation of DrinkService
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class DrinkServiceImpl implements DrinkService {
-    private static final Logger logger = Logger.getLogger(DrinkServiceImpl.class);
-
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
     private static class InstanceHolder {

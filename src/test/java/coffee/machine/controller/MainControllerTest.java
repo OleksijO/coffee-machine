@@ -16,10 +16,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+import static coffee.machine.i18n.message.key.GeneralKey.ERROR_UNKNOWN;
+import static coffee.machine.view.Attributes.ERROR_MESSAGE;
+import static coffee.machine.view.PagesPaths.HOME_PAGE;
+import static coffee.machine.view.PagesPaths.HOME_PATH;
 import static org.mockito.Mockito.*;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 29.11.2016.
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class MainControllerTest {
     @Mock
@@ -61,7 +65,7 @@ public class MainControllerTest {
     @Test
     public void processRequestNoSuchPage() throws Exception {
         controller.processRequest(null, request, response);
-        verify(response, times(1)).sendRedirect(PagesPaths.HOME_PATH);
+        verify(response, times(1)).sendRedirect(HOME_PATH);
         verify(requestDispatcher, times(0)).forward(request, response);
     }
 
@@ -69,9 +73,10 @@ public class MainControllerTest {
     public void processRequestRuntimeException() throws Exception {
         when(command.execute(request, response)).thenThrow(new RuntimeException("messageKey"));
         controller.processRequest(command, request, response);
-        verify(request, times(1)).setAttribute(any(), any());
+        verify(request, times(1)).setAttribute(ERROR_MESSAGE, ERROR_UNKNOWN);
+        verify(request, times(1)).getRequestDispatcher(HOME_PAGE);
         verify(response, times(0)).sendRedirect(any());
-        verify(requestDispatcher, times(0)).forward(request, response);
+        verify(requestDispatcher, times(1)).forward(request, response);
     }
 
     @Test

@@ -5,7 +5,9 @@ import coffee.machine.CoffeeMachineConfig;
 import java.util.Date;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 15.11.2016.
+ * This class represents HistoryRecord entity.
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class HistoryRecord {
     private int id;

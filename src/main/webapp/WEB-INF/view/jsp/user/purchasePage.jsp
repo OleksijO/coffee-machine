@@ -1,5 +1,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page import="coffee.machine.view.PagesPaths" %>
+<%@ page import="coffee.machine.view.Attributes" %>
 <%@ page import="coffee.machine.view.Parameters" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
@@ -9,7 +10,8 @@
 <fmt:message key="user.purchase.description"/> <br>
 <br>
 <form action="${PagesPaths.USER_PURCHASE_PATH}" method="post">
-    <fmt:message key="user.purchase.your.balance.is"/> <fmt:formatNumber value="${user_balance}" type="number"
+    <fmt:message key="user.purchase.your.balance.is"/>
+    <fmt:formatNumber value="${requestScope[Attributes.USER_ACCOUNT].realAmount}" type="number"
                                                                          minFractionDigits="2" maxFractionDigits="2"/>
     <fmt:message key="currency"/>.<br>
     <br>
@@ -31,8 +33,7 @@
             </td>
         </tr>
 
-        <c:set var="drinks_attr" value="<%=Attributes.DRINKS%>"/>
-        <c:forEach items="${requestScope[drinks_attr]}" var="drink">
+        <c:forEach items="${requestScope[Attributes.DRINKS]}" var="drink">
             <c:if test="${drink.quantity gt 0}">
                 <tr>
                     <td><b>${drink.name}</b>

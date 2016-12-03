@@ -1,8 +1,11 @@
 package coffee.machine.model.entity.item;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 01.12.2016.
+ * This enum defines types of item hierarchy
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public enum ItemType {
-    DRINK, ADDON
+    DRINK,
+    ADDON
 }

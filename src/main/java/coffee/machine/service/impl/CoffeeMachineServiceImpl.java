@@ -16,12 +16,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import static coffee.machine.i18n.message.key.error.ServiceErrorKey.GOODS_NO_LONGER_AVAILABLE;
+import static coffee.machine.i18n.message.key.error.ServiceErrorKey.ITEM_NO_LONGER_AVAILABLE;
 import static coffee.machine.i18n.message.key.error.ServiceErrorKey.NOT_ENOUGH_MONEY;
 import static coffee.machine.i18n.message.key.error.ServiceErrorKey.YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 15.11.2016.
+ * This class is an implementation of CoffeeMachineService
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceErrorProcessing {
     private static final Logger logger = Logger.getLogger(CoffeeMachineServiceImpl.class);
@@ -44,15 +46,16 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
 
             String orderDescription = drinks.toString();
 
-            /* getting needed DAO */
+            // getting needed DAO
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
             AddonDao addonDao = daoFactory.getAddonDao(connection);
             AccountDao accountDao = daoFactory.getAccountDao(connection);
             HistoryRecordDao historyDao = daoFactory.getHistoryRecordDao(connection);
-             /* calculationg order price */
+
+            // calculating order price
             long drinksPrice = getSummaryPrice(drinks);
 
-            /* getting separately drinks and addons */
+            // getting separately drinks and addons
             List<Drink> baseDrinksToBuy = getBaseDrinksFromDrinks(drinks);
             if (baseDrinksToBuy.size() == 0) {
                 logErrorAndThrowNewServiceException(logger, YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY);
@@ -61,35 +64,35 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
 
             connection.beginTransaction();
 
-            /*  check if user has enough money to buy selected drinks */
+            //  check if user has enough money to buy selected drinks
             Account userAccount = accountDao.getByUserId(userId);
             if (userAccount.getAmount() < drinksPrice) {
                 logErrorAndThrowNewServiceException(
                         logger, NOT_ENOUGH_MONEY, String.format("%.2f", drinksPrice * CoffeeMachineConfig.DB_MONEY_COEFF));
             }
 
-            /*  getting available drinks and addons */
+            //  getting available drinks and addons
             List<Drink> baseDrinksAvailable = getBaseDrinksFromDrinks(drinkDao.getAllFromList(baseDrinksToBuy));
             List<Item> addonsAvailable = null;
             if (addonsToBuy.size() > 0) {
                 addonsAvailable = addonDao.getAllFromList(addonsToBuy);
             }
 
-            /* checking if there is enough available quantity of drinks and addons to prepare selected drinks
-             * by deducting retrieved available goods quantities from the quantities of goods gotten in parameter */
-            baseDrinksAvailable = deductGoodsToBuyFromAvailable(baseDrinksToBuy, baseDrinksAvailable);
+            // checking if there is enough available quantity of drinks and addons to prepare selected drinks
+            // by deducting retrieved available items' quantities from the quantities of goods gotten in parameter
+            baseDrinksAvailable = deductItemsToBuyFromAvailable(baseDrinksToBuy, baseDrinksAvailable);
             if (addonsToBuy.size() > 0) {
-                addonsAvailable = deductGoodsToBuyFromAvailable(addonsToBuy, addonsAvailable);
+                addonsAvailable = deductItemsToBuyFromAvailable(addonsToBuy, addonsAvailable);
             }
       
-            /* performing money exchange */
+            // performing money exchange
             Account coffeeMachineAccount = accountDao.getById(COFFEE_MACHINE_ACCOUNT_ID);
             userAccount.withdrow(drinksPrice);
             coffeeMachineAccount.add(drinksPrice);
             accountDao.update(coffeeMachineAccount);
             accountDao.update(userAccount);
 
-            /* updating quantities of goods in machine */
+            // updating quantities of items in machine
             if (baseDrinksAvailable.size() > 0) {
                 drinkDao.updateQuantityAllInList(baseDrinksAvailable);
             }
@@ -97,7 +100,7 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
                 addonDao.updateQuantityAllInList(addonsAvailable);
             }
 
-            /* forming history record of purchase to return */
+            // forming history record of purchase to return
             HistoryRecord historyRecord = new HistoryRecord(userId, new Date(), orderDescription, drinksPrice);
             historyDao.insert(historyRecord);
 
@@ -110,7 +113,9 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
 
     private List<Drink> getBaseDrinksFromDrinks(List<Drink> drinks) {
         HashMap<Drink, Integer> baseDrinks = new HashMap<>();
+
         drinks.forEach(drink -> {
+
             int quantity = drink.getQuantity();
             Drink baseDrink = drink.getBaseDrink();
             baseDrink.setQuantity(0);
@@ -118,17 +123,24 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
                 baseDrinks.put(baseDrink, 0);
             }
             baseDrinks.put(baseDrink, baseDrinks.get(baseDrink) + quantity);
+
         });
+
         baseDrinks.keySet().forEach(drink -> {
+
             drink.setQuantity(baseDrinks.get(drink));
+
         });
+
         return new ArrayList<>(baseDrinks.keySet());
     }
 
     private List<Item> getAddonsFromDrinks(List<Drink> drinks) {
         HashMap<Item, Integer> addons = new HashMap<>();
         drinks.forEach(drink -> {
+
             drink.getAddons().forEach(addon -> {
+
                 int quantity = addon.getQuantity();
                 addon.setQuantity(0);
                 if (!addons.containsKey(addon)) {
@@ -137,8 +149,11 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
                 addons.put(addon, addons.get(addon) + quantity * drink.getQuantity());
             });
         });
+
         List<Item> addonsWithQuantity = new ArrayList<>();
+
         addons.keySet().forEach(addon -> {
+
             int quantity = addons.get(addon);
             if (quantity > 0) {
                 addon.setQuantity(quantity);
@@ -155,33 +170,37 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
         return price[0];
     }
 
-    private <T extends Item> List<T> deductGoodsToBuyFromAvailable(List<T> goodsToBuy, List<T> goodsAvailable) {
-        HashMap<Integer, Integer> goodsAvailableQuantity = new HashMap<>();
-        goodsAvailable.forEach(goods -> {
-            int quantity = goods.getQuantity();
-            goods.setQuantity(0);
-            if (!goodsAvailableQuantity.containsKey(goods.getId())) {
-                goodsAvailableQuantity.put(goods.getId(), 0);
+    private <T extends Item> List<T> deductItemsToBuyFromAvailable(List<T> itemsToBuy, List<T> itemsAvailable) {
+        HashMap<Integer, Integer> itemsAvailableQuantity = new HashMap<>();
+
+        itemsAvailable.forEach(itemAvailable -> {
+
+            int quantity = itemAvailable.getQuantity();
+            itemAvailable.setQuantity(0);
+            if (!itemsAvailableQuantity.containsKey(itemAvailable.getId())) {
+                itemsAvailableQuantity.put(itemAvailable.getId(), 0);
             }
-            goodsAvailableQuantity.put(goods.getId(), goodsAvailableQuantity.get(goods.getId()) + quantity);
+            itemsAvailableQuantity.put(itemAvailable.getId(), itemsAvailableQuantity.get(itemAvailable.getId()) + quantity);
         });
 
-        goodsToBuy.forEach(goods1ToBuy -> {
+        itemsToBuy.forEach(itemToBuy -> {
+
             int availableQuantity = -1;
-            if (goodsAvailableQuantity.containsKey(goods1ToBuy.getId())) {
-                availableQuantity = goodsAvailableQuantity.get(goods1ToBuy.getId());
+            if (itemsAvailableQuantity.containsKey(itemToBuy.getId())) {
+                availableQuantity = itemsAvailableQuantity.get(itemToBuy.getId());
             }
-            availableQuantity -= goods1ToBuy.getQuantity();
+            availableQuantity -= itemToBuy.getQuantity();
             if (availableQuantity < 0) {
-                logErrorAndThrowNewServiceException(logger, GOODS_NO_LONGER_AVAILABLE, goods1ToBuy.getName());
+                logErrorAndThrowNewServiceException(logger, ITEM_NO_LONGER_AVAILABLE, itemToBuy.getName());
             }
-            goodsAvailableQuantity.put(goods1ToBuy.getId(), availableQuantity);
+            itemsAvailableQuantity.put(itemToBuy.getId(), availableQuantity);
         });
 
-        goodsAvailable.forEach(goods1Available -> {
-            goods1Available.setQuantity(goodsAvailableQuantity.get(goods1Available.getId()));
+        itemsAvailable.forEach(itemAvailable -> {
+
+            itemAvailable.setQuantity(itemsAvailableQuantity.get(itemAvailable.getId()));
         });
 
-        return goodsAvailable;
+        return itemsAvailable;
     }
 }

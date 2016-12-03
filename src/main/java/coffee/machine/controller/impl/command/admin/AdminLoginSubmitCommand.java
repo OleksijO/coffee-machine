@@ -21,6 +21,7 @@ import static coffee.machine.i18n.message.key.error.CommandErrorKey.ERROR_LOGIN_
 import static coffee.machine.view.Attributes.ADMIN_ID;
 import static coffee.machine.view.Attributes.ERROR_MESSAGE;
 import static coffee.machine.view.Attributes.PREVIOUS_ENTERED_EMAIL;
+import static coffee.machine.view.PagesPaths.REDIRECTED;
 import static coffee.machine.view.Parameters.LOGIN_PARAM;
 import static coffee.machine.view.Parameters.PASSWORD;
 
@@ -66,7 +67,7 @@ public class AdminLoginSubmitCommand extends CommandExecuteWrapper {
             logger.info(String.format(ADMIN_LOGGED_IN, admin.getId()));
             request.getSession().setAttribute(ADMIN_ID, admin.getId());
             response.sendRedirect(PagesPaths.ADMIN_HOME_PATH);
-            return PagesPaths.REDIRECTED;
+            return REDIRECTED;
         }
     }
 

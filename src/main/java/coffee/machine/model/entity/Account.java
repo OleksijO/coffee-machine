@@ -2,6 +2,11 @@ package coffee.machine.model.entity;
 
 import static coffee.machine.CoffeeMachineConfig.DB_MONEY_COEFF;
 
+/**
+ * This class represents Account entity.
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class Account {
 	private int id;
 	private long amount;

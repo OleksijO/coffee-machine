@@ -10,6 +10,8 @@ import java.sql.SQLException;
 /**
  * This class repesents JDBC implementation of AbstractConnection.
  * It performs rollback if transaction began but was not committed before close method was called.
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class AbstractConnectionImpl implements AbstractConnection, DaoErrorProcessing {
     private static final Logger logger = Logger.getLogger(AbstractConnectionImpl.class);
@@ -20,6 +22,7 @@ public class AbstractConnectionImpl implements AbstractConnection, DaoErrorProce
     private static final String CAN_NOT_CLOSE_CONNECTION = "Can not close connection";
 
     private Connection connection;
+
     private boolean transactionBegin = false;
     private boolean transactionCommitted = false;
 

@@ -4,18 +4,25 @@ import coffee.machine.CoffeeMachineConfig;
 
 import java.util.Set;
 import java.util.TreeSet;
-
+/**
+ * This class represents Drink entity. NOTE: Drink = Item + List<Item>
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class Drink extends Item {
     Set<Item> addons;
 
     public Drink() {
     }
 
-    public Drink(Drink drink) {
+    private Drink(Drink drink) {
         super(drink);
         this.addons = drink.getAddonsCopy();
     }
 
+    /**
+     * @return Base drink: with quantity = 0 and set of available addons also with zero quantity.
+     */
     public Drink getBaseDrink() {
         Drink baseDrink = new Drink(this);
         baseDrink.getAddons().forEach(addon -> addon.setQuantity(0));
@@ -23,6 +30,9 @@ public class Drink extends Item {
         return baseDrink;
     }
 
+    /**
+     * @return Totla price of base drink and sum of prices of all addons in it
+     */
     public long getTotalPrice() {
         long totalPrice = price;
         for (Item addon : addons) {
@@ -33,6 +43,9 @@ public class Drink extends Item {
         return totalPrice;
     }
 
+    /**
+     * @return Real amount of price in human friendly format with fractional digits
+     */
     public double getRealTotalPrice() {
         return CoffeeMachineConfig.DB_MONEY_COEFF * getTotalPrice();
     }

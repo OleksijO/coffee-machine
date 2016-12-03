@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * This interface represents utility methods for logging errors.
+ * This interface represents utility methods for logging errors in controller unit.
  *
  * @author oleksij.onysymchuk@gmail.com
  */

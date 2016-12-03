@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static coffee.machine.view.PagesPaths.REDIRECTED;
+
 /**
  * This class represents admin logout request handler command.
  *
@@ -26,7 +28,7 @@ public class AdminLogoutCommand implements Command {
 
         request.getSession().removeAttribute(Attributes.ADMIN_ID);
         response.sendRedirect(PagesPaths.HOME_PATH);
-        return PagesPaths.REDIRECTED;
+        return REDIRECTED;
     }
 
 }

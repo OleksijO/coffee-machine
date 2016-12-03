@@ -1,7 +1,9 @@
 package coffee.machine.i18n.message.key;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 27.11.2016.
+ * This interface is a holder for bundle keys of messages, used in commands
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public interface CommandKey {
     String ADMIN_REFILL_SUCCESSFULL = "refill.successful";

@@ -1,10 +1,9 @@
 package coffee.machine.controller;
 
 import coffee.machine.controller.impl.CommandHolderImpl;
-import coffee.machine.view.PagesPaths;
 import coffee.machine.controller.logging.ControllerErrorLogging;
 import coffee.machine.exception.ApplicationException;
-import coffee.machine.i18n.message.key.GeneralKey;
+import coffee.machine.view.PagesPaths;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -13,8 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static coffee.machine.i18n.message.key.GeneralKey.ERROR_UNKNOWN;
 import static coffee.machine.view.Attributes.ERROR_ADDITIONAL_MESSAGE;
 import static coffee.machine.view.Attributes.ERROR_MESSAGE;
+import static coffee.machine.view.PagesPaths.HOME_PAGE;
 
 /**
  * This class represents main request controller. It calls commands for correspondent request uri
@@ -73,9 +74,9 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
             request.setAttribute(ERROR_ADDITIONAL_MESSAGE, e.getAdditionalMessage());
         } catch (Exception e) {
             logError(logger, request, e);
-            request.setAttribute(ERROR_MESSAGE, GeneralKey.ERROR_UNKNOWN);
+            request.setAttribute(ERROR_MESSAGE, ERROR_UNKNOWN);
         }
-        request.getRequestDispatcher(PagesPaths.HOME_PAGE).forward(request, response);
+        request.getRequestDispatcher(HOME_PAGE).forward(request, response);
 
     }
 
@@ -84,7 +85,6 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
             throws ServletException, IOException {
 
         // getting command for GET requests
-
         String uri = getUri(request);
         processRequest(commandHolder.get(uri), request, response);
     }

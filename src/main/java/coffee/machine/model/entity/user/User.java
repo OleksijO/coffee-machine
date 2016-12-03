@@ -2,11 +2,21 @@ package coffee.machine.model.entity.user;
 
 import coffee.machine.model.entity.Account;
 
+/**
+ * This class represents User entity.
+ *
+ * IMPORTANT: in case of admin instance account field will be null.
+ *
+ * @author oleksij.onysymchuk@gmail.com
+ */
 public class User {
-	protected int id;
-	protected String email;
-	protected String password;
-	protected String fullName;
+	private int id;
+	/**
+	 * Email field is used as login
+	 */
+	private String email;
+	private String password;
+	private String fullName;
 	private Account account;
 	private boolean admin;
 
