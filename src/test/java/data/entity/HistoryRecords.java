@@ -1,6 +1,6 @@
 package data.entity;
 
-import coffee_machine.model.entity.HistoryRecord;
+import coffee.machine.model.entity.HistoryRecord;
 
 import java.util.Date;
 

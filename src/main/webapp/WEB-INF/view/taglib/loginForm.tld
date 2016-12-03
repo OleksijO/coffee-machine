@@ -12,7 +12,7 @@
    
     <tag>
         <name>loginForm</name>
-        <tag-class>coffee_machine.view.tag.LoginFormTag</tag-class>
+        <tag-class>coffee.machine.view.tag.LoginFormTag</tag-class>
         <body-content>empty</body-content>
        	<attribute>
             <name>cssClass</name>

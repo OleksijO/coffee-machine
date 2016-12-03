@@ -4,7 +4,7 @@
   
   <servlet>
     <servlet-name>main</servlet-name>
-    <servlet-class>coffee_machine.controller.MainController</servlet-class>
+    <servlet-class>coffee.machine.controller.MainController</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>main</servlet-name>
@@ -14,7 +14,7 @@
   </servlet-mapping>
   <filter>
     <filter-name>i18n</filter-name>
-    <filter-class>coffee_machine.controller.i18n.LocaleFilter</filter-class>
+    <filter-class>coffee.machine.controller.i18n.LocaleFilter</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>i18n</filter-name>
@@ -22,7 +22,7 @@
   </filter-mapping>
   <filter>
     <filter-name>authentication</filter-name>
-    <filter-class>coffee_machine.controller.security.AuthentificationFilter</filter-class>
+    <filter-class>coffee.machine.controller.security.AuthentificationFilter</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>authentication</filter-name>

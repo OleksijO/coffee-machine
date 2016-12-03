@@ -1,10 +1,10 @@
 package integration.dao;
 
-import coffee_machine.dao.AbstractConnection;
-import coffee_machine.dao.AddonDao;
-import coffee_machine.dao.DaoFactory;
-import coffee_machine.dao.impl.jdbc.DaoFactoryImpl;
-import coffee_machine.model.entity.item.Item;
+import coffee.machine.dao.AbstractConnection;
+import coffee.machine.dao.AddonDao;
+import coffee.machine.dao.DaoFactory;
+import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
+import coffee.machine.model.entity.item.Item;
 import data.entity.Addons;
 import org.junit.*;
 

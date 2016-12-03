@@ -1,6 +1,6 @@
 package data.entity;
 
-import coffee_machine.model.entity.Account;
+import coffee.machine.model.entity.Account;
 
 /**
  * @author oleksij.onysymchuk@gmail.com 24.11.2016.

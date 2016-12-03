@@ -1,8 +1,8 @@
 package data.entity;
 
-import coffee_machine.model.entity.item.Item;
-import coffee_machine.model.entity.item.Drink;
-import coffee_machine.model.entity.item.ItemType;
+import coffee.machine.model.entity.item.Item;
+import coffee.machine.model.entity.item.Drink;
+import coffee.machine.model.entity.item.ItemType;
 
 import java.util.*;
 

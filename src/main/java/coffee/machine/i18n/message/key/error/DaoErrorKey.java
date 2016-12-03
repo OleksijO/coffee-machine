@@ -1,0 +1,6 @@
+package coffee.machine.i18n.message.key.error;
+
+public interface DaoErrorKey {
+    String DAO_ERROR = "error.dao";
+
+}
