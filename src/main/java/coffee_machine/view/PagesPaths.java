@@ -36,8 +36,6 @@ public final class PagesPaths {
 
 	public static final String ADMIN_REFILL_PATH = ADMIN + REFILL;
 	public static final String ADMIN_REFILL_PAGE = VIEW_JSP_CLASSPATH + ADMIN_REFILL_PATH + PAGE;
-	public static final String HEADER = VIEW_JSP_CLASSPATH + "/fragment/header" + JSP;
-	public static final String FOOTER = VIEW_JSP_CLASSPATH + "/fragment/footer" + JSP;
 	public static final String SOURCES_PATH = "https://github.com/OleksijO/coffee-machine";
 
 }

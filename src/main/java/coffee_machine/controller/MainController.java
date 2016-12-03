@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static coffee_machine.controller.RegExp.*;
 import static coffee_machine.view.Attributes.ERROR_ADDITIONAL_MESSAGE;
 import static coffee_machine.view.Attributes.ERROR_MESSAGE;
 import static coffee_machine.view.PagesPaths.*;
@@ -24,6 +25,7 @@ import static coffee_machine.view.PagesPaths.*;
  */
 public class MainController extends HttpServlet implements ControllerErrorLogging {
     static final Logger logger = Logger.getLogger(MainController.class);
+    public static final String URI_IS = " : uri = ";
 
     /**
      * Command holder instance
@@ -50,7 +52,9 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
     void processRequest(Command command, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         try {
-
+            Logger.getLogger(RegExp.class).info(REGEXP_EMAIL);
+            Logger.getLogger(RegExp.class).info(REGEXP_PASSWORD);
+            Logger.getLogger(RegExp.class).info(REGEXP_NUMBER);
             // in case of unsupported uri redirecting to home page
             if (command == null) {
                 response.sendRedirect(HOME_PATH);
@@ -91,7 +95,7 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
 
     private String getUri(HttpServletRequest request) {
         String uri = request.getRequestURI();
-        logger.debug(request.getMethod().toUpperCase() + " : uri = " + uri);
+        logger.debug(request.getMethod().toUpperCase() + URI_IS + uri);
         return uri;
     }
 
