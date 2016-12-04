@@ -20,6 +20,9 @@ import java.util.Set;
 public class DrinkServiceImpl implements DrinkService {
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
+    private DrinkServiceImpl() {
+    }
+
     private static class InstanceHolder {
         private static final DrinkService instance = new DrinkServiceImpl();
     }

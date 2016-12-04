@@ -17,6 +17,9 @@ import java.util.List;
 public class HistoryRecordServiceImpl implements HistoryRecordService {
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
+    private HistoryRecordServiceImpl() {
+    }
+
     private static class InstanceHolder {
         private static final HistoryRecordService instance = new HistoryRecordServiceImpl();
     }

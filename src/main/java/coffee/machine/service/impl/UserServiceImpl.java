@@ -15,6 +15,9 @@ import coffee.machine.service.UserService;
 public class UserServiceImpl implements UserService {
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
+    private UserServiceImpl() {
+    }
+
     private static class InstanceHolder {
         private static final UserService instance = new UserServiceImpl();
     }

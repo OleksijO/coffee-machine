@@ -19,6 +19,9 @@ import java.util.Map;
 public class AddonServiceImpl implements AddonService {
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
+    private AddonServiceImpl() {
+    }
+
     private static class InstanceHolder {
         private static final AddonService instance = new AddonServiceImpl();
     }

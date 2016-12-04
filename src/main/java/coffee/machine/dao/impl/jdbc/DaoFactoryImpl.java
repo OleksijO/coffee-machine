@@ -23,6 +23,8 @@ public class DaoFactoryImpl implements DaoFactory, DaoErrorProcessing {
 
     private final DataSource dataSource = JdbcPooledDataSource.getInstance();
 
+    private DaoFactoryImpl() {
+    }
 
     private static class InstanceHolder {
         private static final DaoFactory instance = new DaoFactoryImpl();

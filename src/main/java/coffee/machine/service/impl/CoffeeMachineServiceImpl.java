@@ -31,6 +31,9 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private static final int COFFEE_MACHINE_ACCOUNT_ID = CoffeeMachineConfig.ACCOUNT_ID;
 
+    private CoffeeMachineServiceImpl() {
+    }
+
     private static class InstanceHolder {
         private static final CoffeeMachineService instance = new CoffeeMachineServiceImpl();
     }

@@ -15,6 +15,9 @@ import coffee.machine.service.AccountService;
 public class AccountServiceImpl implements AccountService {
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
+    private AccountServiceImpl() {
+    }
+
     private static class InstanceHolder {
         private static final AccountService instance = new AccountServiceImpl();
     }
