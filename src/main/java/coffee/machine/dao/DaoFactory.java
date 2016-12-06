@@ -43,8 +43,8 @@ public interface DaoFactory {
 	/**
 	 * @param connection
 	 *            Abstract connection instance
-	 * @return history record entity DAO
+	 * @return order entity DAO
 	 */
-	HistoryRecordDao getHistoryRecordDao(AbstractConnection connection);
+	OrderDao getOrderDao(AbstractConnection connection);
 
 }

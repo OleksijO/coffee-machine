@@ -74,7 +74,7 @@ public class DrinkServiceImplTest {
         int memory1 = drinksToUpdate.get(0).getQuantity();
         int memory2 = drinksToUpdate.get(1).getQuantity();
 
-        when(drinkDao.getAllByIds(new HashSet<Integer>() {{
+        when(drinkDao.getAllByIds(new TreeSet<Integer>() {{
             add(2);
             add(11);
         }})).thenReturn(drinksToUpdate);
@@ -87,7 +87,7 @@ public class DrinkServiceImplTest {
         service.refill(quantitiesToAdd);
 
         verify(daoFactory, times(1)).getDrinkDao(connection);
-        verify(drinkDao, times(1)).getAllByIds(new HashSet<Integer>() {{
+        verify(drinkDao, times(1)).getAllByIds(new TreeSet<Integer>() {{
             add(2);
             add(11);
         }});
@@ -113,7 +113,7 @@ public class DrinkServiceImplTest {
         int memory1 = drinksToUpdate.get(0).getQuantity();
 
 
-        when(drinkDao.getAllByIds(new HashSet<Integer>() {{
+        when(drinkDao.getAllByIds(new TreeSet<Integer>() {{
             add(11);
         }})).thenReturn(drinksToUpdate);
         doNothing().when(drinkDao).updateQuantityAllInList(drinkListCaptor.capture());
@@ -124,7 +124,7 @@ public class DrinkServiceImplTest {
         service.refill(quantitiesToAdd);
 
         verify(daoFactory, times(1)).getDrinkDao(connection);
-        verify(drinkDao, times(1)).getAllByIds(new HashSet<Integer>() {{
+        verify(drinkDao, times(1)).getAllByIds(new TreeSet<Integer>() {{
             add(11);
         }});
         Assert.assertEquals(

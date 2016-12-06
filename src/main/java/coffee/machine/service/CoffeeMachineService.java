@@ -1,6 +1,6 @@
 package coffee.machine.service;
 
-import coffee.machine.model.entity.HistoryRecord;
+import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.item.Drink;
 
 import java.util.List;
@@ -14,8 +14,8 @@ public interface CoffeeMachineService {
 
     /**
      * Decreases quantities of drink and addons in them in database,
-     * withdrows from user's account and adds to coffee-machine account total price of drink list,
-     * forms history record.
+     * withdraws from user's account and adds to coffee-machine account total price of drink list,
+     * forms order, stores it in database and returns it.
      *
      * Throws application exception with message key in case of impossibility to perform mentioned operations.
      *
@@ -23,6 +23,6 @@ public interface CoffeeMachineService {
      * @param userId User's id  drinks to sell for.
      * @return History record, which contains date, price and detailed description of purchased drinks
      */
-    HistoryRecord prepareDrinksForUser(List<Drink> drinks, int userId);
+    Order prepareDrinksForUser(List<Drink> drinks, int userId);
 
 }

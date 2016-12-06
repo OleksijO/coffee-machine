@@ -27,7 +27,7 @@ public class CommandHolderImpl implements CommandHolder {
             put(PagesPaths.USER_LOGOUT_PATH, new UserLogoutCommand());
             put(PagesPaths.USER_HOME_PATH, new UserHomeCommand());
             put(PagesPaths.USER_PURCHASE_PATH, new UserPurchaseCommand());
-            put(PagesPaths.USER_HISTORY_PATH, new UserHistoryCommand());
+            put(PagesPaths.USER_ORDER_HISTORY_PATH, new UserOrderHistoryCommand());
 
             put(PagesPaths.ADMIN_LOGIN_PATH, new AdminLoginCommand());
             put(PagesPaths.ADMIN_LOGOUT_PATH, new AdminLogoutCommand());

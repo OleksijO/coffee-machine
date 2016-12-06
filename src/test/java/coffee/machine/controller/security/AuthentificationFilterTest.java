@@ -62,9 +62,9 @@ public class AuthentificationFilterTest {
         performTest("/admin/login", null, null, "/admin/login", 0);
 
         performTest("/user/any", null, null, PagesPaths.USER_LOGIN_PATH, 1);
-        performTest(PagesPaths.USER_HISTORY_PATH, null, null, PagesPaths.USER_LOGIN_PATH, 1);
-        performTest(PagesPaths.USER_HISTORY_PATH, 1, null, PagesPaths.USER_LOGIN_PATH, 1);
-        performTest(PagesPaths.USER_HISTORY_PATH, null, 1, PagesPaths.USER_HISTORY_PATH, 0);
+        performTest(PagesPaths.USER_ORDER_HISTORY_PATH, null, null, PagesPaths.USER_LOGIN_PATH, 1);
+        performTest(PagesPaths.USER_ORDER_HISTORY_PATH, 1, null, PagesPaths.USER_LOGIN_PATH, 1);
+        performTest(PagesPaths.USER_ORDER_HISTORY_PATH, null, 1, PagesPaths.USER_ORDER_HISTORY_PATH, 0);
         performTest("/user/any", null, 1, "/user/any", 0);
 
         performTest("/admin/any", null, null, PagesPaths.ADMIN_LOGIN_PATH, 1);

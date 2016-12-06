@@ -11,7 +11,7 @@ import org.junit.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.List;
 import java.util.Set;
 
@@ -168,7 +168,7 @@ public class AddonDaoTest {
             add(Addons.CREAM.getCopy());
             add(Addons.CINNAMON.getCopy());
         }};
-        Set<Integer> ids = new HashSet<Integer>(){{add(9);add(13);}};
+        Set<Integer> ids = new TreeSet<Integer>(){{add(9);add(13);}};
         assertEquals(itemsToRetrive, addonDao.getAllByIds(ids));
     }
 

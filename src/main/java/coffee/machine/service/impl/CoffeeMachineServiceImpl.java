@@ -3,10 +3,10 @@ package coffee.machine.service.impl;
 import coffee.machine.CoffeeMachineConfig;
 import coffee.machine.dao.*;
 import coffee.machine.model.entity.Account;
+import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.item.Item;
 import coffee.machine.service.logging.ServiceErrorProcessing;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
-import coffee.machine.model.entity.HistoryRecord;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.service.CoffeeMachineService;
 import org.apache.log4j.Logger;
@@ -43,8 +43,7 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
     }
 
     @Override
-    public HistoryRecord prepareDrinksForUser(List<Drink> drinks, int userId) {
-
+    public Order prepareDrinksForUser(List<Drink> drinks, int userId) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             String orderDescription = drinks.toString();
@@ -53,12 +52,15 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
             AddonDao addonDao = daoFactory.getAddonDao(connection);
             AccountDao accountDao = daoFactory.getAccountDao(connection);
-            HistoryRecordDao historyDao = daoFactory.getHistoryRecordDao(connection);
+            OrderDao orderDao = daoFactory.getOrderDao(connection);
 
             // calculating order price
             long drinksPrice = getSummaryPrice(drinks);
 
-            // getting separately drinks and addons
+            // forming order
+            Order order = new Order(userId, new Date(), drinks, drinksPrice);
+
+            // getting separately drinks and addons quantities
             List<Drink> baseDrinksToBuy = getBaseDrinksFromDrinks(drinks);
             if (baseDrinksToBuy.size() == 0) {
                 logErrorAndThrowNewServiceException(logger, YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY);
@@ -71,7 +73,8 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
             Account userAccount = accountDao.getByUserId(userId);
             if (userAccount.getAmount() < drinksPrice) {
                 logErrorAndThrowNewServiceException(
-                        logger, NOT_ENOUGH_MONEY, String.format("%.2f", drinksPrice * CoffeeMachineConfig.DB_MONEY_COEFF));
+                        logger, NOT_ENOUGH_MONEY,
+                        String.format("%.2f", drinksPrice * CoffeeMachineConfig.DB_MONEY_COEFF));
             }
 
             //  getting available drinks and addons
@@ -82,7 +85,7 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
             }
 
             // checking if there is enough available quantity of drinks and addons to prepare selected drinks
-            // by deducting retrieved available items' quantities from the quantities of goods gotten in parameter
+            // by deducting retrieved available items' quantities from the quantities of items got in parameter
             baseDrinksAvailable = deductItemsToBuyFromAvailable(baseDrinksToBuy, baseDrinksAvailable);
             if (addonsToBuy.size() > 0) {
                 addonsAvailable = deductItemsToBuyFromAvailable(addonsToBuy, addonsAvailable);
@@ -103,13 +106,11 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
                 addonDao.updateQuantityAllInList(addonsAvailable);
             }
 
-            // forming history record of purchase to return
-            HistoryRecord historyRecord = new HistoryRecord(userId, new Date(), orderDescription, drinksPrice);
-            historyDao.insert(historyRecord);
-
+            // saving order of purchase to return
+            orderDao.insert(order);
             connection.commitTransaction();
 
-            return historyRecord;
+            return order;
         }
 
     }
@@ -142,9 +143,10 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
         HashMap<Item, Integer> addons = new HashMap<>();
         drinks.forEach(drink -> {
 
-            drink.getAddons().forEach(addon -> {
+            drink.getAddons().forEach(addonToBy -> {
 
-                int quantity = addon.getQuantity();
+                int quantity = addonToBy.getQuantity();
+                Item addon = addonToBy.getCopy();
                 addon.setQuantity(0);
                 if (!addons.containsKey(addon)) {
                     addons.put(addon, 0);

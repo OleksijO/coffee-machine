@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.List;
 import java.util.Set;
 
@@ -50,7 +50,7 @@ public class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
         }
 
         itemDao.insert(drink);
-        insertAddonSet(drink); // Addons as Items should be put in 'item' table earlier
+        insertAddonSet(drink); // Addons as Items should already exist in table Item.
 
         return drink;
     }
@@ -117,7 +117,7 @@ public class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
 
             statement.setInt(1, drinkId);
             try (ResultSet resultSet = statement.executeQuery()) {
-                return new HashSet<>(itemDao.parseResultSet(resultSet));
+                return new TreeSet<>(itemDao.parseResultSet(resultSet));
             }
         } catch (SQLException e) {
             logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_ADDON_SET_OF_DRINK_WITH_ID, drinkId, e);

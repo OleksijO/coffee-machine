@@ -26,7 +26,7 @@
         |
         <a href="${PagesPaths.USER_HOME_PATH}"><fmt:message key="user.home.page"/></a> |
         <a href="${PagesPaths.USER_PURCHASE_PATH}"><fmt:message key="user.purchase.page"/></a> |
-        <a href="${PagesPaths.USER_HISTORY_PATH}"><fmt:message key="user.history.page"/></a> |
+        <a href="${PagesPaths.USER_ORDER_HISTORY_PATH}"><fmt:message key="user.orders.history.page"/></a> |
         <a href="${PagesPaths.USER_LOGOUT_PATH}"><fmt:message key="logout"/></a> |
 
     </c:if>

@@ -40,7 +40,7 @@ public class CoffeeMachineServiceImplTest {
     @Mock
     private AccountDao accountDao;
     @Mock
-    private HistoryRecordDao historyRecordDao;
+    private OrderDao orderDao;
     @Mock
     private AbstractConnection connection;
     @Captor
@@ -69,7 +69,7 @@ public class CoffeeMachineServiceImplTest {
         MockitoAnnotations.initMocks(this);
 
         when(daoFactory.getAccountDao(connection)).thenReturn(accountDao);
-        when(daoFactory.getHistoryRecordDao(connection)).thenReturn(historyRecordDao);
+        when(daoFactory.getOrderDao(connection)).thenReturn(orderDao);
         when(daoFactory.getAddonDao(connection)).thenReturn(addonDao);
         when(daoFactory.getDrinkDao(connection)).thenReturn(drinkDao);
         when(daoFactory.getConnection()).thenReturn(connection);

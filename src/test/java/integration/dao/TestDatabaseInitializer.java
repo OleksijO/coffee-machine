@@ -20,9 +20,7 @@ public class TestDatabaseInitializer {
 
 
         InputStream ddlSQL = this.getClass().getClassLoader()
-                .getResourceAsStream("DDL.sql");
-        InputStream populateSQL = this.getClass().getClassLoader()
-                .getResourceAsStream("POPULATE.sql");
+                .getResourceAsStream("DDL+POPULATE.sql");
 
         // Create MySql Connection
         Class.forName(jdbcProperties.getString("jdbc.driver"));
@@ -41,9 +39,6 @@ public class TestDatabaseInitializer {
                 new InputStreamReader(ddlSQL));
         scriptRunner.runScript(reader);
 
-        reader = new BufferedReader(
-                new InputStreamReader(populateSQL));
-        scriptRunner.runScript(reader);
     }
 }
 

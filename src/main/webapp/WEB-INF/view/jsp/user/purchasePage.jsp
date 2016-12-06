@@ -1,7 +1,4 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page import="coffee.machine.view.PagesPaths" %>
-<%@ page import="coffee.machine.view.Attributes" %>
-<%@ page import="coffee.machine.view.Parameters" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%@ include file="/WEB-INF/view/jsp/fragment/header.jsp" %>
@@ -12,7 +9,7 @@
 <form action="${PagesPaths.USER_PURCHASE_PATH}" method="post">
     <fmt:message key="user.purchase.your.balance.is"/>
     <fmt:formatNumber value="${requestScope[Attributes.USER_ACCOUNT].realAmount}" type="number"
-                                                                         minFractionDigits="2" maxFractionDigits="2"/>
+                      minFractionDigits="2" maxFractionDigits="2"/>
     <fmt:message key="currency"/>.<br>
     <br>
     <table cellpadding="10" cellspacing="2" border="1">
@@ -44,7 +41,7 @@
                                 <c:if test="${addon.quantity gt 0}">
                                     <tr>
                                         <td>
-                                        <td test='${addon.quantity>0}'>
+                                        <td>
                                             <b>+</b>
                                                 ${addon.name}</td>
                                         <td>(+<fmt:formatNumber value="${addon.realPrice}"

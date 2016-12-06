@@ -1,7 +1,7 @@
-DROP SCHEMA IF EXISTS coffee_machine;
+DROP SCHEMA IF EXISTS test_coffee_machine;
 
-CREATE DATABASE IF NOT EXISTS coffee_machine ;
-USE coffee_machine;
+CREATE DATABASE IF NOT EXISTS test_coffee_machine ;
+USE test_coffee_machine;
 
 DROP TABLE IF EXISTS item;
 

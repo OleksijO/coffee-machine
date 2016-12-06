@@ -92,8 +92,8 @@ public class DaoFactoryImpl implements DaoFactory, DaoErrorProcessing {
     }
 
     @Override
-    public HistoryRecordDao getHistoryRecordDao(AbstractConnection connection) {
+    public OrderDao getOrderDao(AbstractConnection connection) {
         checkConnection(connection);
-        return new HistoryRecordDaoImpl(getSqlConnection(connection));
+        return new OrderDaoImpl(getSqlConnection(connection));
     }
 }

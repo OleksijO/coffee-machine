@@ -22,10 +22,10 @@ public final class Attributes {
     public final static String USUAL_ADDITIONAL_MESSAGE = "usual_additional_message";
     public final static String ERROR_ADDITIONAL_MESSAGE = "error_additional_message";
 
-    public static final String HISTORY_RECORD = "history_record";
+    public static final String ORDER = "order";
 
     public static final String COFFEE_MACHINE_BALANCE = "coffee_machine_balance";
-    public static final String USER_RECORD_HISTORY_LIST = "user_record_history_list";
+    public static final String USER_ORDER_LIST = "USER_ORDER_LIST";
 
     public static final String LOGIN_FORM_TITLE = "login_form_title";
     public static final String LOGIN_FORM_ACTION="login_from_action";

@@ -74,7 +74,7 @@ public class AddonServiceImplTest {
         int memory1 = addonsToUpdate.get(0).getQuantity();
         int memory2 = addonsToUpdate.get(1).getQuantity();
 
-        when(addonDao.getAllByIds(new HashSet<Integer>() {{
+        when(addonDao.getAllByIds(new TreeSet<Integer>() {{
             add(5);
             add(13);
         }})).thenReturn(addonsToUpdate);
@@ -87,7 +87,7 @@ public class AddonServiceImplTest {
         service.refill(quantitiesToAdd);
 
         verify(daoFactory, times(1)).getAddonDao(connection);
-        verify(addonDao, times(1)).getAllByIds(new HashSet<Integer>() {{
+        verify(addonDao, times(1)).getAllByIds(new TreeSet<Integer>() {{
             add(5);
             add(13);
         }});
@@ -113,7 +113,7 @@ public class AddonServiceImplTest {
         int memory1 = addonsToUpdate.get(0).getQuantity();
 
 
-        when(addonDao.getAllByIds(new HashSet<Integer>() {{
+        when(addonDao.getAllByIds(new TreeSet<Integer>() {{
             add(13);
         }})).thenReturn(addonsToUpdate);
         doNothing().when(addonDao).updateQuantityAllInList(addonListCaptor.capture());
@@ -124,7 +124,7 @@ public class AddonServiceImplTest {
         service.refill(quantitiesToAdd);
 
         verify(daoFactory, times(1)).getAddonDao(connection);
-        verify(addonDao, times(1)).getAllByIds(new HashSet<Integer>() {{
+        verify(addonDao, times(1)).getAllByIds(new TreeSet<Integer>() {{
             add(13);
         }});
         Assert.assertEquals(

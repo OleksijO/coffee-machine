@@ -29,7 +29,7 @@ public enum Drinks {
         drink.setPrice(price);
         drink.setType(ItemType.DRINK);
         drink.setQuantity(quantity);
-        Set<Item> drinkAddons = new HashSet<>();
+        Set<Item> drinkAddons = new TreeSet<>();
         if (addons != null) {
             Collections.addAll(drinkAddons, addons);
         }
@@ -54,7 +54,7 @@ public enum Drinks {
         newDrink.setQuantity(drink.getQuantity());
         newDrink.setName(drink.getName());
         newDrink.setPrice(drink.getPrice());
-        Set<Item> addonSet=new HashSet<>();
+        Set<Item> addonSet=new TreeSet<>();
         drink.getAddons().forEach(addon->addonSet.add(Addons.getCopyById(addon.getId())));
         newDrink.setAddons(addonSet);
         return newDrink;

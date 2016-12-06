@@ -14,7 +14,7 @@ public interface GeneralKey {
    String TITLE_ADMIN_REFILL = "title.admin.refill";
    String TITLE_ADMIN_LOGIN = "title.admin.login";
 
-   String TITLE_USER_HISTORY = "title.user.history";
+   String TITLE_USER_ORDER_HISTORY = "title.user.orders.history";
    String TITLE_USER_HOME = "title.user.home";
    String TITLE_USER_PURCHASE = "title.user.purchase";
    String TITLE_USER_LOGIN = "title.user.login";

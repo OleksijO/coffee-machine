@@ -11,7 +11,7 @@ import org.junit.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.List;
 import java.util.Set;
 
@@ -168,7 +168,7 @@ public class DrinkDaoTest {
             add(Drinks.BORJOMI.getCopy());
             add(Drinks.MOCACCINO.getCopy());
         }};
-        Set<Integer> ids = new HashSet<Integer>(){{add(2);add(11);}};
+        Set<Integer> ids = new TreeSet<Integer>(){{add(2);add(11);}};
         assertEquals(itemsToRetrive, drinkDao.getAllByIds(ids));
     }
 

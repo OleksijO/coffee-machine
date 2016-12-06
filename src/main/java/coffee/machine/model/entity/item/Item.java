@@ -24,6 +24,10 @@ public class Item implements Comparable<Item> {
         quantity = item.getQuantity();
     }
 
+    public Item getCopy(){
+        return new Item(this);
+    }
+
     public int getId() {
         return id;
     }

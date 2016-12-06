@@ -1,28 +1,30 @@
 package coffee.machine.model.entity;
 
 import coffee.machine.CoffeeMachineConfig;
+import coffee.machine.model.entity.item.Drink;
 
 import java.util.Date;
+import java.util.List;
 
 /**
- * This class represents HistoryRecord entity.
+ * This class represents Order entity.
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class HistoryRecord {
+public class Order {
     private int id;
     private int userId;
     private Date date;
-    private String orderDescription;
+    private List<Drink> drinks;
     private long amount;
 
-    public HistoryRecord() {
+    public Order() {
     }
 
-    public HistoryRecord(int userId, Date date, String orderDescription, long amount) {
+    public Order(int userId, Date date, List<Drink> drinks, long amount) {
         this.userId = userId;
         this.date = date;
-        this.orderDescription = orderDescription;
+        this.drinks = drinks;
         this.amount = amount;
     }
 
@@ -54,12 +56,12 @@ public class HistoryRecord {
         this.date = date;
     }
 
-    public String getOrderDescription() {
-        return orderDescription;
+    public List<Drink> getDrinks() {
+        return drinks;
     }
 
-    public void setOrderDescription(String orderDescription) {
-        this.orderDescription = orderDescription;
+    public void setDrinks(List<Drink> drinks) {
+        this.drinks = drinks;
     }
 
     public long getAmount() {
@@ -75,13 +77,13 @@ public class HistoryRecord {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        HistoryRecord that = (HistoryRecord) o;
+        Order that = (Order) o;
 
         if (id != that.id) return false;
         if (userId != that.userId) return false;
         if (amount != that.amount) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
-        return orderDescription != null ? orderDescription.equals(that.orderDescription) : that.orderDescription == null;
+        return drinks != null ? drinks.equals(that.drinks) : that.drinks == null;
 
     }
 
@@ -90,18 +92,18 @@ public class HistoryRecord {
         int result = id;
         result = 31 * result + userId;
         result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + (orderDescription != null ? orderDescription.hashCode() : 0);
+        result = 31 * result + (drinks != null ? drinks.hashCode() : 0);
         result = 31 * result + (int) (amount ^ (amount >>> 32));
         return result;
     }
 
     @Override
     public String toString() {
-        return "HistoryRecord{" +
+        return "Order{" +
                 "id=" + id +
                 ", userId=" + userId +
                 ", date=" + date +
-                ", orderDescription='" + orderDescription + '\'' +
+                ", drinks='" + drinks + '\'' +
                 ", amount=" + amount +
                 '}';
     }

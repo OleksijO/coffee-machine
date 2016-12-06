@@ -4,6 +4,7 @@ import coffee.machine.controller.impl.command.CommandExecuteWrapper;
 import coffee.machine.controller.impl.command.request.data.extractor.impl.PurchaseFormExtractorImpl;
 import coffee.machine.i18n.message.key.CommandKey;
 import coffee.machine.i18n.message.key.GeneralKey;
+import coffee.machine.model.entity.Order;
 import coffee.machine.service.AccountService;
 import coffee.machine.service.CoffeeMachineService;
 import coffee.machine.service.DrinkService;
@@ -14,7 +15,6 @@ import coffee.machine.service.impl.DrinkServiceImpl;
 import coffee.machine.view.Attributes;
 import coffee.machine.view.PagesPaths;
 import coffee.machine.controller.impl.command.request.data.extractor.PurchaseFormDataExtractor;
-import coffee.machine.model.entity.HistoryRecord;
 import coffee.machine.model.entity.item.Drink;
 import org.apache.log4j.Logger;
 
@@ -48,8 +48,8 @@ public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
 
         // performing purchase
         try {
-            HistoryRecord record = coffeeMachine.prepareDrinksForUser(drinksToBuy, userId);
-            request.setAttribute(Attributes.HISTORY_RECORD, record);
+            Order record = coffeeMachine.prepareDrinksForUser(drinksToBuy, userId);
+            request.setAttribute(Attributes.ORDER, record);
         } catch (ServiceException e){
             request.setAttribute(Attributes.USER_ACCOUNT, accountService.getByUserId(userId).getRealAmount());
             throw e;
