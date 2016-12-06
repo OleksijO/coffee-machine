@@ -18,6 +18,7 @@
         |
         <a href="${PagesPaths.ADMIN_HOME_PATH}"><fmt:message key="admin.home.page"/></a> |
         <a href="${PagesPaths.ADMIN_REFILL_PATH}"><fmt:message key="admin.refill.page"/></a> |
+        <a href="${PagesPaths.ADMIN_ADD_CREDITS_PATH}"><fmt:message key="admin.add.credit.page"/></a> |
         <a href="${PagesPaths.ADMIN_LOGOUT_PATH}"><fmt:message key="logout"/></a> |
 
     </c:if>

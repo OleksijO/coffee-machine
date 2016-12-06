@@ -8,7 +8,10 @@
 <br>
 <fmt:message key="admin.refill.description"/> <br><br>
 <fmt:message key="admin.refill.machine.balance"/> :
-${requestScope[Attributes.COFFEE_MACHINE_BALANCE]}
+<fmt:formatNumber value="${requestScope[Attributes.COFFEE_MACHINE_BALANCE]}"
+                  type="number"
+                  minFractionDigits="2"
+                  maxFractionDigits="2"/>
 <fmt:message key="currency"/><br><br>
 
 <form action="${PagesPaths.ADMIN_REFILL_PATH}" method="post">
@@ -41,7 +44,7 @@ ${requestScope[Attributes.COFFEE_MACHINE_BALANCE]}
                 </td>
                 <td>
                     <div align="center">
-                        <input type="text" value="0" name="${Parameters.DRINK_PARAMETER_STARTS_WITH}${drink.id}"
+                        <input type="number" step="1" min=0 value="0" name="${Parameters.DRINK_PARAMETER_STARTS_WITH}${drink.id}"
                                style="width: 20pt">
                     </div>
                 </td>
@@ -61,7 +64,7 @@ ${requestScope[Attributes.COFFEE_MACHINE_BALANCE]}
                 </td>
                 <td>
                     <div align="center">
-                        <input type="text" value="0" name="${Parameters.ADDON_PARAMETER_STARTS_WITH}${addon.id}"
+                        <input type="number" step="1" min="0" value="0" name="${Parameters.ADDON_PARAMETER_STARTS_WITH}${addon.id}"
                                style="width: 20pt">
                     </div>
                 </td>

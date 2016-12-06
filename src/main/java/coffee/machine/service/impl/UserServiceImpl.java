@@ -7,6 +7,8 @@ import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.user.User;
 import coffee.machine.service.UserService;
 
+import java.util.List;
+
 /**
  * This class is an implementation of UserService
  *
@@ -31,6 +33,7 @@ public class UserServiceImpl implements UserService {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             UserDao userDao = daoFactory.getUserDao(connection);
+            connection.beginTransaction();
             User user = userDao.getById(id);
             connection.commitTransaction();
             return user;
@@ -47,6 +50,19 @@ public class UserServiceImpl implements UserService {
             User user = adminDao.getUserByLogin(login);
             connection.commitTransaction();
             return user;
+
+        }
+    }
+
+    @Override
+    public List<User> getAllNonAdminUsers() {
+        try (AbstractConnection connection = daoFactory.getConnection()) {
+
+            UserDao userDao = daoFactory.getUserDao(connection);
+            connection.beginTransaction();
+            List<User> users = userDao.getAllNonAdmin();
+            connection.commitTransaction();
+            return users;
 
         }
     }

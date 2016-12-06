@@ -14,4 +14,5 @@ public interface AccountService {
     Account getByUserId(int userId);
 
 
+    void addToAccountByUserId(int userId, long amountToAdd);
 }

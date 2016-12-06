@@ -7,7 +7,7 @@ import coffee.machine.model.entity.user.User;
  * @author oleksij.onysymchuk@gmail.com 24.11.2016.
  */
 public enum Users {
-    A(1, "oleksij.onysymchuk@gmail.com", "495286b908f344a71f0895d3258f5e4a", "Олексій Онисимчук", Accounts.USER_A.account, true),
+    A(1, "oleksij.onysymchuk@gmail.com", "495286b908f344a71f0895d3258f5e4a", "Олексій Онисимчук", Accounts.USER_A.account, false),
     B(2, "user@test.com", "495286b908f344a71f0895d3258f5e4a", "Тестовий користувач", Accounts.USER_B.account, false),
     C(3, "admin@test.com", "495286b908f344a71f0895d3258f5e4a", "Тестовий адміністратор", null, true);
 

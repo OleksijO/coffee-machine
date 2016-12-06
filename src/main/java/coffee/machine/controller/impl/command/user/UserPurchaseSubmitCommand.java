@@ -60,7 +60,7 @@ public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
 		// putting data to show on view in request
         request.setAttribute(Attributes.USUAL_MESSAGE, CommandKey.PURCHASE_THANKS_MESSAGE);
         request.setAttribute(Attributes.DRINKS, drinkService.getAll());
-
+        request.setAttribute(Attributes.USER_ACCOUNT, accountService.getByUserId(userId));
         return PagesPaths.USER_PURCHASE_PAGE;
     }
 

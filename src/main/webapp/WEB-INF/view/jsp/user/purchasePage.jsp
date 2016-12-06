@@ -77,7 +77,7 @@
                     </td>
                     <td>
                         <div align="center">
-                            <input type="text" value="0"
+                            <input type="number" step="1" value="0"
                                    name="<%=Parameters.DRINK_PARAMETER_STARTS_WITH%>${drink.id}"
                                    style="width: 20pt">
                         </div>

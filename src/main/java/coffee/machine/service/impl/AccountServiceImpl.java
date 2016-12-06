@@ -51,4 +51,19 @@ public class AccountServiceImpl implements AccountService {
 
         }
     }
+
+    @Override
+    public void addToAccountByUserId(int userId, long amountToAdd) {
+        try (AbstractConnection connection = daoFactory.getConnection()) {
+
+            AccountDao accountDao = daoFactory.getAccountDao(connection);
+            connection.beginTransaction();
+            Account account = accountDao.getByUserId(userId);
+            account.add(amountToAdd);
+            accountDao.update(account);
+            connection.commitTransaction();
+
+        }
+
+    }
 }

@@ -31,4 +31,5 @@ public final class Attributes {
     public static final String LOGIN_FORM_ACTION="login_from_action";
 
     public static final String BUNDLE_FILE = "bundle_file" ;
+    public static final String USER_LIST = "add_credit_user_list";
 }

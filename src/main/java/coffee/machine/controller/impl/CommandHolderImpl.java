@@ -33,6 +33,7 @@ public class CommandHolderImpl implements CommandHolder {
             put(PagesPaths.ADMIN_LOGOUT_PATH, new AdminLogoutCommand());
             put(PagesPaths.ADMIN_REFILL_PATH, new AdminRefillCommand());
             put(PagesPaths.ADMIN_HOME_PATH, new AdminHomeCommand());
+            put(PagesPaths.ADMIN_ADD_CREDITS_PATH, new AdminAddCreditCommand());
         }
     };
 
@@ -46,6 +47,7 @@ public class CommandHolderImpl implements CommandHolder {
 
             put(PagesPaths.ADMIN_REFILL_PATH, new AdminRefillSubmitCommand());
             put(PagesPaths.ADMIN_LOGIN_PATH, new AdminLoginSubmitCommand());
+            put(PagesPaths.ADMIN_ADD_CREDITS_PATH, new AdminAddCreditSubmitCommand());
         }
     };
 

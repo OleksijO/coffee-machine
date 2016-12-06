@@ -13,4 +13,6 @@ public final class Parameters {
 	public static final String LOGIN_PARAM = "login";
 	public static final String PASSWORD = "password";
 	public static final String USER_LOCALE = "language";
+    public static final String USER_ID = "user_id";
+	public static final String CREDITS_TO_ADD = "credits_to_add";
 }

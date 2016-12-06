@@ -9,4 +9,6 @@ public interface CommandKey {
     String ADMIN_REFILL_SUCCESSFULL = "refill.successful";
 
     String PURCHASE_THANKS_MESSAGE = "user.purchase.thanks.for.purchase";
+
+    String ADD_CREDITS_YOU_ADDED_CREDITS_SUCCESSFULLY_ON_ACCOUNT_OF_USER = "admin.add.credits.you.added.credits.to.account.of.user";
 }

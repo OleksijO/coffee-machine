@@ -99,7 +99,7 @@ CREATE TABLE orders_addon (
 INSERT INTO account (amount) VALUES (0), (9999999999), (999999);
 
 INSERT INTO users (id, email, password, full_name, account_id, is_admin) VALUES
-  (1, 'oleksij.onysymchuk@gmail.com', '495286b908f344a71f0895d3258f5e4a', 'Олексій Онисимчук', 2, TRUE),
+  (1, 'oleksij.onysymchuk@gmail.com', '495286b908f344a71f0895d3258f5e4a', 'Олексій Онисимчук', 2, FALSE),
   (2, 'user@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий користувач', 3, FALSE),
   (3, 'admin@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий адміністратор', NULL, TRUE);
 

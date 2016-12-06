@@ -22,7 +22,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
     private static final String SELECT_ALL_SQL =
             "SELECT users.id, email, password, full_name, account_id, amount, is_admin FROM users " +
-                    "LEFT JOIN account ON users.account_id = account.id";
+                    "LEFT JOIN account ON users.account_id = account.id ";
     private static final String UPDATE_SQL =
             "UPDATE users SET email = ?, password = ?, full_name = ?, account_id = ?, is_admin = ? WHERE id = ? ; ";
     private static final String INSERT_SQL =
@@ -31,6 +31,8 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
             "DELETE FROM users WHERE id = ?; ";
     private static final String WHERE_USER_EMAIL = " WHERE users.email = ?";
     private static final String WHERE_USER_ID = " WHERE users.id = ?";
+    private static final String WHERE_NOT_ADMIN = " WHERE users.is_admin = FALSE";
+
 
     private static final String FIELD_LOGIN = "email";
     private static final String FIELD_PASSWORD = "password";
@@ -189,6 +191,19 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
         }
         throw new InternalError(); // STUB for compiler
 
+    }
+
+    @Override
+    public List<User> getAllNonAdmin() {
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(SELECT_ALL_SQL + WHERE_NOT_ADMIN)) {
+
+            return parseResultSet(resultSet);
+
+        } catch (SQLException e) {
+            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_ALL, e);
+        }
+        throw new InternalError(); // STUB for compiler
     }
 
 }

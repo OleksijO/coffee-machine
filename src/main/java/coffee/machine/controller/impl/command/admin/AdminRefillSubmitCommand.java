@@ -31,7 +31,7 @@ public class AdminRefillSubmitCommand extends CommandExecuteWrapper {
     private final AddonService addonService = AddonServiceImpl.getInstance();
     private final AccountService accountService = AccountServiceImpl.getInstance();
 
-    private final RefillFormDataExtractor formParser = new RefillFormExtractorImpl();
+    private final RefillFormDataExtractor formDataExtractor = new RefillFormExtractorImpl();
 
     public AdminRefillSubmitCommand() {
         super(PagesPaths.ADMIN_REFILL_PAGE);
@@ -42,8 +42,8 @@ public class AdminRefillSubmitCommand extends CommandExecuteWrapper {
 
         request.setAttribute(PAGE_TITLE, TITLE_ADMIN_REFILL);
 
-        Map<Integer, Integer> drinkAddQuantityByIds = formParser.getDrinksQuantityByIdFromRequest(request);
-        Map<Integer, Integer> addonAddQuantityByIds = formParser.getAddonsQuantityByIdFromRequest(request);
+        Map<Integer, Integer> drinkAddQuantityByIds = formDataExtractor.getDrinksQuantityByIdFromRequest(request);
+        Map<Integer, Integer> addonAddQuantityByIds = formDataExtractor.getAddonsQuantityByIdFromRequest(request);
 
         // check if we perform updating drinks or addons to select corresponding message
         boolean itemsAdded = false;

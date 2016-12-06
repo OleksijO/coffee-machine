@@ -2,6 +2,8 @@ package coffee.machine.service;
 
 import coffee.machine.model.entity.user.User;
 
+import java.util.List;
+
 /**
  * This class represents user service
  *
@@ -13,4 +15,5 @@ public interface UserService {
 
     User getUserByLogin(String login);
 
+    List<User> getAllNonAdminUsers();
 }
