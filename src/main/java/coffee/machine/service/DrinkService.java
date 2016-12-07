@@ -14,6 +14,10 @@ import java.util.Set;
  */
 public interface DrinkService {
 
+	/**
+	 * @return list of all drinks with specified available quantity.
+	 * Addons in sets also has quantity equals to available quantity
+	 */
 	List<Drink> getAll();
 
 	/**

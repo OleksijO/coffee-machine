@@ -9,10 +9,24 @@ import coffee.machine.model.entity.Account;
  */
 public interface AccountService {
 
+    /**
+     * @param id id of the account
+     * @return account or null if there is no account with specified id
+     */
     Account getById(int id);
 
+    /**
+     * @param userId
+     * @return account or null if there is no account with specified user's id
+     */
     Account getByUserId(int userId);
 
 
+    /**
+     * Adds amount to account of user with specidied id.
+     *
+     * @param userId user's id, whose account has to be updated
+     * @param amountToAdd amount to be add to acoount of user with specified id
+     */
     void addToAccountByUserId(int userId, long amountToAdd);
 }

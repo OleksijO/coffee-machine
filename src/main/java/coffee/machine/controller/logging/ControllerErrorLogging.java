@@ -21,6 +21,7 @@ public interface ControllerErrorLogging extends ApplicationErrorLogging {
     String REQUEST_URI_IS = "Request_URI=";
     String USER_LOCALE_IS = "User_locale=";
     String REQUEST_QUERY_IS = "Request_query=";
+    String REQUEST_METHOD = "Request_method=";
 
     /**
      * @param logger  logger instance of class
@@ -70,9 +71,10 @@ public interface ControllerErrorLogging extends ApplicationErrorLogging {
             }
         }
         messageBuilder.append(SEPATATOR).append(REQUEST_URI_IS).append(request.getRequestURI())
+                .append(SEPATATOR).append(REQUEST_METHOD).append(request.getMethod().toUpperCase())
                 .append(SEPATATOR).append(REQUEST_QUERY_IS).append(request.getQueryString())
-                .append(SEPATATOR).append(USER_LOCALE_IS)
-                .append(SEPATATOR).append(request.getSession().getAttribute(Attributes.USER_LOCALE));
+                .append(SEPATATOR)
+                .append(USER_LOCALE_IS).append(request.getSession().getAttribute(Attributes.USER_LOCALE));
 
         return messageBuilder.toString();
     }

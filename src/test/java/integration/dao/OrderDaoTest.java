@@ -13,9 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * @author oleksij.onysymchuk@gmail.com
@@ -72,19 +70,9 @@ public class OrderDaoTest {
         assertNull("Must be null", order);
     }
 
-    @Ignore //not implemented
+    @Ignore //method not implemented and throws UnsupportedOperationException
     @Test
     public void testUpdate() {
-        Order order = testOrders.get(1);
-        long amount = order.getAmount();
-        order.setAmount(0);
-
-        orderDao.update(order);
-
-        assertEquals("1", 0, orderDao.getById(2).getAmount());
-        order.setAmount(amount);
-        orderDao.update(order);
-        assertEquals("2", testOrders.get(1).getAmount(), orderDao.getById(2).getAmount());
 
     }
 
@@ -93,12 +81,12 @@ public class OrderDaoTest {
         Order order = testOrders.get(1);
         order.setId(0);
         int newOrderId = orderDao.insert(order).getId();
-        assertFalse("new Id must differs",newOrderId==1);
+        assertTrue("new Id must be greater of total number of present records", newOrderId > 2);
         order.setId(newOrderId);
 
         assertEquals("1", order.toString(), orderDao.getById(newOrderId).toString());
         order.setId(2);
-        assertEquals("2", testOrders.size()+1, orderDao.getAll().size());
+        assertEquals("2", testOrders.size() + 1, orderDao.getAll().size());
         orderDao.deleteById(newOrderId);
         assertNull("3", orderDao.getById(newOrderId));
         assertEquals("4", testOrders.size(), orderDao.getAll().size());
@@ -107,12 +95,11 @@ public class OrderDaoTest {
 
     @Test
     public void testGetAllByUserId() {
-        List<Order> resultList=new ArrayList<>();
+        List<Order> resultList = new ArrayList<>();
         resultList.addAll(orderDao.getAllByUserId(1));
         assertEquals("1.", 0, resultList.size());
         resultList.addAll(orderDao.getAllByUserId(2));
         assertEquals("2.", 2, resultList.size());
-
         assertEquals("3", testOrders.toString(), resultList.toString());
     }
 }

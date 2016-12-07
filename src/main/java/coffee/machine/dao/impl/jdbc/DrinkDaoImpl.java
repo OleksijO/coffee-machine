@@ -1,19 +1,18 @@
 package coffee.machine.dao.impl.jdbc;
 
+import coffee.machine.dao.DrinkDao;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
 import coffee.machine.model.entity.item.ItemType;
-import coffee.machine.dao.DrinkDao;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.TreeSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import static coffee.machine.dao.impl.jdbc.ItemDaoImpl.*;
 
 /**
  * This class is the implementation of Drink entity DAO
@@ -22,11 +21,18 @@ import java.util.Set;
  */
 public class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
     private static final Logger logger = Logger.getLogger(DrinkDaoImpl.class);
+    private static final String SELECT_ALL_DRINKS_WITH_ADDONS_FORMAT = "" +
+            " SELECT id, name, price, quantity, type, drink_id AS parent_id " +
+            " FROM item " +
+            " LEFT JOIN drink_addons ON item.id = drink_addons.addon_id " +
+            " %s " +
+            " ORDER BY type DESC";
+    private static final String WHERE_ID_OR_DRINK_ID = " WHERE drink_id = ? OR item.id = ? ";
     static final String DB_ERROR_WHILE_INSERTING_ADDONS = "Database error while inserting addons of drink: ";
-    private static final String SELECT_ADDON_SET_SQL = "SELECT id, name, price, quantity, type " + "FROM item "
-            + "INNER JOIN drink_addons ON addon_id=item.id " + "WHERE drink_id = ? ;";
     private static final String INSERT_ADDON_SQL = "INSERT INTO drink_addons (drink_id, addon_id) VALUES (?,?); ";
     private static final String DELETE_ADDON_FROM_SET_SQL = "DELETE FROM drink_addons WHERE drink_id = ?; ";
+
+    private static final String FIELD_PARENT_ID = "parent_id";
 
     private static final String DB_ERROR_WHILE_GETTING_ADDON_SET_OF_DRINK_WITH_ID =
             "Database error while getting addon set of drink with id=";
@@ -101,37 +107,73 @@ public class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
 
     @Override
     public List<Drink> getAll() {
+        try (PreparedStatement statement =
+                     connection.prepareStatement(String.format(SELECT_ALL_DRINKS_WITH_ADDONS_FORMAT, ""));
+             ResultSet resultSet = statement.executeQuery()) {
+            return parseResultSet(resultSet);
 
-        List<Item> items = itemDao.getAll(ItemType.DRINK);
-        List<Drink> drinks = new ArrayList<>();
-        items.forEach(item -> {
-            Drink drinkRef = (Drink) item;
-            drinkRef.setAddons(getAddonSet(drinkRef.getId()));
-            drinks.add(drinkRef);
-        });
-        return drinks;
-    }
-
-    private Set<Item> getAddonSet(int drinkId) {
-        try (PreparedStatement statement = connection.prepareStatement(SELECT_ADDON_SET_SQL)) {
-
-            statement.setInt(1, drinkId);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                return new TreeSet<>(itemDao.parseResultSet(resultSet));
-            }
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_ADDON_SET_OF_DRINK_WITH_ID, drinkId, e);
+            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_ALL, e);
         }
         throw new InternalError(); // STUB for compiler
     }
 
-    @Override
-    public Drink getById(int id) {
-        Drink drink = (Drink) itemDao.getById(id);
-        if (drink != null) {
-            drink.setAddons(getAddonSet(id));
+    private List<Drink> parseResultSet(ResultSet resultSet) throws SQLException {
+        List<Drink> drinkList = new ArrayList<>();
+        while (resultSet.next()) {
+            Item item;
+            ItemType type = ItemType.valueOf(resultSet.getString(FIELD_TYPE));
+            if (type == ItemType.DRINK) {
+                item = new Drink();
+                ((Drink) item).setAddons(new TreeSet<>());
+            } else {
+                item = new Item();
+            }
+            item.setId(resultSet.getInt(FIELD_ID));
+            item.setName(resultSet.getString(FIELD_NAME));
+            item.setPrice(resultSet.getLong(FIELD_PRICE));
+            item.setQuantity(resultSet.getInt(FIELD_QUANTITY));
+            item.setType(type);
+            if (type == ItemType.DRINK) {
+                drinkList.add((Drink) item);
+            } else {
+                Drink drink = getDrinkFromListById(drinkList, resultSet.getInt(FIELD_PARENT_ID));
+                drink.getAddons().add(item);
+            }
+        }
+        return drinkList;
+    }
+
+    private Drink getDrinkFromListById(List<Drink> drinks, int drinkId) {
+        Drink drink;
+        Optional<Drink> orderOptional = drinks.stream().filter(d -> d.getId() == drinkId).findFirst();
+        if (orderOptional.isPresent()) {
+            drink = orderOptional.get();
+        } else {
+            throw new IllegalStateException();
         }
         return drink;
+    }
+
+    @Override
+    public Drink getById(int id) {
+        try (PreparedStatement statement =
+                     connection.prepareStatement(
+                             String.format(SELECT_ALL_DRINKS_WITH_ADDONS_FORMAT, WHERE_ID_OR_DRINK_ID))) {
+
+            statement.setInt(1, id);
+            statement.setInt(2, id);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+
+                List<Drink> drinks = parseResultSet(resultSet);
+                checkSingleResult(drinks);
+                return drinks == null || drinks.isEmpty() ? null : drinks.get(0);
+            }
+        } catch (SQLException e) {
+            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_ALL, e);
+        }
+        throw new InternalError(); // STUB for compiler
 
     }
 

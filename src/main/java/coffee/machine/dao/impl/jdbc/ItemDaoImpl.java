@@ -25,14 +25,16 @@ public class ItemDaoImpl extends AbstractDao<Item> {
             "UPDATE item SET quantity = ? WHERE id = ?; ";
     private static final String INSERT_SQL =
             "INSERT INTO item (name, price, quantity, type) VALUES (?, ?, ?, ?); ";
-    private static final String DELETE_SQL = "DELETE FROM item WHERE id = ?; ";
+    private static final String DELETE_SQL =
+            "DELETE FROM drink_addons WHERE drink_id = ? OR addon_id = ?;" +
+                    "DELETE FROM item WHERE id = ?; ";
     private static final String WHERE_ITEM_ID = " WHERE item.id = ?";
     private static final String WHERE_ITEM_IS = " WHERE type = '%s'";
 
-    private static final String FIELD_NAME = "name";
-    private static final String FIELD_PRICE = "price";
-    private static final String FIELD_QUANTITY = "quantity";
-    private static final String FIELD_TYPE = "type";
+    static final String FIELD_NAME = "name";
+    static final String FIELD_PRICE = "price";
+    static final String FIELD_QUANTITY = "quantity";
+    static final String FIELD_TYPE = "type";
 
     private final Connection connection;
 
@@ -123,6 +125,7 @@ public class ItemDaoImpl extends AbstractDao<Item> {
             } else {
                 item = new Item();
             }
+            item.setType(type);
             item.setId(resultSet.getInt(FIELD_ID));
             item.setName(resultSet.getString(FIELD_NAME));
             item.setPrice(resultSet.getLong(FIELD_PRICE));
@@ -158,6 +161,8 @@ public class ItemDaoImpl extends AbstractDao<Item> {
         try (PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
 
             statement.setInt(1, id);
+            statement.setInt(2, id);
+            statement.setInt(3, id);
             statement.executeUpdate();
 
         } catch (SQLException e) {

@@ -7,10 +7,7 @@ import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.service.DrinkService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class is an implementation of DrinkService
@@ -18,6 +15,9 @@ import java.util.Set;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class DrinkServiceImpl implements DrinkService {
+    private static final String QUANTITIES_BY_ID_SHOULD_CONTAIN_ANY_DATA_GOT_OBJECT =
+            "Quantities by id should contain any data. Got object: ";
+
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
     private DrinkServiceImpl() {
@@ -47,7 +47,8 @@ public class DrinkServiceImpl implements DrinkService {
     @Override
     public void refill(Map<Integer, Integer> quantitiesById) {
         if ((quantitiesById == null) || (quantitiesById.size() == 0)) {
-            return;
+            throw new IllegalArgumentException(
+                    QUANTITIES_BY_ID_SHOULD_CONTAIN_ANY_DATA_GOT_OBJECT + quantitiesById);
         }
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
@@ -64,6 +65,7 @@ public class DrinkServiceImpl implements DrinkService {
 
     @Override
     public List<Drink> getAllByIdSet(Set<Integer> drinkIds) {
+        Objects.requireNonNull(drinkIds);
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);

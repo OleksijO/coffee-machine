@@ -1,9 +1,10 @@
 package coffee.machine.controller.impl.command.request.data.extractor.impl;
 
-import coffee.machine.controller.exception.ControllerException;
 import coffee.machine.controller.RegExp;
+import coffee.machine.controller.exception.ControllerException;
 import coffee.machine.i18n.message.key.GeneralKey;
 import coffee.machine.i18n.message.key.error.CommandErrorKey;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
@@ -18,11 +19,14 @@ import java.util.regex.Pattern;
  * @author oleksij.onysymchuk@gmail.com
  */
 class ItemsBySimpleParameterExtractor {
+    private static final Logger logger = Logger.getLogger(ItemsBySimpleParameterExtractor.class);
+    public static final String QUANTITY_UNDER_ZERO_IN_PARAM = "Quantity under zero in param ";
     private final Pattern patternNumber = Pattern.compile(RegExp.REGEXP_NUMBER);
+
 
     /**
      * @param request request instance
-     * @return  The map of pairs (drinkId, specifiedQuantity) with nonZero quantity.
+     * @return The map of pairs (drinkId, specifiedQuantity) with nonZero quantity.
      */
     Map<Integer, Integer> getItemQuantityByIdFromRequest(HttpServletRequest request,
                                                          Pattern itemParameterPattern) {
@@ -39,6 +43,7 @@ class ItemsBySimpleParameterExtractor {
                     itemQuantityByIds.put(itemId, itemQuantity);
                 } else if (itemQuantity < 0) {
                     // validation error
+                    logger.error(QUANTITY_UNDER_ZERO_IN_PARAM + param);
                     throw new ControllerException(CommandErrorKey.QUANTITY_SHOULD_BE_NON_NEGATIVE);
                 }
             }
@@ -46,12 +51,14 @@ class ItemsBySimpleParameterExtractor {
         return itemQuantityByIds;
     }
 
-    private int getIntFromRequestByParameter(String param, HttpServletRequest request) {
+    int getIntFromRequestByParameter(String param, HttpServletRequest request) {
         try {
 
             return Integer.parseInt(request.getParameter(param));
 
         } catch (Exception e) {
+            logger.error(String.format("Problems with parsing INT from parameter '%s', its value ='%s'",
+                    param, request.getParameter(param)));
             throw new ControllerException(CommandErrorKey.QUANTITY_SHOULD_BE_INT);
         }
 

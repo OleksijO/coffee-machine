@@ -13,6 +13,9 @@ import java.util.Map;
  */
 public interface AddonService {
 
+    /**
+     * @return list of all addons with specified available quantity.
+     */
     List<Item> getAll();
 
     /**

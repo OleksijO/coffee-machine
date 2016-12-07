@@ -11,10 +11,7 @@ import coffee.machine.model.entity.item.Drink;
 import coffee.machine.service.CoffeeMachineService;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static coffee.machine.i18n.message.key.error.ServiceErrorKey.ITEM_NO_LONGER_AVAILABLE;
 import static coffee.machine.i18n.message.key.error.ServiceErrorKey.NOT_ENOUGH_MONEY;
@@ -27,6 +24,10 @@ import static coffee.machine.i18n.message.key.error.ServiceErrorKey.YOU_DID_NOT_
  */
 public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceErrorProcessing {
     private static final Logger logger = Logger.getLogger(CoffeeMachineServiceImpl.class);
+
+    private static final String CANT_FIND_ACCOUNT_OF_USER_WITH_ID = "Can't find account of user with id";
+    private static final String CANT_FIND_ACCOUNT_COFFEE_MACHINE =
+            "Can't find account of coffee-machine. Check out CoffeeMachineConfig" ;
 
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private static final int COFFEE_MACHINE_ACCOUNT_ID = CoffeeMachineConfig.ACCOUNT_ID;
@@ -44,9 +45,8 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
 
     @Override
     public Order prepareDrinksForUser(List<Drink> drinks, int userId) {
+        Objects.requireNonNull(drinks);
         try (AbstractConnection connection = daoFactory.getConnection()) {
-
-            String orderDescription = drinks.toString();
 
             // getting needed DAO
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
@@ -71,6 +71,9 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
 
             //  check if user has enough money to buy selected drinks
             Account userAccount = accountDao.getByUserId(userId);
+            if (userAccount==null){
+                throw new IllegalArgumentException(CANT_FIND_ACCOUNT_OF_USER_WITH_ID +userId);
+            }
             if (userAccount.getAmount() < drinksPrice) {
                 logErrorAndThrowNewServiceException(
                         logger, NOT_ENOUGH_MONEY,
@@ -93,12 +96,15 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
       
             // performing money exchange
             Account coffeeMachineAccount = accountDao.getById(COFFEE_MACHINE_ACCOUNT_ID);
+            if (coffeeMachineAccount==null){
+                throw new IllegalArgumentException(CANT_FIND_ACCOUNT_COFFEE_MACHINE);
+            }
             userAccount.withdrow(drinksPrice);
             coffeeMachineAccount.add(drinksPrice);
             accountDao.update(coffeeMachineAccount);
             accountDao.update(userAccount);
 
-            // updating quantities of items in machine
+            // updating quantities of items in database
             if (baseDrinksAvailable.size() > 0) {
                 drinkDao.updateQuantityAllInList(baseDrinksAvailable);
             }

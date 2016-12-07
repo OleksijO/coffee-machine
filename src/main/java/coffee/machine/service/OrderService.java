@@ -10,5 +10,9 @@ import java.util.List;
  * @author oleksij.onysymchuk@gmail.com
  */
 public interface OrderService {
+    /**
+     * @param userId user's id, whose orders will be returned
+     * @return list of orders of user with specified id
+     */
     List<Order> getAllByUserId(int userId);
 }

@@ -17,8 +17,6 @@ CREATE TABLE item (
   DEFAULT CHARSET = utf8;
 
 
-DROP TABLE IF EXISTS abstract_user;
-
 DROP TABLE IF EXISTS account;
 
 CREATE TABLE account (

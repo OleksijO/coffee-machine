@@ -1,10 +1,9 @@
 package coffee.machine.controller.impl.command.request.data.extractor.impl;
 
-import coffee.machine.controller.exception.ControllerException;
-import coffee.machine.i18n.message.key.GeneralKey;
 import coffee.machine.controller.RegExp;
+import coffee.machine.controller.exception.ControllerException;
 import coffee.machine.controller.impl.command.request.data.extractor.PurchaseFormDataExtractor;
-import coffee.machine.i18n.message.key.error.CommandErrorKey;
+import coffee.machine.i18n.message.key.GeneralKey;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
@@ -43,10 +42,10 @@ public class PurchaseFormExtractorImpl implements PurchaseFormDataExtractor {
             if (matcher.matches()) {
                 //founded needed parameter, can process it
                 int addonId = getAddonIdFromParam(param);
-                int addonQuantity = getIntFromRequestByParameter(param, request);
+                int addonQuantity = simpleParameterExtractor.getIntFromRequestByParameter(param, request);
 
                 if (addonQuantity > 0) {
-                    int drinkId = getDrinkIdFromParam(param);
+                    int drinkId = simpleParameterExtractor.getItemIdFromParam(param);
 
                     addonQuantityInDrinksById.putIfAbsent(drinkId, new HashMap<>());
                     addonQuantityInDrinksById
@@ -59,23 +58,6 @@ public class PurchaseFormExtractorImpl implements PurchaseFormDataExtractor {
         return addonQuantityInDrinksById;
     }
 
-
-    private int getIntFromRequestByParameter(String param, HttpServletRequest request) {
-        try {
-
-            return Integer.parseInt(request.getParameter(param));
-
-        } catch (Exception e) {
-            throw new ControllerException(CommandErrorKey.QUANTITY_SHOULD_BE_INT);
-        }
-
-    }
-
-    private int getDrinkIdFromParam(String param) {
-
-       return simpleParameterExtractor.getItemIdFromParam(param);
-    }
-
     private int getAddonIdFromParam(String param) {
         Matcher matcher = patternNumber.matcher(param);
 
@@ -85,7 +67,7 @@ public class PurchaseFormExtractorImpl implements PurchaseFormDataExtractor {
                 return Integer.parseInt(param.substring(matcher.start(), matcher.end()));
             }
         }
-        throw new ControllerException(GeneralKey.ERROR_UNKNOWN);
+        throw new ControllerException(GeneralKey.ERROR_UNKNOWN); // this should not happen in normal in-page operation
     }
 
 }

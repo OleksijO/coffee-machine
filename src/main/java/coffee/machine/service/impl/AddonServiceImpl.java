@@ -17,6 +17,9 @@ import java.util.Map;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class AddonServiceImpl implements AddonService {
+    private static final String QUANTITIES_BY_ID_SHOULD_CONTAIN_ANY_DATA_GOT_OBJECT =
+            "Quantities by id should contain any data. Got object: ";
+
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
     private AddonServiceImpl() {
@@ -46,7 +49,8 @@ public class AddonServiceImpl implements AddonService {
     @Override
     public void refill(Map<Integer, Integer> quantitiesById) {
         if ((quantitiesById == null) || (quantitiesById.size() == 0)) {
-            return;
+            throw new IllegalArgumentException(
+                    QUANTITIES_BY_ID_SHOULD_CONTAIN_ANY_DATA_GOT_OBJECT + quantitiesById);
         }
         try (AbstractConnection connection = daoFactory.getConnection()) {
 

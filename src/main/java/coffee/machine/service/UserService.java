@@ -11,9 +11,20 @@ import java.util.List;
  */
 public interface UserService {
 
+    /**
+     * @param id user's id, whose entity will be returned
+     * @return user entity with specified id
+     */
     User getById(int id);
 
+    /**
+     * @param login user's email (login), whose entity will be returned
+     * @return user entity with specified email (login)
+     */
     User getUserByLogin(String login);
 
+    /**
+      * @return list of user entity with field admin==false
+     */
     List<User> getAllNonAdminUsers();
 }

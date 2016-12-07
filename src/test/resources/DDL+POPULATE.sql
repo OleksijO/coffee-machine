@@ -64,7 +64,7 @@ CREATE TABLE orders (
   date_time TIMESTAMP  NOT NULL,
   amount    BIGINT(20) NOT NULL DEFAULT '0',
   PRIMARY KEY id_pk (id),
-  KEY oeder_user_fk_idx (user_id),
+  KEY order_user_fk_idx (user_id),
   CONSTRAINT orders_user_fk FOREIGN KEY (user_id) REFERENCES users (id)
     ON DELETE CASCADE
 )

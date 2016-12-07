@@ -8,6 +8,7 @@ import coffee.machine.model.entity.user.User;
 import coffee.machine.service.UserService;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class is an implementation of UserService
@@ -43,6 +44,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByLogin(String login) {
+        Objects.requireNonNull(login);
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             UserDao adminDao = daoFactory.getUserDao(connection);
