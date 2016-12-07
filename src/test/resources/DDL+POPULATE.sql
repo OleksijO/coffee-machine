@@ -17,8 +17,6 @@ CREATE TABLE item (
   DEFAULT CHARSET = utf8;
 
 
-DROP TABLE IF EXISTS abstract_user;
-
 DROP TABLE IF EXISTS account;
 
 CREATE TABLE account (
@@ -96,7 +94,7 @@ CREATE TABLE orders_addon (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-INSERT INTO account (amount) VALUES (0), (9999999999), (999999);
+INSERT INTO account (amount) VALUES (0), (1000000), (100000);
 
 INSERT INTO users (id, email, password, full_name, account_id, is_admin) VALUES
   (1, 'oleksij.onysymchuk@gmail.com', '495286b908f344a71f0895d3258f5e4a', 'Олексій Онисимчук', 2, FALSE),

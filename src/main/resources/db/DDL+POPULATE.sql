@@ -62,7 +62,7 @@ CREATE TABLE orders (
   date_time TIMESTAMP  NOT NULL,
   amount    BIGINT(20) NOT NULL DEFAULT '0',
   PRIMARY KEY id_pk (id),
-  KEY oeder_user_fk_idx (user_id),
+  KEY order_user_fk_idx (user_id),
   CONSTRAINT orders_user_fk FOREIGN KEY (user_id) REFERENCES users (id)
     ON DELETE CASCADE
 )
@@ -94,7 +94,7 @@ CREATE TABLE orders_addon (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-INSERT INTO account (amount) VALUES (0), (9999999900), (999900);
+INSERT INTO account (amount) VALUES (0), (1000000), (100000);
 
 INSERT INTO users (id, email, password, full_name, account_id, is_admin) VALUES
   (1, 'oleksij.onysymchuk@gmail.com', '495286b908f344a71f0895d3258f5e4a', 'Олексій Онисимчук', 2, FALSE),

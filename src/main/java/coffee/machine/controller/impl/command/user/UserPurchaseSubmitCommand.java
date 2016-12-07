@@ -51,11 +51,9 @@ public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
             Order record = coffeeMachine.prepareDrinksForUser(drinksToBuy, userId);
             request.setAttribute(Attributes.ORDER, record);
         } catch (ServiceException e){
-            request.setAttribute(Attributes.USER_ACCOUNT, accountService.getByUserId(userId).getRealAmount());
+            request.setAttribute(Attributes.USER_ACCOUNT, accountService.getByUserId(userId));
             throw e;
         }
-
-
 
 		// putting data to show on view in request
         request.setAttribute(Attributes.USUAL_MESSAGE, CommandKey.PURCHASE_THANKS_MESSAGE);
