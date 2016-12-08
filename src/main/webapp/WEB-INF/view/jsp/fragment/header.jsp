@@ -15,10 +15,12 @@
     <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
     <title><fmt:message key="${requestScope[Attributes.PAGE_TITLE]}"/></title>
 </head>
-<body>
-<br>
+<body style="background: gainsboro">
+
 <div align="center">
-    <div style="max-width: 1024px" align="center">
+    <br>
+    <div class="container" align="center">
+
         <%@ include file="/WEB-INF/view/jsp/fragment/i18n/header_block.jsp" %>
         <hr>
         <br>

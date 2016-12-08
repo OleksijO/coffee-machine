@@ -94,28 +94,26 @@ CREATE TABLE orders_addon (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-INSERT INTO account (amount) VALUES (0), (1000000), (100000);
+INSERT INTO account (amount) VALUES (0), (0);
 
 INSERT INTO users (id, email, password, full_name, account_id, is_admin) VALUES
-  (1, 'oleksij.onysymchuk@gmail.com', '495286b908f344a71f0895d3258f5e4a', 'Олексій Онисимчук', 2, FALSE),
-  (2, 'user@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий користувач', 3, FALSE),
-  (3, 'admin@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий адміністратор', NULL, TRUE);
+  (1, 'admin@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий адміністратор', NULL, TRUE),
+  (2, 'user@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий користувач', 2, FALSE);
 
 INSERT INTO item (id, name, price, quantity, type) VALUES
-  (1, 'Вода', 100, 20, 'DRINK'),
-  (2, 'Боржоми', 500, 20, 'DRINK'),
+  (1, 'Вода', 100, 10, 'DRINK'),
+  (2, 'Боржоми', 500, 10, 'DRINK'),
   (3, 'Чай без сахара', 500, 10, 'DRINK'),
-  (4, 'Чай с сахаром', 600, 20, 'DRINK'),
+  (4, 'Чай с сахаром', 600, 10, 'DRINK'),
   (5, 'Лимон', 200, 20, 'ADDON'),
-  (6, 'Эспрессо', 700, 50, 'DRINK'),
-  (7, 'Дополнительный сахар', 100, 300, 'ADDON'),
-  (8, 'Молоко', 200, 150, 'ADDON'),
-  (9, 'Сливки', 300, 150, 'ADDON'),
-  (10, 'Американо', 800, 150, 'DRINK'),
-  (11, 'Мокачино', 1000, 50, 'DRINK'),
+  (6, 'Эспрессо', 700, 10, 'DRINK'),
+  (7, 'Дополнительный сахар', 100, 20, 'ADDON'),
+  (8, 'Молоко', 200, 20, 'ADDON'),
+  (9, 'Сливки', 300, 20, 'ADDON'),
+  (10, 'Американо', 800, 10, 'DRINK'),
+  (11, 'Мокачино', 1000, 10, 'DRINK'),
   (12, 'Латте', 1200, 100, 'DRINK'),
-  (13, 'Корица', 150, 75, 'ADDON');
-
+  (13, 'Корица', 150, 20, 'ADDON');
 
 INSERT INTO drink_addons (drink_id, addon_id) VALUES
   (3, 5),
@@ -135,19 +133,3 @@ INSERT INTO drink_addons (drink_id, addon_id) VALUES
   (10, 13),
   (11, 13),
   (12, 13);
-
-INSERT INTO orders (id, user_id, date_time, amount) VALUES
-  (1, 2, '2016-06-18 15:05:00',  1000),
-  (2, 2, '2016-06-18 15:15:00',  2000);
-
-INSERT INTO orders_drink (id, orders_id, drink_id, quantity) VALUES
-  (1, 1, 1, 1),
-  (2, 2, 1, 2),
-  (3, 2, 4, 1),
-  (4, 2, 6, 3);
-
-
-INSERT INTO orders_addon (orders_drink_id, addon_id, quantity) VALUES
-  (3, 5, 1),
-  (4, 7, 2),
-  (4, 8, 1);

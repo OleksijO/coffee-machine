@@ -17,3 +17,10 @@ div.register_form
     min-width: 450px;
     align-content: center;
 }
+
+div.container
+{
+    max-width: 1024px;
+    background: ghostwhite;
+    padding: 10px
+}

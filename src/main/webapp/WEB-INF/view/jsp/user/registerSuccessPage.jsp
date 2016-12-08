@@ -5,16 +5,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%@ include file="/WEB-INF/view/jsp/fragment/header.jsp" %>
+
 <br>
 <fmt:message key="user.success.registration.description"/> <br>
 <br>
 <br>
 <br> <h2><a href="${PagesPaths.USER_LOGIN_PATH}"><fmt:message key="login.user.title"/></a></h2>
-
-
-
-
-
-
 
 <%@ include file="/WEB-INF/view/jsp/fragment/footer.jsp" %>
