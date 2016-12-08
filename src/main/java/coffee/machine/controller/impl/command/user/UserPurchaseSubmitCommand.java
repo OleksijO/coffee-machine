@@ -1,6 +1,8 @@
 package coffee.machine.controller.impl.command.user;
 
 import coffee.machine.controller.impl.command.CommandExecuteWrapper;
+import coffee.machine.controller.impl.command.request.data.extractor.ItemsStringFormDataExtractor;
+import coffee.machine.controller.impl.command.request.data.extractor.impl.ItemsStringFormDataExtractorImpl;
 import coffee.machine.controller.impl.command.request.data.extractor.impl.PurchaseFormExtractorImpl;
 import coffee.machine.i18n.message.key.CommandKey;
 import coffee.machine.i18n.message.key.GeneralKey;
@@ -32,6 +34,8 @@ public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
     private CoffeeMachineService coffeeMachine = CoffeeMachineServiceImpl.getInstance();
 
     private PurchaseFormDataExtractor formExtractor = new PurchaseFormExtractorImpl();
+    private final ItemsStringFormDataExtractor formStringDataExtractor = new ItemsStringFormDataExtractorImpl();
+
 
     public UserPurchaseSubmitCommand() {
         super(PagesPaths.USER_PURCHASE_PAGE);
@@ -41,24 +45,29 @@ public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_USER_PURCHASE);
-        int userId = (int) request.getSession().getAttribute(Attributes.USER_ID);
+        request.setAttribute(Attributes.PREVIOUS_VALUES_TABLE,
+                formStringDataExtractor.getAllItemParameterValuesFromRequest(request));
 
-        // extracting drinks to buy from request
-        List<Drink> drinksToBuy = getDrinksFromRequest(request);
+        int userId = (int) request.getSession().getAttribute(Attributes.USER_ID);
 
         // performing purchase
         try {
+            // extracting drinks to buy from request
+            List<Drink> drinksToBuy = getDrinksFromRequest(request);
             Order record = coffeeMachine.prepareDrinksForUser(drinksToBuy, userId);
             request.setAttribute(Attributes.ORDER, record);
         } catch (ServiceException e){
-            request.setAttribute(Attributes.USER_ACCOUNT, accountService.getByUserId(userId));
+            placeNecessaryDataToRequest(request, userId);
             throw e;
         }
 
 		// putting data to show on view in request
         request.setAttribute(Attributes.USUAL_MESSAGE, CommandKey.PURCHASE_THANKS_MESSAGE);
-        request.setAttribute(Attributes.DRINKS, drinkService.getAll());
-        request.setAttribute(Attributes.USER_ACCOUNT, accountService.getByUserId(userId));
+        placeNecessaryDataToRequest(request, userId);
+
+        // clearing form in case of success operation
+        request.removeAttribute(Attributes.PREVIOUS_VALUES_TABLE);
+
         return PagesPaths.USER_PURCHASE_PAGE;
     }
 
@@ -108,5 +117,9 @@ public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
         });
     }
 
+    private void placeNecessaryDataToRequest(HttpServletRequest request, int userId) {
+        request.setAttribute(Attributes.DRINKS, drinkService.getAll());
+        request.setAttribute(Attributes.USER_ACCOUNT, accountService.getByUserId(userId));
+    }
 
 }

@@ -23,9 +23,6 @@
                 </div>
             </td>
             <td>
-                <div align="center"><b><fmt:message key="purchase.drink.available"/></b></div>
-            </td>
-            <td>
                 <div align="center"><b><fmt:message key="purchase.drink.quantity"/></b></div>
             </td>
         </tr>
@@ -56,7 +53,22 @@
                                                     .concat(Parameters.ADDON_PARAMETER_STARTS_WITH)
                                                      .concat(addon.id)}"
                                                     style="width: 30pt">
-                                                <option selected value="0">0</option>
+                                                <c:set var="previousAddonQuantity" value="${empty requestScope[Attributes.PREVIOUS_VALUES_TABLE]?
+                                                                0:requestScope[Attributes.PREVIOUS_VALUES_TABLE]
+                                                                .get(Parameters.DRINK_PARAMETER_STARTS_WITH
+                                                                .concat(drink.id)
+                                                                .concat(Parameters.ADDON_PARAMETER_STARTS_WITH)
+                                                                .concat(addon.id))}"/>
+                                                <option selected>
+                                                    <c:choose>
+                                                        <c:when test="${previousAddonQuantity gt addon.quantity}">
+                                                            0
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            ${previousAddonQuantity}
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </option>
                                                 <option value="1">1</option>
                                                 <c:if test="${addon.quantity gt 1}">
                                                     <option value="2">2</option>
@@ -73,13 +85,12 @@
                                                               minFractionDigits="2" maxFractionDigits="2"/></div>
                     </td>
                     <td>
-                        <div align="center">${drink.quantity}</div>
-                    </td>
-                    <td>
                         <div align="center">
-                            <input type="number" step="1" min="0" value="0"
-                                   name="<%=Parameters.DRINK_PARAMETER_STARTS_WITH%>${drink.id}"
-                                   style="width: 20pt">
+                            <input type="number" step="1" min="0" max="${drink.quantity}"
+                                   name="${Parameters.DRINK_PARAMETER_STARTS_WITH.concat(drink.id)}"
+                                   style="width: 30pt"
+                                   value="${empty requestScope[Attributes.PREVIOUS_VALUES_TABLE]?0:requestScope[Attributes.PREVIOUS_VALUES_TABLE]
+                                   .get(Parameters.DRINK_PARAMETER_STARTS_WITH.concat(drink.id))}">
                         </div>
                     </td>
                 </tr>
