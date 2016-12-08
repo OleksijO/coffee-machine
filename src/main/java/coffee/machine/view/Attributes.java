@@ -13,7 +13,8 @@ public final class Attributes {
     public final static String DRINKS = "drinks";
     public final static String ADDONS = "addons";
 
-    public final static String PREVIOUS_ENTERED_EMAIL = "previos_entered_email";
+    public final static String PREVIOUS_ENTERED_EMAIL = "previous_entered_email";
+    public static final String PREVIOUS_ENTERED_FULL_NAME = "previous_entered_full_name";
 
     public final static String USUAL_MESSAGE = "usual_message";
     public final static String ERROR_MESSAGE = "error_message";
@@ -28,10 +29,15 @@ public final class Attributes {
     public static final String USER_ORDER_LIST = "USER_ORDER_LIST";
 
     public static final String LOGIN_FORM_TITLE = "login_form_title";
-    public static final String LOGIN_FORM_ACTION="login_from_action";
+    public static final String LOGIN_FORM_ACTION="login_form_action";
+
+    public static final String REGISTER_FORM_TITLE = "register_form_title";
+    public static final String REGISTER_FORM_ACTION="login_from_action";
 
     public static final String BUNDLE_FILE = "bundle_file" ;
     public static final String USER_LIST = "add_credit_user_list";
 
     public static final String PREVIOUS_VALUES_TABLE = "previous_values_table";
+
+
 }

@@ -25,6 +25,7 @@ public class CommandHolderImpl implements CommandHolder {
 
             put(PagesPaths.USER_LOGIN_PATH, new UserLoginCommand());
             put(PagesPaths.USER_LOGOUT_PATH, new UserLogoutCommand());
+            put(PagesPaths.USER_REGISTER_PATH, new UserRegisterCommand());
             put(PagesPaths.USER_HOME_PATH, new UserHomeCommand());
             put(PagesPaths.USER_PURCHASE_PATH, new UserPurchaseCommand());
             put(PagesPaths.USER_ORDER_HISTORY_PATH, new UserOrderHistoryCommand());
@@ -43,6 +44,7 @@ public class CommandHolderImpl implements CommandHolder {
     private final Map<String, Command> postCommands = new HashMap<String, Command>() {
         {
             put(PagesPaths.USER_LOGIN_PATH, new UserLoginSubmitCommand());
+            put(PagesPaths.USER_REGISTER_PATH, new UserRegisterSubmitCommand());
             put(PagesPaths.USER_PURCHASE_PATH, new UserPurchaseSubmitCommand());
 
             put(PagesPaths.ADMIN_REFILL_PATH, new AdminRefillSubmitCommand());

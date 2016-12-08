@@ -23,7 +23,7 @@ import static coffee.machine.view.Attributes.ERROR_MESSAGE;
 import static coffee.machine.view.Attributes.PREVIOUS_ENTERED_EMAIL;
 import static coffee.machine.view.PagesPaths.REDIRECTED;
 import static coffee.machine.view.Parameters.LOGIN_PARAM;
-import static coffee.machine.view.Parameters.PASSWORD;
+import static coffee.machine.view.Parameters.PASSWORD_PARAM;
 
 /**
  * This class represents admin login post request page handler command.
@@ -46,7 +46,7 @@ public class AdminLoginSubmitCommand extends CommandExecuteWrapper {
         request.setAttribute(Attributes.LOGIN_FORM_ACTION, PagesPaths.ADMIN_LOGIN_PATH);
 
         String email = request.getParameter(LOGIN_PARAM);
-        String password = request.getParameter(PASSWORD);
+        String password = request.getParameter(PASSWORD_PARAM);
         request.setAttribute(PREVIOUS_ENTERED_EMAIL, email);
 
         if (!helper.processLoginForm(request, email, password)) {

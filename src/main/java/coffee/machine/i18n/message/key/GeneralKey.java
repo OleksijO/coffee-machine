@@ -19,10 +19,12 @@ public interface GeneralKey {
    String TITLE_USER_HOME = "title.user.home";
    String TITLE_USER_PURCHASE = "title.user.purchase";
    String TITLE_USER_LOGIN = "title.user.login";
+   String TITLE_USER_REGISTER = "title.user.register";
 
    String LOGIN_ADMIN_FORM_TITLE = "login.form.admin.title";
    String LOGIN_USER_FORM_TITLE = "login.form.user.title";
 
 
+    String REGISTER_USER_FORM_TITLE = "register.form.user.title";
 
 }

@@ -7,6 +7,8 @@
 <br>
 <fmt:message key="home.description"/><br>
 <h2>
+    <br> <a href="${PagesPaths.USER_REGISTER_PATH}"><fmt:message key="register.user.title"/></a>
+    <br>
     <br> <a href="${PagesPaths.USER_LOGIN_PATH}"><fmt:message key="login.user.title"/></a>
     <br>
     <br> <a href="${PagesPaths.ADMIN_LOGIN_PATH}"><fmt:message key="login.admin.title"/></a>

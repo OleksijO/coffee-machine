@@ -20,7 +20,7 @@ import static coffee.machine.controller.impl.command.helper.LoginCommandHelper.U
 import static coffee.machine.i18n.message.key.error.CommandErrorKey.ERROR_LOGIN_NO_SUCH_COMBINATION;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.*;
-import static coffee.machine.view.Parameters.PASSWORD;
+import static coffee.machine.view.Parameters.PASSWORD_PARAM;
 
 /**
  * This class represents user login post request page handler command.
@@ -44,7 +44,7 @@ public class UserLoginSubmitCommand extends CommandExecuteWrapper {
 
         String email = request.getParameter(Parameters.LOGIN_PARAM);
         request.setAttribute(PREVIOUS_ENTERED_EMAIL, email);
-        String password = request.getParameter(PASSWORD);
+        String password = request.getParameter(PASSWORD_PARAM);
 
         if (!helper.processLoginForm(request, email, password)) {
             return LOGIN_PAGE;

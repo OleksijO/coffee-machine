@@ -59,5 +59,10 @@
             <required>true</required>
             <rtexprvalue>false</rtexprvalue>
         </attribute>
+        <attribute>
+            <name>cancelMessageKey</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
     </tag>
 </taglib>

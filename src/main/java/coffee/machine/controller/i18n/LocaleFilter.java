@@ -10,6 +10,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
 /**
@@ -31,7 +32,12 @@ public class LocaleFilter implements Filter {
 
         HttpServletRequest req = ((HttpServletRequest) request);
         HttpSession session = req.getSession();
-
+        try {
+            request.setCharacterEncoding("utf-8");
+            response.setCharacterEncoding("utf-8");
+        } catch (UnsupportedEncodingException e) {
+            logger.error(e);
+        }
         /* setting up resource bundle for jsp fmt */
         if (req.getSession().getAttribute(Attributes.BUNDLE_FILE) == null) {
             req.getSession().setAttribute(Attributes.BUNDLE_FILE, CoffeeMachineConfig.MESSAGES);

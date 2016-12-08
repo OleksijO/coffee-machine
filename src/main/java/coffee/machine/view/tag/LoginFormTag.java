@@ -53,6 +53,10 @@ public class LoginFormTag implements Tag {
      * submit button text - should be message key from resource bundle
      */
     private String submitMessageKey;
+    /**
+     * cancel button text - should be message key from resource bundle
+     */
+    private String cancelMessageKey;
 
 
     @Override
@@ -82,8 +86,14 @@ public class LoginFormTag implements Tag {
                     "            </tr>\n" +
                     "            <tr>\n" +
                     "                <td colspan=\"2\">\n" +
-                    "                    <div align=\"center\"><input type=\"submit\" value=\""
-                                                            + bundle.getString(submitMessageKey) + "\"></div>\n" +
+                    "                   <div align=\"center\">" +
+                    "                         <input type=\"submit\" value=\""
+                                                            + bundle.getString(submitMessageKey) + "\">" +
+                    "                         &nbsp;\n" +
+                    "                        <input type=\"button\" value=\""
+                                                    + bundle.getString(cancelMessageKey)
+                                                    + "\" onclick=\"history.back()\">" +
+                    "                   </div>\n" +
                     "                </td>\n" +
                     "            </tr>\n" +
                     "        </table>\n" +
@@ -158,4 +168,7 @@ public class LoginFormTag implements Tag {
         this.submitMessageKey = submitMessageKey;
     }
 
+    public void setCancelMessageKey(String cancelMessageKey) {
+        this.cancelMessageKey = cancelMessageKey;
+    }
 }

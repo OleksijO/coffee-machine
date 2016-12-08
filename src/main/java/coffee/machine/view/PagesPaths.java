@@ -12,6 +12,7 @@ public final class PagesPaths {
 	public static final String ADMIN = "/admin";
 	public static final String LOGIN = "/login";
 	public static final String LOGOUT = "/logout";
+	public static final String REGISTER = "/register";
 	public static final String HOME_PATH = "/home";
 	public static final String ORDERS_HISTORY = "/orders/history";
 	public static final String PURCHASE = "/purchase";
@@ -24,12 +25,15 @@ public final class PagesPaths {
 	public static final String LOGIN_PAGE = VIEW_JSP_CLASSPATH + LOGIN + PAGE;
 
 	public static final String USER_LOGIN_PATH = USER + LOGIN;
+	public static final String USER_REGISTER_PATH = USER + REGISTER;
 	public static final String USER_LOGOUT_PATH = USER + LOGOUT;
 	public static final String USER_ORDER_HISTORY_PATH = USER + ORDERS_HISTORY;
 	public static final String USER_HOME_PATH = USER + HOME_PATH;
 	public static final String USER_PURCHASE_PATH = USER + PURCHASE;
 
 	public static final String USER_HOME_PAGE = VIEW_JSP_CLASSPATH + USER_HOME_PATH + PAGE;
+	public static final String USER_REGISTER_PAGE = VIEW_JSP_CLASSPATH + USER + REGISTER + PAGE;
+	public static final String USER_REGISTER_SUCCESS_PAGE =VIEW_JSP_CLASSPATH + USER + REGISTER +"Success"+ PAGE ;
 	public static final String USER_PURCHASE_PAGE = VIEW_JSP_CLASSPATH + USER + PURCHASE + PAGE;
 	public static final String USER_ORDER_HISTORY_PAGE = VIEW_JSP_CLASSPATH + USER + "/ordersHistory" + PAGE;
 

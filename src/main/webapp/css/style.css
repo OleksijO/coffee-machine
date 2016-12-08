@@ -7,3 +7,13 @@ div.login_form
     min-width: 300px;
     align-content: center;
 }
+
+div.register_form
+{
+    background: lightgray;
+    border: 5px darkgray;
+    max-width: 550px;
+    width: 35%;
+    min-width: 450px;
+    align-content: center;
+}

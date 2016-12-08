@@ -61,7 +61,13 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
         if (user.isAdmin()) {
             accountId = 0;
         } else {
-            accountId = accountDao.insert(user.getAccount()).getId();
+            if ((user.getAccount() != null) && (user.getAccount().getId() != 0)) {
+                // if account was created before and set to user, f.e. in service layer
+                accountId = user.getAccount().getId();
+            } else {
+                // if account was not created before
+                accountId = accountDao.insert(user.getAccount()).getId();
+            }
         }
 
         try (PreparedStatement statement = connection.prepareStatement(INSERT_SQL,
@@ -146,7 +152,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
         try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_USER_ID)) {
 
             statement.setInt(1, id);
-            try(ResultSet resultSet = statement.executeQuery()) {
+            try (ResultSet resultSet = statement.executeQuery()) {
                 List<User> userList = parseResultSet(resultSet);
                 checkSingleResult(userList);
                 return userList == null || userList.isEmpty() ? null : userList.get(0);
@@ -180,7 +186,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
         try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_USER_EMAIL)) {
 
             statement.setString(1, login);
-            try(ResultSet resultSet = statement.executeQuery()) {
+            try (ResultSet resultSet = statement.executeQuery()) {
                 List<User> userList = parseResultSet(resultSet);
                 checkSingleResult(userList);
 

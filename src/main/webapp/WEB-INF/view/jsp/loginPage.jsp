@@ -13,8 +13,9 @@
                   parameterLogin="${Parameters.LOGIN_PARAM}"
                   loginPreviosValue="${requestScope[Attributes.PREVIOUS_ENTERED_EMAIL]}"
                   passwordLabelMessageKey="login.password"
-                  parameterPassword="${Parameters.PASSWORD}"
+                  parameterPassword="${Parameters.PASSWORD_PARAM}"
                   submitMessageKey="login.submit"
+                  cancelMessageKey="cancel"
 />
 <h5>
     <br>

@@ -14,6 +14,7 @@ public interface RegExp {
     String REGEXP_EMAIL = regexp.getString("email");
     String REGEXP_PASSWORD = regexp.getString("password");
     String REGEXP_NUMBER = regexp.getString("number");
+    String REGEXP_FULL_NAME = regexp.getString("fullName");
 
     String REGEXP_DRINK_PARAM = "^" + Parameters.DRINK_PARAMETER_STARTS_WITH + REGEXP_NUMBER + "$";
     String REGEXP_ADDON_PARAM = "^" + Parameters.ADDON_PARAMETER_STARTS_WITH + REGEXP_NUMBER + "$";
@@ -24,6 +25,7 @@ public interface RegExp {
             Parameters.ADDON_PARAMETER_STARTS_WITH + REGEXP_NUMBER + ")|("+
             Parameters.DRINK_PARAMETER_STARTS_WITH + REGEXP_NUMBER +
             Parameters.ADDON_PARAMETER_STARTS_WITH + REGEXP_NUMBER + ")$";
+
 
 
 }

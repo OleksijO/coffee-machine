@@ -1,11 +1,16 @@
 package coffee.machine.service.impl;
 
 import coffee.machine.dao.AbstractConnection;
+import coffee.machine.dao.AccountDao;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.UserDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
+import coffee.machine.i18n.message.key.error.ServiceErrorKey;
+import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.user.User;
 import coffee.machine.service.UserService;
+import coffee.machine.service.logging.ServiceErrorProcessing;
+import org.apache.log4j.Logger;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,8 +20,9 @@ import java.util.Objects;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, ServiceErrorProcessing {
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+    private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
 
     private UserServiceImpl() {
     }
@@ -52,7 +58,6 @@ public class UserServiceImpl implements UserService {
             User user = adminDao.getUserByLogin(login);
             connection.commitTransaction();
             return user;
-
         }
     }
 
@@ -65,7 +70,26 @@ public class UserServiceImpl implements UserService {
             List<User> users = userDao.getAllNonAdmin();
             connection.commitTransaction();
             return users;
-
         }
+    }
+
+    @Override
+    public void createNewUser(User user) {
+        try (AbstractConnection connection = daoFactory.getConnection()) {
+            AccountDao accountDao = daoFactory.getAccountDao(connection);
+            UserDao userDao = daoFactory.getUserDao(connection);
+            connection.beginTransaction();
+            if (userDao.getUserByLogin(user.getEmail()) != null) {
+                logger.error("Try to register user with already used email: " + user.getEmail());
+                logErrorAndThrowNewServiceException(
+                        logger, ServiceErrorKey.USER_WITH_SPECIFIED_EMAIL_ALREADY_REGISTERED);
+            }
+            Account newAccount = new Account();
+            newAccount = accountDao.insert(newAccount);
+            user.setAccount(newAccount);
+            userDao.insert(user);
+            connection.commitTransaction();
+        }
+
     }
 }

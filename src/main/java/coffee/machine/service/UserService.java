@@ -27,4 +27,11 @@ public interface UserService {
       * @return list of user entity with field admin==false
      */
     List<User> getAllNonAdminUsers();
+
+    /**
+     * Creates account, sets it to user and saves user entity to database
+     *
+     * @param user user entity to be saved in data base
+     */
+    void createNewUser(User user);
 }

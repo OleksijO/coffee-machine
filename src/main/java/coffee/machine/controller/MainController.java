@@ -26,6 +26,7 @@ import static coffee.machine.view.PagesPaths.HOME_PAGE;
 public class MainController extends HttpServlet implements ControllerErrorLogging {
     static final Logger logger = Logger.getLogger(MainController.class);
     public static final String URI_IS = " : uri = ";
+    public static final String REQUESTED_PATH_IS_NOT_SUPPORTED_REDIRECTING_TO_HOME_PAGE_FORMAT = "Requested path '%s' is not supported. Redirecting to home page.";
 
     /**
      * Command holder instance
@@ -54,6 +55,8 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
         try {
             // in case of unsupported uri redirecting to home page
             if (command == null) {
+                logger.info(String.format(
+                        REQUESTED_PATH_IS_NOT_SUPPORTED_REDIRECTING_TO_HOME_PAGE_FORMAT,request.getRequestURI()));
                 response.sendRedirect(PagesPaths.HOME_PATH);
                 return;
             }

@@ -10,4 +10,6 @@ public interface ServiceErrorKey {
 	String ITEM_NO_LONGER_AVAILABLE = "error.service.goods.no.longer.available";
 	String NOT_ENOUGH_MONEY = "error.service.not.enough.money";
 	String YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY = "user.purchase.you.did.not.specified.drinks.to.buy";
+    String USER_WITH_SPECIFIED_EMAIL_ALREADY_REGISTERED =
+			"error.service.register.user.with.specified.email.already.registered";
 }

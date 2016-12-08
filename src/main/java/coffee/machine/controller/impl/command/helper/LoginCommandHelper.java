@@ -46,15 +46,15 @@ public class LoginCommandHelper implements ControllerErrorLogging {
         return true;
     }
 
-    private boolean checkPassword(String password) {
+    boolean checkPassword(String password) {
         return checkToPattern(PATTERN_PASSWORD, password);
     }
 
-    private boolean checkLogin(String email) {
+    boolean checkLogin(String email) {
         return checkToPattern(PATTERN_EMAIL, email);
     }
 
-    private boolean checkToPattern(Pattern pattern, String stringToCheck) {
+    boolean checkToPattern(Pattern pattern, String stringToCheck) {
         return (stringToCheck != null) && (pattern.matcher(stringToCheck).matches());
     }
 
