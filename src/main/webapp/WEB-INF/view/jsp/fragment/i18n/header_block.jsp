@@ -1,12 +1,10 @@
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"  %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@ page import="coffee.machine.view.Parameters" %>
 <%@ page import="coffee.machine.i18n.SupportedLocale" %>
 <%@ page import="coffee.machine.view.Attributes" %>
-<%@ page import="coffee.machine.CoffeeMachineConfig" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <!-- there is no need to use fmt setLocale, because native session scoped attribute already set in LocaleFilter -->
 <fmt:requestEncoding value="UTF-8" />

@@ -71,6 +71,7 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
             request.getRequestDispatcher(view).forward(request, response);
 
             return;
+
         } catch (ApplicationException e) {
             logApplicationError(logger, request, e);
             request.setAttribute(ERROR_MESSAGE, e.getMessage());
@@ -80,7 +81,6 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
             request.setAttribute(ERROR_MESSAGE, ERROR_UNKNOWN);
         }
         request.getRequestDispatcher(HOME_PAGE).forward(request, response);
-
     }
 
     @Override
@@ -103,7 +103,6 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
             throws ServletException, IOException {
 
         // getting command for POST requests
-
         String uri = getUri(request);
         processRequest(commandHolder.post(uri), request, response);
     }
