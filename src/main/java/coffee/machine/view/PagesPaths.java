@@ -33,7 +33,7 @@ public final class PagesPaths {
 
 	public static final String USER_HOME_PAGE = VIEW_JSP_CLASSPATH + USER_HOME_PATH + PAGE;
 	public static final String USER_REGISTER_PAGE = VIEW_JSP_CLASSPATH + USER + REGISTER + PAGE;
-	public static final String USER_REGISTER_SUCCESS_PAGE =VIEW_JSP_CLASSPATH + USER + REGISTER +"Success"+ PAGE ;
+	public static final String USER_REGISTER_SUCCESS_PAGE =VIEW_JSP_CLASSPATH + USER + REGISTER +""+ PAGE ;
 	public static final String USER_PURCHASE_PAGE = VIEW_JSP_CLASSPATH + USER + PURCHASE + PAGE;
 	public static final String USER_ORDER_HISTORY_PAGE = VIEW_JSP_CLASSPATH + USER + "/ordersHistory" + PAGE;
 

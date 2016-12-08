@@ -90,6 +90,6 @@ public class UserServiceImpl implements UserService, ServiceErrorProcessing {
             userDao.insert(user);
             connection.commitTransaction();
         }
-
     }
+
 }
