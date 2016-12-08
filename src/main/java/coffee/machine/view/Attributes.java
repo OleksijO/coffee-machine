@@ -32,4 +32,6 @@ public final class Attributes {
 
     public static final String BUNDLE_FILE = "bundle_file" ;
     public static final String USER_LIST = "add_credit_user_list";
+
+    public static final String PREVIOUS_VALUES_TABLE = "previous_values_table";
 }

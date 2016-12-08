@@ -1,18 +1,21 @@
 package coffee.machine.controller.impl.command.admin;
 
-import coffee.machine.service.AccountService;
-import coffee.machine.service.AddonService;
-import coffee.machine.service.impl.AccountServiceImpl;
-import coffee.machine.view.PagesPaths;
 import coffee.machine.CoffeeMachineConfig;
 import coffee.machine.controller.impl.command.CommandExecuteWrapper;
+import coffee.machine.controller.impl.command.request.data.extractor.ItemsStringFormDataExtractor;
 import coffee.machine.controller.impl.command.request.data.extractor.RefillFormDataExtractor;
+import coffee.machine.controller.impl.command.request.data.extractor.impl.ItemsStringFormDataExtractorImpl;
 import coffee.machine.controller.impl.command.request.data.extractor.impl.RefillFormExtractorImpl;
 import coffee.machine.i18n.message.key.CommandKey;
 import coffee.machine.i18n.message.key.error.CommandErrorKey;
+import coffee.machine.service.AccountService;
+import coffee.machine.service.AddonService;
 import coffee.machine.service.DrinkService;
+import coffee.machine.service.impl.AccountServiceImpl;
 import coffee.machine.service.impl.AddonServiceImpl;
 import coffee.machine.service.impl.DrinkServiceImpl;
+import coffee.machine.view.Attributes;
+import coffee.machine.view.PagesPaths;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +35,7 @@ public class AdminRefillSubmitCommand extends CommandExecuteWrapper {
     private final AccountService accountService = AccountServiceImpl.getInstance();
 
     private final RefillFormDataExtractor formDataExtractor = new RefillFormExtractorImpl();
+    private final ItemsStringFormDataExtractor formStringDataExtractor = new ItemsStringFormDataExtractorImpl();
 
     public AdminRefillSubmitCommand() {
         super(PagesPaths.ADMIN_REFILL_PAGE);
@@ -41,9 +45,18 @@ public class AdminRefillSubmitCommand extends CommandExecuteWrapper {
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) {
 
         request.setAttribute(PAGE_TITLE, TITLE_ADMIN_REFILL);
+        request.setAttribute(Attributes.PREVIOUS_VALUES_TABLE,
+                formStringDataExtractor.getAllItemParameterValuesFromRequest(request));
 
-        Map<Integer, Integer> drinkAddQuantityByIds = formDataExtractor.getDrinksQuantityByIdFromRequest(request);
-        Map<Integer, Integer> addonAddQuantityByIds = formDataExtractor.getAddonsQuantityByIdFromRequest(request);
+        Map<Integer, Integer> drinkAddQuantityByIds = null;
+        Map<Integer, Integer> addonAddQuantityByIds = null;
+        try {
+            drinkAddQuantityByIds = formDataExtractor.getDrinksQuantityByIdFromRequest(request);
+            addonAddQuantityByIds = formDataExtractor.getAddonsQuantityByIdFromRequest(request);
+        } catch (Exception e) {
+            placeNecessaryDataToRequest(request);
+           throw e;
+        }
 
         // check if we perform updating drinks or addons to select corresponding message
         boolean itemsAdded = false;
@@ -64,12 +77,19 @@ public class AdminRefillSubmitCommand extends CommandExecuteWrapper {
         }
 
         // placing necessary for view data
+        placeNecessaryDataToRequest(request);
+
+        // clearing form in case of success operation
+        request.removeAttribute(Attributes.PREVIOUS_VALUES_TABLE);
+
+        return PagesPaths.ADMIN_REFILL_PAGE;
+    }
+
+    private void placeNecessaryDataToRequest(HttpServletRequest request) {
         request.setAttribute(COFFEE_MACHINE_BALANCE, accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)
                 .getRealAmount());
         request.setAttribute(DRINKS, drinkService.getAll());
         request.setAttribute(ADDONS, addonService.getAll());
-
-        return PagesPaths.ADMIN_REFILL_PAGE;
     }
 
 

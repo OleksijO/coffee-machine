@@ -19,6 +19,11 @@ public interface RegExp {
     String REGEXP_ADDON_PARAM = "^" + Parameters.ADDON_PARAMETER_STARTS_WITH + REGEXP_NUMBER + "$";
     String REGEXP_ADDON_IN_DRINK_PARAM = "^" + Parameters.DRINK_PARAMETER_STARTS_WITH + REGEXP_NUMBER
             + Parameters.ADDON_PARAMETER_STARTS_WITH + REGEXP_NUMBER + "$";
+    String REQEXP_ANY_ITEM = "^("+
+            Parameters.DRINK_PARAMETER_STARTS_WITH + REGEXP_NUMBER + ")|("+
+            Parameters.ADDON_PARAMETER_STARTS_WITH + REGEXP_NUMBER + ")|("+
+            Parameters.DRINK_PARAMETER_STARTS_WITH + REGEXP_NUMBER +
+            Parameters.ADDON_PARAMETER_STARTS_WITH + REGEXP_NUMBER + ")$";
 
 
 }
