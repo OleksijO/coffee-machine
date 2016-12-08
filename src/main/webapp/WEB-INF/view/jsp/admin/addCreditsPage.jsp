@@ -22,6 +22,9 @@
                 <div align="center"><b><fmt:message key="admin.add.credit.user.full.name"/></b></div>
             </td>
             <td>
+                <div align="center"><b><fmt:message key="login.email"/></b></div>
+            </td>
+            <td>
                 <div align="center"><b><fmt:message key="admin.add.credit.user.balance"/>,
                     <fmt:message key="currency"/></b></div>
             </td>
@@ -36,6 +39,7 @@
             <tr>
 
                 <td>${user.fullName}</td>
+                <td>${user.email}</td>
                 <td>
                     <div align="center"><fmt:formatNumber value="${user.account.realAmount}"
                                                           type="number"
@@ -49,7 +53,7 @@
                         <div align="center">
                             <input type="hidden" name="${Parameters.USER_ID}" value="${user.id}">
                             <input type="number" min="0.01" value="0" name="${Parameters.CREDITS_TO_ADD}"
-                                   style="width: 30pt" step="0.01">
+                                   style="width: 50pt" step="0.01">
                             <fmt:message key="admin.add.credit.submit" var="message_submit"/>
                             <input type="submit" value="${message_submit}">
                         </div>
