@@ -9,6 +9,8 @@
 <br>
 <fmt:message key="user.success.registration.description"/> <br>
 <br>
+admin@some.domain.com / 0-800-00-00
+<br>
 <br>
 <br> <h2><a href="${PagesPaths.USER_LOGIN_PATH}"><fmt:message key="login.user.title"/></a></h2>
 

@@ -24,14 +24,15 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
             "SELECT users.id, email, password, full_name, account_id, amount, is_admin FROM users " +
                     "LEFT JOIN account ON users.account_id = account.id ";
     private static final String UPDATE_SQL =
-            "UPDATE users SET email = ?, password = ?, full_name = ?, account_id = ?, is_admin = ? WHERE id = ? ; ";
+            "UPDATE users SET email = ?, password = ?, full_name = ?, account_id = ?, is_admin = ? WHERE id = ? ";
     private static final String INSERT_SQL =
-            "INSERT INTO users (email, password, full_name, account_id, is_admin) VALUES (?, ?, ?, ?, ?); ";
+            "INSERT INTO users (email, password, full_name, account_id, is_admin) VALUES (?, ?, ?, ?, ?) ";
     private static final String DELETE_SQL =
-            "DELETE FROM users WHERE id = ?; ";
-    private static final String WHERE_USER_EMAIL = " WHERE users.email = ?";
-    private static final String WHERE_USER_ID = " WHERE users.id = ?";
-    private static final String WHERE_NOT_ADMIN = " WHERE users.is_admin = FALSE";
+            "DELETE FROM users WHERE id = ? ";
+    private static final String WHERE_USER_EMAIL = " WHERE users.email = ? ";
+    private static final String WHERE_USER_ID = " WHERE users.id = ? ";
+    private static final String WHERE_NOT_ADMIN = " WHERE users.is_admin = FALSE ";
+    private static final String ORDER_BY_FULL_NAME = " ORDER BY full_name ";
 
 
     private static final String FIELD_LOGIN = "email";
@@ -116,7 +117,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
     @Override
     public List<User> getAll() {
         try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(SELECT_ALL_SQL)) {
+             ResultSet resultSet = statement.executeQuery(SELECT_ALL_SQL + ORDER_BY_FULL_NAME)) {
 
             return parseResultSet(resultSet);
 
@@ -202,7 +203,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
     @Override
     public List<User> getAllNonAdmin() {
         try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(SELECT_ALL_SQL + WHERE_NOT_ADMIN)) {
+             ResultSet resultSet = statement.executeQuery(SELECT_ALL_SQL + WHERE_NOT_ADMIN + ORDER_BY_ID)) {
 
             return parseResultSet(resultSet);
 

@@ -26,16 +26,13 @@ public class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
             " FROM item " +
             " LEFT JOIN drink_addons ON item.id = drink_addons.addon_id " +
             " %s " +
-            " ORDER BY type DESC";
+            " ORDER BY type DESC, id ASC";
     private static final String WHERE_ID_OR_DRINK_ID = " WHERE drink_id = ? OR item.id = ? ";
     static final String DB_ERROR_WHILE_INSERTING_ADDONS = "Database error while inserting addons of drink: ";
     private static final String INSERT_ADDON_SQL = "INSERT INTO drink_addons (drink_id, addon_id) VALUES (?,?); ";
     private static final String DELETE_ADDON_FROM_SET_SQL = "DELETE FROM drink_addons WHERE drink_id = ?; ";
 
     private static final String FIELD_PARENT_ID = "parent_id";
-
-    private static final String DB_ERROR_WHILE_GETTING_ADDON_SET_OF_DRINK_WITH_ID =
-            "Database error while getting addon set of drink with id=";
 
     private final Connection connection;
     private ItemDaoImpl itemDao;

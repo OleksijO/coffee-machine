@@ -10,6 +10,7 @@ import coffee.machine.service.impl.UserServiceImpl;
 import coffee.machine.view.Attributes;
 import coffee.machine.view.PagesPaths;
 import coffee.machine.view.Parameters;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +26,11 @@ import static coffee.machine.view.Parameters.PASSWORD_PARAM;
  * Created by oleksij.onysymchuk@gmail on 08.12.2016.
  */
 public class UserRegisterSubmitCommand extends CommandExecuteWrapper {
+    private static final Logger logger = Logger.getLogger(UserRegisterSubmitCommand.class);
+
+    private static final String CANT_CREATE_USER = "Can't create user=";
+    private static final String NEW_USER_HAS_BEEN_REGISTERED_FORMAT =
+            "New user with email '%s' has been registered with id=%d.";
 
     private UserRegisterCommandHelper helper = new UserRegisterCommandHelper();
     private UserService userService = UserServiceImpl.getInstance();
@@ -55,8 +61,13 @@ public class UserRegisterSubmitCommand extends CommandExecuteWrapper {
         user.setFullName(fullName);
         user.setEmail(email);
         user.setPassword(encryptedPassword);
-        userService.createNewUser(user);
-
+        try {
+            userService.createNewUser(user);
+        } catch (Exception e) {
+            logger.error(CANT_CREATE_USER + user);
+            throw e;
+        }
+        logger.info(String.format(NEW_USER_HAS_BEEN_REGISTERED_FORMAT, user.getEmail(), user.getId()));
         return PagesPaths.USER_REGISTER_SUCCESS_PAGE;
     }
 }

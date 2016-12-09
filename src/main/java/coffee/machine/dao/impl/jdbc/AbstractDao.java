@@ -31,6 +31,7 @@ abstract class AbstractDao<T> implements GenericDao<T>, DaoErrorProcessing {
     static final String DB_ERROR_WHILE_DELETING_BY_ID = "Database error while deleting entity ";
 
     static final String FIELD_ID = "id";
+    static final String ORDER_BY_ID = " ORDER BY id ";
 
 
 

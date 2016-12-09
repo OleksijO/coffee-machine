@@ -19,7 +19,6 @@ public class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
 
     private static final Logger logger = Logger.getLogger(OrderDaoImpl.class);
 
-    public static final String WHERE_USER_ID = " WHERE user_id = ?";
     private static final String SELECT_ALL_ORDERS_SQL =
             " SELECT orders.id, user_id, date_time, amount " +
                     " FROM orders ";
@@ -42,12 +41,17 @@ public class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
                     " ON orders_drink.id=orders_addon.orders_drink_id " +
                     " LEFT JOIN item " +
                     " ON orders_addon.addon_id = item.id";
-    private static final String WHERE_ID = " WHERE orders.id = ?";
-    private static final String INSERT_SQL = "INSERT INTO orders (user_id, date_time, amount) VALUES (?,?,?);";
-    private static final String INSERT_ORDER_DRINK_SQL = "INSERT INTO orders_drink (orders_id, drink_id, quantity ) VALUES (?,?,?);";
-    private static final String INSERT_ORDER_DRINK_ADDON_SQL = "INSERT INTO orders_addon (orders_drink_id, addon_id, quantity) VALUES (?,?,?);";
+    private static final String INSERT_SQL =
+            "INSERT INTO orders (user_id, date_time, amount) VALUES (?,?,?)";
+    private static final String INSERT_ORDER_DRINK_SQL =
+            "INSERT INTO orders_drink (orders_id, drink_id, quantity ) VALUES (?,?,?)";
+    private static final String INSERT_ORDER_DRINK_ADDON_SQL =
+            "INSERT INTO orders_addon (orders_drink_id, addon_id, quantity) VALUES (?,?,?)";
+    private static final String DELETE_SQL = "DELETE FROM orders WHERE id=? ";
 
-    private static final String DELETE_SQL = "DELETE FROM orders WHERE id=? ;";
+    private static final String WHERE_USER_ID = " WHERE user_id = ?";
+    private static final String ORDER_BY_DATE_TIME = " ORDER BY date_time";
+    private static final String WHERE_ID = " WHERE orders.id = ?";
 
     private static final String FIELD_USER_ID = "user_id";
     private static final String FIELD_DATE_TIME = "date_time";
@@ -123,7 +127,7 @@ public class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     @Override
     public List<Order> getAll() {
         try (PreparedStatement statementOrder =
-                     connection.prepareStatement(SELECT_ALL_ORDERS_SQL);
+                     connection.prepareStatement(SELECT_ALL_ORDERS_SQL + ORDER_BY_DATE_TIME);
              PreparedStatement statementDrink =
                      connection.prepareStatement(SELECT_ALL_ORDER_DRINKS_SQL);
              PreparedStatement statementAddon =
@@ -251,7 +255,7 @@ public class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     @Override
     public List<Order> getAllByUserId(int userId) {
         try (PreparedStatement statementOrder =
-                     connection.prepareStatement(SELECT_ALL_ORDERS_SQL + WHERE_USER_ID);
+                     connection.prepareStatement(SELECT_ALL_ORDERS_SQL + WHERE_USER_ID + ORDER_BY_DATE_TIME);
              PreparedStatement statementDrink =
                      connection.prepareStatement(SELECT_ALL_ORDER_DRINKS_SQL + WHERE_USER_ID);
              PreparedStatement statementAddon =
