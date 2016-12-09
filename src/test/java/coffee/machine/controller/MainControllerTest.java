@@ -72,6 +72,7 @@ public class MainControllerTest {
     @Test
     public void processRequestRuntimeException() throws Exception {
         when(command.execute(request, response)).thenThrow(new RuntimeException("messageKey"));
+        when(request.getMethod()).thenReturn("post");
         controller.processRequest(command, request, response);
         verify(request, times(1)).setAttribute(ERROR_MESSAGE, ERROR_UNKNOWN);
         verify(request, times(1)).getRequestDispatcher(HOME_PAGE);
@@ -82,10 +83,11 @@ public class MainControllerTest {
     @Test
     public void processRequestApplicationException() throws Exception {
         when(command.execute(request, response)).thenThrow(new ApplicationException("error.unknown"));
+        when(request.getMethod()).thenReturn("post");
         controller.processRequest(command, request, response);
         verify(request, times(2)).setAttribute(any(), any());
         verify(response, times(0)).sendRedirect(any());
-        verify(requestDispatcher, times(0)).forward(request, response);
+        verify(requestDispatcher, times(1)).forward(request, response);
     }
 
     @Test
