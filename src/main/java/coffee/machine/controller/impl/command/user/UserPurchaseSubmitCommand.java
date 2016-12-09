@@ -3,11 +3,13 @@ package coffee.machine.controller.impl.command.user;
 import coffee.machine.CoffeeMachineConfig;
 import coffee.machine.controller.impl.command.CommandExecuteWrapper;
 import coffee.machine.controller.impl.command.request.data.extractor.ItemsStringFormDataExtractor;
+import coffee.machine.controller.impl.command.request.data.extractor.PurchaseFormDataExtractor;
 import coffee.machine.controller.impl.command.request.data.extractor.impl.ItemsStringFormDataExtractorImpl;
 import coffee.machine.controller.impl.command.request.data.extractor.impl.PurchaseFormExtractorImpl;
 import coffee.machine.i18n.message.key.CommandKey;
 import coffee.machine.i18n.message.key.GeneralKey;
 import coffee.machine.model.entity.Order;
+import coffee.machine.model.entity.item.Drink;
 import coffee.machine.service.AccountService;
 import coffee.machine.service.CoffeeMachineService;
 import coffee.machine.service.DrinkService;
@@ -17,8 +19,6 @@ import coffee.machine.service.impl.CoffeeMachineServiceImpl;
 import coffee.machine.service.impl.DrinkServiceImpl;
 import coffee.machine.view.Attributes;
 import coffee.machine.view.PagesPaths;
-import coffee.machine.controller.impl.command.request.data.extractor.PurchaseFormDataExtractor;
-import coffee.machine.model.entity.item.Drink;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +29,7 @@ import java.util.Map;
 
 public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
     private static final Logger logger = Logger.getLogger(UserPurchaseSubmitCommand.class);
+    private static final String USER_WITH_ID_MADE_PURCHASE_FORMAT = "User with id = %d made purchase: %s";
 
     private DrinkService drinkService = DrinkServiceImpl.getInstance();
     private AccountService accountService = AccountServiceImpl.getInstance();
@@ -56,14 +57,16 @@ public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
         try {
             // extracting drinks to buy from request
             List<Drink> drinksToBuy = getDrinksFromRequest(request);
-            Order record = coffeeMachine.prepareDrinksForUser(drinksToBuy, userId);
-            request.setAttribute(Attributes.ORDER, record);
-        } catch (ServiceException e){
+            Order order = coffeeMachine.prepareDrinksForUser(drinksToBuy, userId);
+            request.setAttribute(Attributes.ORDER, order);
+
+            logger.info(String.format(USER_WITH_ID_MADE_PURCHASE_FORMAT, userId, order));
+        } catch (ServiceException e) {
             placeNecessaryDataToRequest(request, userId);
             throw e;
         }
 
-		// putting data to show on view in request
+        // putting data to show on view in request
         request.setAttribute(Attributes.USUAL_MESSAGE, CommandKey.PURCHASE_THANKS_MESSAGE);
         placeNecessaryDataToRequest(request, userId);
 
@@ -77,17 +80,17 @@ public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
         // extracting drinks quantity
         Map<Integer, Integer> drinkQuantityByIds = formExtractor.getDrinksQuantityByIdFromRequest(request);
 
-		// loading entities from bd
+        // loading entities from bd
         List<Drink> drinks = drinkService.getAllBaseByIdSet(drinkQuantityByIds.keySet());
 
-		// setting actual drink quantities gotten from request
+        // setting actual drink quantities gotten from request
         setDrinkQuantities(drinks, drinkQuantityByIds);
 
-		// extracting quantity of addons in drinks
+        // extracting quantity of addons in drinks
         Map<Integer, Map<Integer, Integer>> addonsQuantityInDrinksById =
                 formExtractor.getAddonsQuantityInDrinksByIdFromRequest(request);
 
-		// setting actual drink quantities gotten from request
+        // setting actual drink quantities gotten from request
         setAddonsQuantityInDrinks(addonsQuantityInDrinksById, drinks);
 
         return drinks;

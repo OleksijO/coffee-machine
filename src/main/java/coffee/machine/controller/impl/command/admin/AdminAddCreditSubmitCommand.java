@@ -54,7 +54,7 @@ public class AdminAddCreditSubmitCommand extends CommandExecuteWrapper {
                 userFullName + " / " + (amountToAdd * DB_MONEY_COEFF));
         request.setAttribute(COFFEE_MACHINE_BALANCE, accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)
                 .getRealAmount());
-        logger.info(String.format(TO_USER_ID_ACCOUNT_ADDED_N_CREDITS_FORMAT, userId,amountToAdd * DB_MONEY_COEFF));
+        logger.info(String.format(TO_USER_ID_ACCOUNT_ADDED_N_CREDITS_FORMAT, userId, amountToAdd * DB_MONEY_COEFF));
         return ADMIN_ADD_CREDITS_PAGE;
     }
 

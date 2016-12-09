@@ -16,6 +16,7 @@ import coffee.machine.service.impl.AddonServiceImpl;
 import coffee.machine.service.impl.DrinkServiceImpl;
 import coffee.machine.view.Attributes;
 import coffee.machine.view.PagesPaths;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +31,11 @@ import static coffee.machine.view.Attributes.*;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class AdminRefillSubmitCommand extends CommandExecuteWrapper {
+    private static final Logger logger = Logger.getLogger(AdminRefillSubmitCommand.class);
+    private static final String DRINKS_ADDED = "Drinks added to coffee machine. Table id=addedQuantity:";
+    private static final String ADDONS_ADDED = "Addons added to coffee machine. Table id=addedQuantity:";
+    private static final String ADMIN_ID_IS = ". Admin id=";
+
     private final DrinkService drinkService = DrinkServiceImpl.getInstance();
     private final AddonService addonService = AddonServiceImpl.getInstance();
     private final AccountService accountService = AccountServiceImpl.getInstance();
@@ -55,7 +61,7 @@ public class AdminRefillSubmitCommand extends CommandExecuteWrapper {
             addonAddQuantityByIds = formDataExtractor.getAddonsQuantityByIdFromRequest(request);
         } catch (Exception e) {
             placeNecessaryDataToRequest(request);
-           throw e;
+            throw e;
         }
 
         // check if we perform updating drinks or addons to select corresponding message
@@ -63,10 +69,14 @@ public class AdminRefillSubmitCommand extends CommandExecuteWrapper {
         if ((drinkAddQuantityByIds != null) && (drinkAddQuantityByIds.size() > 0)) {
             drinkService.refill(drinkAddQuantityByIds);
             itemsAdded = true;
+            logger.info(DRINKS_ADDED + drinkAddQuantityByIds + ADMIN_ID_IS
+                    + request.getSession().getAttribute(Attributes.ADMIN_ID));
         }
         if ((addonAddQuantityByIds != null) && (addonAddQuantityByIds.size() > 0)) {
             addonService.refill(addonAddQuantityByIds);
             itemsAdded = true;
+            logger.info(ADDONS_ADDED + addonAddQuantityByIds + ADMIN_ID_IS
+                    + request.getSession().getAttribute(Attributes.ADMIN_ID));
         }
 
         // placing correspondent message or error for view

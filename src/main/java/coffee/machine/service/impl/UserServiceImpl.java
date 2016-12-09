@@ -21,6 +21,7 @@ import java.util.Objects;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class UserServiceImpl implements UserService, ServiceErrorProcessing {
+    private static final String TRY_TO_REGISTER_USER_WITH_ALREADY_USED_EMAIL = "Try to register user with already used email: ";
     static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
 
@@ -80,7 +81,7 @@ public class UserServiceImpl implements UserService, ServiceErrorProcessing {
             UserDao userDao = daoFactory.getUserDao(connection);
             connection.beginTransaction();
             if (userDao.getUserByLogin(user.getEmail()) != null) {
-                logger.error("Try to register user with already used email: " + user.getEmail());
+                logger.error(TRY_TO_REGISTER_USER_WITH_ALREADY_USED_EMAIL + user.getEmail());
                 logErrorAndThrowNewServiceException(
                         logger, ServiceErrorKey.USER_WITH_SPECIFIED_EMAIL_ALREADY_REGISTERED);
             }

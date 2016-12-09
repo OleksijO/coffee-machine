@@ -176,7 +176,6 @@ public class ItemDaoImpl extends AbstractDao<Item> {
     }
 
     public List<Item> getAll(ItemType type) {
-        logger.info(SELECT_ALL_SQL + WHERE_ITEM_IS + type);
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(
                      SELECT_ALL_SQL + String.format(WHERE_ITEM_IS, type) + ORDER_BY_ID)) {

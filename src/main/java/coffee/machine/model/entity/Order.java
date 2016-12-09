@@ -104,7 +104,7 @@ public class Order {
                 ", userId=" + userId +
                 ", date=" + date +
                 ", drinks='" + drinks + '\'' +
-                ", amount=" + amount +
+                ", amount=" + getRealAmount() +
                 '}';
     }
 }

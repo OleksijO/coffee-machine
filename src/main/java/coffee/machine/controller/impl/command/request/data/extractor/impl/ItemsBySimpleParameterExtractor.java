@@ -20,7 +20,8 @@ import java.util.regex.Pattern;
  */
 class ItemsBySimpleParameterExtractor {
     private static final Logger logger = Logger.getLogger(ItemsBySimpleParameterExtractor.class);
-    public static final String QUANTITY_UNDER_ZERO_IN_PARAM = "Quantity under zero in param ";
+    private static final String QUANTITY_UNDER_ZERO_IN_PARAM = "Quantity under zero in param ";
+    private static final String PROBLEMS_WITH_PARSING_INT_FROM_PARAMETER_FORMAT = "Problems with parsing INT from parameter '%s', its value ='%s'";
     private final Pattern patternNumber = Pattern.compile(RegExp.REGEXP_NUMBER);
 
 
@@ -57,7 +58,7 @@ class ItemsBySimpleParameterExtractor {
             return Integer.parseInt(request.getParameter(param));
 
         } catch (Exception e) {
-            logger.error(String.format("Problems with parsing INT from parameter '%s', its value ='%s'",
+            logger.error(String.format(PROBLEMS_WITH_PARSING_INT_FROM_PARAMETER_FORMAT,
                     param, request.getParameter(param)));
             throw new ControllerException(CommandErrorKey.QUANTITY_SHOULD_BE_INT);
         }
