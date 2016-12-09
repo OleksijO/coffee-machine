@@ -21,7 +21,6 @@ import static org.junit.Assert.assertNull;
 /**
  * @author oleksij.onysymchuk@gmail.com
  */
-@Ignore
 public class DrinkDaoTest {
     private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private List<Drink> testDrinks = new ArrayList<>();

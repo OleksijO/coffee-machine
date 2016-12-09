@@ -18,7 +18,6 @@ import static org.junit.Assert.*;
 /**
  * @author oleksij.onysymchuk@gmail.com
  */
-@Ignore
 public class OrderDaoTest {
     private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private List<Order> testOrders = new ArrayList<>();

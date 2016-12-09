@@ -20,7 +20,6 @@ import static org.junit.Assert.assertNull;
 /**
  * @author oleksij.onysymchuk@gmail.com
  */
-@Ignore
 public class AccountDaoTest {
     private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private List<Account> testAccounts = new ArrayList<>();
