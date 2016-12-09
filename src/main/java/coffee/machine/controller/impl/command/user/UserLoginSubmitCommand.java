@@ -8,6 +8,7 @@ import coffee.machine.model.entity.user.User;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.UserServiceImpl;
 import coffee.machine.view.Attributes;
+import coffee.machine.view.PagesPaths;
 import coffee.machine.view.Parameters;
 import org.apache.log4j.Logger;
 
@@ -45,6 +46,10 @@ public class UserLoginSubmitCommand extends CommandExecuteWrapper {
         String email = request.getParameter(Parameters.LOGIN_PARAM);
         request.setAttribute(PREVIOUS_ENTERED_EMAIL, email);
         String password = request.getParameter(PASSWORD_PARAM);
+
+        if (helper.isDoubleLoginAttempt(request)){
+            return PagesPaths.LOGIN_PAGE;
+        }
 
         if (!helper.processLoginForm(request, email, password)) {
             return LOGIN_PAGE;

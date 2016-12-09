@@ -203,7 +203,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
     @Override
     public List<User> getAllNonAdmin() {
         try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(SELECT_ALL_SQL + WHERE_NOT_ADMIN + ORDER_BY_ID)) {
+             ResultSet resultSet = statement.executeQuery(SELECT_ALL_SQL + WHERE_NOT_ADMIN + ORDER_BY_FULL_NAME)) {
 
             return parseResultSet(resultSet);
 

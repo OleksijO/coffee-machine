@@ -17,4 +17,5 @@ public interface CommandErrorKey {
 
 
     Object ERROR_REGISTER_FULL_NAME_DO_NOT_MATCH_PATTERN = "error.register.full.name.do.not.match.pattern" ;
+    Object ERROR_LOGIN_YOU_ARE_ALREADY_LOGGED_IN = "error.login.you.are.already.logged.in" ;
 }

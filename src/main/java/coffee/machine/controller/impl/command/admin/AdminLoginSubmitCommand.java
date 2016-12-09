@@ -1,14 +1,14 @@
 package coffee.machine.controller.impl.command.admin;
 
-import coffee.machine.controller.security.PasswordEncryptor;
-import coffee.machine.i18n.message.key.GeneralKey;
-import coffee.machine.service.impl.UserServiceImpl;
-import coffee.machine.view.PagesPaths;
 import coffee.machine.controller.impl.command.CommandExecuteWrapper;
 import coffee.machine.controller.impl.command.helper.LoginCommandHelper;
+import coffee.machine.controller.security.PasswordEncryptor;
+import coffee.machine.i18n.message.key.GeneralKey;
 import coffee.machine.model.entity.user.User;
 import coffee.machine.service.UserService;
+import coffee.machine.service.impl.UserServiceImpl;
 import coffee.machine.view.Attributes;
+import coffee.machine.view.PagesPaths;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,9 +18,7 @@ import java.io.IOException;
 import static coffee.machine.controller.impl.command.helper.LoginCommandHelper.ADMIN_LOGGED_IN;
 import static coffee.machine.controller.impl.command.helper.LoginCommandHelper.TRY_FAILED_WRONG_EMAIL_OR_PASSWORD;
 import static coffee.machine.i18n.message.key.error.CommandErrorKey.ERROR_LOGIN_NO_SUCH_COMBINATION;
-import static coffee.machine.view.Attributes.ADMIN_ID;
-import static coffee.machine.view.Attributes.ERROR_MESSAGE;
-import static coffee.machine.view.Attributes.PREVIOUS_ENTERED_EMAIL;
+import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.REDIRECTED;
 import static coffee.machine.view.Parameters.LOGIN_PARAM;
 import static coffee.machine.view.Parameters.PASSWORD_PARAM;
@@ -48,6 +46,10 @@ public class AdminLoginSubmitCommand extends CommandExecuteWrapper {
         String email = request.getParameter(LOGIN_PARAM);
         String password = request.getParameter(PASSWORD_PARAM);
         request.setAttribute(PREVIOUS_ENTERED_EMAIL, email);
+
+        if (helper.isDoubleLoginAttempt(request)){
+            return PagesPaths.LOGIN_PAGE;
+        }
 
         if (!helper.processLoginForm(request, email, password)) {
             return PagesPaths.LOGIN_PAGE;

@@ -1,5 +1,6 @@
 package coffee.machine.controller.impl.command.user;
 
+import coffee.machine.CoffeeMachineConfig;
 import coffee.machine.controller.impl.command.CommandExecuteWrapper;
 import coffee.machine.i18n.message.key.GeneralKey;
 import coffee.machine.service.AccountService;
@@ -27,6 +28,7 @@ public class UserPurchaseCommand extends CommandExecuteWrapper {
         request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_USER_PURCHASE);
         int userId = (int) request.getSession().getAttribute(Attributes.USER_ID);
         request.setAttribute(Attributes.USER_ACCOUNT, accountService.getByUserId(userId));
+        request.setAttribute(Attributes.ADMIN_CONTACTS, CoffeeMachineConfig.ADMIN_CONTACT_INFO);
         request.setAttribute(Attributes.DRINKS, drinkService.getAll());
         return PagesPaths.USER_PURCHASE_PAGE;
     }

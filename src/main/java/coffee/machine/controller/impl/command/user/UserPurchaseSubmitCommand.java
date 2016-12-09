@@ -1,5 +1,6 @@
 package coffee.machine.controller.impl.command.user;
 
+import coffee.machine.CoffeeMachineConfig;
 import coffee.machine.controller.impl.command.CommandExecuteWrapper;
 import coffee.machine.controller.impl.command.request.data.extractor.ItemsStringFormDataExtractor;
 import coffee.machine.controller.impl.command.request.data.extractor.impl.ItemsStringFormDataExtractorImpl;
@@ -45,6 +46,7 @@ public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_USER_PURCHASE);
+        request.setAttribute(Attributes.ADMIN_CONTACTS, CoffeeMachineConfig.ADMIN_CONTACT_INFO);
         request.setAttribute(Attributes.PREVIOUS_VALUES_TABLE,
                 formStringDataExtractor.getAllItemParameterValuesFromRequest(request));
 

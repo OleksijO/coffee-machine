@@ -39,5 +39,7 @@ public final class Attributes {
 
     public static final String PREVIOUS_VALUES_TABLE = "previous_values_table";
 
+    public static final String ADMIN_CONTACTS = "admin_contacts";
+
 
 }

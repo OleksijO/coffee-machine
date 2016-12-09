@@ -11,6 +11,14 @@
     <fmt:formatNumber value="${requestScope[Attributes.USER_ACCOUNT].realAmount}" type="number"
                       minFractionDigits="2" maxFractionDigits="2"/>
     <fmt:message key="currency"/>.<br>
+    <c:if test="${requestScope[Attributes.USER_ACCOUNT].realAmount lt 15}">
+        <br>
+        <p style="color: red"><fmt:message
+                key="user.purchase.your.balance.too.low.contact.administrator.to.add.credits"/>:
+                ${requestScope[Attributes.ADMIN_CONTACTS]}
+        </p>
+    </c:if>
+
     <br>
     <table cellpadding="10" cellspacing="2" border="1">
         <tr>

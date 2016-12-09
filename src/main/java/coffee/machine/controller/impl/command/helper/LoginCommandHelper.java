@@ -9,6 +9,8 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import java.util.regex.Pattern;
 
+import static coffee.machine.view.Attributes.*;
+
 /**
  * This class represents login page main functionality helper.
  * This is template for specific role user/admin login pages.
@@ -58,5 +60,12 @@ public class LoginCommandHelper implements ControllerErrorLogging {
         return (stringToCheck != null) && (pattern.matcher(stringToCheck).matches());
     }
 
-
+    public boolean isDoubleLoginAttempt(HttpServletRequest request){
+        if ((request.getSession().getAttribute(USER_ID)!=null)
+                ||(request.getSession().getAttribute(ADMIN_ID)!=null)){
+            request.setAttribute(ERROR_MESSAGE, CommandErrorKey.ERROR_LOGIN_YOU_ARE_ALREADY_LOGGED_IN);
+            return true;
+        }
+        return false;
+    }
 }

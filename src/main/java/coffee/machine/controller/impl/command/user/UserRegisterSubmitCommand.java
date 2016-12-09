@@ -1,5 +1,6 @@
 package coffee.machine.controller.impl.command.user;
 
+import coffee.machine.CoffeeMachineConfig;
 import coffee.machine.controller.impl.command.CommandExecuteWrapper;
 import coffee.machine.controller.impl.command.helper.UserRegisterCommandHelper;
 import coffee.machine.controller.security.PasswordEncryptor;
@@ -67,7 +68,11 @@ public class UserRegisterSubmitCommand extends CommandExecuteWrapper {
             logger.error(CANT_CREATE_USER + user);
             throw e;
         }
+
         logger.info(String.format(NEW_USER_HAS_BEEN_REGISTERED_FORMAT, user.getEmail(), user.getId()));
+
+        request.setAttribute(Attributes.ADMIN_CONTACTS, CoffeeMachineConfig.ADMIN_CONTACT_INFO);
+
         return PagesPaths.USER_REGISTER_SUCCESS_PAGE;
     }
 }
