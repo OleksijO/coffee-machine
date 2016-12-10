@@ -53,9 +53,8 @@ public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
 
         int userId = (int) request.getSession().getAttribute(Attributes.USER_ID);
 
-        // performing purchase
         try {
-            // extracting drinks to buy from request
+
             List<Drink> drinksToBuy = getDrinksFromRequest(request);
             Order order = coffeeMachine.prepareDrinksForUser(drinksToBuy, userId);
             request.setAttribute(Attributes.ORDER, order);
@@ -66,31 +65,21 @@ public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
             throw e;
         }
 
-        // putting data to show on view in request
         request.setAttribute(Attributes.USUAL_MESSAGE, CommandKey.PURCHASE_THANKS_MESSAGE);
         placeNecessaryDataToRequest(request, userId);
 
-        // clearing form in case of success operation
-        request.removeAttribute(Attributes.PREVIOUS_VALUES_TABLE);
+        request.removeAttribute(Attributes.PREVIOUS_VALUES_TABLE);  //clearing form in case of success purchase
 
         return PagesPaths.USER_PURCHASE_PAGE;
     }
 
     List<Drink> getDrinksFromRequest(HttpServletRequest request) {
-        // extracting drinks quantity
+
         Map<Integer, Integer> drinkQuantityByIds = formExtractor.getDrinksQuantityByIdFromRequest(request);
-
-        // loading entities from bd
         List<Drink> drinks = drinkService.getAllBaseByIdSet(drinkQuantityByIds.keySet());
-
-        // setting actual drink quantities gotten from request
         setDrinkQuantities(drinks, drinkQuantityByIds);
-
-        // extracting quantity of addons in drinks
         Map<Integer, Map<Integer, Integer>> addonsQuantityInDrinksById =
                 formExtractor.getAddonsQuantityInDrinksByIdFromRequest(request);
-
-        // setting actual drink quantities gotten from request
         setAddonsQuantityInDrinks(addonsQuantityInDrinksById, drinks);
 
         return drinks;
@@ -98,17 +87,16 @@ public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
 
 
     void setDrinkQuantities(List<Drink> drinks, Map<Integer, Integer> drinkQuantityByIds) {
+
         drinks.forEach(drink -> {
-
             drink.setQuantity(drinkQuantityByIds.get(drink.getId()));
-
         });
     }
 
     void setAddonsQuantityInDrinks(Map<Integer, Map<Integer, Integer>> addonsQuantityInDrinksById, List<Drink> drinks) {
+
         drinks.forEach(drink -> {
             Map<Integer, Integer> addonsQuantityById = addonsQuantityInDrinksById.get(drink.getId());
-
             if (addonsQuantityById != null) {
                 drink.getAddons().forEach(addon -> {
 

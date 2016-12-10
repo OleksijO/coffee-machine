@@ -33,7 +33,7 @@ public abstract class CommandExecuteWrapper implements Command, ControllerErrorL
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        // common try-catch wrapper for specific command logic
+        // common try-catch wrapper for command logic, which could throw application or any other exception
         try {
 
             return performExecute(request, response);
@@ -51,7 +51,7 @@ public abstract class CommandExecuteWrapper implements Command, ControllerErrorL
     }
 
     /**
-     * This method should be overridden in childs and should perform specific logic of logging in
+     * This method should be overridden in child classes and should perform specific logic
      *
      * @param request  request instance
      * @param response responce instance

@@ -49,17 +49,23 @@ public class UserRegisterSubmitCommand extends CommandExecuteWrapper {
             return USER_REGISTER_PAGE;
         }
 
-        User user = new User();
-        user.setAdmin(false);
-        user.setFullName(formData.getFullName());
-        user.setEmail(formData.getEmail());
-        user.setPassword(PasswordEncryptor.encryptPassword(formData.getPassword()));
+        User user = getUserFromFormData(formData);
 
         userService.createNewUser(user);
+
         logger.info(String.format(NEW_USER_HAS_BEEN_REGISTERED_FORMAT, user.getEmail(), user.getId()));
 
         request.setAttribute(Attributes.ADMIN_CONTACTS, CoffeeMachineConfig.ADMIN_CONTACT_INFO);
 
         return USER_REGISTER_SUCCESS_PAGE;
+    }
+
+    private User getUserFromFormData(RegisterFormData formData) {
+        User user = new User();
+        user.setAdmin(false);
+        user.setFullName(formData.getFullName());
+        user.setEmail(formData.getEmail());
+        user.setPassword(PasswordEncryptor.encryptPassword(formData.getPassword()));
+        return user;
     }
 }
