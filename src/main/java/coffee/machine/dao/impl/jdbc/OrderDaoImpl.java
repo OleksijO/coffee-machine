@@ -149,38 +149,51 @@ public class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     private List<Order> parseResultSets(ResultSet rsOrder, ResultSet rsDrink, ResultSet rsAddon) throws SQLException {
         List<Order> orderList = new ArrayList<>();
         while (rsOrder.next()) {
-            int orderId = rsOrder.getInt(FIELD_ID);
-            Order order = new Order();
-            order.setId(orderId);
-            order.setUserId(rsOrder.getInt(FIELD_USER_ID));
-            order.setDate(toDate(rsOrder.getTimestamp(FIELD_DATE_TIME)));
-            order.setAmount(rsOrder.getLong(FIELD_AMOUNT));
-            order.setDrinks(new ArrayList<>());
+            Order order = getOrderFromResultSet(rsOrder);
             orderList.add(order);
         }
         while (rsDrink.next()) {
             int orderId = rsDrink.getInt(FIELD_ID);
             Order order = getOrderFromListById(orderList, orderId);
-            Drink drink = new Drink();
-            drink.setId(rsDrink.getInt(FIELD_DRINK_ID));
-            drink.setQuantity(rsDrink.getInt(FIELD_ITEM_QUANTITY));
-            drink.setName(rsDrink.getString(FIELD_ITEM_NAME));
-            drink.setAddons(new TreeSet<>());
+            Drink drink = getDrinkFromResultSet(rsDrink);
             order.getDrinks().add(drink);
         }
         while (rsAddon.next()) {
             Order order = getOrderFromListById(orderList, rsAddon.getInt(FIELD_ID));
             Drink drink = getDrinkFromListById(order.getDrinks(), rsAddon.getInt(FIELD_DRINK_ID));
-            Item addon = new Item();
-            addon.setId(rsAddon.getInt(FIELD_ADDON_ID));
-            addon.setQuantity(rsAddon.getInt(FIELD_ITEM_QUANTITY));
-            addon.setName(rsAddon.getString(FIELD_ITEM_NAME));
+            Item addon = getItemFromResultSet(rsAddon);
             drink.getAddons().add(addon);
         }
 
         return orderList;
     }
 
+    private Order getOrderFromResultSet(ResultSet rsOrder) throws SQLException {
+        Order order = new Order();
+        order.setId(rsOrder.getInt(FIELD_ID));
+        order.setUserId(rsOrder.getInt(FIELD_USER_ID));
+        order.setDate(toDate(rsOrder.getTimestamp(FIELD_DATE_TIME)));
+        order.setAmount(rsOrder.getLong(FIELD_AMOUNT));
+        order.setDrinks(new ArrayList<>());
+        return order;
+    }
+
+    private Drink getDrinkFromResultSet(ResultSet rsDrink) throws SQLException {
+        Drink drink = new Drink();
+        drink.setId(rsDrink.getInt(FIELD_DRINK_ID));
+        drink.setQuantity(rsDrink.getInt(FIELD_ITEM_QUANTITY));
+        drink.setName(rsDrink.getString(FIELD_ITEM_NAME));
+        drink.setAddons(new TreeSet<>());
+        return drink;
+    }
+
+    private Item getItemFromResultSet(ResultSet rsAddon) throws SQLException {
+        Item addon = new Item();
+        addon.setId(rsAddon.getInt(FIELD_ADDON_ID));
+        addon.setQuantity(rsAddon.getInt(FIELD_ITEM_QUANTITY));
+        addon.setName(rsAddon.getString(FIELD_ITEM_NAME));
+        return addon;
+    }
 
     private Order getOrderFromListById(List<Order> orderList, int orderId) {
         Order order;
