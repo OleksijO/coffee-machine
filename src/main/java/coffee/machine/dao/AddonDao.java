@@ -1,9 +1,9 @@
 package coffee.machine.dao;
 
+import coffee.machine.model.entity.item.Item;
+
 import java.util.List;
 import java.util.Set;
-
-import coffee.machine.model.entity.item.Item;
 
 /**
  * This class represents addon entity DAO functionality
@@ -37,9 +37,9 @@ public interface AddonDao extends GenericDao<Item> {
 	List<Item> getAllFromList(List<Item> addons);
 
 	/**
-	 * @param itemIds
+	 * @param addonIds
 	 *            list of ids, which entities has to be retrieved from database
-	 * @return
+	 * @return actual list of addons, which id's specified in argument
 	 */
-	List<Item> getAllByIds(Set<Integer> itemIds);
+	List<Item> getAllByIds(Set<Integer> addonIds);
 }

@@ -19,7 +19,7 @@ import static coffee.machine.dao.impl.jdbc.ItemDaoImpl.*;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
+class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
     private static final Logger logger = Logger.getLogger(DrinkDaoImpl.class);
     private static final String SELECT_ALL_DRINKS_WITH_ADDONS_FORMAT = "" +
             " SELECT id, name, price, quantity, type, drink_id AS parent_id " +
@@ -37,7 +37,7 @@ public class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
     private final Connection connection;
     private ItemDaoImpl itemDao;
 
-    public DrinkDaoImpl(Connection connection) {
+    DrinkDaoImpl(Connection connection) {
         this.connection = connection;
         itemDao = new ItemDaoImpl(connection);
     }

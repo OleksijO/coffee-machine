@@ -18,8 +18,8 @@ public class DaoFactoryImpl implements DaoFactory, DaoErrorProcessing {
 
     private static final String SQL_CONNECTION_CAN_NOT_BE_NULL =
             "SQL connection can not be null. Datasource returned no connection.";
-    public static final String CONNECTION_CAN_NOT_BE_NULL = "Connection can not be null.";
-    public static final String CONNECTION_IS_NOT_AN_ABSTRACT_CONNECTION_IMPL_FOR_JDBC = "Connection is not an AbstractConnectionImpl for JDBC.";
+    private static final String CONNECTION_CAN_NOT_BE_NULL = "Connection can not be null.";
+    private static final String CONNECTION_IS_NOT_AN_ABSTRACT_CONNECTION_IMPL_FOR_JDBC = "Connection is not an AbstractConnectionImpl for JDBC.";
 
     private final DataSource dataSource = JdbcPooledDataSource.getInstance();
 

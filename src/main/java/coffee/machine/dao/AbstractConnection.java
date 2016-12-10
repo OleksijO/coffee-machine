@@ -31,7 +31,7 @@ public interface AbstractConnection extends AutoCloseable {
 	 *
 	 * IMPORTANT.
 	 * It MUST call ROLLBACK IF TRANSACTION has been begun
-	 * but was NOT COMMITTED before close method was called.
+	 * but was NOT COMMITTED before close method was called, f.e. if any exception was thrown
 	 */
 	@Override
 	void close();

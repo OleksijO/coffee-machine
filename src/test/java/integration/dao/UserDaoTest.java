@@ -52,8 +52,8 @@ public class UserDaoTest {
     @Test
     public void testGetAll() {
         List<User> testUsersOrderedByFullName=new ArrayList<>();
-        testUsersOrderedByFullName.add(testUsers.get(0));
         testUsersOrderedByFullName.add(testUsers.get(2));
+        testUsersOrderedByFullName.add(testUsers.get(0));
         testUsersOrderedByFullName.add(testUsers.get(1));
         List<User> users = userDao.getAll();
         System.out.println(testUsers);

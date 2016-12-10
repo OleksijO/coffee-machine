@@ -6,6 +6,7 @@ import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.item.Item;
 import coffee.machine.service.AddonService;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,8 @@ import java.util.Map;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class AddonServiceImpl implements AddonService {
+    private static final Logger logger = Logger.getLogger(AddonServiceImpl.class);
+
     private static final String QUANTITIES_BY_ID_SHOULD_CONTAIN_ANY_DATA_GOT_OBJECT =
             "Quantities by id should contain any data. Got object: ";
 
@@ -49,8 +52,9 @@ public class AddonServiceImpl implements AddonService {
     @Override
     public void refill(Map<Integer, Integer> quantitiesById) {
         if ((quantitiesById == null) || (quantitiesById.size() == 0)) {
-            throw new IllegalArgumentException(
+            logger.error(
                     QUANTITIES_BY_ID_SHOULD_CONTAIN_ANY_DATA_GOT_OBJECT + quantitiesById);
+            return;
         }
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
@@ -61,7 +65,6 @@ public class AddonServiceImpl implements AddonService {
                     addon -> addon.setQuantity(addon.getQuantity() + quantitiesById.get(addon.getId())));
             addonDao.updateQuantityAllInList(addonsToUpdate);
             connection.commitTransaction();
-
         }
     }
 }

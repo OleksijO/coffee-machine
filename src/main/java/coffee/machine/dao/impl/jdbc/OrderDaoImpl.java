@@ -15,7 +15,7 @@ import java.util.Date;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
+class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
 
     private static final Logger logger = Logger.getLogger(OrderDaoImpl.class);
 

@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
+class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
     private static final Logger logger = Logger.getLogger(AccountDaoImpl.class);
 
     private static final String SELECT_ALL_SQL = "SELECT id, amount FROM account";

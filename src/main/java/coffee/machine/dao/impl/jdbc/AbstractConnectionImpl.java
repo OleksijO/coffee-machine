@@ -13,7 +13,7 @@ import java.sql.SQLException;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class AbstractConnectionImpl implements AbstractConnection, DaoErrorProcessing {
+class AbstractConnectionImpl implements AbstractConnection, DaoErrorProcessing {
     private static final Logger logger = Logger.getLogger(AbstractConnectionImpl.class);
 
     private static final String CAN_NOT_BEGIN_TRANSACTION = "Can not begin transaction.";

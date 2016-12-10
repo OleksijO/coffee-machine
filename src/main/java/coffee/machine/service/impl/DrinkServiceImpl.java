@@ -6,6 +6,7 @@ import coffee.machine.dao.DrinkDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.service.DrinkService;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 
@@ -15,6 +16,8 @@ import java.util.*;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class DrinkServiceImpl implements DrinkService {
+    private static final Logger logger = Logger.getLogger(DrinkServiceImpl.class);
+
     private static final String QUANTITIES_BY_ID_SHOULD_CONTAIN_ANY_DATA_GOT_OBJECT =
             "Quantities by id should contain any data. Got object: ";
 
@@ -47,8 +50,9 @@ public class DrinkServiceImpl implements DrinkService {
     @Override
     public void refill(Map<Integer, Integer> quantitiesById) {
         if ((quantitiesById == null) || (quantitiesById.size() == 0)) {
-            throw new IllegalArgumentException(
+            logger.error(
                     QUANTITIES_BY_ID_SHOULD_CONTAIN_ANY_DATA_GOT_OBJECT + quantitiesById);
+            return;
         }
         try (AbstractConnection connection = daoFactory.getConnection()) {
 

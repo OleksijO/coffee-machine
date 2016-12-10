@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class ItemDaoImpl extends AbstractDao<Item> {
+class ItemDaoImpl extends AbstractDao<Item> {
     private static final Logger logger = Logger.getLogger(ItemDaoImpl.class);
 
     private static final String SELECT_ALL_SQL =
@@ -38,7 +38,7 @@ public class ItemDaoImpl extends AbstractDao<Item> {
 
     private final Connection connection;
 
-    public ItemDaoImpl(Connection connection) {
+    ItemDaoImpl(Connection connection) {
         this.connection = connection;
     }
 

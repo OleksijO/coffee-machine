@@ -16,7 +16,7 @@ import java.util.List;
  * @param <T> Entity class
  */
 abstract class AbstractDao<T> implements GenericDao<T>, DaoErrorProcessing {
-    protected static final String FOR_UPDATE = " FOR UPDATE ";
+    static final String FOR_UPDATE = " FOR UPDATE ";
     private final Logger logger = Logger.getLogger(AbstractDao.class);
 
     static final String DB_ERROR_UNEXPECTED_MULTIPLE_RESULT_WHILE_GETTING_BY_ID =

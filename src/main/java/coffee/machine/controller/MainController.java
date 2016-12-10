@@ -24,9 +24,10 @@ import static coffee.machine.view.PagesPaths.HOME_PAGE;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class MainController extends HttpServlet implements ControllerErrorLogging {
-    static final Logger logger = Logger.getLogger(MainController.class);
-    public static final String URI_IS = " : uri = ";
-    public static final String REQUESTED_PATH_IS_NOT_SUPPORTED_REDIRECTING_TO_HOME_PAGE_FORMAT = "Requested path '%s' is not supported. Redirecting to home page.";
+    private static final Logger logger = Logger.getLogger(MainController.class);
+    private static final String URI_IS = " : uri = ";
+    private static final String REQUESTED_PATH_IS_NOT_SUPPORTED_REDIRECTING_TO_HOME_PAGE_FORMAT =
+            "Requested path '%s' is not supported. Redirecting to home page.";
 
     /**
      * Command holder instance
@@ -37,7 +38,6 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
     @Override
     public void init() throws ServletException {
         super.init();
-		// initializing holder for commands by uri
         commandHolder = new CommandHolderImpl();
     }
 
@@ -53,7 +53,6 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
     void processRequest(Command command, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         try {
-            // in case of unsupported uri redirecting to home page
             if (command == null) {
                 logger.info(String.format(
                         REQUESTED_PATH_IS_NOT_SUPPORTED_REDIRECTING_TO_HOME_PAGE_FORMAT,request.getRequestURI()));
@@ -63,9 +62,8 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
 
             String view = command.execute(request, response);
 
-            // redirected to reset uri
             if (PagesPaths.REDIRECTED.equals(view)) {
-                return;
+                return;     // redirected to reset uri
             }
 
             request.getRequestDispatcher(view).forward(request, response);
@@ -80,6 +78,7 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
             logError(logger, request, e);
             request.setAttribute(ERROR_MESSAGE, ERROR_UNKNOWN);
         }
+
         request.getRequestDispatcher(HOME_PAGE).forward(request, response);
     }
 
@@ -87,7 +86,6 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // getting command for GET requests
         String uri = getUri(request);
         processRequest(commandHolder.get(uri), request, response);
     }
@@ -102,7 +100,6 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // getting command for POST requests
         String uri = getUri(request);
         processRequest(commandHolder.post(uri), request, response);
     }

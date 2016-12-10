@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class UserDaoImpl extends AbstractDao<User> implements UserDao {
+class UserDaoImpl extends AbstractDao<User> implements UserDao {
     private static final Logger logger = Logger.getLogger(UserDaoImpl.class);
 
     private static final String DB_ERROR_WHILE_GETTING_BY_LOGIN = "Database error while getting user by login";
@@ -45,7 +45,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
     private final Connection connection;
     private final AccountDao accountDao;
 
-    public UserDaoImpl(Connection connection, AccountDao accountDao) {
+    UserDaoImpl(Connection connection, AccountDao accountDao) {
         this.connection = connection;
         this.accountDao = accountDao;
     }

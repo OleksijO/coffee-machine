@@ -1,9 +1,9 @@
 package coffee.machine.dao;
 
+import coffee.machine.model.entity.item.Drink;
+
 import java.util.List;
 import java.util.Set;
-
-import coffee.machine.model.entity.item.Drink;
 
 /**
  * This class represents drink entity DAO functionality
@@ -12,18 +12,33 @@ import coffee.machine.model.entity.item.Drink;
  */
 public interface DrinkDao extends GenericDao<Drink> {
 
+	/**
+	 * @param drinks
+	 *            Drink list to be retrieved from database in actual state
+	 * @return actual list of drinks, listed in argument
+	 */
 	List<Drink> getAllFromList(List<Drink> drinks);
 
 	/**
-	 * Updates quantity of all drinks in list in corresponding saved entities in
-	 * database
+	 * Updates quantity of all drinks in the database
 	 * 
 	 * @param drinks
 	 *            Entities, which quantities have to be updated.
 	 */
 	void updateQuantityAllInList(List<Drink> drinks);
 
+	/**
+	 * @param drinkIds
+	 *            list of ids, which entities has to be retrieved from the database
+	 * @return actual list of drinks, which id's specified in argument
+	 */
 	List<Drink> getAllByIds(Set<Integer> drinkIds);
 
+	/**
+	 * Updates quantity of drink in the database
+	 *
+	 * @param drink
+	 *            Entity, which quantity has to be updated.
+	 */
 	void updateQuantity(Drink drink);
 }

@@ -16,10 +16,10 @@ import java.util.Set;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class AddonDaoImpl extends AbstractDao<Item> implements AddonDao {
+class AddonDaoImpl extends AbstractDao<Item> implements AddonDao {
     private ItemDaoImpl itemDao;
 
-    public AddonDaoImpl(Connection connection) {
+    AddonDaoImpl(Connection connection) {
         itemDao = new ItemDaoImpl(connection);
     }
 
