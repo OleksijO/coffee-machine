@@ -104,7 +104,7 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 
     @Override
     public Account getById(int id) {
-        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_ID)) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_ID + FOR_UPDATE)) {
 
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -122,7 +122,7 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 
     @Override
     public Account getByUserId(int userId) {
-        try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_USER_ID_SQL)) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_USER_ID_SQL + FOR_UPDATE)) {
             statement.setInt(1, userId);
 
             try (ResultSet resultSet = statement.executeQuery()) {

@@ -156,7 +156,7 @@ public class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
     public Drink getById(int id) {
         try (PreparedStatement statement =
                      connection.prepareStatement(
-                             String.format(SELECT_ALL_DRINKS_WITH_ADDONS_FORMAT, WHERE_ID_OR_DRINK_ID))) {
+                             String.format(SELECT_ALL_DRINKS_WITH_ADDONS_FORMAT, WHERE_ID_OR_DRINK_ID)+FOR_UPDATE)) {
 
             statement.setInt(1, id);
             statement.setInt(2, id);
@@ -168,7 +168,7 @@ public class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
                 return drinks == null || drinks.isEmpty() ? null : drinks.get(0);
             }
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_ALL, e);
+            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_BY_ID, e);
         }
         throw new InternalError(); // STUB for compiler
 

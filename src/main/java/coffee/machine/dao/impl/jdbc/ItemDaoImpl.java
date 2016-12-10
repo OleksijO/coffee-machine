@@ -1,8 +1,8 @@
 package coffee.machine.dao.impl.jdbc;
 
-import coffee.machine.model.entity.item.ItemType;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
+import coffee.machine.model.entity.item.ItemType;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
@@ -137,7 +137,7 @@ public class ItemDaoImpl extends AbstractDao<Item> {
 
     @Override
     public Item getById(int id) {
-        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_ITEM_ID)) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL  + WHERE_ITEM_ID + FOR_UPDATE)) {
 
             statement.setInt(1, id);
 
