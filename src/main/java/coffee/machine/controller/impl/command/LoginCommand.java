@@ -1,9 +1,8 @@
 package coffee.machine.controller.impl.command;
 
-import coffee.machine.i18n.message.key.GeneralKey;
-import coffee.machine.view.Attributes;
-import coffee.machine.view.PagesPaths;
 import coffee.machine.controller.Command;
+import coffee.machine.controller.impl.command.helper.LoginCommandHelper;
+import coffee.machine.view.PagesPaths;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,12 +13,11 @@ import javax.servlet.http.HttpServletResponse;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class LoginCommand implements Command {
+	private LoginCommandHelper helper = new LoginCommandHelper();
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
-		request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_LOGIN);
-		request.setAttribute(Attributes.LOGIN_FORM_TITLE, GeneralKey.LOGIN_FORM_TITLE);
-		request.setAttribute(Attributes.LOGIN_FORM_ACTION, PagesPaths.LOGIN_PATH);
+		helper.setGeneralLoginPageAttributes(request);
 		return PagesPaths.LOGIN_PAGE;
 	}
 

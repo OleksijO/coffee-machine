@@ -3,11 +3,9 @@ package coffee.machine.controller.impl.command;
 import coffee.machine.controller.impl.command.helper.LoginCommandHelper;
 import coffee.machine.controller.impl.command.helper.LoginFormData;
 import coffee.machine.controller.security.PasswordEncryptor;
-import coffee.machine.i18n.message.key.GeneralKey;
 import coffee.machine.model.entity.user.User;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.UserServiceImpl;
-import coffee.machine.view.Attributes;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,16 +26,19 @@ public class LoginSubmitCommand extends CommandExecuteWrapper {
     private static final Logger logger = Logger.getLogger(LoginSubmitCommand.class);
     private static final String USER_ROLE_IS_NOT_IDENTIFIED = "User role is not identified";
 
-    UserService userService = UserServiceImpl.getInstance();
-    LoginCommandHelper helper = new LoginCommandHelper();
+    private UserService userService = UserServiceImpl.getInstance();
+    private LoginCommandHelper helper = new LoginCommandHelper();
 
     public LoginSubmitCommand() {
         super(LOGIN_PAGE);
     }
 
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        setGeneralLoginPageAttributes(request);
+        helper.setGeneralLoginPageAttributes(request);
         LoginFormData formData = helper.processLoginForm(request);
+
+        request.setAttribute(PREVIOUS_ENTERED_EMAIL, formData.getEmail());
+
         if (helper.isDoubleLoginAttempt(request)) {
             return LOGIN_PAGE;
         }
@@ -60,11 +61,6 @@ public class LoginSubmitCommand extends CommandExecuteWrapper {
         return LOGIN_PAGE;
     }
 
-    private void setGeneralLoginPageAttributes(HttpServletRequest request) {
-        request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_LOGIN);
-        request.setAttribute(Attributes.LOGIN_FORM_TITLE, GeneralKey.LOGIN_FORM_TITLE);
-        request.setAttribute(Attributes.LOGIN_FORM_ACTION, LOGIN_PATH);
-    }
 
     private void performActionsToLogIn(HttpServletRequest request, HttpServletResponse response, User user)
             throws IOException {
@@ -72,14 +68,12 @@ public class LoginSubmitCommand extends CommandExecuteWrapper {
 
             helper.performActionsToLogInRole(request, response, ADMIN_LOGGED_IN,
                     user.getId(), ADMIN_ID, ADMIN_HOME_PATH);
-            return;
-        } else if (!user.isAdmin()) {
+
+        } else {
 
             helper.performActionsToLogInRole(request, response, USER_LOGGED_IN,
                     user.getId(), USER_ID, USER_HOME_PATH);
-            return;
         }
-        throw new UnsupportedOperationException(USER_ROLE_IS_NOT_IDENTIFIED);
     }
 
 }

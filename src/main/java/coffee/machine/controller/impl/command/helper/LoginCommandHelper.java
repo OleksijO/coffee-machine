@@ -2,6 +2,7 @@ package coffee.machine.controller.impl.command.helper;
 
 import coffee.machine.controller.RegExp;
 import coffee.machine.controller.logging.ControllerErrorLogging;
+import coffee.machine.i18n.message.key.GeneralKey;
 import coffee.machine.i18n.message.key.error.CommandErrorKey;
 import coffee.machine.view.Attributes;
 import coffee.machine.view.Parameters;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 
 import static coffee.machine.view.Attributes.*;
+import static coffee.machine.view.PagesPaths.LOGIN_PATH;
 import static coffee.machine.view.Parameters.PASSWORD_PARAM;
 
 /**
@@ -28,10 +30,8 @@ public class LoginCommandHelper implements ControllerErrorLogging {
     private static final Pattern PATTERN_PASSWORD = Pattern.compile(RegExp.REGEXP_PASSWORD);
 
     public static final String TRY_FAILED_WRONG_EMAIL_OR_PASSWORD =
-            "LOGIN_PARAM TRY FAILED: no such combination of email and password.";
+            "LOGIN TRY FAILED: no such combination of email and password.";
 
-    private static final String TRY_FAILED_WRONG_EMAIL = " LOGIN_PARAM TRY FAILED: wrong email: ";
-    private static final String TRY_FAILED_WRONG_PASSWORD = " LOGIN_PARAM TRY FAILED: password do not matches pattern.";
     public static final String USER_LOGGED_IN = "USER id=%d LOGGED IN.";
     public static final String ADMIN_LOGGED_IN = "ADMIN id=%d LOGGED IN.";
 
@@ -43,17 +43,13 @@ public class LoginCommandHelper implements ControllerErrorLogging {
 
         if (!checkLogin(email)) {
             request.setAttribute(Attributes.ERROR_MESSAGE, CommandErrorKey.ERROR_LOGIN_EMAIL_DO_NOT_MATCH_PATTERN);
-            logger.info(TRY_FAILED_WRONG_EMAIL + email);
             return formData;
         }
 
         if (!checkPassword(password)) {
             request.setAttribute(Attributes.ERROR_MESSAGE, CommandErrorKey.ERROR_LOGIN_PASSWORD_DO_NOT_MATCH_PATTERN);
-            logger.info(TRY_FAILED_WRONG_PASSWORD);
             return formData;
         }
-
-        request.setAttribute(PREVIOUS_ENTERED_EMAIL, formData);
 
         formData.setValid(true);
         return formData;
@@ -80,13 +76,19 @@ public class LoginCommandHelper implements ControllerErrorLogging {
         return false;
     }
 
-   public void performActionsToLogInRole(HttpServletRequest request,
-                                           HttpServletResponse response,
-                                           String logMessageFormat, int userId,
-                                           String sessionAttribute,
-                                           String redirectPath) throws IOException {
+    public void performActionsToLogInRole(HttpServletRequest request,
+                                          HttpServletResponse response,
+                                          String logMessageFormat, int userId,
+                                          String sessionAttribute,
+                                          String redirectPath) throws IOException {
         logger.info(String.format(logMessageFormat, userId));
         request.getSession().setAttribute(sessionAttribute, userId);
         response.sendRedirect(redirectPath);
+    }
+
+    public void setGeneralLoginPageAttributes(HttpServletRequest request) {
+        request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_LOGIN);
+        request.setAttribute(Attributes.LOGIN_FORM_TITLE, GeneralKey.LOGIN_FORM_TITLE);
+        request.setAttribute(Attributes.LOGIN_FORM_ACTION, LOGIN_PATH);
     }
 }

@@ -2,15 +2,13 @@ package coffee.machine.controller.impl.command.user;
 
 import coffee.machine.CoffeeMachineConfig;
 import coffee.machine.controller.impl.command.CommandExecuteWrapper;
+import coffee.machine.controller.impl.command.helper.RegisterFormData;
 import coffee.machine.controller.impl.command.helper.UserRegisterCommandHelper;
 import coffee.machine.controller.security.PasswordEncryptor;
-import coffee.machine.i18n.message.key.GeneralKey;
 import coffee.machine.model.entity.user.User;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.UserServiceImpl;
 import coffee.machine.view.Attributes;
-import coffee.machine.view.PagesPaths;
-import coffee.machine.view.Parameters;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,8 +18,7 @@ import java.io.IOException;
 import static coffee.machine.view.Attributes.PREVIOUS_ENTERED_EMAIL;
 import static coffee.machine.view.Attributes.PREVIOUS_ENTERED_FULL_NAME;
 import static coffee.machine.view.PagesPaths.USER_REGISTER_PAGE;
-import static coffee.machine.view.Parameters.FULL_NAME_PARAM;
-import static coffee.machine.view.Parameters.PASSWORD_PARAM;
+import static coffee.machine.view.PagesPaths.USER_REGISTER_SUCCESS_PAGE;
 
 /**
  * Created by oleksij.onysymchuk@gmail on 08.12.2016.
@@ -42,37 +39,27 @@ public class UserRegisterSubmitCommand extends CommandExecuteWrapper {
 
     @Override
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_USER_REGISTER);
-        request.setAttribute(Attributes.REGISTER_FORM_TITLE, GeneralKey.REGISTER_USER_FORM_TITLE);
-        request.setAttribute(Attributes.REGISTER_FORM_ACTION, PagesPaths.USER_REGISTER_PATH);
+        helper.setGeneralRegisterPageAttributes(request);
+        RegisterFormData formData = helper.processRegisterForm(request);
 
-        String email = request.getParameter(Parameters.LOGIN_PARAM);
-        request.setAttribute(PREVIOUS_ENTERED_EMAIL, email);
-        String password = request.getParameter(PASSWORD_PARAM);
-        String fullName = request.getParameter(FULL_NAME_PARAM);
-        request.setAttribute(PREVIOUS_ENTERED_FULL_NAME, fullName);
+        request.setAttribute(PREVIOUS_ENTERED_EMAIL, formData.getEmail());
+        request.setAttribute(PREVIOUS_ENTERED_FULL_NAME, formData.getFullName());
 
-        if (!helper.processRegisterForm(request, email, password, fullName)) {
+        if (!formData.isValid()) {
             return USER_REGISTER_PAGE;
         }
 
-        String encryptedPassword = PasswordEncryptor.encryptPassword(password);
         User user = new User();
         user.setAdmin(false);
-        user.setFullName(fullName);
-        user.setEmail(email);
-        user.setPassword(encryptedPassword);
-        try {
-            userService.createNewUser(user);
-        } catch (Exception e) {
-            logger.error(CANT_CREATE_USER + user);
-            throw e;
-        }
+        user.setFullName(formData.getFullName());
+        user.setEmail(formData.getEmail());
+        user.setPassword(PasswordEncryptor.encryptPassword(formData.getPassword()));
 
+        userService.createNewUser(user);
         logger.info(String.format(NEW_USER_HAS_BEEN_REGISTERED_FORMAT, user.getEmail(), user.getId()));
 
         request.setAttribute(Attributes.ADMIN_CONTACTS, CoffeeMachineConfig.ADMIN_CONTACT_INFO);
 
-        return PagesPaths.USER_REGISTER_SUCCESS_PAGE;
+        return USER_REGISTER_SUCCESS_PAGE;
     }
 }

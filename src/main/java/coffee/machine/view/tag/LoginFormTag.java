@@ -1,6 +1,7 @@
 package coffee.machine.view.tag;
 
 import coffee.machine.CoffeeMachineConfig;
+import coffee.machine.controller.RegExp;
 import coffee.machine.view.Attributes;
 import org.apache.log4j.Logger;
 
@@ -76,13 +77,17 @@ public class LoginFormTag implements Tag {
                     "                <td><br><label for=\"login\">" + bundle.getString(loginLabelMessageKey)
                                                                     + "</label>&nbsp;<br><br></td>\n" +
                     "                <td><br><input id=\"login\" type=\"text\" name=\"" + parameterLogin + "\"\n" +
-                    "                               value=\"" + loginPreviosValue + "\"/><br><br></td>\n" +
+                    "                               value=\"" + loginPreviosValue + "\"" +
+                    "                  required     pattern=\"" + RegExp.REGEXP_EMAIL + "\""+
+                    "  title=\""+bundle.getString("error.login.email.do.not.match.pattern")+ "\"/><br><br></td>\n" +
                     "            </tr>\n" +
                     "            <tr>\n" +
                     "                <td><br><label for=\"pswd\">" + bundle.getString(passwordLabelMessageKey)
                                                                     + "</label>&nbsp;<br><br></td>\n" +
                     "                <td><br><input id=\"pswd\" type=\"password\" name=\"" + parameterPassword
-                                                                                            + "\"/><br><br></td>\n" +
+                                                                                            + "\""+
+                    "                       required min=4 max=12 pattern=\"" + RegExp.REGEXP_PASSWORD + "\""+
+                    "  title=\""+bundle.getString("error.login.password.do.not.match.pattern")+ "\"/><br><br></td>\n" +
                     "            </tr>\n" +
                     "            <tr>\n" +
                     "                <td colspan=\"2\">\n" +

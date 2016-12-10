@@ -75,4 +75,16 @@ class ItemsBySimpleParameterExtractor {
             throw new ControllerException(GeneralKey.ERROR_UNKNOWN); //this normally should not ever happen
         }
     }
+
+    int getSecondIdFromParam(String param) {
+        Matcher matcher = patternNumber.matcher(param);
+
+        if (matcher.find(0)) {    // passing by first id
+            if (matcher.find(matcher.end())) {
+
+                return Integer.parseInt(param.substring(matcher.start(), matcher.end()));
+            }
+        }
+        throw new ControllerException(GeneralKey.ERROR_UNKNOWN); // this should not happen in normal in-page operation
+    }
 }

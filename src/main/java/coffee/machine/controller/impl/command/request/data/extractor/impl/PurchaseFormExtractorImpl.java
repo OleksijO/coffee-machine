@@ -1,9 +1,7 @@
 package coffee.machine.controller.impl.command.request.data.extractor.impl;
 
 import coffee.machine.controller.RegExp;
-import coffee.machine.controller.exception.ControllerException;
 import coffee.machine.controller.impl.command.request.data.extractor.PurchaseFormDataExtractor;
-import coffee.machine.i18n.message.key.GeneralKey;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
@@ -40,8 +38,7 @@ public class PurchaseFormExtractorImpl implements PurchaseFormDataExtractor {
             Matcher matcher = patternAddonInDrink.matcher(param);
 
             if (matcher.matches()) {
-                //founded needed parameter, can process it
-                int addonId = getAddonIdFromParam(param);
+                int addonId = simpleParameterExtractor.getSecondIdFromParam(param);
                 int addonQuantity = simpleParameterExtractor.getIntFromRequestByParameter(param, request);
 
                 if (addonQuantity > 0) {
@@ -56,18 +53,6 @@ public class PurchaseFormExtractorImpl implements PurchaseFormDataExtractor {
         }
 
         return addonQuantityInDrinksById;
-    }
-
-    private int getAddonIdFromParam(String param) {
-        Matcher matcher = patternNumber.matcher(param);
-
-        if (matcher.find(0)) {    // passing by drink id
-            if (matcher.find(matcher.end())) {
-
-                return Integer.parseInt(param.substring(matcher.start(), matcher.end()));
-            }
-        }
-        throw new ControllerException(GeneralKey.ERROR_UNKNOWN); // this should not happen in normal in-page operation
     }
 
 }
