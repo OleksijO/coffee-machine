@@ -10,19 +10,16 @@ public interface GeneralKey {
 
    String TITLE_HOME = "title.home";
 
-   String TITLE_ADMIN_HOME = "title.admin.home";
    String TITLE_ADMIN_REFILL = "title.admin.refill";
    String TITLE_ADMIN_LOGIN = "title.admin.login";
    String TITLE_ADMIN_ADD_CREDIT = "title.admin.add.credit";
 
    String TITLE_USER_ORDER_HISTORY = "title.user.orders.history";
-   String TITLE_USER_HOME = "title.user.home";
    String TITLE_USER_PURCHASE = "title.user.purchase";
-   String TITLE_USER_LOGIN = "title.user.login";
+   String TITLE_LOGIN = "title.login";
    String TITLE_USER_REGISTER = "title.user.register";
 
-   String LOGIN_ADMIN_FORM_TITLE = "login.form.admin.title";
-   String LOGIN_USER_FORM_TITLE = "login.form.user.title";
+   String LOGIN_FORM_TITLE = "login.form.title";
 
 
     String REGISTER_USER_FORM_TITLE = "register.form.user.title";

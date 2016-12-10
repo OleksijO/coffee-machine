@@ -1,14 +1,13 @@
 package coffee.machine.controller.impl.command.admin;
 
 import coffee.machine.controller.Command;
-import coffee.machine.view.Attributes;
-import coffee.machine.view.PagesPaths;
-import org.apache.log4j.Logger;
+import coffee.machine.controller.impl.command.helper.LogoutCommandHelper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static coffee.machine.view.Attributes.ADMIN_ID;
 import static coffee.machine.view.PagesPaths.REDIRECTED;
 
 /**
@@ -17,17 +16,14 @@ import static coffee.machine.view.PagesPaths.REDIRECTED;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class AdminLogoutCommand implements Command {
-    private static final Logger logger = Logger.getLogger(AdminLogoutCommand.class);
-
     private static final String ADMIN_LOGGED_OUT = "ADMIN id=%d LOGGED OUT.";
+
+    private LogoutCommandHelper helper = new LogoutCommandHelper();
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        logger.info(String.format(ADMIN_LOGGED_OUT, (int) request.getSession().getAttribute(Attributes.ADMIN_ID)));
-
-        request.getSession().removeAttribute(Attributes.ADMIN_ID);
-        response.sendRedirect(PagesPaths.HOME_PATH);
+        helper.performActionsToLogOutOfRole(request, response, ADMIN_LOGGED_OUT, ADMIN_ID);
         return REDIRECTED;
     }
 

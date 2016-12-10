@@ -1,14 +1,17 @@
 package coffee.machine.controller.impl;
 
-import coffee.machine.controller.impl.command.admin.*;
-import coffee.machine.controller.impl.command.user.*;
-import coffee.machine.view.PagesPaths;
 import coffee.machine.controller.Command;
 import coffee.machine.controller.CommandHolder;
 import coffee.machine.controller.impl.command.HomeCommand;
+import coffee.machine.controller.impl.command.LoginCommand;
+import coffee.machine.controller.impl.command.LoginSubmitCommand;
+import coffee.machine.controller.impl.command.admin.*;
+import coffee.machine.controller.impl.command.user.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static coffee.machine.view.PagesPaths.*;
 
 /**
  * This class is implementation of CommandHolder. It defines command for every supported request uri.
@@ -21,20 +24,17 @@ public class CommandHolderImpl implements CommandHolder {
      */
     private final Map<String, Command> getCommands = new HashMap<String, Command>() {
         {
-            put(PagesPaths.HOME_PATH, new HomeCommand());
+            put(HOME_PATH, new HomeCommand());
+            put(LOGIN_PATH, new LoginCommand());
 
-            put(PagesPaths.USER_LOGIN_PATH, new UserLoginCommand());
-            put(PagesPaths.USER_LOGOUT_PATH, new UserLogoutCommand());
-            put(PagesPaths.USER_REGISTER_PATH, new UserRegisterCommand());
-            put(PagesPaths.USER_HOME_PATH, new UserHomeCommand());
-            put(PagesPaths.USER_PURCHASE_PATH, new UserPurchaseCommand());
-            put(PagesPaths.USER_ORDER_HISTORY_PATH, new UserOrderHistoryCommand());
+            put(USER_LOGOUT_PATH, new UserLogoutCommand());
+            put(USER_REGISTER_PATH, new UserRegisterCommand());
+            put(USER_PURCHASE_PATH, new UserPurchaseCommand());
+            put(USER_ORDER_HISTORY_PATH, new UserOrderHistoryCommand());
 
-            put(PagesPaths.ADMIN_LOGIN_PATH, new AdminLoginCommand());
-            put(PagesPaths.ADMIN_LOGOUT_PATH, new AdminLogoutCommand());
-            put(PagesPaths.ADMIN_REFILL_PATH, new AdminRefillCommand());
-            put(PagesPaths.ADMIN_HOME_PATH, new AdminHomeCommand());
-            put(PagesPaths.ADMIN_ADD_CREDITS_PATH, new AdminAddCreditCommand());
+            put(ADMIN_LOGOUT_PATH, new AdminLogoutCommand());
+            put(ADMIN_REFILL_PATH, new AdminRefillCommand());
+            put(ADMIN_ADD_CREDITS_PATH, new AdminAddCreditCommand());
         }
     };
 
@@ -43,13 +43,12 @@ public class CommandHolderImpl implements CommandHolder {
      */
     private final Map<String, Command> postCommands = new HashMap<String, Command>() {
         {
-            put(PagesPaths.USER_LOGIN_PATH, new UserLoginSubmitCommand());
-            put(PagesPaths.USER_REGISTER_PATH, new UserRegisterSubmitCommand());
-            put(PagesPaths.USER_PURCHASE_PATH, new UserPurchaseSubmitCommand());
+            put(LOGIN_PATH, new LoginSubmitCommand());
+            put(USER_REGISTER_PATH, new UserRegisterSubmitCommand());
+            put(USER_PURCHASE_PATH, new UserPurchaseSubmitCommand());
 
-            put(PagesPaths.ADMIN_REFILL_PATH, new AdminRefillSubmitCommand());
-            put(PagesPaths.ADMIN_LOGIN_PATH, new AdminLoginSubmitCommand());
-            put(PagesPaths.ADMIN_ADD_CREDITS_PATH, new AdminAddCreditSubmitCommand());
+            put(ADMIN_REFILL_PATH, new AdminRefillSubmitCommand());
+            put(ADMIN_ADD_CREDITS_PATH, new AdminAddCreditSubmitCommand());
         }
     };
 

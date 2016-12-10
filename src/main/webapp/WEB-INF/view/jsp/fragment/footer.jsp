@@ -9,7 +9,7 @@
             <br>
             <hr>
             <div align="center">
-                <a href="${PagesPaths.SOURCES_PATH}"> <fmt:message key="sources.here"/></a>
+                 <fmt:message key="title"/> - 2016
             </div>
             <hr>
         </div>

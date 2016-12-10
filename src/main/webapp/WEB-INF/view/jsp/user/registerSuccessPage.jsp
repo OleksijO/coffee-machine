@@ -12,6 +12,6 @@
 ${requestScope[Attributes.ADMIN_CONTACTS]}
 <br>
 <br>
-<br> <h2><a href="${PagesPaths.USER_LOGIN_PATH}"><fmt:message key="login.user.title"/></a></h2>
+<br> <h2><a href="${PagesPaths.USER_LOGIN_PATH}"><fmt:message key="login.user.href.name"/></a></h2>
 
 <%@ include file="/WEB-INF/view/jsp/fragment/footer.jsp" %>

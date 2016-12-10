@@ -26,17 +26,16 @@ public class AuthentificationFilter implements Filter {
 
         // in case of not logged admin and try to go on any admin page - forwarding to admin login path
         if ((req.getRequestURI().startsWith(PagesPaths.ADMIN)) && (session.getAttribute(Attributes.ADMIN_ID) == null)
-                && (!req.getRequestURI().startsWith(PagesPaths.ADMIN_LOGIN_PATH))) {
-            req.getRequestDispatcher(PagesPaths.ADMIN_LOGIN_PATH).forward(request, response);
+                && (!req.getRequestURI().startsWith(PagesPaths.LOGIN_PATH))) {
+            req.getRequestDispatcher(PagesPaths.LOGIN_PATH).forward(request, response);
             return;
         }
 
         // in case of not logged user and try to go on any user page - forwarding to user login path
         if ((req.getRequestURI().startsWith(PagesPaths.USER))
                 && (session.getAttribute(Attributes.USER_ID) == null)
-                && (!req.getRequestURI().startsWith(PagesPaths.USER_LOGIN_PATH))
                 && (!req.getRequestURI().startsWith(PagesPaths.USER_REGISTER_PATH))) {
-            req.getRequestDispatcher(PagesPaths.USER_LOGIN_PATH).forward(request, response);
+            req.getRequestDispatcher(PagesPaths.LOGIN_PATH).forward(request, response);
             return;
         }
 

@@ -17,14 +17,10 @@
                   submitMessageKey="login.submit"
                   cancelMessageKey="cancel"
 />
-<h5>
-    <br>
-    login / password
-    <br>
-    user@test.com / 1234
-    <br>
-    admin@test.com / 1234
-</h5>
+<br>
+<a href="${PagesPaths.USER_REGISTER_PATH}"><fmt:message key="register.user.href.name"/></a>
+
+
 
 
 <%@ include file="/WEB-INF/view/jsp/fragment/footer.jsp" %>
