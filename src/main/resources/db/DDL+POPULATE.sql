@@ -102,7 +102,7 @@ INSERT INTO users (id, email, password, full_name, account_id, is_admin) VALUES
 
 INSERT INTO item (id, name, price, quantity, type) VALUES
   (1, 'Вода', 100, 10, 'DRINK'),
-  (2, 'Боржоми', 500, 10, 'DRINK'),
+  (2, 'Минеральная вода', 500, 10, 'DRINK'),
   (3, 'Чай без сахара', 500, 10, 'DRINK'),
   (4, 'Чай с сахаром', 600, 10, 'DRINK'),
   (5, 'Лимон', 200, 20, 'ADDON'),

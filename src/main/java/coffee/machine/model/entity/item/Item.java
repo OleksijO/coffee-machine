@@ -97,4 +97,14 @@ public class Item implements Comparable<Item> {
         result = 31 * result + (int) (price ^ (price >>> 32));
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", type=" + type +
+                '}';
+    }
 }
