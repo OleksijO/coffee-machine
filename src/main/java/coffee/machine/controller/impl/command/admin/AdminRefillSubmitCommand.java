@@ -32,9 +32,7 @@ import static coffee.machine.view.Attributes.*;
  */
 public class AdminRefillSubmitCommand extends CommandExecuteWrapper {
     private static final Logger logger = Logger.getLogger(AdminRefillSubmitCommand.class);
-    private static final String DRINKS_ADDED = "Drinks added to coffee machine. Table id=addedQuantity:";
-    private static final String ADDONS_ADDED = "Addons added to coffee machine. Table id=addedQuantity:";
-    private static final String ADMIN_ID_IS = ". Admin id=";
+    private static final String ITEMS_ADDED = "Coffee-machine was refilled by admin id=%d. Added drinks: %s, addons %s";
 
     private final DrinkService drinkService = DrinkServiceImpl.getInstance();
     private final AddonService addonService = AddonServiceImpl.getInstance();
@@ -54,8 +52,8 @@ public class AdminRefillSubmitCommand extends CommandExecuteWrapper {
         request.setAttribute(Attributes.PREVIOUS_VALUES_TABLE,
                 formStringDataExtractor.getAllItemParameterValuesFromRequest(request));
 
-        Map<Integer, Integer> drinkAddQuantityByIds = null;
-        Map<Integer, Integer> addonAddQuantityByIds = null;
+        Map<Integer, Integer> drinkAddQuantityByIds;
+        Map<Integer, Integer> addonAddQuantityByIds;
         try {
             drinkAddQuantityByIds = formDataExtractor.getDrinksQuantityByIdFromRequest(request);
             addonAddQuantityByIds = formDataExtractor.getAddonsQuantityByIdFromRequest(request);
@@ -64,42 +62,43 @@ public class AdminRefillSubmitCommand extends CommandExecuteWrapper {
             throw e;
         }
 
-        // check if we perform updating drinks or addons to select corresponding message
-        boolean itemsAdded = false;
-        if ((drinkAddQuantityByIds != null) && (drinkAddQuantityByIds.size() > 0)) {
-            drinkService.refill(drinkAddQuantityByIds);
-            itemsAdded = true;
-            logger.info(DRINKS_ADDED + drinkAddQuantityByIds + ADMIN_ID_IS
-                    + request.getSession().getAttribute(Attributes.ADMIN_ID));
-        }
-        if ((addonAddQuantityByIds != null) && (addonAddQuantityByIds.size() > 0)) {
-            addonService.refill(addonAddQuantityByIds);
-            itemsAdded = true;
-            logger.info(ADDONS_ADDED + addonAddQuantityByIds + ADMIN_ID_IS
-                    + request.getSession().getAttribute(Attributes.ADMIN_ID));
-        }
+        boolean anyItemWereAdded = performRefilling(drinkAddQuantityByIds, addonAddQuantityByIds);
 
-        // placing correspondent message or error for view
-        if (itemsAdded) {
+        if (anyItemWereAdded) {
             request.setAttribute(USUAL_MESSAGE, CommandKey.ADMIN_REFILL_SUCCESSFULL);
+            logger.info(String.format(ITEMS_ADDED, (int) request.getSession().getAttribute(Attributes.ADMIN_ID),
+                    drinkAddQuantityByIds, addonAddQuantityByIds));
         } else {
             request.setAttribute(ERROR_MESSAGE, CommandErrorKey.ADMIN_REFILL_NOTHING_TO_ADD);
         }
 
-        // placing necessary for view data
         placeNecessaryDataToRequest(request);
-
-        // clearing form in case of success operation
-        request.removeAttribute(Attributes.PREVIOUS_VALUES_TABLE);
+        request.removeAttribute(Attributes.PREVIOUS_VALUES_TABLE);     //clearing form in case of success refilling
 
         return PagesPaths.ADMIN_REFILL_PAGE;
     }
+
 
     private void placeNecessaryDataToRequest(HttpServletRequest request) {
         request.setAttribute(COFFEE_MACHINE_BALANCE, accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)
                 .getRealAmount());
         request.setAttribute(DRINKS, drinkService.getAll());
         request.setAttribute(ADDONS, addonService.getAll());
+    }
+
+    private boolean performRefilling(Map<Integer, Integer> drinkAddQuantityByIds,
+                                     Map<Integer, Integer> addonAddQuantityByIds) {
+        boolean anyItemWereAdded = false;
+        if ((drinkAddQuantityByIds != null) && (drinkAddQuantityByIds.size() > 0)) {
+            drinkService.refill(drinkAddQuantityByIds);
+            anyItemWereAdded = true;
+
+        }
+        if ((addonAddQuantityByIds != null) && (addonAddQuantityByIds.size() > 0)) {
+            addonService.refill(addonAddQuantityByIds);
+            anyItemWereAdded = true;
+        }
+        return anyItemWereAdded;
     }
 
 
