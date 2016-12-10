@@ -1,7 +1,9 @@
 package coffee.machine.controller.impl.command.helper;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 10.12.2016.
+ * This class represents DTO for transfer data of login form and validation result
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class LoginFormData {
     private String email;
