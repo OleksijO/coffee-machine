@@ -1,11 +1,8 @@
 package coffee.machine.controller.security;
 
 import coffee.machine.view.Attributes;
-import coffee.machine.view.PagesPaths;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -14,8 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
+import static coffee.machine.view.PagesPaths.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -32,59 +28,86 @@ public class AuthentificationFilterTest {
     HttpSession session;
     @Mock
     RequestDispatcher requestDispatcher;
-    @Captor
-    ArgumentCaptor<String> dispatcherArgCaptor;
-    int dispatcherCallCounter = 0;
 
     private Filter filter = new AuthentificationFilter();
-
-    private static final String FORMAT = "Input data: path='%s', adminId=%d, userId=%d. Expected path = '%s'.";
-
 
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        when(request.getRequestDispatcher(dispatcherArgCaptor.capture())).thenReturn(requestDispatcher);
+        when(request.getRequestDispatcher(anyString())).thenReturn(requestDispatcher);
         when(request.getSession()).thenReturn(session);
     }
 
     @Test
-    public void testDoFilter() throws Exception {
+    public void testDoFilterNotLoggedRootPaths() throws Exception {
         performTest("", null, null, "", 0);
         performTest("/", null, null, "/", 0);
         performTest("/", 1, null, "/", 0);
-        performTest("/", 2, 1, "/", 0);
-        performTest(PagesPaths.HOME_PATH, null, null, PagesPaths.HOME_PATH, 0);
-        performTest("/home/", null, null, PagesPaths.HOME_PATH, 0);
-        performTest("/kdfvblkjsdfbjkv", null, null, PagesPaths.HOME_PATH, 0);
+    }
 
-        performTest("/user/login", null, null, "/user/login", 0);
-        performTest("/admin/login", null, null, "/admin/login", 0);
+    @Test
+    public void testDoFilterNotLoggedHomePath() throws Exception {
+        performTest(HOME_PATH, null, null, HOME_PATH, 0);
+    }
 
-        performTest("/user/any", null, null, PagesPaths.LOGIN_PATH, 1);
-        performTest(PagesPaths.USER_ORDER_HISTORY_PATH, null, null, PagesPaths.LOGIN_PATH, 1);
-        performTest(PagesPaths.USER_ORDER_HISTORY_PATH, 1, null, PagesPaths.LOGIN_PATH, 1);
-        performTest(PagesPaths.USER_ORDER_HISTORY_PATH, null, 1, PagesPaths.USER_ORDER_HISTORY_PATH, 0);
+    @Test
+    public void testDoFilterNotLoggedAnyUnRestrictedPath() throws Exception {
+        performTest("/kdfvblkjsdfbjkv", null, null, HOME_PATH, 0);
+    }
+
+
+    @Test
+    public void testDoFilterNotLoggedLoginPath() throws Exception {
+        performTest("/login", null, null, "/login", 0);
+    }
+
+    @Test
+    public void testDoFilterNotLoggedRegisterPath() throws Exception {
+        performTest("/user/register", null, null, "/user/register", 0);
+    }
+
+    @Test
+    public void testDoFilterUserLoggedInNoForward() throws Exception {
+        performTest(USER_ORDER_HISTORY_PATH, null, 1, USER_ORDER_HISTORY_PATH, 0);
         performTest("/user/any", null, 1, "/user/any", 0);
+    }
 
-        performTest("/admin/any", null, null, PagesPaths.LOGIN_PATH, 1);
-        performTest(PagesPaths.ADMIN_HOME_PATH, null, null, PagesPaths.LOGIN_PATH, 1);
-        performTest(PagesPaths.ADMIN_HOME_PATH, null, 1, PagesPaths.LOGIN_PATH, 1);
-        performTest(PagesPaths.ADMIN_HOME_PATH, 1, null, PagesPaths.ADMIN_HOME_PATH, 0);
+    @Test
+    public void testDoFilterAdminLoggedInNoForward() throws Exception {
+        performTest(ADMIN_HOME_PATH, 1, null, ADMIN_HOME_PATH, 0);
         performTest("/admin/any", 1, null, "/admin/any", 0);
     }
 
+    @Test
+    public void testDoFilterNotLoggedInTryToGetUserPages() throws Exception {
+        performTest("/user/any", null, null, LOGIN_PATH, 1);
+    }
+
+    @Test
+    public void testDoFilterNotLoggedInTryToGetAdminPages() throws Exception {
+        performTest("/admin/any", null, null, LOGIN_PATH, 1);
+    }
+
+    @Test
+    public void testDoFilterUserLoggedInTryToGetAdminPages() throws Exception {
+        performTest(ADMIN_HOME_PATH, null, 1, LOGIN_PATH, 1);
+    }
+
+    @Test
+    public void testDoFilterAdminLoggedInTryToGetUserPages() throws Exception {
+        performTest(USER_ORDER_HISTORY_PATH, 1, null, LOGIN_PATH, 1);
+    }
+
     private void performTest(String path, Integer adminId, Integer userId, String expectedPath,
-                             int expectedDispetcherCallTimes) throws ServletException, IOException {
+                             int expectedDispatcherCallTimes) throws ServletException, IOException {
         setUpMocks(path, adminId, userId);
         filter.doFilter(request, response, chain);
-        dispatcherCallCounter+=expectedDispetcherCallTimes;
-        verify(requestDispatcher, times(dispatcherCallCounter)).forward(any(), any());
-        if (expectedDispetcherCallTimes > 0) {
-            assertEquals(
-                    String.format(FORMAT, path, adminId, userId, expectedPath),
-                    expectedPath, dispatcherArgCaptor.getValue());
+        if (expectedDispatcherCallTimes > 0) {
+            verify(request, times(expectedDispatcherCallTimes)).getRequestDispatcher(expectedPath);
+        } else {
+            verify(request, never()).getRequestDispatcher(expectedPath);
         }
+
     }
 
 

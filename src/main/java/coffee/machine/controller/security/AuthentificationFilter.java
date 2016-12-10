@@ -16,26 +16,23 @@ import java.io.IOException;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class AuthentificationFilter implements Filter {
-    static final Logger logger = Logger.getLogger(AuthentificationFilter.class);
+    private static final Logger logger = Logger.getLogger(AuthentificationFilter.class);
+    private static final String ACCESS_DENIDED_LOG_MESSAGE_FORMAT =
+            "Access denied. Requested URI='%s', userId='%s', adminId='%s'";
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest req = ((HttpServletRequest) request);
         HttpSession session = req.getSession();
+        String uri = req.getRequestURI();
+        Object adminId = session.getAttribute(Attributes.ADMIN_ID);
+        Object userId = session.getAttribute(Attributes.USER_ID);
 
-        // in case of not logged admin and try to go on any admin page - forwarding to admin login path
-        if ((req.getRequestURI().startsWith(PagesPaths.ADMIN)) && (session.getAttribute(Attributes.ADMIN_ID) == null)
-                && (!req.getRequestURI().startsWith(PagesPaths.LOGIN_PATH))) {
+        if (((userId == null) && (uri.startsWith(PagesPaths.USER)) && (!uri.startsWith(PagesPaths.USER_REGISTER_PATH)))
+                || ((uri.startsWith(PagesPaths.ADMIN) && (adminId == null)))) {
             req.getRequestDispatcher(PagesPaths.LOGIN_PATH).forward(request, response);
-            return;
-        }
-
-        // in case of not logged user and try to go on any user page - forwarding to user login path
-        if ((req.getRequestURI().startsWith(PagesPaths.USER))
-                && (session.getAttribute(Attributes.USER_ID) == null)
-                && (!req.getRequestURI().startsWith(PagesPaths.USER_REGISTER_PATH))) {
-            req.getRequestDispatcher(PagesPaths.LOGIN_PATH).forward(request, response);
+            logger.info(String.format(ACCESS_DENIDED_LOG_MESSAGE_FORMAT, uri, userId, adminId));
             return;
         }
 
