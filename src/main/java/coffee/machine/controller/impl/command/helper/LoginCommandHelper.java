@@ -30,7 +30,7 @@ public class LoginCommandHelper implements ControllerErrorLogging {
     private static final Pattern PATTERN_PASSWORD = Pattern.compile(RegExp.REGEXP_PASSWORD);
 
     public static final String TRY_FAILED_WRONG_EMAIL_OR_PASSWORD =
-            "LOGIN TRY FAILED: no such combination of email and password.";
+            "LOGIN TRY FAILED: no such combination of email and password. Entered e-mail: ";
 
     public static final String USER_LOGGED_IN = "USER id=%d LOGGED IN.";
     public static final String ADMIN_LOGGED_IN = "ADMIN id=%d LOGGED IN.";

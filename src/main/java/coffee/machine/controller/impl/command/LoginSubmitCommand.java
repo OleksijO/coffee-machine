@@ -24,7 +24,6 @@ import static coffee.machine.view.PagesPaths.*;
  */
 public class LoginSubmitCommand extends CommandExecuteWrapper {
     private static final Logger logger = Logger.getLogger(LoginSubmitCommand.class);
-    private static final String USER_ROLE_IS_NOT_IDENTIFIED = "User role is not identified";
 
     private UserService userService = UserServiceImpl.getInstance();
     private LoginCommandHelper helper = new LoginCommandHelper();
@@ -51,7 +50,7 @@ public class LoginSubmitCommand extends CommandExecuteWrapper {
         User user = userService.getUserByLogin(formData.getEmail());
 
         if ((user == null) || (!encryptedPassword.equals(user.getPassword()))) {
-            logger.info(TRY_FAILED_WRONG_EMAIL_OR_PASSWORD);
+            logger.info(TRY_FAILED_WRONG_EMAIL_OR_PASSWORD + formData.getEmail());
             request.setAttribute(ERROR_MESSAGE, ERROR_LOGIN_NO_SUCH_COMBINATION);
         } else {
             performActionsToLogIn(request, response, user);
