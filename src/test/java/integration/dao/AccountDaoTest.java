@@ -5,7 +5,7 @@ import coffee.machine.dao.AccountDao;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Account;
-import data.entity.Accounts;
+import data.test.entity.Accounts;
 import org.junit.*;
 
 import java.io.IOException;
@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static data.entity.Users.A;
+import static data.test.entity.Users.A;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 

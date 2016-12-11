@@ -1,4 +1,4 @@
-package data.entity;
+package data.test.entity;
 
 import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.item.Drink;
@@ -6,7 +6,7 @@ import coffee.machine.model.entity.item.Drink;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static data.entity.Orders.ConstHolder.*;
+import static data.test.entity.Orders.ConstHolder.*;
 
 /**
  * @author oleksij.onysymchuk@gmail.com 24.11.2016.

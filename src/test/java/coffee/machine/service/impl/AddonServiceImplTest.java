@@ -6,7 +6,7 @@ import coffee.machine.dao.DaoFactory;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.item.Item;
 import coffee.machine.service.AddonService;
-import data.entity.Addons;
+import data.test.entity.Addons;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

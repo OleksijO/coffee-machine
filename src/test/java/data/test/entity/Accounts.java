@@ -1,4 +1,4 @@
-package data.entity;
+package data.test.entity;
 
 import coffee.machine.model.entity.Account;
 

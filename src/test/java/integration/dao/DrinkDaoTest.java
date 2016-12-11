@@ -5,7 +5,7 @@ import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.DrinkDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.item.Drink;
-import data.entity.Drinks;
+import data.test.entity.Drinks;
 import org.junit.*;
 
 import java.io.IOException;

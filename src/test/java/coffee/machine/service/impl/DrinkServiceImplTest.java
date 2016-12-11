@@ -6,7 +6,7 @@ import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.DrinkDao;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.service.DrinkService;
-import data.entity.Drinks;
+import data.test.entity.Drinks;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
