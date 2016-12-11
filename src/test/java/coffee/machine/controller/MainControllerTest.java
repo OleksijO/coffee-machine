@@ -55,7 +55,7 @@ public class MainControllerTest {
     }
 
     @Test
-    public void processRequest() throws Exception {
+    public void testProcessRequestOnCommandRedirect() throws Exception {
         when(command.execute(request, response)).thenReturn(PagesPaths.REDIRECTED);
         controller.processRequest(command, request, response);
         verify(response, times(0)).sendRedirect(any());
@@ -63,14 +63,14 @@ public class MainControllerTest {
     }
 
     @Test
-    public void processRequestNoSuchPage() throws Exception {
+    public void testProcessRequestNoSuchPage() throws Exception {
         controller.processRequest(null, request, response);
         verify(response, times(1)).sendRedirect(HOME_PATH);
         verify(requestDispatcher, times(0)).forward(request, response);
     }
 
     @Test
-    public void processRequestRuntimeException() throws Exception {
+    public void testProcessRequestRuntimeException() throws Exception {
         when(command.execute(request, response)).thenThrow(new RuntimeException("messageKey"));
         when(request.getMethod()).thenReturn("post");
         controller.processRequest(command, request, response);
@@ -81,17 +81,18 @@ public class MainControllerTest {
     }
 
     @Test
-    public void processRequestApplicationException() throws Exception {
+    public void testProcessRequestApplicationException() throws Exception {
         when(command.execute(request, response)).thenThrow(new ApplicationException("error.unknown"));
         when(request.getMethod()).thenReturn("post");
         controller.processRequest(command, request, response);
         verify(request, times(2)).setAttribute(any(), any());
+        verify(request, times(1)).setAttribute(ERROR_MESSAGE, "error.unknown");
         verify(response, times(0)).sendRedirect(any());
         verify(requestDispatcher, times(1)).forward(request, response);
     }
 
     @Test
-    public void doGet() throws Exception {
+    public void testDoGetRetrievesGetCommandsFromHolder() throws Exception {
         when(request.getRequestURI()).thenReturn("path");
         when(request.getMethod()).thenReturn("get");
         when(commandHolder.get("path")).thenReturn(command);
@@ -106,7 +107,7 @@ public class MainControllerTest {
     }
 
     @Test
-    public void doPost() throws Exception {
+    public void testDoPostRetrievesGetCommandsFromHolder() throws Exception {
         when(request.getRequestURI()).thenReturn("path");
         when(request.getMethod()).thenReturn("get");
         when(commandHolder.post("path")).thenReturn(command);
