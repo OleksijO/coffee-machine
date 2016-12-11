@@ -50,7 +50,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     private static final String DELETE_SQL = "DELETE FROM orders WHERE id=? ";
 
     private static final String WHERE_USER_ID = " WHERE user_id = ?";
-    private static final String ORDER_BY_DATE_TIME = " ORDER BY date_time";
+    private static final String ORDER_BY_DATE_TIME = " ORDER BY date_time DESC ";
     private static final String WHERE_ID = " WHERE orders.id = ?";
 
     private static final String FIELD_USER_ID = "user_id";
