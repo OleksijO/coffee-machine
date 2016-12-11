@@ -42,4 +42,5 @@ public final class Attributes {
     public static final String ADMIN_CONTACTS = "admin_contacts";
 
 
+    public static final String BALANCE_LOW_WARN_LIMIT = "balance_warn_limit";
 }

@@ -1,8 +1,7 @@
 package coffee.machine.controller.impl.command.user;
 
-import coffee.machine.CoffeeMachineConfig;
 import coffee.machine.controller.impl.command.CommandExecuteWrapper;
-import coffee.machine.i18n.message.key.GeneralKey;
+import coffee.machine.controller.impl.command.helper.UserPurchaseCommandHelper;
 import coffee.machine.service.AccountService;
 import coffee.machine.service.DrinkService;
 import coffee.machine.service.impl.AccountServiceImpl;
@@ -17,6 +16,7 @@ import java.io.IOException;
 public class UserPurchaseCommand extends CommandExecuteWrapper {
     private DrinkService drinkService = DrinkServiceImpl.getInstance();
     private AccountService accountService = AccountServiceImpl.getInstance();
+    private UserPurchaseCommandHelper helper = new UserPurchaseCommandHelper();
 
     public UserPurchaseCommand() {
         super(PagesPaths.USER_PURCHASE_PAGE);
@@ -25,10 +25,9 @@ public class UserPurchaseCommand extends CommandExecuteWrapper {
     @Override
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // just putting all needed for jsp data
-        request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_USER_PURCHASE);
+        helper.setGeneralRegisterPageAttributes(request);
         int userId = (int) request.getSession().getAttribute(Attributes.USER_ID);
         request.setAttribute(Attributes.USER_ACCOUNT, accountService.getByUserId(userId));
-        request.setAttribute(Attributes.ADMIN_CONTACTS, CoffeeMachineConfig.ADMIN_CONTACT_INFO);
         request.setAttribute(Attributes.DRINKS, drinkService.getAll());
         return PagesPaths.USER_PURCHASE_PAGE;
     }

@@ -1,13 +1,12 @@
 package coffee.machine.controller.impl.command.user;
 
-import coffee.machine.CoffeeMachineConfig;
 import coffee.machine.controller.impl.command.CommandExecuteWrapper;
+import coffee.machine.controller.impl.command.helper.UserPurchaseCommandHelper;
 import coffee.machine.controller.impl.command.request.data.extractor.ItemsStringFormDataExtractor;
 import coffee.machine.controller.impl.command.request.data.extractor.PurchaseFormDataExtractor;
 import coffee.machine.controller.impl.command.request.data.extractor.impl.ItemsStringFormDataExtractorImpl;
 import coffee.machine.controller.impl.command.request.data.extractor.impl.PurchaseFormExtractorImpl;
 import coffee.machine.i18n.message.key.CommandKey;
-import coffee.machine.i18n.message.key.GeneralKey;
 import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.service.AccountService;
@@ -36,7 +35,8 @@ public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
     private CoffeeMachineService coffeeMachine = CoffeeMachineServiceImpl.getInstance();
 
     private PurchaseFormDataExtractor formExtractor = new PurchaseFormExtractorImpl();
-    private final ItemsStringFormDataExtractor formStringDataExtractor = new ItemsStringFormDataExtractorImpl();
+    private ItemsStringFormDataExtractor formStringDataExtractor = new ItemsStringFormDataExtractorImpl();
+    private UserPurchaseCommandHelper helper = new UserPurchaseCommandHelper();
 
 
     public UserPurchaseSubmitCommand() {
@@ -46,8 +46,7 @@ public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
     @Override
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_USER_PURCHASE);
-        request.setAttribute(Attributes.ADMIN_CONTACTS, CoffeeMachineConfig.ADMIN_CONTACT_INFO);
+        helper.setGeneralRegisterPageAttributes(request);
         request.setAttribute(Attributes.PREVIOUS_VALUES_TABLE,
                 formStringDataExtractor.getAllItemParameterValuesFromRequest(request));
 
@@ -99,10 +98,8 @@ public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
             Map<Integer, Integer> addonsQuantityById = addonsQuantityInDrinksById.get(drink.getId());
             if (addonsQuantityById != null) {
                 drink.getAddons().forEach(addon -> {
-
                     Integer quantity = addonsQuantityById.get(addon.getId());
                     if (quantity != null) {
-
                         addon.setQuantity(quantity);
                     }
                 });

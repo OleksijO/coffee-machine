@@ -17,7 +17,6 @@ import static coffee.machine.view.Parameters.PASSWORD_PARAM;
 
 /**
  * This class represents register page main functionality helper.
- * This is template for specific role user/admin login pages.
  *
  * @author oleksij.onysymchuk@gmail.com
  */

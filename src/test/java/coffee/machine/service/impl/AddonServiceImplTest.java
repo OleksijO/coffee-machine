@@ -51,7 +51,7 @@ public class AddonServiceImplTest {
         when(addonDao.getAllFromList(any())).thenReturn(addonsToUpdate);
 
         service = AddonServiceImpl.getInstance();
-        AddonServiceImpl.daoFactory = daoFactory;
+        ((CoffeeMachineServiceImpl)service).daoFactory = daoFactory;
 
     }
 

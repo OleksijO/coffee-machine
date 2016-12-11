@@ -103,7 +103,7 @@ public class CoffeeMachineServiceImplTest {
         when(addonDao.getAllFromList(any())).thenReturn(addonsToBuy);
 
         service = CoffeeMachineServiceImpl.getInstance();
-        CoffeeMachineServiceImpl.daoFactory = daoFactory;
+        ((CoffeeMachineServiceImpl)service).daoFactory = daoFactory;
 
         userAccountInitialAmount = Accounts.USER_A.account.getAmount();
         cmAccountAmount = Accounts.COFFEE_MACHINE.account.getAmount();
