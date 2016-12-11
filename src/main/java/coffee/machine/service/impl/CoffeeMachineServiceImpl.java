@@ -57,7 +57,7 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
 
             Account userAccount = accountDao.getByUserId(userId);
             checkUserHaveEnoughMoney(drinksPrice, userAccount.getAmount());
-            decreasePersistedItemQuantitiesByItemQuantitiesInDrinksToBy(drinks, drinkDao, addonDao);
+            decreaseItemQuantitiesInDatabaseByItemQuantitiesInDrinksToBuy(drinks, drinkDao, addonDao);
             performMoneyExchange(accountDao, userAccount, drinksPrice);
 
             Order order = new Order(userId, new Date(), drinks, drinksPrice);
@@ -93,7 +93,9 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
 
 
 
-    private void decreasePersistedItemQuantitiesByItemQuantitiesInDrinksToBy(List<Drink> drinks, DrinkDao drinkDao, AddonDao addonDao) {
+    private void decreaseItemQuantitiesInDatabaseByItemQuantitiesInDrinksToBuy(List<Drink> drinks,
+                                                                               DrinkDao drinkDao,
+                                                                               AddonDao addonDao) {
         List<Drink> baseDrinksToBuy = getBaseDrinksFromDrinks(drinks);
         List<Item> addonsToBuy = getAddonsFromDrinks(drinks);
         List<Drink> baseDrinksAvailable = getBaseDrinksFromDrinks(drinkDao.getAllFromList(baseDrinksToBuy));
