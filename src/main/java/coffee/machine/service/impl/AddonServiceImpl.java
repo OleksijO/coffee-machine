@@ -23,7 +23,7 @@ public class AddonServiceImpl implements AddonService {
     private static final String QUANTITIES_BY_ID_SHOULD_CONTAIN_ANY_DATA_GOT_OBJECT =
             "Quantities by id should contain any data. Got object: ";
 
-    static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+    DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
     private AddonServiceImpl() {
     }

@@ -15,7 +15,7 @@ import java.util.List;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class OrderServiceImpl implements OrderService {
-    static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+    DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
     private OrderServiceImpl() {
     }

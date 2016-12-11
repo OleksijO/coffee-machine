@@ -25,12 +25,8 @@ import static coffee.machine.i18n.message.key.error.ServiceErrorKey.YOU_DID_NOT_
 public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceErrorProcessing {
     private static final Logger logger = Logger.getLogger(CoffeeMachineServiceImpl.class);
 
-    private static final String CANT_FIND_ACCOUNT_OF_USER_WITH_ID = "Can't find account of user with id=";
-    private static final String CANT_FIND_ACCOUNT_COFFEE_MACHINE =
-            "Can't find account of coffee-machine. Check out CoffeeMachineConfig" ;
-
-    static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
-    private static final int COFFEE_MACHINE_ACCOUNT_ID = CoffeeMachineConfig.ACCOUNT_ID;
+    DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+    private final int COFFEE_MACHINE_ACCOUNT_ID = CoffeeMachineConfig.ACCOUNT_ID;
 
     private CoffeeMachineServiceImpl() {
     }

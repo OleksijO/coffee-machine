@@ -16,8 +16,9 @@ import coffee.machine.service.exception.ServiceException;
 public class AccountServiceImpl implements AccountService {
     private static final String AMOUNT_FOR_ADD_SHOULD_BE_GREATER_THAN_ZERO_FORMAT =
             "Amount to add should be greater than zero. UserId=%d, amount=%d.";
-    public static final String CANT_FIND_ACCOUNT_WITH_ID = "Can't find account with id = ";
-    static DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+    private static final String CANT_FIND_ACCOUNT_WITH_ID = "Can't find account with id = ";
+
+    DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
     private AccountServiceImpl() {
     }
