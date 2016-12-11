@@ -24,6 +24,11 @@ import static org.mockito.Mockito.*;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class DrinkServiceImplTest {
+    private static final String DRINK_QUANTITY_MISMATCH = " drink quantity mismatch";
+    private static final String FIRST = "First";
+    private static final String SECOND = "Second";
+    private static final String THE_ONLY = "The only";
+
     @Mock
     private DaoFactory daoFactory;
     @Mock
@@ -91,12 +96,12 @@ public class DrinkServiceImplTest {
             add(2);
             add(11);
         }});
-        Assert.assertEquals(
+        Assert.assertEquals(FIRST + DRINK_QUANTITY_MISMATCH,
                 memory1 + valueToAdd,
                 drinkListCaptor.getAllValues()
                         .get(drinkListCaptor.getAllValues().size() - 1).get(0).getQuantity());
 
-        Assert.assertEquals(
+        Assert.assertEquals(SECOND + DRINK_QUANTITY_MISMATCH,
                 memory2 + valueToAdd,
                 drinkListCaptor.getAllValues()
                         .get(drinkListCaptor.getAllValues().size() - 1).get(1).getQuantity());
@@ -127,7 +132,7 @@ public class DrinkServiceImplTest {
         verify(drinkDao, times(1)).getAllByIds(new TreeSet<Integer>() {{
             add(11);
         }});
-        Assert.assertEquals(
+        Assert.assertEquals(THE_ONLY + DRINK_QUANTITY_MISMATCH,
                 memory1 + valueToAdd,
                 drinkListCaptor.getAllValues()
                         .get(drinkListCaptor.getAllValues().size() - 1).get(0).getQuantity());

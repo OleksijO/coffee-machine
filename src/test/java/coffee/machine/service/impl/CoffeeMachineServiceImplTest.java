@@ -31,6 +31,18 @@ import static org.mockito.Mockito.*;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class CoffeeMachineServiceImplTest {
+    private static final String LIST_OF_ADDONS_TO_UPDATE_SHOULD_BE_NOT_NULL =
+            "List of addons to update should be not null";
+    private static final String LIST_OF_DRINKS_TO_UPDATE_SHOULD_BE_NOT_NULL =
+            "List of drinks to update should be not null";
+    private static final String ADDON_QUANTITY_SHOULD_DECREASE_FORMAT =
+            "Addon quantity should decrease on %d, addon id=%d";
+    private static final String DRINK_QUANTITY_SHOULD_DECREASE_FORMAT =
+            "Drink quantity should decrease on %d, drink id=%d";
+    private static final String HERE_SHOULD_BE_APPLICATION_EXCEPTION = "Here should be application exception";
+    private static final String COFFEE_MACHINE_BALANCE_MISMATCH = "CoffeeMachine balance mismatch";
+    private static final String USER_BALANCE_MISMATCH = "User balance mismatch";
+
     @Mock
     private DaoFactory daoFactory;
     @Mock
@@ -101,32 +113,32 @@ public class CoffeeMachineServiceImplTest {
 
 
     @Test
-    public void testPrepareDrinksForUserWithoutAddons() throws Exception {
+    public void testPrepareDrinksForUserDrinksToBuyWithoutAddons() throws Exception {
 
-        prepareDataForTestWithoutAddons(2, 2);
+        prepareDataForTestDrinksWithoutAddons(2, 2);
 
         service.prepareDrinksForUser(drinksToBuy, userId);
 
         varifyDaoAccesionTimes(1, 0, 2);
-        verifyTestResultsWithoutAddons();
+        verifyTestResultsDrinksWithoutAddons();
 
     }
 
     @Test
-    public void testPrepareDrinksForUserWithAddons() throws Exception {
-        prepareDataForTest(4,2,1);
+    public void testPrepareDrinksForUserDrinksToBuyWithAddons() throws Exception {
+        prepareDataForTestDrinkWithAddons(4,2,1);
 
         service.prepareDrinksForUser(drinksToBuy, userId);
 
         varifyDaoAccesionTimes(1, 1, 2);
-        verifyTestResultsWithoutAddons();
-        verifyTestResultsWithAddons();
+        verifyTestResultsDrinksWithoutAddons();
+        verifyTestResultsDrinksWithAddons();
     }
 
     @Test
     public void testPrepareDrinksForUserNotEnoughMoney() throws Exception {
 
-        prepareDataForTest(4,2,1);
+        prepareDataForTestDrinkWithAddons(4,2,1);
         Accounts.USER_A.account.setAmount(0);
 
         try {
@@ -136,7 +148,7 @@ public class CoffeeMachineServiceImplTest {
             Assert.assertEquals(ServiceErrorKey.NOT_ENOUGH_MONEY, e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Here should be application exception");
+            fail(HERE_SHOULD_BE_APPLICATION_EXCEPTION);
         } finally {
             Accounts.USER_A.account.setAmount(userAccountInitialAmount);
         }
@@ -147,7 +159,7 @@ public class CoffeeMachineServiceImplTest {
     @Test
     public void testPrepareDrinksForUserNotEnoughDrinks() throws Exception {
 
-        prepareDataForTest(4,2,1);
+        prepareDataForTestDrinkWithAddons(4,2,1);
         int memory = Drinks.ESPRESSO.drink.getQuantity();
         Drinks.ESPRESSO.drink.setQuantity(0);
         try {
@@ -157,7 +169,7 @@ public class CoffeeMachineServiceImplTest {
             Assert.assertEquals(ServiceErrorKey.ITEM_NO_LONGER_AVAILABLE, e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Here should be application exception");
+            fail(HERE_SHOULD_BE_APPLICATION_EXCEPTION);
         } finally {
             Drinks.ESPRESSO.drink.setQuantity(memory);
         }
@@ -167,7 +179,7 @@ public class CoffeeMachineServiceImplTest {
 
     @Test
     public void testPrepareDrinksForUserEmptyDrinks() throws Exception {
-        prepareDataForTest(4,2,1);
+        prepareDataForTestDrinkWithAddons(4,2,1);
         drinksToBuy.clear();
         Drinks.ESPRESSO.drink.setQuantity(0);
         try {
@@ -177,17 +189,13 @@ public class CoffeeMachineServiceImplTest {
             Assert.assertEquals(ServiceErrorKey.YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY, e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            fail("Here should be application exception");
+            fail(HERE_SHOULD_BE_APPLICATION_EXCEPTION);
         }
 
         varifyDaoAccesionTimes(0, 0, 0);
     }
 
-
-
-
-
-    private void prepareDataForTestWithoutAddons(int drinkQuantity, int userId) {
+    private void prepareDataForTestDrinksWithoutAddons(int drinkQuantity, int userId) {
 
         this.drinkQuantity = drinkQuantity;
         this.userId = userId;
@@ -196,41 +204,41 @@ public class CoffeeMachineServiceImplTest {
         sumAmount = getSumAmount(drinksToBuy);
     }
 
-    private void prepareDataForTest(int drinkQuantity, int userId, int addonQuantity) {
-        prepareDataForTestWithoutAddons(drinkQuantity, userId);
+    private void prepareDataForTestDrinkWithAddons(int drinkQuantity, int userId, int addonQuantity) {
+        prepareDataForTestDrinksWithoutAddons(drinkQuantity, userId);
         this.addonQuantity = addonQuantity;
         drinksToBuy = getTestDrinksWithAddons(addonQuantity);
         setDrinksQuantity(drinksToBuy, drinkQuantity);
         sumAmount = getSumAmount(drinksToBuy);
     }
 
-    private void verifyTestResultsWithAddons() {
+    private void verifyTestResultsDrinksWithAddons() {
         List<Item> updatedAddons = addonListCaptor.getValue();
-        assertNotNull("List of addons to update should be not null", updatedAddons);
+        assertNotNull(LIST_OF_ADDONS_TO_UPDATE_SHOULD_BE_NOT_NULL, updatedAddons);
         if (addonQuantity > 0) {
             updatedAddons.forEach(addon -> {
-                assertEquals("Addon quantity should decrease on " + addonQuantity + " addon id=" + addon.getId(),
+                assertEquals(String.format(ADDON_QUANTITY_SHOULD_DECREASE_FORMAT,addonQuantity, addon.getId()),
                         addonQuantitiesById.get(addon.getId()) - addonQuantity * drinkQuantity,
                         addon.getQuantity());
             });
         }
     }
 
-    private void verifyTestResultsWithoutAddons() {
+    private void verifyTestResultsDrinksWithoutAddons() {
         List<Account> capturedAccounts = accountCaptor.getAllValues();
         Account cmAccount = capturedAccounts.get(0);
         Account userAccount = capturedAccounts.get(1);
         List<Drink> updatedDrinks = drinkListCaptor.getValue();
 
-        assertNotNull("List of drinks to update should be not null", updatedDrinks);
+        assertNotNull(LIST_OF_DRINKS_TO_UPDATE_SHOULD_BE_NOT_NULL, updatedDrinks);
         updatedDrinks.forEach(drink1 -> {
-            assertEquals("Drink quantity should decrease on " + drinkQuantity + " drink id=" + drink1.getId(),
+            assertEquals(String.format(DRINK_QUANTITY_SHOULD_DECREASE_FORMAT,drinkQuantity,drink1.getId()),
                     drinkQuantitiesById.get(drink1.getId()) - drinkQuantity,
                     drink1.getQuantity());
         });
 
-        assertEquals("CM balance", cmAccountAmount + sumAmount, cmAccount.getAmount());
-        assertEquals("User balance", userAccountInitialAmount - sumAmount, userAccount.getAmount());
+        assertEquals(COFFEE_MACHINE_BALANCE_MISMATCH, cmAccountAmount + sumAmount, cmAccount.getAmount());
+        assertEquals(USER_BALANCE_MISMATCH, userAccountInitialAmount - sumAmount, userAccount.getAmount());
     }
 
     private void varifyDaoAccesionTimes(int drinkTimes, int addonTimes, int accountTimes) {
@@ -260,8 +268,6 @@ public class CoffeeMachineServiceImplTest {
         }
         return sumAmount;
     }
-
-
 
     private List<Drink> getTestDrinksWithAddons(int addonQuantity) {
         List<Drink> drinks = new ArrayList<>();
