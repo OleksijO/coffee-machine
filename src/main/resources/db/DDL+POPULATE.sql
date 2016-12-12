@@ -94,11 +94,15 @@ CREATE TABLE orders_addon (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-INSERT INTO account (amount) VALUES (0), (10000);
+INSERT INTO account (amount) VALUES (0), (0), (10000), (10000), (100000);
 
 INSERT INTO users (id, email, password, full_name, account_id, is_admin) VALUES
   (1, 'admin@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий адміністратор', NULL, TRUE),
-  (2, 'user@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий користувач', 2, FALSE);
+  (2, 'user@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий користувач', 2, FALSE),
+  (3, 'user1@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий користувач 2', 3, FALSE),
+  (4, 'user2@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий користувач 3', 4, FALSE),
+  (5, 'user3@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий користувач 4', 5, FALSE);  
+  
 
 INSERT INTO item (id, name, price, quantity, type) VALUES
   (1, 'Вода', 100, 10, 'DRINK'),
