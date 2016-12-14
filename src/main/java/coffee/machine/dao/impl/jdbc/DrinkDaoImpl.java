@@ -3,6 +3,7 @@ package coffee.machine.dao.impl.jdbc;
 import coffee.machine.dao.DrinkDao;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
+import coffee.machine.model.entity.item.ItemFactory;
 import coffee.machine.model.entity.item.ItemType;
 import org.apache.log4j.Logger;
 
@@ -118,20 +119,15 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
     private List<Drink> parseResultSet(ResultSet resultSet) throws SQLException {
         List<Drink> drinkList = new ArrayList<>();
         while (resultSet.next()) {
-            Item item;
             ItemType type = ItemType.valueOf(resultSet.getString(FIELD_TYPE));
-            if (type == ItemType.DRINK) {
-                item = new Drink();
-                ((Drink) item).setAddons(new TreeSet<>());
-            } else {
-                item = new Item();
-            }
+            Item item = ItemFactory.getInstance().getNewInstanceOfType(type);
+            item.setType(type);
             item.setId(resultSet.getInt(FIELD_ID));
             item.setName(resultSet.getString(FIELD_NAME));
             item.setPrice(resultSet.getLong(FIELD_PRICE));
             item.setQuantity(resultSet.getInt(FIELD_QUANTITY));
-            item.setType(type);
             if (type == ItemType.DRINK) {
+                ((Drink) item).setAddons(new TreeSet<>());
                 drinkList.add((Drink) item);
             } else {
                 Drink drink = getDrinkFromListById(drinkList, resultSet.getInt(FIELD_PARENT_ID));
@@ -156,7 +152,7 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
     public Drink getById(int id) {
         try (PreparedStatement statement =
                      connection.prepareStatement(
-                             String.format(SELECT_ALL_DRINKS_WITH_ADDONS_FORMAT, WHERE_ID_OR_DRINK_ID)+FOR_UPDATE)) {
+                             String.format(SELECT_ALL_DRINKS_WITH_ADDONS_FORMAT, WHERE_ID_OR_DRINK_ID) + FOR_UPDATE)) {
 
             statement.setInt(1, id);
             statement.setInt(2, id);

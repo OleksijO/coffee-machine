@@ -1,7 +1,7 @@
 package coffee.machine.dao.impl.jdbc;
 
-import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
+import coffee.machine.model.entity.item.ItemFactory;
 import coffee.machine.model.entity.item.ItemType;
 import org.apache.log4j.Logger;
 
@@ -118,13 +118,9 @@ class ItemDaoImpl extends AbstractDao<Item> {
     List<Item> parseResultSet(ResultSet resultSet) throws SQLException {
         List<Item> itemList = new ArrayList<>();
         while (resultSet.next()) {
-            Item item;
+
             ItemType type = ItemType.valueOf(resultSet.getString(FIELD_TYPE));
-            if (type == ItemType.DRINK) {
-                item = new Drink();
-            } else {
-                item = new Item();
-            }
+            Item item = ItemFactory.getInstance().getNewInstanceOfType(type);
             item.setType(type);
             item.setId(resultSet.getInt(FIELD_ID));
             item.setName(resultSet.getString(FIELD_NAME));
@@ -137,7 +133,7 @@ class ItemDaoImpl extends AbstractDao<Item> {
 
     @Override
     public Item getById(int id) {
-        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL  + WHERE_ITEM_ID + FOR_UPDATE)) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_ITEM_ID + FOR_UPDATE)) {
 
             statement.setInt(1, id);
 
