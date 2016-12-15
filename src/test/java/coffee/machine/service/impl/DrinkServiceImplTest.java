@@ -56,7 +56,7 @@ public class DrinkServiceImplTest {
         when(drinkDao.getAllFromList(any())).thenReturn(drinksToUpdate);
 
         service = DrinkServiceImpl.getInstance();
-        ((CoffeeMachineServiceImpl)service).daoFactory = daoFactory;
+        ((DrinkServiceImpl)service).daoFactory = daoFactory;
 
     }
 

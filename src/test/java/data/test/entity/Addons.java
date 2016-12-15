@@ -6,7 +6,7 @@ import coffee.machine.model.entity.item.ItemType;
 import java.util.*;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 24.11.2016.
+ * @author oleksij.onysymchuk@gmail.com
  */
 public enum Addons {
     LEMON(5, "Лимон", 200, 20),

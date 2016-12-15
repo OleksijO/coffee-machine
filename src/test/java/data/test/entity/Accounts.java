@@ -3,7 +3,7 @@ package data.test.entity;
 import coffee.machine.model.entity.Account;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 24.11.2016.
+ * @author oleksij.onysymchuk@gmail.com
  */
 public enum Accounts {
     COFFEE_MACHINE(1,0),
@@ -17,6 +17,13 @@ public enum Accounts {
         account=new Account();
         account.setId(id);
         account.setAmount(amount);
+    }
+
+    public Account getCopy(){
+        Account acc= new Account();
+        acc.setId(account.getId());
+        acc.setAmount(account.getAmount());
+        return acc;
     }
 }
 

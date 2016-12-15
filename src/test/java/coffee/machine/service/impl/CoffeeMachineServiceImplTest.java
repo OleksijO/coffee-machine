@@ -67,6 +67,9 @@ public class CoffeeMachineServiceImplTest {
     Map<Integer, Integer> drinkQuantitiesById = Drinks.getQuantitiesByIds();
     Map<Integer, Integer> addonQuantitiesById = Addons.getQuantitiesByIds();
 
+    Account coffeeMachineAccount = Accounts.COFFEE_MACHINE.getCopy();
+    Account userAccount = Accounts.USER_A.getCopy();
+
     List<Drink> drinksToBuy;
     long sumAmount;
     long userAccountInitialAmount;
@@ -86,8 +89,7 @@ public class CoffeeMachineServiceImplTest {
         when(daoFactory.getDrinkDao(connection)).thenReturn(drinkDao);
         when(daoFactory.getConnection()).thenReturn(connection);
 
-        Account coffeeMachineAccount = Accounts.COFFEE_MACHINE.account;
-        Account userAccount = Accounts.USER_A.account;
+
         when(accountDao.getByUserId(2)).thenReturn(userAccount);
         when(accountDao.getById(1)).thenReturn(coffeeMachineAccount);
 
@@ -105,8 +107,8 @@ public class CoffeeMachineServiceImplTest {
         service = CoffeeMachineServiceImpl.getInstance();
         ((CoffeeMachineServiceImpl)service).daoFactory = daoFactory;
 
-        userAccountInitialAmount = Accounts.USER_A.account.getAmount();
-        cmAccountAmount = Accounts.COFFEE_MACHINE.account.getAmount();
+        userAccountInitialAmount = userAccount.getAmount();
+        cmAccountAmount = coffeeMachineAccount.getAmount();
     }
 
 
@@ -139,7 +141,7 @@ public class CoffeeMachineServiceImplTest {
     public void testPrepareDrinksForUserNotEnoughMoney() throws Exception {
 
         prepareDataForTestDrinkWithAddons(4,2,1);
-        Accounts.USER_A.account.setAmount(0);
+        userAccount.setAmount(0);
 
         try {
             service.prepareDrinksForUser(drinksToBuy, userId);
@@ -150,7 +152,7 @@ public class CoffeeMachineServiceImplTest {
             e.printStackTrace();
             fail(HERE_SHOULD_BE_APPLICATION_EXCEPTION);
         } finally {
-            Accounts.USER_A.account.setAmount(userAccountInitialAmount);
+            userAccount.setAmount(userAccountInitialAmount);
         }
 
         varifyDaoAccesionTimes(0, 0, 0);
@@ -181,7 +183,6 @@ public class CoffeeMachineServiceImplTest {
     public void testPrepareDrinksForUserEmptyDrinks() throws Exception {
         prepareDataForTestDrinkWithAddons(4,2,1);
         drinksToBuy.clear();
-        Drinks.ESPRESSO.drink.setQuantity(0);
         try {
             service.prepareDrinksForUser(drinksToBuy, userId);
         } catch (ServiceException e) {

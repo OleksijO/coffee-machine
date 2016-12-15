@@ -9,6 +9,7 @@ import data.test.entity.Orders;
 import org.junit.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -25,6 +26,7 @@ public class OrderDaoTest {
     {
         for (Orders oderEnum : Orders.values()) {
             testOrders.add(oderEnum.order);
+            Collections.sort(testOrders,(o1,o2)-> o2.getDate().compareTo(o1.getDate()));
         }
     }
 
@@ -50,8 +52,6 @@ public class OrderDaoTest {
     public void testGetAll() {
 
         List<Order> orders = orderDao.getAll();
-        System.out.println(testOrders);
-        System.out.println(orders);
         assertEquals(testOrders.toString(), orders.toString());
 
     }
@@ -60,17 +60,9 @@ public class OrderDaoTest {
     public void testGetById() {
 
         Order order = orderDao.getById(2);
-        System.out.println(testOrders.get(1));
-        System.out.println(order);
-        assertEquals("Must be identical", testOrders.get(1).toString(), order.toString());
+        assertEquals("Must be identical", testOrders.get(0).toString(), order.toString());
         order = orderDao.getById(7);
         assertNull("Must be null", order);
-    }
-
-    @Ignore //method not implemented and throws UnsupportedOperationException
-    @Test
-    public void testUpdate() {
-
     }
 
     @Test
@@ -82,7 +74,7 @@ public class OrderDaoTest {
         order.setId(newOrderId);
 
         assertEquals("1", order.toString(), orderDao.getById(newOrderId).toString());
-        order.setId(2);
+        order.setId(1);
         assertEquals("2", testOrders.size() + 1, orderDao.getAll().size());
         orderDao.deleteById(newOrderId);
         assertNull("3", orderDao.getById(newOrderId));

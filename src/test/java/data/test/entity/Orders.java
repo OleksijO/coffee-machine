@@ -9,7 +9,7 @@ import java.util.Date;
 import static data.test.entity.Orders.ConstHolder.*;
 
 /**
- * @author oleksij.onysymchuk@gmail.com 24.11.2016.
+ * @author oleksij.onysymchuk@gmail.com
  */
 public enum Orders {
     A1(1, 2, new Date(YEAR2016 + 6 * MONTH + 12 * HOUR + 5 * MIN), 1000),

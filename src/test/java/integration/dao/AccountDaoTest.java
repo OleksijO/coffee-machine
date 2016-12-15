@@ -29,7 +29,7 @@ public class AccountDaoTest {
 
     {
         for (Accounts accountEnum : Accounts.values()) {
-            testAccounts.add(accountEnum.account);
+            testAccounts.add(accountEnum.getCopy());
         }
     }
 
