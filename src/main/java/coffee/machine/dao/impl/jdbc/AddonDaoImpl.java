@@ -5,9 +5,7 @@ import coffee.machine.model.entity.item.Item;
 import coffee.machine.model.entity.item.ItemType;
 
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class is the implementation of Addon entity DAO
@@ -35,13 +33,14 @@ class AddonDaoImpl extends AbstractDao<Item> implements AddonDao {
     }
 
     @Override
-    public List<Item> getAllFromList(List<Item> addons) {
+    public List<Item> getAllFromList(List<Item> addonsToGet) {
+        Collections.sort(addonsToGet);      // to avoid deadlock on select for update
         List<Item> updatedAddons = new ArrayList<>();
-        addons.forEach(addon -> {
+        addonsToGet.forEach(addon -> {
             if (addon != null) {
-                Item item = getById(addon.getId());
-                if (item != null) {
-                    updatedAddons.add(item);
+                Item updatedAddon = getById(addon.getId());
+                if (updatedAddon != null) {
+                    updatedAddons.add(updatedAddon);
                 }
             }
         });
@@ -50,6 +49,7 @@ class AddonDaoImpl extends AbstractDao<Item> implements AddonDao {
 
     @Override
     public List<Item> getAllByIds(Set<Integer> itemIds) {
+        itemIds = new TreeSet<>(itemIds);       // to avoid deadlock on select for update
         List<Item> addon = new ArrayList<>();
         itemIds.forEach(id -> {
             Item updatedDrink = getById(id);

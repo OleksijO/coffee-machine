@@ -8,8 +8,6 @@ import coffee.machine.model.entity.Order;
 import data.test.entity.Orders;
 import org.junit.*;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +29,7 @@ public class OrderDaoTest {
     }
 
     @BeforeClass
-    public static void initTestDataBase() throws SQLException, ClassNotFoundException, InterruptedException, IOException {
+    public static void initTestDataBase() throws Exception {
         new TestDatabaseInitializer().initTestJdbcDB();
     }
 

@@ -182,6 +182,7 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
 
     @Override
     public List<Drink> getAllFromList(List<Drink> drinksToGet) {
+        Collections.sort(drinksToGet);          // to avoid deadlock on select for update
         List<Drink> items = new ArrayList<>();
         drinksToGet.forEach(drink -> {
             if (drink != null) {
@@ -196,6 +197,7 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
 
     @Override
     public List<Drink> getAllByIds(Set<Integer> itemIds) {
+        itemIds = new TreeSet<>(itemIds);       // to avoid deadlock on select for update
         List<Drink> drinks = new ArrayList<>();
         itemIds.forEach(id -> {
             Drink updatedDrink = getById(id);

@@ -104,7 +104,12 @@ class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 
     @Override
     public Account getById(int id) {
-        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_ID + FOR_UPDATE)) {
+        return getAccountByQueryAndIntParameter(SELECT_ALL_SQL + WHERE_ID + FOR_UPDATE, id);
+
+    }
+
+    private Account getAccountByQueryAndIntParameter(String sql, int id) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -117,24 +122,11 @@ class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
             logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_BY_ID, e);
         }
         throw new InternalError(); // STUB for compiler
-
     }
 
     @Override
     public Account getByUserId(int userId) {
-        try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_USER_ID_SQL + FOR_UPDATE)) {
-            statement.setInt(1, userId);
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                List<Account> accountList = parseResultSet(resultSet);
-                checkSingleResult(accountList);
-
-                return accountList == null || accountList.isEmpty() ? null : accountList.get(0);
-            }
-        } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_BY_ID, e);
-        }
-        throw new InternalError(); // STUB for compiler
+        return getAccountByQueryAndIntParameter(SELECT_BY_USER_ID_SQL + FOR_UPDATE, userId);
 
     }
 

@@ -6,10 +6,11 @@ import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Account;
 import data.test.entity.Accounts;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class AccountDaoTest {
     }
 
     @BeforeClass
-    public static void initTestDataBase() throws SQLException, ClassNotFoundException, InterruptedException, IOException {
+    public static void initTestDataBase() throws Exception {
         new TestDatabaseInitializer().initTestJdbcDB();
     }
 
