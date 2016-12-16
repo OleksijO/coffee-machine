@@ -39,9 +39,7 @@ public class DrinkServiceImpl implements DrinkService {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-            connection.beginTransaction();
             List<Drink> drinks = drinkDao.getAll();
-            connection.commitTransaction();
             return (drinks == null) ? new ArrayList<>() : drinks;
 
         }

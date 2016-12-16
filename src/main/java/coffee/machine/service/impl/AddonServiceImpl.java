@@ -41,9 +41,7 @@ public class AddonServiceImpl implements AddonService {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             AddonDao addonDao = daoFactory.getAddonDao(connection);
-            connection.beginTransaction();
             List<Item> addons = addonDao.getAll();
-            connection.commitTransaction();
             return (addons == null) ? new ArrayList<>() : addons;
 
         }

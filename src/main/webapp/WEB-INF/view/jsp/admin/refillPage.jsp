@@ -46,7 +46,7 @@
                 <td>
                     <div align="center">
                         <input type="number" step="1" min=0 name="${Parameters.DRINK_PARAMETER_STARTS_WITH}${drink.id}"
-                               style="width: 20pt"
+                               style="width: 30pt"
                                value="${empty requestScope[Attributes.PREVIOUS_VALUES_TABLE]?0:requestScope[Attributes.PREVIOUS_VALUES_TABLE].get(Parameters.DRINK_PARAMETER_STARTS_WITH.concat(drink.id))}">
                     </div>
                 </td>
@@ -67,7 +67,7 @@
                 <td>
                     <div align="center">
                         <input type="number" step="1" min="0"  name="${Parameters.ADDON_PARAMETER_STARTS_WITH}${addon.id}"
-                               style="width: 20pt"
+                               style="width: 30pt"
                                value="${empty requestScope[Attributes.PREVIOUS_VALUES_TABLE]?0:requestScope[Attributes.PREVIOUS_VALUES_TABLE].get(Parameters.ADDON_PARAMETER_STARTS_WITH.concat(addon.id))}">
                     </div>
                 </td>

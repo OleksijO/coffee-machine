@@ -36,10 +36,7 @@ public class AccountServiceImpl implements AccountService {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             AccountDao accountDao = daoFactory.getAccountDao(connection);
-            connection.beginTransaction();
-            Account account = accountDao.getById(id);
-            connection.commitTransaction();
-            return account;
+            return accountDao.getById(id);
         }
     }
 
@@ -48,10 +45,7 @@ public class AccountServiceImpl implements AccountService {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             AccountDao accountDao = daoFactory.getAccountDao(connection);
-            connection.beginTransaction();
-            Account account = accountDao.getByUserId(userId);
-            connection.commitTransaction();
-            return account;
+            return accountDao.getByUserId(userId);
         }
     }
 

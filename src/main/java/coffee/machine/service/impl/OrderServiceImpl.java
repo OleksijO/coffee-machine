@@ -33,10 +33,7 @@ public class OrderServiceImpl implements OrderService {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             OrderDao orderDao = daoFactory.getOrderDao(connection);
-            connection.beginTransaction();
-            List<Order> orders =  orderDao.getAllByUserId(userId);
-            connection.commitTransaction();
-            return orders;
+            return orderDao.getAllByUserId(userId);
 
         }
     }
