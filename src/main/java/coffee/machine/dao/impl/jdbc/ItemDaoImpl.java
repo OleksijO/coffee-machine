@@ -52,15 +52,15 @@ class ItemDaoImpl extends AbstractDao<Item> {
             logErrorAndThrowDaoException(logger, CAN_NOT_CREATE_ALREADY_SAVED);
         }
 
-        try (PreparedStatement statemement = connection.prepareStatement(INSERT_SQL,
+        try (PreparedStatement statement = connection.prepareStatement(INSERT_SQL,
                 Statement.RETURN_GENERATED_KEYS)) {
 
-            statemement.setString(1, item.getName());
-            statemement.setLong(2, item.getPrice());
-            statemement.setInt(3, item.getQuantity());
-            statemement.setString(4, item.getType().toString());
+            statement.setString(1, item.getName());
+            statement.setLong(2, item.getPrice());
+            statement.setInt(3, item.getQuantity());
+            statement.setString(4, item.getType().toString());
 
-            int itemId = executeInsertStatement(statemement);
+            int itemId = executeInsertStatement(statement);
             item.setId(itemId);
         } catch (SQLException e) {
             logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_INSERTING, item, e);

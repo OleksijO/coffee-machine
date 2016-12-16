@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 /**
@@ -121,7 +120,7 @@ public class CoffeeMachineServiceImplTest {
 
         service.prepareDrinksForUser(drinksToBuy, userId);
 
-        varifyDaoAccesionTimes(1, 0, 2);
+        verifyDabAccessionTimes(1, 0, 2);
         verifyTestResultsDrinksWithoutAddons();
 
     }
@@ -132,7 +131,7 @@ public class CoffeeMachineServiceImplTest {
 
         service.prepareDrinksForUser(drinksToBuy, userId);
 
-        varifyDaoAccesionTimes(1, 1, 2);
+        verifyDabAccessionTimes(1, 1, 2);
         verifyTestResultsDrinksWithoutAddons();
         verifyTestResultsDrinksWithAddons();
     }
@@ -155,7 +154,7 @@ public class CoffeeMachineServiceImplTest {
             userAccount.setAmount(userAccountInitialAmount);
         }
 
-        varifyDaoAccesionTimes(0, 0, 0);
+        verifyDabAccessionTimes(0, 0, 0);
     }
 
     @Test
@@ -176,7 +175,7 @@ public class CoffeeMachineServiceImplTest {
             Drinks.ESPRESSO.drink.setQuantity(memory);
         }
 
-        varifyDaoAccesionTimes(0, 0, 0);
+        verifyDabAccessionTimes(0, 0, 0);
     }
 
     @Test
@@ -193,7 +192,7 @@ public class CoffeeMachineServiceImplTest {
             fail(HERE_SHOULD_BE_APPLICATION_EXCEPTION);
         }
 
-        varifyDaoAccesionTimes(0, 0, 0);
+        verifyDabAccessionTimes(0, 0, 0);
     }
 
     private void prepareDataForTestDrinksWithoutAddons(int drinkQuantity, int userId) {
@@ -217,11 +216,10 @@ public class CoffeeMachineServiceImplTest {
         List<Item> updatedAddons = addonListCaptor.getValue();
         assertNotNull(LIST_OF_ADDONS_TO_UPDATE_SHOULD_BE_NOT_NULL, updatedAddons);
         if (addonQuantity > 0) {
-            updatedAddons.forEach(addon -> {
-                assertEquals(String.format(ADDON_QUANTITY_SHOULD_DECREASE_FORMAT,addonQuantity, addon.getId()),
-                        addonQuantitiesById.get(addon.getId()) - addonQuantity * drinkQuantity,
-                        addon.getQuantity());
-            });
+            updatedAddons.forEach(addon ->
+                    assertEquals(String.format(ADDON_QUANTITY_SHOULD_DECREASE_FORMAT,addonQuantity, addon.getId()),
+                    addonQuantitiesById.get(addon.getId()) - addonQuantity * drinkQuantity,
+                    addon.getQuantity()));
         }
     }
 
@@ -232,17 +230,16 @@ public class CoffeeMachineServiceImplTest {
         List<Drink> updatedDrinks = drinkListCaptor.getValue();
 
         assertNotNull(LIST_OF_DRINKS_TO_UPDATE_SHOULD_BE_NOT_NULL, updatedDrinks);
-        updatedDrinks.forEach(drink1 -> {
-            assertEquals(String.format(DRINK_QUANTITY_SHOULD_DECREASE_FORMAT,drinkQuantity,drink1.getId()),
-                    drinkQuantitiesById.get(drink1.getId()) - drinkQuantity,
-                    drink1.getQuantity());
-        });
+        updatedDrinks.forEach(drink1 ->
+                assertEquals(String.format(DRINK_QUANTITY_SHOULD_DECREASE_FORMAT,drinkQuantity,drink1.getId()),
+                drinkQuantitiesById.get(drink1.getId()) - drinkQuantity,
+                drink1.getQuantity()));
 
         assertEquals(COFFEE_MACHINE_BALANCE_MISMATCH, cmAccountAmount + sumAmount, cmAccount.getAmount());
         assertEquals(USER_BALANCE_MISMATCH, userAccountInitialAmount - sumAmount, userAccount.getAmount());
     }
 
-    private void varifyDaoAccesionTimes(int drinkTimes, int addonTimes, int accountTimes) {
+    private void verifyDabAccessionTimes(int drinkTimes, int addonTimes, int accountTimes) {
         verify(drinkDao, times(drinkTimes)).updateQuantityAllInList(drinkListCaptor.capture());
         verify(addonDao, times(addonTimes)).updateQuantityAllInList(addonListCaptor.capture());
         verify(accountDao, times(accountTimes)).update(accountCaptor.capture());

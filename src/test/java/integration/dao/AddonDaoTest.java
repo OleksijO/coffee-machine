@@ -152,24 +152,24 @@ public class AddonDaoTest {
 
     @Test
     public void testGetAllFromList() throws Exception {
-        List<Item> itemsToRetrive = new ArrayList<>();
+        List<Item> itemsToRetrieve = new ArrayList<>();
         Item addon = Addons.CREAM.getCopy();
         addon.setQuantity(4);
-        itemsToRetrive.add(addon);
+        itemsToRetrieve.add(addon);
         addon = Addons.CINNAMON.getCopy();
         addon.setQuantity(4);
-        itemsToRetrive.add(addon);
-        assertEquals(itemsToRetrive, addonDao.getAllFromList(itemsToRetrive));
+        itemsToRetrieve.add(addon);
+        assertEquals(itemsToRetrieve, addonDao.getAllFromList(itemsToRetrieve));
     }
 
     @Test
     public void testGetAllByIds() throws Exception {
-        List<Item> itemsToRetrive = new ArrayList<Item>() {{
+        List<Item> itemsToRetrieve = new ArrayList<Item>() {{
             add(Addons.CREAM.getCopy());
             add(Addons.CINNAMON.getCopy());
         }};
         Set<Integer> ids = new TreeSet<Integer>(){{add(9);add(13);}};
-        assertEquals(itemsToRetrive, addonDao.getAllByIds(ids));
+        assertEquals(itemsToRetrieve, addonDao.getAllByIds(ids));
     }
 
 }

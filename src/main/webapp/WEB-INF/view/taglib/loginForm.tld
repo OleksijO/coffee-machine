@@ -40,7 +40,7 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>loginPreviosValue</name>
+            <name>loginPreviousValue</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

@@ -42,7 +42,7 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
     }
 
     /**
-     * The main method, which redirects request to an approprient page depends on commands results.
+     * The main method, which redirects request to an appropriate page depends on commands results.
      *
      * @param command  command instance, which corresponds request uri
      * @param request  request instance

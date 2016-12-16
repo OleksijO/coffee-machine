@@ -21,7 +21,7 @@ import static coffee.machine.view.PagesPaths.USER_REGISTER_PAGE;
 import static coffee.machine.view.PagesPaths.USER_REGISTER_SUCCESS_PAGE;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 08.12.2016.
+ * Created by oleksij.onysymchuk@gmail
  */
 public class UserRegisterSubmitCommand extends CommandExecuteWrapper {
     private static final Logger logger = Logger.getLogger(UserRegisterSubmitCommand.class);

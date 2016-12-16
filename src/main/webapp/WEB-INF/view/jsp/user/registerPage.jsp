@@ -13,7 +13,7 @@
     <b><fmt:message key="register.form.user.title"/></b><br>
     <hr>
     <fmt:message key="error.login.email.do.not.match.pattern" var="titleLoginInput"/>
-    <fmt:message key="error.login.password.do.not.match.pattern" var="titlePaswordInput"/>
+    <fmt:message key="error.login.password.do.not.match.pattern" var="titlePasswordInput"/>
     <fmt:message key="error.register.full.name.do.not.match.pattern" var="titleFullNameInput"/>
     <fmt:message key="register.submit" var="message_submit"/>
     <fmt:message key="cancel" var="message_cancel"/>
@@ -31,7 +31,7 @@
                 <td><br><label for="pswd"><fmt:message key="login.password"/></label>&nbsp;<br><br></td>
                 <td><br><input id="pswd" minlength="4" type="password" name="${Parameters.PASSWORD_PARAM}"
                                pattern="${RegExp.REGEXP_PASSWORD}" required
-                               title="${titlePaswordInput}"/><br><br></td>
+                               title="${titlePasswordInput}"/><br><br></td>
             </tr>
             <tr>
                 <td><br><label for="fullName"><fmt:message key="register.full.name"/></label>&nbsp;<br><br></td>

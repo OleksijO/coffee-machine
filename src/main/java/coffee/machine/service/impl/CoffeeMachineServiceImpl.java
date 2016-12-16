@@ -113,7 +113,7 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
 
     private void performMoneyExchange(AccountDao accountDao, Account userAccount, long drinksPrice) {
         Account coffeeMachineAccount = accountDao.getById(COFFEE_MACHINE_ACCOUNT_ID);
-        userAccount.withdrow(drinksPrice);
+        userAccount.withdraw(drinksPrice);
         coffeeMachineAccount.add(drinksPrice);
         accountDao.update(coffeeMachineAccount);
         accountDao.update(userAccount);
@@ -132,26 +132,22 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
             baseDrinks.put(baseDrink, baseDrinks.get(baseDrink) + quantity);
         });
 
-        baseDrinks.keySet().forEach(drink -> {
-            drink.setQuantity(baseDrinks.get(drink));
-        });
+        baseDrinks.keySet().forEach(drink -> drink.setQuantity(baseDrinks.get(drink)));
 
         return new ArrayList<>(baseDrinks.keySet());
     }
 
     private List<Item> getAddonsFromDrinks(List<Drink> drinks) {
         HashMap<Item, Integer> addons = new HashMap<>();
-        drinks.forEach(drink -> {
-            drink.getAddons().forEach(addonToBy -> {
-                int quantity = addonToBy.getQuantity();
-                Item addon = addonToBy.getCopy();
-                addon.setQuantity(0);
-                if (!addons.containsKey(addon)) {
-                    addons.put(addon, 0);
-                }
-                addons.put(addon, addons.get(addon) + quantity * drink.getQuantity());
-            });
-        });
+        drinks.forEach(drink -> drink.getAddons().forEach(addonToBy -> {
+            int quantity = addonToBy.getQuantity();
+            Item addon = addonToBy.getCopy();
+            addon.setQuantity(0);
+            if (!addons.containsKey(addon)) {
+                addons.put(addon, 0);
+            }
+            addons.put(addon, addons.get(addon) + quantity * drink.getQuantity());
+        }));
 
         List<Item> addonsWithQuantity = new ArrayList<>();
 
@@ -192,9 +188,8 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
             itemsAvailableQuantity.put(itemToBuy.getId(), availableQuantity);
         });
 
-        itemsAvailable.forEach(itemAvailable -> {
-            itemAvailable.setQuantity(itemsAvailableQuantity.get(itemAvailable.getId()));
-        });
+        itemsAvailable.forEach(
+                itemAvailable -> itemAvailable.setQuantity(itemsAvailableQuantity.get(itemAvailable.getId())));
 
         return itemsAvailable;
     }

@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class ItemsStringFormDataExtractorImpl implements ItemsStringFormDataExtractor {
-    private final Pattern PATTERN_ITEM = Pattern.compile(RegExp.REQEXP_ANY_ITEM);
+    private final Pattern PATTERN_ITEM = Pattern.compile(RegExp.REGEXP_ANY_ITEM);
     private FormStringValuesExtractor generalExtractor = new FormStringValuesExtractor();
 
     public Map<String, String> getAllItemParameterValuesFromRequest(HttpServletRequest request){

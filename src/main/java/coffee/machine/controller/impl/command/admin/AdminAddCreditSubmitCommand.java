@@ -25,7 +25,7 @@ import static coffee.machine.view.PagesPaths.ADMIN_ADD_CREDITS_PAGE;
 import static coffee.machine.view.Parameters.CREDITS_TO_ADD;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 06.12.2016.
+ * Created by oleksij.onysymchuk@gmail
  */
 public class AdminAddCreditSubmitCommand extends CommandExecuteWrapper {
     private static final String TO_USER_ID_ACCOUNT_ADDED_N_CREDITS_FORMAT =

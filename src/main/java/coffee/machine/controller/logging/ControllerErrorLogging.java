@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface ControllerErrorLogging extends ApplicationErrorLogging {
     String MESSAGE_IN_CASE_OF_EMPTY = "";
-    String SEPATATOR = "\t";
+    String SEPARATOR = "\t";
     String STATE = "\nState:";
     String USER_ID_IS = "User_ID=";
     String ADMIN_ID_IS = "Admin_ID=";
@@ -61,19 +61,19 @@ public interface ControllerErrorLogging extends ApplicationErrorLogging {
         if (request.getSession().getAttribute(Attributes.USER_ID) != null) {
             int userId = (int) request.getSession().getAttribute(Attributes.USER_ID);
             if (userId > 0) {
-                messageBuilder.append(SEPATATOR).append(USER_ID_IS).append(userId);
+                messageBuilder.append(SEPARATOR).append(USER_ID_IS).append(userId);
             }
         }
         if (request.getSession().getAttribute(Attributes.ADMIN_ID) != null) {
             int adminId = (int) request.getSession().getAttribute(Attributes.ADMIN_ID);
             if (adminId > 0) {
-                messageBuilder.append(SEPATATOR).append(ADMIN_ID_IS).append(adminId);
+                messageBuilder.append(SEPARATOR).append(ADMIN_ID_IS).append(adminId);
             }
         }
-        messageBuilder.append(SEPATATOR).append(REQUEST_URI_IS).append(request.getRequestURI())
-                .append(SEPATATOR).append(REQUEST_METHOD).append(request.getMethod().toUpperCase())
-                .append(SEPATATOR).append(REQUEST_QUERY_IS).append(request.getQueryString())
-                .append(SEPATATOR)
+        messageBuilder.append(SEPARATOR).append(REQUEST_URI_IS).append(request.getRequestURI())
+                .append(SEPARATOR).append(REQUEST_METHOD).append(request.getMethod().toUpperCase())
+                .append(SEPARATOR).append(REQUEST_QUERY_IS).append(request.getQueryString())
+                .append(SEPARATOR)
                 .append(USER_LOCALE_IS).append(request.getSession().getAttribute(Attributes.USER_LOCALE));
 
         return messageBuilder.toString();

@@ -19,7 +19,7 @@ import java.util.Locale;
  * locale to locale of request if it is supported by application (or sets up default), later changes on demand by
  * request query parameter.
  *
- * Also, sets up message resource budle for the view pages.
+ * Also, sets up message resource bundle for the view pages.
  *
  *  @author oleksij.onysymchuk@gmail.com
  */
@@ -79,10 +79,10 @@ public class LocaleFilter implements Filter {
     private void initialSetUpOfUserLocale(HttpServletRequest request) {
         HttpSession session = request.getSession();
         Locale locale = null;
-        Locale requeslLocale = request.getLocale();
-        if (requeslLocale != null) {
+        Locale requestLocale = request.getLocale();
+        if (requestLocale != null) {
             for (SupportedLocale loc : SupportedLocale.values()) {
-                if (loc.getLocale().toString().equals(requeslLocale.toString())) {
+                if (loc.getLocale().toString().equals(requestLocale.toString())) {
                     locale = loc.getLocale();
                     break;
                 }

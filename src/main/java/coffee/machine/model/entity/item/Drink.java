@@ -31,7 +31,7 @@ public class Drink extends Item {
     }
 
     /**
-     * @return Totla price of base drink and sum of prices of all addons in it
+     * @return Total price of base drink and sum of prices of all addons in it
      */
     public long getTotalPrice() {
         long totalPrice = price;

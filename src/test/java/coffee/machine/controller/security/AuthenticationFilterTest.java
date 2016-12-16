@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 /**
  * @author oleksij.onysymchuk@gmail.com
  */
-public class AuthentificationFilterTest {
+public class AuthenticationFilterTest {
     @Mock
     HttpServletRequest request;
     @Mock
@@ -29,7 +29,7 @@ public class AuthentificationFilterTest {
     @Mock
     RequestDispatcher requestDispatcher;
 
-    private Filter filter = new AuthentificationFilter();
+    private Filter filter = new AuthenticationFilter();
 
     @Before
     public void init() {

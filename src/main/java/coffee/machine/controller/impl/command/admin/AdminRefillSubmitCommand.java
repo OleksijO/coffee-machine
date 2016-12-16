@@ -65,7 +65,7 @@ public class AdminRefillSubmitCommand extends CommandExecuteWrapper {
         boolean anyItemWereAdded = performRefilling(drinkAddQuantityByIds, addonAddQuantityByIds);
 
         if (anyItemWereAdded) {
-            request.setAttribute(USUAL_MESSAGE, CommandKey.ADMIN_REFILL_SUCCESSFULL);
+            request.setAttribute(USUAL_MESSAGE, CommandKey.ADMIN_REFILL_SUCCESSFUL);
             logger.info(String.format(ITEMS_ADDED, (int) request.getSession().getAttribute(Attributes.ADMIN_ID),
                     drinkAddQuantityByIds, addonAddQuantityByIds));
         } else {

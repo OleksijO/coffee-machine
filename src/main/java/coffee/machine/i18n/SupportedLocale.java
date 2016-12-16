@@ -29,9 +29,6 @@ public enum SupportedLocale {
         return param;
     }
 
-    /**
-     * @return
-     */
     public static Locale getDefault() {
         return defaultLocale.getLocale();
     }

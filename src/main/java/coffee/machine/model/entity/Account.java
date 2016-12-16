@@ -11,7 +11,7 @@ public class Account {
 	private int id;
 	private long amount;
 
-	public void withdrow(long amount) {
+	public void withdraw(long amount) {
 		this.amount -= amount;
 	}
 

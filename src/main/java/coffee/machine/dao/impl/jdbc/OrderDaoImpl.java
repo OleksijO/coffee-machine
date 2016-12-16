@@ -279,7 +279,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
             statementAddon.setInt(1, userId);
             try (ResultSet resultSetOrder = statementOrder.executeQuery();
                  ResultSet resultSetDrink = statementDrink.executeQuery();
-                 ResultSet resultSetAddon = statementAddon.executeQuery();) {
+                 ResultSet resultSetAddon = statementAddon.executeQuery()) {
                 return parseResultSets(resultSetOrder, resultSetDrink, resultSetAddon);
             }
         } catch (SQLException e) {

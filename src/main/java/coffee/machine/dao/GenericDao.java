@@ -22,7 +22,7 @@ public interface GenericDao<T> {
 	 * Updates correspondent to object rows in database
 	 * 
 	 * @param obj
-	 *            instanse to update
+	 *            instance to update
 	 */
 	void update(T obj);
 
@@ -35,7 +35,7 @@ public interface GenericDao<T> {
 	 * Searches for saved instance by id
 	 * 
 	 * @param id
-	 *            instanse's field id
+	 *            instance's field id
 	 * @return Returns NULL if there is no entity with specified Id
 	 */
 	T getById(int id);
@@ -44,8 +44,7 @@ public interface GenericDao<T> {
 	 * Searches for saved instance by id and removes it from BD
 	 * 
 	 * @param id
-	 *            instanse's field id
-	 * @return Returns NULL if there is no entity with specified Id
+	 *            instance's field id
 	 */
 	void deleteById(int id);
 }

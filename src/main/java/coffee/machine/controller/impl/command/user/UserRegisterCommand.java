@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 08.12.2016.
+ * Created by oleksij.onysymchuk@gmail
  */
 public class UserRegisterCommand implements Command {
     private UserRegisterCommandHelper helper = new UserRegisterCommandHelper();

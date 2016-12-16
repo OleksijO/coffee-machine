@@ -10,10 +10,10 @@ import java.util.Map;
  */
 enum TestData {
     EMPTY_TEST(
-            new HashMap<String, String>(),
-            new HashMap<Integer, Integer>(),
-            new HashMap<Integer, Integer>(),
-            new HashMap<Integer, Map<Integer, Integer>>()
+            new HashMap<>(),
+            new HashMap<>(),
+            new HashMap<>(),
+            new HashMap<>()
     ),
 
     FULL_TEST(

@@ -164,12 +164,12 @@ public class DrinkDaoTest {
 
     @Test
     public void testGetAllByIds() throws Exception {
-        List<Drink> itemsToRetrive = new ArrayList<Drink>() {{
+        List<Drink> itemsToRetrieve = new ArrayList<Drink>() {{
             add(Drinks.BORJOMI.getCopy());
             add(Drinks.MOCACCINO.getCopy());
         }};
         Set<Integer> ids = new TreeSet<Integer>(){{add(2);add(11);}};
-        assertEquals(itemsToRetrive, drinkDao.getAllByIds(ids));
+        assertEquals(itemsToRetrieve, drinkDao.getAllByIds(ids));
     }
 
 }

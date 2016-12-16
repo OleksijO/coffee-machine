@@ -87,9 +87,7 @@ public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
 
     void setDrinkQuantities(List<Drink> drinks, Map<Integer, Integer> drinkQuantityByIds) {
 
-        drinks.forEach(drink -> {
-            drink.setQuantity(drinkQuantityByIds.get(drink.getId()));
-        });
+        drinks.forEach(drink -> drink.setQuantity(drinkQuantityByIds.get(drink.getId())));
     }
 
     void setAddonsQuantityInDrinks(Map<Integer, Map<Integer, Integer>> addonsQuantityInDrinksById, List<Drink> drinks) {

@@ -19,7 +19,7 @@ import static coffee.machine.view.Attributes.PAGE_TITLE;
 import static coffee.machine.view.PagesPaths.ADMIN_ADD_CREDITS_PAGE;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 06.12.2016.
+ * Created by oleksij.onysymchuk@gmail
  */
 public class AdminAddCreditCommand extends CommandExecuteWrapper {
     UserService userService = UserServiceImpl.getInstance();

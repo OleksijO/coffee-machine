@@ -6,7 +6,7 @@ package coffee.machine.i18n.message.key;
  * @author oleksij.onysymchuk@gmail.com
  */
 public interface CommandKey {
-    String ADMIN_REFILL_SUCCESSFULL = "refill.successful";
+    String ADMIN_REFILL_SUCCESSFUL = "refill.successful";
 
     String PURCHASE_THANKS_MESSAGE = "user.purchase.thanks.for.purchase";
 

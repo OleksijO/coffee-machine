@@ -15,9 +15,9 @@ import java.io.IOException;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class AuthentificationFilter implements Filter {
-    private static final Logger logger = Logger.getLogger(AuthentificationFilter.class);
-    private static final String ACCESS_DENIDED_LOG_MESSAGE_FORMAT =
+public class AuthenticationFilter implements Filter {
+    private static final Logger logger = Logger.getLogger(AuthenticationFilter.class);
+    private static final String ACCESS_DENIED_LOG_MESSAGE_FORMAT =
             "Access denied. Requested URI='%s', userId='%s', adminId='%s'";
 
     @Override
@@ -32,7 +32,7 @@ public class AuthentificationFilter implements Filter {
         if (((userId == null) && (uri.startsWith(PagesPaths.USER)) && (!uri.startsWith(PagesPaths.USER_REGISTER_PATH)))
                 || ((uri.startsWith(PagesPaths.ADMIN) && (adminId == null)))) {
             req.getRequestDispatcher(PagesPaths.LOGIN_PATH).forward(request, response);
-            logger.info(String.format(ACCESS_DENIDED_LOG_MESSAGE_FORMAT, uri, userId, adminId));
+            logger.info(String.format(ACCESS_DENIED_LOG_MESSAGE_FORMAT, uri, userId, adminId));
             return;
         }
 

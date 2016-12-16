@@ -41,7 +41,7 @@ public class LoginFormTag implements Tag {
     /**
      * previous value of login - in case of login error should stay in input field
      */
-    private String loginPreviosValue;
+    private String loginPreviousValue;
     /**
      * label text for password field label - should be message key from resource bundle
      */
@@ -77,7 +77,7 @@ public class LoginFormTag implements Tag {
                     "                <td><br><label for=\"login\">" + bundle.getString(loginLabelMessageKey)
                                                                     + "</label>&nbsp;<br><br></td>\n" +
                     "                <td><br><input id=\"login\" type=\"text\" name=\"" + parameterLogin + "\"\n" +
-                    "                               value=\"" + loginPreviosValue + "\"" +
+                    "                               value=\"" + loginPreviousValue + "\"" +
                     "                  required     pattern=\"" + RegExp.REGEXP_EMAIL + "\""+
                     "  title=\""+bundle.getString("error.login.email.do.not.match.pattern")+ "\"/><br><br></td>\n" +
                     "            </tr>\n" +
@@ -157,8 +157,8 @@ public class LoginFormTag implements Tag {
         this.parameterLogin = parameterLogin;
     }
 
-    public void setLoginPreviosValue(String loginPreviosValue) {
-        this.loginPreviosValue = loginPreviosValue;
+    public void setLoginPreviousValue(String loginPreviousValue) {
+        this.loginPreviousValue = loginPreviousValue;
     }
 
     public void setPasswordLabelMessageKey(String passwordLabelMessageKey) {
