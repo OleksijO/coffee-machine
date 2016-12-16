@@ -18,6 +18,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 /**
+ *  Performs tests of corresponding DAO on real test database (it should be already created)
+ *
  * @author oleksij.onysymchuk@gmail.com
  */
 public class UserDaoTest {

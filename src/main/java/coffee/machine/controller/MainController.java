@@ -18,7 +18,7 @@ import static coffee.machine.view.Attributes.ERROR_MESSAGE;
 import static coffee.machine.view.PagesPaths.HOME_PAGE;
 
 /**
- * This class represents main request controller. It calls commands for correspondent request uri
+ * This class represents request dispatcher. It calls commands for correspondent request uri
  * and forwards request to the appropriate view page.
  *
  * @author oleksij.onysymchuk@gmail.com

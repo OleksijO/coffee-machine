@@ -15,6 +15,8 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 /**
+ * Performs tests of corresponding DAO on real test database (it should be already created)
+ *
  * @author oleksij.onysymchuk@gmail.com
  */
 public class OrderDaoTest {

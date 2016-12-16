@@ -9,6 +9,8 @@ import java.util.Date;
 import static data.test.entity.Orders.ConstHolder.*;
 
 /**
+ * This enum represents data for tests, corresponding to sql populate script
+ *
  * @author oleksij.onysymchuk@gmail.com
  */
 public enum Orders {

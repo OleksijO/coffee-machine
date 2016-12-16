@@ -6,6 +6,8 @@ import coffee.machine.model.entity.item.ItemType;
 import java.util.*;
 
 /**
+ * This enum represents data for tests, corresponding to sql populate script
+ *
  * @author oleksij.onysymchuk@gmail.com
  */
 public enum Addons {

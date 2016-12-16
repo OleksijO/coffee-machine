@@ -15,8 +15,8 @@ import java.io.IOException;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class AuthenticationFilter implements Filter {
-    private static final Logger logger = Logger.getLogger(AuthenticationFilter.class);
+public class AuthFilter implements Filter {
+    private static final Logger logger = Logger.getLogger(AuthFilter.class);
     private static final String ACCESS_DENIED_LOG_MESSAGE_FORMAT =
             "Access denied. Requested URI='%s', userId='%s', adminId='%s'";
 

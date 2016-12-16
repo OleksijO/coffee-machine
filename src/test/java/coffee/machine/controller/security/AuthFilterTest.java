@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 /**
  * @author oleksij.onysymchuk@gmail.com
  */
-public class AuthenticationFilterTest {
+public class AuthFilterTest {
     @Mock
     HttpServletRequest request;
     @Mock
@@ -29,7 +29,7 @@ public class AuthenticationFilterTest {
     @Mock
     RequestDispatcher requestDispatcher;
 
-    private Filter filter = new AuthenticationFilter();
+    private Filter filter = new AuthFilter();
 
     @Before
     public void init() {
@@ -43,6 +43,34 @@ public class AuthenticationFilterTest {
         performTest("", null, null, "", 0);
         performTest("/", null, null, "/", 0);
         performTest("/", 1, null, "/", 0);
+    }
+
+    /**
+     * Performs test, configured by params
+     *
+     * @param path                          request's URI (where request is going to)
+     * @param adminId                       Admin's id in attribute in session (admin with which id is logged in)
+     * @param userId                        User's id in attribute in session (user with which id is logged in)
+     * @param expectedPath                  URI, where filter should route request with specified id's and path
+     * @param expectedDispatcherCallTimes   Number of times, when forwarding should be performed
+     * @throws ServletException             In case of container problems
+     * @throws IOException                  In case of container problems
+     */
+    private void performTest(String path, Integer adminId, Integer userId, String expectedPath,
+                             int expectedDispatcherCallTimes) throws ServletException, IOException {
+        setUpMocks(path, adminId, userId);
+        filter.doFilter(request, response, chain);
+        if (expectedDispatcherCallTimes > 0) {
+            verify(request, times(expectedDispatcherCallTimes)).getRequestDispatcher(expectedPath);
+        } else {
+            verify(request, never()).getRequestDispatcher(expectedPath);
+        }
+    }
+
+    private void setUpMocks(String uri, Integer adminId, Integer userId) {
+        when(request.getRequestURI()).thenReturn(uri);
+        when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(adminId);
+        when(session.getAttribute(Attributes.USER_ID)).thenReturn(userId);
     }
 
     @Test
@@ -97,24 +125,4 @@ public class AuthenticationFilterTest {
     public void testDoFilterAdminLoggedInTryToGetUserPages() throws Exception {
         performTest(USER_ORDER_HISTORY_PATH, 1, null, LOGIN_PATH, 1);
     }
-
-    private void performTest(String path, Integer adminId, Integer userId, String expectedPath,
-                             int expectedDispatcherCallTimes) throws ServletException, IOException {
-        setUpMocks(path, adminId, userId);
-        filter.doFilter(request, response, chain);
-        if (expectedDispatcherCallTimes > 0) {
-            verify(request, times(expectedDispatcherCallTimes)).getRequestDispatcher(expectedPath);
-        } else {
-            verify(request, never()).getRequestDispatcher(expectedPath);
-        }
-
-    }
-
-
-    private void setUpMocks(String uri, Integer adminId, Integer userId) {
-        when(request.getRequestURI()).thenReturn(uri);
-        when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(adminId);
-        when(session.getAttribute(Attributes.USER_ID)).thenReturn(userId);
-    }
-
 }
