@@ -3,7 +3,7 @@
 <%@ page import="coffee.machine.view.Parameters" %>
 <%@ page import="coffee.machine.i18n.SupportedLocale" %>
 <%@ page import="coffee.machine.view.Attributes" %>
-<%@ page import="coffee.machine.CoffeeMachineConfig" %>
+<%@ page import="coffee.machine.config.CoffeeMachineConfig" %>
 <%@ page import="coffee.machine.controller.RegExp" %>
 <%@ page import="org.apache.log4j.Logger" %>
 <%! static final Logger logger = Logger.getLogger("JSP ERROR HANDLER PAGE"); %>

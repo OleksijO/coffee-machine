@@ -24,7 +24,7 @@ public class UserPurchaseCommand extends CommandExecuteWrapper {
 
     @Override
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // just putting all needed for jsp data
+
         helper.setGeneralRegisterPageAttributes(request);
         int userId = (int) request.getSession().getAttribute(Attributes.USER_ID);
         request.setAttribute(Attributes.USER_ACCOUNT, accountService.getByUserId(userId));

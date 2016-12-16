@@ -1,6 +1,6 @@
 package coffee.machine.model.entity;
 
-import static coffee.machine.CoffeeMachineConfig.DB_MONEY_COEFF;
+import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFF;
 
 /**
  * This class represents Account entity.

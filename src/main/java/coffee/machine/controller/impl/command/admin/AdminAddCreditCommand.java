@@ -1,6 +1,6 @@
 package coffee.machine.controller.impl.command.admin;
 
-import coffee.machine.CoffeeMachineConfig;
+import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.impl.command.CommandExecuteWrapper;
 import coffee.machine.i18n.message.key.GeneralKey;
 import coffee.machine.model.entity.user.User;

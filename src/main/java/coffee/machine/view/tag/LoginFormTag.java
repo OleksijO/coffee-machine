@@ -1,6 +1,6 @@
 package coffee.machine.view.tag;
 
-import coffee.machine.CoffeeMachineConfig;
+import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.RegExp;
 import coffee.machine.view.Attributes;
 import org.apache.log4j.Logger;

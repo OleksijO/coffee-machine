@@ -84,6 +84,6 @@ class ItemsBySimpleParameterExtractor {
             }
         }
         throw new ControllerException(GeneralKey.ERROR_UNKNOWN);    // this should not happen
-    }                                                               // in case normal in-page operation
+    }                                                               // in case of normal in-page operation
 
 }

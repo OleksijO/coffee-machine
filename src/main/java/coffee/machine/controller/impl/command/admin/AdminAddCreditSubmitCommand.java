@@ -1,6 +1,6 @@
 package coffee.machine.controller.impl.command.admin;
 
-import coffee.machine.CoffeeMachineConfig;
+import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.impl.command.CommandExecuteWrapper;
 import coffee.machine.i18n.message.key.CommandKey;
 import coffee.machine.i18n.message.key.GeneralKey;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 
-import static coffee.machine.CoffeeMachineConfig.DB_MONEY_COEFF;
+import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFF;
 import static coffee.machine.view.Attributes.COFFEE_MACHINE_BALANCE;
 import static coffee.machine.view.Attributes.PAGE_TITLE;
 import static coffee.machine.view.PagesPaths.ADMIN_ADD_CREDITS_PAGE;

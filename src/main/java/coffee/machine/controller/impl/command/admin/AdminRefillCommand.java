@@ -1,6 +1,6 @@
 package coffee.machine.controller.impl.command.admin;
 
-import coffee.machine.CoffeeMachineConfig;
+import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.impl.command.CommandExecuteWrapper;
 import coffee.machine.i18n.message.key.GeneralKey;
 import coffee.machine.service.AccountService;
@@ -33,7 +33,6 @@ public class AdminRefillCommand extends CommandExecuteWrapper {
     @Override
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        // just putting all needed for jsp data
         request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_ADMIN_REFILL);
         request.setAttribute(Attributes.COFFEE_MACHINE_BALANCE,
                 accountService.getById(CoffeeMachineConfig.ACCOUNT_ID).getRealAmount());

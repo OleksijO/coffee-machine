@@ -1,6 +1,6 @@
 package coffee.machine.controller.impl.command.user;
 
-import coffee.machine.CoffeeMachineConfig;
+import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.impl.command.CommandExecuteWrapper;
 import coffee.machine.controller.impl.command.helper.RegisterFormData;
 import coffee.machine.controller.impl.command.helper.UserRegisterCommandHelper;

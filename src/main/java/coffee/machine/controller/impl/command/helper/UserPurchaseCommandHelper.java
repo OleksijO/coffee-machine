@@ -1,6 +1,6 @@
 package coffee.machine.controller.impl.command.helper;
 
-import coffee.machine.CoffeeMachineConfig;
+import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.logging.ControllerErrorLogging;
 import coffee.machine.i18n.message.key.GeneralKey;
 import coffee.machine.view.Attributes;

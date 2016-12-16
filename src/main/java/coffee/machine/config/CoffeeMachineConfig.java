@@ -1,4 +1,4 @@
-package coffee.machine;
+package coffee.machine.config;
 
 import java.util.ResourceBundle;
 

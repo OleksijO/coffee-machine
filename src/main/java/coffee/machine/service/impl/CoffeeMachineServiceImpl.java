@@ -1,6 +1,6 @@
 package coffee.machine.service.impl;
 
-import coffee.machine.CoffeeMachineConfig;
+import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.dao.*;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.Order;

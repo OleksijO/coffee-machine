@@ -14,7 +14,7 @@ public class RegExp {
     public static String REGEXP_EMAIL = regexp.getString("email");
     public static String REGEXP_PASSWORD = regexp.getString("password");
     public static String REGEXP_NUMBER = regexp.getString("number");
-    public static String REGEXP_FULL_NAME = regexp.getString("fullName");
+    public static String REGEXP_FULL_NAME = regexp.getString("full.name");
 
     public static String REGEXP_DRINK_PARAM = "^" + Parameters.DRINK_PARAMETER_STARTS_WITH + REGEXP_NUMBER + "$";
     public static String REGEXP_ADDON_PARAM = "^" + Parameters.ADDON_PARAMETER_STARTS_WITH + REGEXP_NUMBER + "$";

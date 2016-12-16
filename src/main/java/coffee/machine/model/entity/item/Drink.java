@@ -1,6 +1,6 @@
 package coffee.machine.model.entity.item;
 
-import coffee.machine.CoffeeMachineConfig;
+import coffee.machine.config.CoffeeMachineConfig;
 
 import java.util.Set;
 import java.util.TreeSet;

@@ -1,6 +1,6 @@
 package coffee.machine.model.entity;
 
-import coffee.machine.CoffeeMachineConfig;
+import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.model.entity.item.Drink;
 
 import java.util.Date;
