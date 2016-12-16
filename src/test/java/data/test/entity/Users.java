@@ -4,6 +4,8 @@ import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.user.User;
 
 /**
+ * This enum represents data for tests, corresponding to sql populate script
+ *
  * @author oleksij.onysymchuk@gmail.com
  */
 public enum Users {

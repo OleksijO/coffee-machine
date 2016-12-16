@@ -120,81 +120,15 @@ public class CoffeeMachineServiceImplTest {
 
         service.prepareDrinksForUser(drinksToBuy, userId);
 
-        verifyDabAccessionTimes(1, 0, 2);
+        verifyDaoAccessionTimesAndCaptureCalledMethodArgs(1, 0, 2);
         verifyTestResultsDrinksWithoutAddons();
 
     }
 
-    @Test
-    public void testPrepareDrinksForUserDrinksToBuyWithAddons() throws Exception {
-        prepareDataForTestDrinkWithAddons(4,2,1);
-
-        service.prepareDrinksForUser(drinksToBuy, userId);
-
-        verifyDabAccessionTimes(1, 1, 2);
-        verifyTestResultsDrinksWithoutAddons();
-        verifyTestResultsDrinksWithAddons();
-    }
-
-    @Test
-    public void testPrepareDrinksForUserNotEnoughMoney() throws Exception {
-
-        prepareDataForTestDrinkWithAddons(4,2,1);
-        userAccount.setAmount(0);
-
-        try {
-            service.prepareDrinksForUser(drinksToBuy, userId);
-        } catch (ServiceException e) {
-            e.printStackTrace();
-            Assert.assertEquals(ServiceErrorKey.NOT_ENOUGH_MONEY, e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail(HERE_SHOULD_BE_APPLICATION_EXCEPTION);
-        } finally {
-            userAccount.setAmount(userAccountInitialAmount);
-        }
-
-        verifyDabAccessionTimes(0, 0, 0);
-    }
-
-    @Test
-    public void testPrepareDrinksForUserNotEnoughDrinks() throws Exception {
-
-        prepareDataForTestDrinkWithAddons(4,2,1);
-        int memory = Drinks.ESPRESSO.drink.getQuantity();
-        Drinks.ESPRESSO.drink.setQuantity(0);
-        try {
-            service.prepareDrinksForUser(drinksToBuy, userId);
-        } catch (ServiceException e) {
-            e.printStackTrace();
-            Assert.assertEquals(ServiceErrorKey.ITEM_NO_LONGER_AVAILABLE, e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail(HERE_SHOULD_BE_APPLICATION_EXCEPTION);
-        } finally {
-            Drinks.ESPRESSO.drink.setQuantity(memory);
-        }
-
-        verifyDabAccessionTimes(0, 0, 0);
-    }
-
-    @Test
-    public void testPrepareDrinksForUserEmptyDrinks() throws Exception {
-        prepareDataForTestDrinkWithAddons(4,2,1);
-        drinksToBuy.clear();
-        try {
-            service.prepareDrinksForUser(drinksToBuy, userId);
-        } catch (ServiceException e) {
-            e.printStackTrace();
-            Assert.assertEquals(ServiceErrorKey.YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY, e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail(HERE_SHOULD_BE_APPLICATION_EXCEPTION);
-        }
-
-        verifyDabAccessionTimes(0, 0, 0);
-    }
-
+    /**
+     * @param drinkQuantity     Quantity of each test drink to buy
+     * @param userId            User's id, who purchases drinks
+     */
     private void prepareDataForTestDrinksWithoutAddons(int drinkQuantity, int userId) {
 
         this.drinkQuantity = drinkQuantity;
@@ -202,55 +136,6 @@ public class CoffeeMachineServiceImplTest {
         drinksToBuy = getTestDrinksWithoutAddons();
         setDrinksQuantity(drinksToBuy, drinkQuantity);
         sumAmount = getSumAmount(drinksToBuy);
-    }
-
-    private void prepareDataForTestDrinkWithAddons(int drinkQuantity, int userId, int addonQuantity) {
-        prepareDataForTestDrinksWithoutAddons(drinkQuantity, userId);
-        this.addonQuantity = addonQuantity;
-        drinksToBuy = getTestDrinksWithAddons(addonQuantity);
-        setDrinksQuantity(drinksToBuy, drinkQuantity);
-        sumAmount = getSumAmount(drinksToBuy);
-    }
-
-    private void verifyTestResultsDrinksWithAddons() {
-        List<Item> updatedAddons = addonListCaptor.getValue();
-        assertNotNull(LIST_OF_ADDONS_TO_UPDATE_SHOULD_BE_NOT_NULL, updatedAddons);
-        if (addonQuantity > 0) {
-            updatedAddons.forEach(addon ->
-                    assertEquals(String.format(ADDON_QUANTITY_SHOULD_DECREASE_FORMAT,addonQuantity, addon.getId()),
-                    addonQuantitiesById.get(addon.getId()) - addonQuantity * drinkQuantity,
-                    addon.getQuantity()));
-        }
-    }
-
-    private void verifyTestResultsDrinksWithoutAddons() {
-        List<Account> capturedAccounts = accountCaptor.getAllValues();
-        Account cmAccount = capturedAccounts.get(0);
-        Account userAccount = capturedAccounts.get(1);
-        List<Drink> updatedDrinks = drinkListCaptor.getValue();
-
-        assertNotNull(LIST_OF_DRINKS_TO_UPDATE_SHOULD_BE_NOT_NULL, updatedDrinks);
-        updatedDrinks.forEach(drink1 ->
-                assertEquals(String.format(DRINK_QUANTITY_SHOULD_DECREASE_FORMAT,drinkQuantity,drink1.getId()),
-                drinkQuantitiesById.get(drink1.getId()) - drinkQuantity,
-                drink1.getQuantity()));
-
-        assertEquals(COFFEE_MACHINE_BALANCE_MISMATCH, cmAccountAmount + sumAmount, cmAccount.getAmount());
-        assertEquals(USER_BALANCE_MISMATCH, userAccountInitialAmount - sumAmount, userAccount.getAmount());
-    }
-
-    private void verifyDabAccessionTimes(int drinkTimes, int addonTimes, int accountTimes) {
-        verify(drinkDao, times(drinkTimes)).updateQuantityAllInList(drinkListCaptor.capture());
-        verify(addonDao, times(addonTimes)).updateQuantityAllInList(addonListCaptor.capture());
-        verify(accountDao, times(accountTimes)).update(accountCaptor.capture());
-    }
-
-    private List<Drink> getTestDrinksWithoutAddons() {
-        List<Drink> drinks = new ArrayList<>();
-        drinks.add(Drinks.BORJOMI.getCopy().getBaseDrink());
-        drinks.add(Drinks.ESPRESSO.getCopy().getBaseDrink());
-        drinks.add(Drinks.MOCACCINO.getCopy().getBaseDrink());
-        return drinks;
     }
 
     private void setDrinksQuantity(List<Drink> drinks, int quantity) {
@@ -265,6 +150,78 @@ public class CoffeeMachineServiceImplTest {
             sumAmount += drink.getTotalPrice() * drink.getQuantity();
         }
         return sumAmount;
+    }
+
+    private List<Drink> getTestDrinksWithoutAddons() {
+        List<Drink> drinks = new ArrayList<>();
+        drinks.add(Drinks.BORJOMI.getCopy().getBaseDrink());
+        drinks.add(Drinks.ESPRESSO.getCopy().getBaseDrink());
+        drinks.add(Drinks.MOCACCINO.getCopy().getBaseDrink());
+        return drinks;
+    }
+
+    /**
+     * Verifies, that correct data was directed to DAO layer
+     */
+    private void verifyTestResultsDrinksWithoutAddons() {
+        List<Account> capturedAccounts = accountCaptor.getAllValues();
+        Account cmAccount = capturedAccounts.get(0);
+        Account userAccount = capturedAccounts.get(1);
+        List<Drink> updatedDrinks = drinkListCaptor.getValue();
+
+        assertNotNull(LIST_OF_DRINKS_TO_UPDATE_SHOULD_BE_NOT_NULL, updatedDrinks);
+        updatedDrinks.forEach(drink1 ->
+                assertEquals(String.format(DRINK_QUANTITY_SHOULD_DECREASE_FORMAT,drinkQuantity,drink1.getId()),
+                        drinkQuantitiesById.get(drink1.getId()) - drinkQuantity,
+                        drink1.getQuantity()));
+
+        assertEquals(COFFEE_MACHINE_BALANCE_MISMATCH, cmAccountAmount + sumAmount, cmAccount.getAmount());
+        assertEquals(USER_BALANCE_MISMATCH, userAccountInitialAmount - sumAmount, userAccount.getAmount());
+    }
+
+    // Verifies, that each dao was called exactly specified number of times and captures called method args
+    private void verifyDaoAccessionTimesAndCaptureCalledMethodArgs(int drinkTimes, int addonTimes, int accountTimes) {
+        verify(drinkDao, times(drinkTimes)).updateQuantityAllInList(drinkListCaptor.capture());
+        verify(addonDao, times(addonTimes)).updateQuantityAllInList(addonListCaptor.capture());
+        verify(accountDao, times(accountTimes)).update(accountCaptor.capture());
+    }
+
+    @Test
+    public void testPrepareDrinksForUserDrinksToBuyWithAddons() throws Exception {
+        prepareDataForTestDrinkWithAddons(4, 1, 2);
+
+        service.prepareDrinksForUser(drinksToBuy, userId);
+
+        verifyDaoAccessionTimesAndCaptureCalledMethodArgs(1, 1, 2);
+        verifyTestResultsDrinksWithoutAddons();
+        verifyTestResultsDrinksWithAddons();
+    }
+
+    /**
+     * @param drinkQuantity     Quantity of each test drink to buy
+     * @param addonQuantity     Quantity of each addon in each drink to buy
+     * @param userId            User's id, who purchases drinks
+     */
+    private void prepareDataForTestDrinkWithAddons(int drinkQuantity, int addonQuantity, int userId) {
+        prepareDataForTestDrinksWithoutAddons(drinkQuantity, userId);
+        this.addonQuantity = addonQuantity;
+        drinksToBuy = getTestDrinksWithAddons(addonQuantity);
+        setDrinksQuantity(drinksToBuy, drinkQuantity);
+        sumAmount = getSumAmount(drinksToBuy);
+    }
+
+    /**
+     * Verifies, that correct data was directed to DAO layer
+     */
+    private void verifyTestResultsDrinksWithAddons() {
+        List<Item> updatedAddons = addonListCaptor.getValue();
+        assertNotNull(LIST_OF_ADDONS_TO_UPDATE_SHOULD_BE_NOT_NULL, updatedAddons);
+        if (addonQuantity > 0) {
+            updatedAddons.forEach(addon ->
+                    assertEquals(String.format(ADDON_QUANTITY_SHOULD_DECREASE_FORMAT,addonQuantity, addon.getId()),
+                            addonQuantitiesById.get(addon.getId()) - addonQuantity * drinkQuantity,
+                            addon.getQuantity()));
+        }
     }
 
     private List<Drink> getTestDrinksWithAddons(int addonQuantity) {
@@ -282,7 +239,63 @@ public class CoffeeMachineServiceImplTest {
 
     }
 
+    @Test
+    public void testPrepareDrinksForUserNotEnoughMoney() throws Exception {
 
+        prepareDataForTestDrinkWithAddons(4, 1, 2);
+        userAccount.setAmount(0);
 
+        try {
+            service.prepareDrinksForUser(drinksToBuy, userId);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+            Assert.assertEquals(ServiceErrorKey.NOT_ENOUGH_MONEY, e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(HERE_SHOULD_BE_APPLICATION_EXCEPTION);
+        } finally {
+            userAccount.setAmount(userAccountInitialAmount);
+        }
+
+        verifyDaoAccessionTimesAndCaptureCalledMethodArgs(0, 0, 0);
+    }
+
+    @Test
+    public void testPrepareDrinksForUserNotEnoughDrinks() throws Exception {
+
+        prepareDataForTestDrinkWithAddons(4, 1, 2);
+        int memory = Drinks.ESPRESSO.drink.getQuantity();
+        Drinks.ESPRESSO.drink.setQuantity(0);
+        try {
+            service.prepareDrinksForUser(drinksToBuy, userId);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+            Assert.assertEquals(ServiceErrorKey.ITEM_NO_LONGER_AVAILABLE, e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(HERE_SHOULD_BE_APPLICATION_EXCEPTION);
+        } finally {
+            Drinks.ESPRESSO.drink.setQuantity(memory);
+        }
+
+        verifyDaoAccessionTimesAndCaptureCalledMethodArgs(0, 0, 0);
+    }
+
+    @Test
+    public void testPrepareDrinksForUserEmptyDrinks() throws Exception {
+        prepareDataForTestDrinkWithAddons(4, 1, 2);
+        drinksToBuy.clear();
+        try {
+            service.prepareDrinksForUser(drinksToBuy, userId);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+            Assert.assertEquals(ServiceErrorKey.YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY, e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(HERE_SHOULD_BE_APPLICATION_EXCEPTION);
+        }
+
+        verifyDaoAccessionTimesAndCaptureCalledMethodArgs(0, 0, 0);
+    }
 
 }

@@ -3,6 +3,8 @@ package data.test.entity;
 import coffee.machine.model.entity.Account;
 
 /**
+ * This enum represents data for tests, corresponding to sql populate script
+ *
  * @author oleksij.onysymchuk@gmail.com
  */
 public enum Accounts {

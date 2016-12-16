@@ -45,6 +45,34 @@ public class AuthenticationFilterTest {
         performTest("/", 1, null, "/", 0);
     }
 
+    /**
+     * Performs test, configured by params
+     *
+     * @param path                          request's URI (where request is going to)
+     * @param adminId                       Admin's id in attribute in session (admin with which id is logged in)
+     * @param userId                        User's id in attribute in session (user with which id is logged in)
+     * @param expectedPath                  URI, where filter should route request with specified id's and path
+     * @param expectedDispatcherCallTimes   Number of times, when forwarding should be performed
+     * @throws ServletException             In case of container problems
+     * @throws IOException                  In case of container problems
+     */
+    private void performTest(String path, Integer adminId, Integer userId, String expectedPath,
+                             int expectedDispatcherCallTimes) throws ServletException, IOException {
+        setUpMocks(path, adminId, userId);
+        filter.doFilter(request, response, chain);
+        if (expectedDispatcherCallTimes > 0) {
+            verify(request, times(expectedDispatcherCallTimes)).getRequestDispatcher(expectedPath);
+        } else {
+            verify(request, never()).getRequestDispatcher(expectedPath);
+        }
+    }
+
+    private void setUpMocks(String uri, Integer adminId, Integer userId) {
+        when(request.getRequestURI()).thenReturn(uri);
+        when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(adminId);
+        when(session.getAttribute(Attributes.USER_ID)).thenReturn(userId);
+    }
+
     @Test
     public void testDoFilterNotLoggedHomePath() throws Exception {
         performTest(HOME_PATH, null, null, HOME_PATH, 0);
@@ -97,24 +125,4 @@ public class AuthenticationFilterTest {
     public void testDoFilterAdminLoggedInTryToGetUserPages() throws Exception {
         performTest(USER_ORDER_HISTORY_PATH, 1, null, LOGIN_PATH, 1);
     }
-
-    private void performTest(String path, Integer adminId, Integer userId, String expectedPath,
-                             int expectedDispatcherCallTimes) throws ServletException, IOException {
-        setUpMocks(path, adminId, userId);
-        filter.doFilter(request, response, chain);
-        if (expectedDispatcherCallTimes > 0) {
-            verify(request, times(expectedDispatcherCallTimes)).getRequestDispatcher(expectedPath);
-        } else {
-            verify(request, never()).getRequestDispatcher(expectedPath);
-        }
-
-    }
-
-
-    private void setUpMocks(String uri, Integer adminId, Integer userId) {
-        when(request.getRequestURI()).thenReturn(uri);
-        when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(adminId);
-        when(session.getAttribute(Attributes.USER_ID)).thenReturn(userId);
-    }
-
 }

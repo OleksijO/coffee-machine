@@ -11,6 +11,9 @@ import java.sql.DriverManager;
 import java.util.ResourceBundle;
 
 /**
+ * This class represents functionality to put test database to initial state by running sql script,
+ * which contains DDL commands and test data to be put into test database
+ *
  * For success perform of refilling database with test data it should be already created,
  * because method connects directly to database, specified in database.properties.
  *
@@ -40,7 +43,6 @@ public class TestDatabaseInitializer {
         InputStream ddlSQL = this.getClass().getClassLoader()
                 .getResourceAsStream(ddlPopulate);
 
-        // Create MySql Connection
         Class.forName(jdbcProperties.getString(JDBC_DRIVER));
         Connection con = DriverManager.getConnection(
                 jdbcProperties.getString(JDBC_URL),
@@ -48,7 +50,7 @@ public class TestDatabaseInitializer {
                 jdbcProperties.getString(JDBC_PASSWORD));
 
         System.out.println("=============================================");
-        System.out.println("            Running SQL scripts");
+        System.out.println("            Running SQL scripts...");
         System.out.println("=============================================");
 
         ScriptRunner scriptRunner = new ScriptRunner(con, false, false);
@@ -57,6 +59,9 @@ public class TestDatabaseInitializer {
                 new InputStreamReader(ddlSQL));
         scriptRunner.runScript(reader);
 
+        System.out.println("=============================================");
+        System.out.println("            Running SQL scripts...DONE");
+        System.out.println("=============================================");
     }
 }
 

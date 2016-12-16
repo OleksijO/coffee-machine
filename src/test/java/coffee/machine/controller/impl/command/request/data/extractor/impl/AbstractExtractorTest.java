@@ -27,9 +27,14 @@ abstract class AbstractExtractorTest {
         MockitoAnnotations.initMocks(this);
     }
 
-   protected void setupRequestParams(TestData fullTest) {
+    /**
+     * Prepares request parameters according to data in param
+     *
+     * @param testData One of prepared data for tests
+     */
+    protected void setupRequestParams(TestData testData) {
         Enumeration<String> params = new Enumeration<String>() {
-            Iterator<String> iterator = fullTest.requestParams.keySet().iterator();
+            Iterator<String> iterator = testData.requestParams.keySet().iterator();
 
             @Override
             public boolean hasMoreElements() {
@@ -47,7 +52,7 @@ abstract class AbstractExtractorTest {
             @Override
             public String answer(InvocationOnMock invocation) throws Throwable {
                 Object[] args = invocation.getArguments();
-                return fullTest.requestParams.get(args[0]);
+                return testData.requestParams.get(args[0]);
             }
         });
     }
