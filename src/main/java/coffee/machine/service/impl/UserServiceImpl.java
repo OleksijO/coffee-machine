@@ -44,10 +44,7 @@ public class UserServiceImpl implements UserService, ServiceErrorProcessing {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             UserDao userDao = daoFactory.getUserDao(connection);
-            connection.beginTransaction();
-            User user = userDao.getById(id);
-            connection.commitTransaction();
-            return user;
+            return userDao.getById(id);
 
         }
     }
@@ -58,10 +55,7 @@ public class UserServiceImpl implements UserService, ServiceErrorProcessing {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             UserDao adminDao = daoFactory.getUserDao(connection);
-            connection.beginTransaction();
-            User user = adminDao.getUserByLogin(login);
-            connection.commitTransaction();
-            return user;
+            return adminDao.getUserByLogin(login);
         }
     }
 
@@ -70,10 +64,7 @@ public class UserServiceImpl implements UserService, ServiceErrorProcessing {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             UserDao userDao = daoFactory.getUserDao(connection);
-            connection.beginTransaction();
-            List<User> users = userDao.getAllNonAdmin();
-            connection.commitTransaction();
-            return users;
+            return userDao.getAllNonAdmin();
         }
     }
 
