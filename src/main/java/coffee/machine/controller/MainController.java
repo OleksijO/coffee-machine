@@ -1,6 +1,5 @@
 package coffee.machine.controller;
 
-import coffee.machine.controller.impl.CommandHolderImpl;
 import coffee.machine.controller.logging.ControllerErrorLogging;
 import coffee.machine.exception.ApplicationException;
 import coffee.machine.view.PagesPaths;
