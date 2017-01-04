@@ -1,7 +1,7 @@
 package coffee.machine.controller.impl.command.user;
 
 import coffee.machine.config.CoffeeMachineConfig;
-import coffee.machine.controller.impl.command.CommandExecuteWrapper;
+import coffee.machine.controller.impl.command.CommandWrapperTemplate;
 import coffee.machine.controller.impl.command.helper.RegisterFormData;
 import coffee.machine.controller.impl.command.helper.UserRegisterCommandHelper;
 import coffee.machine.controller.security.PasswordEncryptor;
@@ -23,7 +23,7 @@ import static coffee.machine.view.PagesPaths.USER_REGISTER_SUCCESS_PAGE;
 /**
  * Created by oleksij.onysymchuk@gmail
  */
-public class UserRegisterSubmitCommand extends CommandExecuteWrapper {
+public class UserRegisterSubmitCommand extends CommandWrapperTemplate {
     private static final Logger logger = Logger.getLogger(UserRegisterSubmitCommand.class);
 
     private static final String CANT_CREATE_USER = "Can't create user=";
@@ -39,7 +39,7 @@ public class UserRegisterSubmitCommand extends CommandExecuteWrapper {
 
     @Override
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        helper.setGeneralRegisterPageAttributes(request);
+
         RegisterFormData formData = helper.processRegisterForm(request);
 
         request.setAttribute(PREVIOUS_ENTERED_EMAIL, formData.getEmail());
@@ -67,5 +67,10 @@ public class UserRegisterSubmitCommand extends CommandExecuteWrapper {
         user.setEmail(formData.getEmail());
         user.setPassword(PasswordEncryptor.encryptPassword(formData.getPassword()));
         return user;
+    }
+
+    @Override
+    protected void placeNecessaryDataToRequest(HttpServletRequest request) {
+        helper.setGeneralRegisterPageAttributes(request);
     }
 }

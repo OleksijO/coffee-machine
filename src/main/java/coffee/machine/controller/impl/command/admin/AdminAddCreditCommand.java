@@ -1,7 +1,7 @@
 package coffee.machine.controller.impl.command.admin;
 
 import coffee.machine.config.CoffeeMachineConfig;
-import coffee.machine.controller.impl.command.CommandExecuteWrapper;
+import coffee.machine.controller.impl.command.CommandWrapperTemplate;
 import coffee.machine.i18n.message.key.GeneralKey;
 import coffee.machine.model.entity.user.User;
 import coffee.machine.service.AccountService;
@@ -21,7 +21,7 @@ import static coffee.machine.view.PagesPaths.ADMIN_ADD_CREDITS_PAGE;
 /**
  * Created by oleksij.onysymchuk@gmail
  */
-public class AdminAddCreditCommand extends CommandExecuteWrapper {
+public class AdminAddCreditCommand extends CommandWrapperTemplate {
     UserService userService = UserServiceImpl.getInstance();
     AccountService accountService = AccountServiceImpl.getInstance();
 
@@ -32,11 +32,16 @@ public class AdminAddCreditCommand extends CommandExecuteWrapper {
 
     @Override
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) {
-        request.setAttribute(PAGE_TITLE, GeneralKey.TITLE_ADMIN_ADD_CREDIT);
+
         List<User> users = userService.getAllNonAdminUsers();
         request.setAttribute(Attributes.USER_LIST, users);
         request.setAttribute(COFFEE_MACHINE_BALANCE, accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)
                 .getRealAmount());
         return ADMIN_ADD_CREDITS_PAGE;
+    }
+
+    @Override
+    protected void placeNecessaryDataToRequest(HttpServletRequest request) {
+        request.setAttribute(PAGE_TITLE, GeneralKey.TITLE_ADMIN_ADD_CREDIT);
     }
 }

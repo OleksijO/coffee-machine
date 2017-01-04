@@ -14,15 +14,15 @@ import static coffee.machine.view.Attributes.ERROR_ADDITIONAL_MESSAGE;
 import static coffee.machine.view.Attributes.ERROR_MESSAGE;
 
 /**
- * This class represents template for specific command pages.
+ * This class represents template for specific commands, which use services and could throw exception .
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public abstract class CommandExecuteWrapper implements Command, ControllerErrorLogging {
-    static Logger logger = Logger.getLogger(CommandExecuteWrapper.class);
+public abstract class CommandWrapperTemplate implements Command, ControllerErrorLogging {
+    static Logger logger = Logger.getLogger(CommandWrapperTemplate.class);
     private String pageAfterErrors;
 
-    public CommandExecuteWrapper(String pageAfterErrors) {
+    public CommandWrapperTemplate(String pageAfterErrors) {
         this.pageAfterErrors = pageAfterErrors;
     }
 
@@ -36,7 +36,9 @@ public abstract class CommandExecuteWrapper implements Command, ControllerErrorL
         // common try-catch wrapper for command logic, which could throw application exception or any other
         try {
 
-            return performExecute(request, response);
+            String view = performExecute(request, response);
+            placeNecessaryDataToRequest(request);
+            return view;
 
         } catch (ApplicationException e) {
             logApplicationError(logger, request, e);
@@ -47,8 +49,15 @@ public abstract class CommandExecuteWrapper implements Command, ControllerErrorL
             request.setAttribute(ERROR_MESSAGE, GeneralKey.ERROR_UNKNOWN);
         }
 
+        placeNecessaryDataToRequest(request);
+
         return pageAfterErrors;
     }
+
+    /**
+     * This method should be overridden in child classes and should place all needed for view data to request
+     */
+    protected abstract void placeNecessaryDataToRequest(HttpServletRequest request);
 
     /**
      * This method should be overridden in child classes and should perform specific logic

@@ -1,7 +1,7 @@
 package coffee.machine.controller.impl.command.admin;
 
 import coffee.machine.config.CoffeeMachineConfig;
-import coffee.machine.controller.impl.command.CommandExecuteWrapper;
+import coffee.machine.controller.impl.command.CommandWrapperTemplate;
 import coffee.machine.controller.impl.command.request.data.extractor.ItemsStringFormDataExtractor;
 import coffee.machine.controller.impl.command.request.data.extractor.RefillFormDataExtractor;
 import coffee.machine.controller.impl.command.request.data.extractor.impl.ItemsStringFormDataExtractorImpl;
@@ -30,7 +30,7 @@ import static coffee.machine.view.Attributes.*;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class AdminRefillSubmitCommand extends CommandExecuteWrapper {
+public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
     private static final Logger logger = Logger.getLogger(AdminRefillSubmitCommand.class);
     private static final String ITEMS_ADDED = "Coffee-machine was refilled by admin id=%d. Added drinks: %s, addons %s";
 
@@ -48,19 +48,13 @@ public class AdminRefillSubmitCommand extends CommandExecuteWrapper {
     @Override
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) {
 
-        request.setAttribute(PAGE_TITLE, TITLE_ADMIN_REFILL);
         request.setAttribute(Attributes.PREVIOUS_VALUES_TABLE,
                 formStringDataExtractor.getAllItemParameterValuesFromRequest(request));
 
-        Map<Integer, Integer> drinkAddQuantityByIds;
-        Map<Integer, Integer> addonAddQuantityByIds;
-        try {
-            drinkAddQuantityByIds = formDataExtractor.getDrinksQuantityByIdFromRequest(request);
-            addonAddQuantityByIds = formDataExtractor.getAddonsQuantityByIdFromRequest(request);
-        } catch (Exception e) {
-            placeNecessaryDataToRequest(request);
-            throw e;
-        }
+
+        Map<Integer, Integer> drinkAddQuantityByIds = formDataExtractor.getDrinksQuantityByIdFromRequest(request);
+        Map<Integer, Integer> addonAddQuantityByIds = formDataExtractor.getAddonsQuantityByIdFromRequest(request);
+
 
         boolean anyItemWereAdded = performRefilling(drinkAddQuantityByIds, addonAddQuantityByIds);
 
@@ -72,18 +66,10 @@ public class AdminRefillSubmitCommand extends CommandExecuteWrapper {
             request.setAttribute(ERROR_MESSAGE, CommandErrorKey.ADMIN_REFILL_NOTHING_TO_ADD);
         }
 
-        placeNecessaryDataToRequest(request);
+
         request.removeAttribute(Attributes.PREVIOUS_VALUES_TABLE);     //clearing form in case of success refilling
 
         return PagesPaths.ADMIN_REFILL_PAGE;
-    }
-
-
-    private void placeNecessaryDataToRequest(HttpServletRequest request) {
-        request.setAttribute(COFFEE_MACHINE_BALANCE, accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)
-                .getRealAmount());
-        request.setAttribute(DRINKS, drinkService.getAll());
-        request.setAttribute(ADDONS, addonService.getAll());
     }
 
     private boolean performRefilling(Map<Integer, Integer> drinkAddQuantityByIds,
@@ -101,5 +87,14 @@ public class AdminRefillSubmitCommand extends CommandExecuteWrapper {
         return anyItemWereAdded;
     }
 
+    @Override
+    protected void placeNecessaryDataToRequest(HttpServletRequest request) {
+        request.setAttribute(PAGE_TITLE, TITLE_ADMIN_REFILL);
 
+        request.setAttribute(COFFEE_MACHINE_BALANCE, accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)
+                .getRealAmount());
+        request.setAttribute(DRINKS, drinkService.getAll());
+        request.setAttribute(ADDONS, addonService.getAll());
+
+    }
 }

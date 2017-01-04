@@ -22,7 +22,7 @@ import static coffee.machine.view.PagesPaths.*;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class LoginSubmitCommand extends CommandExecuteWrapper {
+public class LoginSubmitCommand extends CommandWrapperTemplate {
     private static final Logger logger = Logger.getLogger(LoginSubmitCommand.class);
 
     private UserService userService = UserServiceImpl.getInstance();
@@ -33,7 +33,7 @@ public class LoginSubmitCommand extends CommandExecuteWrapper {
     }
 
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        helper.setGeneralLoginPageAttributes(request);
+
         LoginFormData formData = helper.processLoginForm(request);
 
         request.setAttribute(PREVIOUS_ENTERED_EMAIL, formData.getEmail());
@@ -75,6 +75,10 @@ public class LoginSubmitCommand extends CommandExecuteWrapper {
         }
     }
 
+    @Override
+    protected void placeNecessaryDataToRequest(HttpServletRequest request) {
+        helper.setGeneralLoginPageAttributes(request);
+    }
 }
 
 

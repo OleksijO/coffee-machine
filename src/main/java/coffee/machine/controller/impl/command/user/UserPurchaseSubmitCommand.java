@@ -1,6 +1,6 @@
 package coffee.machine.controller.impl.command.user;
 
-import coffee.machine.controller.impl.command.CommandExecuteWrapper;
+import coffee.machine.controller.impl.command.CommandWrapperTemplate;
 import coffee.machine.controller.impl.command.helper.UserPurchaseCommandHelper;
 import coffee.machine.controller.impl.command.request.data.extractor.ItemsStringFormDataExtractor;
 import coffee.machine.controller.impl.command.request.data.extractor.PurchaseFormDataExtractor;
@@ -12,7 +12,6 @@ import coffee.machine.model.entity.item.Drink;
 import coffee.machine.service.AccountService;
 import coffee.machine.service.CoffeeMachineService;
 import coffee.machine.service.DrinkService;
-import coffee.machine.service.exception.ServiceException;
 import coffee.machine.service.impl.AccountServiceImpl;
 import coffee.machine.service.impl.CoffeeMachineServiceImpl;
 import coffee.machine.service.impl.DrinkServiceImpl;
@@ -26,7 +25,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
+public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
     private static final Logger logger = Logger.getLogger(UserPurchaseSubmitCommand.class);
     private static final String USER_WITH_ID_MADE_PURCHASE_FORMAT = "User with id = %d made purchase: %s";
 
@@ -50,26 +49,23 @@ public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
         request.setAttribute(Attributes.PREVIOUS_VALUES_TABLE,
                 formStringDataExtractor.getAllItemParameterValuesFromRequest(request));
 
-        int userId = (int) request.getSession().getAttribute(Attributes.USER_ID);
+        int userId = getUserIdFromRequest(request);
 
-        try {
 
-            List<Drink> drinksToBuy = getDrinksFromRequest(request);
-            Order order = coffeeMachine.prepareDrinksForUser(drinksToBuy, userId);
-            request.setAttribute(Attributes.ORDER, order);
+        List<Drink> drinksToBuy = getDrinksFromRequest(request);
+        Order order = coffeeMachine.prepareDrinksForUser(drinksToBuy, userId);
+        request.setAttribute(Attributes.ORDER, order);
 
-            logger.info(String.format(USER_WITH_ID_MADE_PURCHASE_FORMAT, userId, order));
-        } catch (ServiceException e) {
-            placeNecessaryDataToRequest(request, userId);
-            throw e;
-        }
+        logger.info(String.format(USER_WITH_ID_MADE_PURCHASE_FORMAT, userId, order));
 
         request.setAttribute(Attributes.USUAL_MESSAGE, CommandKey.PURCHASE_THANKS_MESSAGE);
-        placeNecessaryDataToRequest(request, userId);
-
         request.removeAttribute(Attributes.PREVIOUS_VALUES_TABLE);  //clearing form in case of success purchase
 
         return PagesPaths.USER_PURCHASE_PAGE;
+    }
+
+    private int getUserIdFromRequest(HttpServletRequest request) {
+        return (int) request.getSession().getAttribute(Attributes.USER_ID);
     }
 
     List<Drink> getDrinksFromRequest(HttpServletRequest request) {
@@ -105,9 +101,9 @@ public class UserPurchaseSubmitCommand extends CommandExecuteWrapper {
         });
     }
 
-    private void placeNecessaryDataToRequest(HttpServletRequest request, int userId) {
+    @Override
+    protected void placeNecessaryDataToRequest(HttpServletRequest request) {
         request.setAttribute(Attributes.DRINKS, drinkService.getAll());
-        request.setAttribute(Attributes.USER_ACCOUNT, accountService.getByUserId(userId));
+        request.setAttribute(Attributes.USER_ACCOUNT, accountService.getByUserId(getUserIdFromRequest(request)));
     }
-
 }

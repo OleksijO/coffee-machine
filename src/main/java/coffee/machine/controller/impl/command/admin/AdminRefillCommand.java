@@ -1,7 +1,7 @@
 package coffee.machine.controller.impl.command.admin;
 
 import coffee.machine.config.CoffeeMachineConfig;
-import coffee.machine.controller.impl.command.CommandExecuteWrapper;
+import coffee.machine.controller.impl.command.CommandWrapperTemplate;
 import coffee.machine.i18n.message.key.GeneralKey;
 import coffee.machine.service.AccountService;
 import coffee.machine.service.AddonService;
@@ -21,7 +21,7 @@ import java.io.IOException;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class AdminRefillCommand extends CommandExecuteWrapper {
+public class AdminRefillCommand extends CommandWrapperTemplate {
     private final DrinkService drinkService = DrinkServiceImpl.getInstance();
     private final AddonService addonService = AddonServiceImpl.getInstance();
     private final AccountService accountService = AccountServiceImpl.getInstance();
@@ -33,7 +33,6 @@ public class AdminRefillCommand extends CommandExecuteWrapper {
     @Override
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_ADMIN_REFILL);
         request.setAttribute(Attributes.COFFEE_MACHINE_BALANCE,
                 accountService.getById(CoffeeMachineConfig.ACCOUNT_ID).getRealAmount());
         request.setAttribute(Attributes.DRINKS, drinkService.getAll());
@@ -42,4 +41,8 @@ public class AdminRefillCommand extends CommandExecuteWrapper {
         return PagesPaths.ADMIN_REFILL_PAGE;
     }
 
+    @Override
+    protected void placeNecessaryDataToRequest(HttpServletRequest request) {
+        request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_ADMIN_REFILL);
+    }
 }

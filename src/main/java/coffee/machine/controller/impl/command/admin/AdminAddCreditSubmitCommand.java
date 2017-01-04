@@ -1,7 +1,7 @@
 package coffee.machine.controller.impl.command.admin;
 
 import coffee.machine.config.CoffeeMachineConfig;
-import coffee.machine.controller.impl.command.CommandExecuteWrapper;
+import coffee.machine.controller.impl.command.CommandWrapperTemplate;
 import coffee.machine.i18n.message.key.CommandKey;
 import coffee.machine.i18n.message.key.GeneralKey;
 import coffee.machine.model.entity.user.User;
@@ -27,7 +27,7 @@ import static coffee.machine.view.Parameters.CREDITS_TO_ADD;
 /**
  * Created by oleksij.onysymchuk@gmail
  */
-public class AdminAddCreditSubmitCommand extends CommandExecuteWrapper {
+public class AdminAddCreditSubmitCommand extends CommandWrapperTemplate {
     private static final String TO_USER_ID_ACCOUNT_ADDED_N_CREDITS_FORMAT =
             "To user's (id=%d) account added %.2f credits";
     private static Logger logger = Logger.getLogger(AdminAddCreditSubmitCommand.class);
@@ -40,7 +40,7 @@ public class AdminAddCreditSubmitCommand extends CommandExecuteWrapper {
 
     @Override
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) {
-        request.setAttribute(PAGE_TITLE, GeneralKey.TITLE_ADMIN_ADD_CREDIT);
+
         int userId = Integer.parseInt(request.getParameter(Parameters.USER_ID));
         long amountToAdd =
                 (long) (Double.parseDouble(request.getParameter(CREDITS_TO_ADD)) / DB_MONEY_COEFF);
@@ -65,5 +65,11 @@ public class AdminAddCreditSubmitCommand extends CommandExecuteWrapper {
         } else {
             return USER_ID_IS + userId;
         }
+    }
+
+    @Override
+    protected void placeNecessaryDataToRequest(HttpServletRequest request) {
+        request.setAttribute(PAGE_TITLE, GeneralKey.TITLE_ADMIN_ADD_CREDIT);
+
     }
 }
