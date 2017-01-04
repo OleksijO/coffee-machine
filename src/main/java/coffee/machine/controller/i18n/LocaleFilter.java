@@ -10,7 +10,6 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
 /**
@@ -18,40 +17,26 @@ import java.util.Locale;
  * It changes and sets up user's current session locale depends on request parameters. Initially tries to set up
  * locale to locale of request if it is supported by application (or sets up default), later changes on demand by
  * request query parameter.
- *
  * Also, sets up message resource bundle for the view pages.
  *
- *  @author oleksij.onysymchuk@gmail.com
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class LocaleFilter implements Filter {
     private static final Logger logger = Logger.getLogger(LocaleFilter.class);
-    public static final String UTF_8 = "utf-8";
+
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
         HttpServletRequest req = ((HttpServletRequest) request);
-        HttpSession session = req.getSession();
 
-        setRequestResponseCharacterEncoding(request, response, UTF_8);
         setUpResourceBundleSourceForView(req);
         changeUserLocaleByRequestParameter(req);
 
-        if (session.getAttribute(Attributes.USER_LOCALE) == null) {
-            initialSetUpOfUserLocale(req);
-        }
+        setUpUserLocaleIfAbsent(req);
 
         chain.doFilter(request, response);
-    }
-
-    private void setRequestResponseCharacterEncoding(ServletRequest request, ServletResponse response, String encoding) {
-        try {
-            request.setCharacterEncoding(encoding);
-            response.setCharacterEncoding(encoding);
-        } catch (UnsupportedEncodingException e) {
-            logger.error(e);
-        }
     }
 
     private void setUpResourceBundleSourceForView(HttpServletRequest request) {
@@ -62,36 +47,42 @@ public class LocaleFilter implements Filter {
 
     private void changeUserLocaleByRequestParameter(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        if (request.getParameter(Parameters.USER_LOCALE) != null) {
-            Locale locale = SupportedLocale.getDefault();
-            for (SupportedLocale loc : SupportedLocale.values()) {
-                if (loc.getParam().equals(request.getParameter(Parameters.USER_LOCALE))) {
-                    locale = loc.getLocale();
-                    break;
-                }
-            }
+        String localeParameter = request.getParameter(Parameters.USER_LOCALE);
+        if (localeParameter != null) {
+            Locale locale = findSupportedLocaleByParameter(localeParameter);
             session.setAttribute(Attributes.USER_LOCALE, locale);
         }
     }
 
-
-
-    private void initialSetUpOfUserLocale(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Locale locale = null;
-        Locale requestLocale = request.getLocale();
-        if (requestLocale != null) {
-            for (SupportedLocale loc : SupportedLocale.values()) {
-                if (loc.getLocale().toString().equals(requestLocale.toString())) {
-                    locale = loc.getLocale();
-                    break;
-                }
+    private Locale findSupportedLocaleByParameter(String localeParameter) {
+        for (SupportedLocale loc : SupportedLocale.values()) {
+            if (loc.getParam().equals(localeParameter)) {
+                return loc.getLocale();
             }
         }
-        if (locale == null) {
-            locale = SupportedLocale.getDefault();
+        return SupportedLocale.getDefault();
+    }
+
+    private void setUpUserLocaleIfAbsent(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        if (session.getAttribute(Attributes.USER_LOCALE) != null) {
+            return;
         }
+        Locale requestLocale = request.getLocale();
+        Locale locale = findSupportedLocale(requestLocale);
         session.setAttribute(Attributes.USER_LOCALE, locale);
+    }
+
+    private Locale findSupportedLocale(Locale requestLocale) {
+        if (requestLocale == null) {
+            return SupportedLocale.getDefault();
+        }
+        for (SupportedLocale loc : SupportedLocale.values()) {
+            if (loc.getLocale().equals(requestLocale)) {
+                return loc.getLocale();
+            }
+        }
+        return SupportedLocale.getDefault();
     }
 
     @Override
