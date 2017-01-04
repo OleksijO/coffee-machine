@@ -57,7 +57,7 @@ public class AddonServiceImpl implements AddonService {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             AddonDao addonDao = daoFactory.getAddonDao(connection);
-            connection.beginTransaction();
+            connection.beginSerializableTransaction();
             List<Item> addonsToUpdate = addonDao.getAllByIds(quantitiesById.keySet());
             addonsToUpdate.forEach(
                     addon -> addon.setQuantity(addon.getQuantity() + quantitiesById.get(addon.getId())));

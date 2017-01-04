@@ -73,18 +73,27 @@ public class UserServiceImpl implements UserService, ServiceErrorProcessing {
         try (AbstractConnection connection = daoFactory.getConnection()) {
             AccountDao accountDao = daoFactory.getAccountDao(connection);
             UserDao userDao = daoFactory.getUserDao(connection);
+
             connection.beginTransaction();
-            if (userDao.getUserByLogin(user.getEmail()) != null) {
-                logger.error(TRY_TO_REGISTER_USER_WITH_ALREADY_USED_EMAIL + user.getEmail());
-                logErrorAndThrowNewServiceException(
-                        logger, ServiceErrorKey.USER_WITH_SPECIFIED_EMAIL_ALREADY_REGISTERED);
-            }
-            Account newAccount = new Account();
-            newAccount = accountDao.insert(newAccount);
-            user.setAccount(newAccount);
-            userDao.insert(user);
+            checkIfUserAlreadyExists(user, userDao);
+            createNewUser(user, accountDao, userDao);
             connection.commitTransaction();
         }
+    }
+
+    private void checkIfUserAlreadyExists(User user, UserDao userDao) {
+        if (userDao.getUserByLogin(user.getEmail()) != null) {
+            logger.error(TRY_TO_REGISTER_USER_WITH_ALREADY_USED_EMAIL + user.getEmail());
+            logErrorAndThrowNewServiceException(
+                    logger, ServiceErrorKey.USER_WITH_SPECIFIED_EMAIL_ALREADY_REGISTERED);
+        }
+    }
+
+    private void createNewUser(User user, AccountDao accountDao, UserDao userDao) {
+        Account newAccount = new Account();
+        newAccount = accountDao.insert(newAccount);
+        user.setAccount(newAccount);
+        userDao.insert(user);
     }
 
 }

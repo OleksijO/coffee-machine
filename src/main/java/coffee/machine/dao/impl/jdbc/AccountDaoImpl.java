@@ -104,7 +104,7 @@ class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 
     @Override
     public Account getById(int id) {
-        return getAccountByQueryAndIntParameter(SELECT_ALL_SQL + WHERE_ID + FOR_UPDATE, id);
+        return getAccountByQueryAndIntParameter(SELECT_ALL_SQL + WHERE_ID, id);
 
     }
 
@@ -126,7 +126,7 @@ class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 
     @Override
     public Account getByUserId(int userId) {
-        return getAccountByQueryAndIntParameter(SELECT_BY_USER_ID_SQL + FOR_UPDATE, userId);
+        return getAccountByQueryAndIntParameter(SELECT_BY_USER_ID_SQL, userId);
 
     }
 

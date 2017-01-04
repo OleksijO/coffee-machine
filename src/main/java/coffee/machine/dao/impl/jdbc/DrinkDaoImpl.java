@@ -13,7 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-import static coffee.machine.dao.impl.jdbc.ItemDaoImpl.*;
+import static coffee.machine.dao.impl.jdbc.ItemDaoHelper.*;
 
 /**
  * This class is the implementation of Drink entity DAO
@@ -36,11 +36,11 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
     private static final String FIELD_PARENT_ID = "parent_id";
 
     private final Connection connection;
-    private ItemDaoImpl itemDao;
+    private ItemDaoHelper itemDaoHelper;
 
     DrinkDaoImpl(Connection connection) {
         this.connection = connection;
-        itemDao = new ItemDaoImpl(connection);
+        itemDaoHelper = new ItemDaoHelper(connection);
     }
 
 
@@ -53,7 +53,7 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
             logErrorAndThrowDaoException(logger, CAN_NOT_CREATE_ALREADY_SAVED);
         }
 
-        itemDao.insert(drink);
+        itemDaoHelper.insert(drink);
         insertAddonSet(drink); // Addons as Items should already exist in table Item.
 
         return drink;
@@ -77,12 +77,12 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
 
     @Override
     public void updateQuantity(Drink drink) {
-        itemDao.updateQuantity(drink);
+        itemDaoHelper.updateQuantity(drink);
     }
 
     @Override
     public void update(Drink drink) {
-        itemDao.update(drink);
+        itemDaoHelper.update(drink);
         updateDrinkAddons(drink);
     }
 
@@ -152,7 +152,7 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
     public Drink getById(int id) {
         try (PreparedStatement statement =
                      connection.prepareStatement(
-                             String.format(SELECT_ALL_DRINKS_WITH_ADDONS_FORMAT, WHERE_ID_OR_DRINK_ID) + FOR_UPDATE)) {
+                             String.format(SELECT_ALL_DRINKS_WITH_ADDONS_FORMAT, WHERE_ID_OR_DRINK_ID))) {
 
             statement.setInt(1, id);
             statement.setInt(2, id);
@@ -177,12 +177,11 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
             return;
         }
         deleteDrinkAddons(drink);
-        itemDao.deleteById(id);
+        itemDaoHelper.deleteById(id);
     }
 
     @Override
     public List<Drink> getAllFromList(List<Drink> drinksToGet) {
-        Collections.sort(drinksToGet);          // to avoid deadlock on select for update
         List<Drink> items = new ArrayList<>();
         drinksToGet.forEach(drink -> {
             if (drink != null) {
@@ -197,7 +196,6 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
 
     @Override
     public List<Drink> getAllByIds(Set<Integer> itemIds) {
-        itemIds = new TreeSet<>(itemIds);       // to avoid deadlock on select for update
         List<Drink> drinks = new ArrayList<>();
         itemIds.forEach(id -> {
             Drink updatedDrink = getById(id);

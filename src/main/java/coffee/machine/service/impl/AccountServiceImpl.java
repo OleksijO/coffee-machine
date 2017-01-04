@@ -58,7 +58,7 @@ public class AccountServiceImpl implements AccountService {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             AccountDao accountDao = daoFactory.getAccountDao(connection);
-            connection.beginTransaction();
+            connection.beginSerializableTransaction();
             Account account = accountDao.getByUserId(userId);
             if (account == null) {
                 throw new IllegalArgumentException(CANT_FIND_ACCOUNT_WITH_ID + userId);

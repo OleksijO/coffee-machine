@@ -55,7 +55,7 @@ public class DrinkServiceImpl implements DrinkService {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-            connection.beginTransaction();
+            connection.beginSerializableTransaction();
             List<Drink> drinksToUpdate = drinkDao.getAllByIds(quantitiesById.keySet());
             drinksToUpdate.forEach(
                     drink -> drink.setQuantity(drink.getQuantity() + quantitiesById.get(drink.getId())));
@@ -71,9 +71,7 @@ public class DrinkServiceImpl implements DrinkService {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-            connection.beginTransaction();
             List<Drink> drinks = drinkDao.getAllByIds(drinkIds);
-            connection.commitTransaction();
             return (drinks == null) ? new ArrayList<>() : drinks;
 
         }

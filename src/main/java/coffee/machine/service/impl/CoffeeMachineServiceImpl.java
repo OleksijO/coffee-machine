@@ -53,7 +53,7 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
             AccountDao accountDao = daoFactory.getAccountDao(connection);
             OrderDao orderDao = daoFactory.getOrderDao(connection);
 
-            connection.beginTransaction();
+            connection.beginSerializableTransaction();
 
             Account userAccount = accountDao.getByUserId(userId);
             checkUserHaveEnoughMoney(drinksPrice, userAccount.getAmount());

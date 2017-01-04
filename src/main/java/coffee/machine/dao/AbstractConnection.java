@@ -17,6 +17,11 @@ public interface AbstractConnection extends AutoCloseable {
 	void beginTransaction();
 
 	/**
+	 * Defines begin of transaction with high isolation level
+	 */
+	void beginSerializableTransaction();
+
+	/**
 	 * Saves transaction.
 	 */
 	void commitTransaction();

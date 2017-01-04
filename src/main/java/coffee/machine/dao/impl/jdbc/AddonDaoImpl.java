@@ -10,31 +10,30 @@ import java.util.*;
 /**
  * This class is the implementation of Addon entity DAO
  *
- * Mainly this is an adaptor for ItemDaoImpl, because Addon=Item, but extends it's functionality with some methods
+ * Mainly this is an adaptor for ItemDaoHelper, because Addon=Item, but extends it's functionality with some methods
  *
  * @author oleksij.onysymchuk@gmail.com
  */
 class AddonDaoImpl extends AbstractDao<Item> implements AddonDao {
-    private ItemDaoImpl itemDao;
+    private ItemDaoHelper itemDaoHelper;
 
     AddonDaoImpl(Connection connection) {
-        itemDao = new ItemDaoImpl(connection);
+        itemDaoHelper = new ItemDaoHelper(connection);
     }
 
 
     @Override
     public Item insert(Item item) {
-        return itemDao.insert(item);
+        return itemDaoHelper.insert(item);
     }
 
     @Override
     public void updateQuantity(Item item) {
-        itemDao.updateQuantity(item);
+        itemDaoHelper.updateQuantity(item);
     }
 
     @Override
     public List<Item> getAllFromList(List<Item> addonsToGet) {
-        Collections.sort(addonsToGet);      // to avoid deadlock on select for update
         List<Item> updatedAddons = new ArrayList<>();
         addonsToGet.forEach(addon -> {
             if (addon != null) {
@@ -49,7 +48,6 @@ class AddonDaoImpl extends AbstractDao<Item> implements AddonDao {
 
     @Override
     public List<Item> getAllByIds(Set<Integer> itemIds) {
-        itemIds = new TreeSet<>(itemIds);       // to avoid deadlock on select for update
         List<Item> addon = new ArrayList<>();
         itemIds.forEach(id -> {
             Item updatedDrink = getById(id);
@@ -62,27 +60,27 @@ class AddonDaoImpl extends AbstractDao<Item> implements AddonDao {
 
     @Override
     public void update(Item item) {
-        itemDao.update(item);
+        itemDaoHelper.update(item);
     }
 
     @Override
     public List<Item> getAll() {
-        return itemDao.getAll(ItemType.ADDON);
+        return itemDaoHelper.getAll(ItemType.ADDON);
     }
 
     @Override
     public Item getById(int id) {
-        return itemDao.getById(id);
+        return itemDaoHelper.getById(id);
     }
 
     @Override
     public void deleteById(int id) {
-        itemDao.deleteById(id);
+        itemDaoHelper.deleteById(id);
     }
 
     @Override
     public void updateQuantityAllInList(List<Item> items) {
-        itemDao.updateQuantityAllInList(items);
+        itemDaoHelper.updateQuantityAllInList(items);
     }
 
 }

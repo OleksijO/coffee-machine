@@ -14,8 +14,8 @@ import java.util.List;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-class ItemDaoImpl extends AbstractDao<Item> {
-    private static final Logger logger = Logger.getLogger(ItemDaoImpl.class);
+class ItemDaoHelper extends AbstractDao<Item> {
+    private static final Logger logger = Logger.getLogger(ItemDaoHelper.class);
 
     private static final String SELECT_ALL_SQL =
             "SELECT item.id, name, price, quantity, type FROM item ";
@@ -38,7 +38,7 @@ class ItemDaoImpl extends AbstractDao<Item> {
 
     private final Connection connection;
 
-    ItemDaoImpl(Connection connection) {
+    ItemDaoHelper(Connection connection) {
         this.connection = connection;
     }
 
@@ -133,7 +133,7 @@ class ItemDaoImpl extends AbstractDao<Item> {
 
     @Override
     public Item getById(int id) {
-        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_ITEM_ID + FOR_UPDATE)) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_ITEM_ID)) {
 
             statement.setInt(1, id);
 
