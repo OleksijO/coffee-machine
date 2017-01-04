@@ -8,63 +8,77 @@ import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFF;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class Account {
-	private int id;
-	private long amount;
+    private int id;
+    private long amount;
 
-	public void withdraw(long amount) {
-		this.amount -= amount;
-	}
+    public void withdraw(long amount) {
+        this.amount -= amount;
+    }
 
-	public void add(long amount) {
-		this.amount += amount;
-	}
+    public void add(long amount) {
+        this.amount += amount;
+    }
 
-	public long getAmount() {
-		return amount;
-	}
+    public long getAmount() {
+        return amount;
+    }
 
-	public double getRealAmount() {
-		return DB_MONEY_COEFF*amount;
-	}
+    public double getRealAmount() {
+        return DB_MONEY_COEFF * amount;
+    }
 
-	public void setAmount(long amount) {
-		this.amount = amount;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public int getId() {
-		return id;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (amount ^ (amount >>> 32));
+        result = prime * result + id;
+        return result;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (amount ^ (amount >>> 32));
-		result = prime * result + id;
-		return result;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Account other = (Account) obj;
+        if (amount != other.amount)
+            return false;
+        return id == other.id;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Account other = (Account) obj;
-		if (amount != other.amount)
-			return false;
-		return id == other.id;
-	}
+    @Override
+    public String toString() {
+        return "Account [id=" + id + ", amount=" + amount + "]";
+    }
 
-	@Override
-	public String toString() {
-		return "Account [id=" + id + ", amount=" + amount + "]";
-	}
+    public static class Builder {
+        private Account account = new Account();
 
+        public Builder setId(int id) {
+            account.id = id;
+            return this;
+        }
+
+        public Builder setAmount(long amount) {
+            account.amount = amount;
+            return this;
+        }
+
+        public Account build() {
+            return account;
+        }
+
+    }
 }

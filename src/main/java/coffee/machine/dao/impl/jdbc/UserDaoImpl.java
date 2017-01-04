@@ -136,10 +136,14 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
             user.setFullName(resultSet.getString(FIELD_FULL_NAME));
             user.setEmail(resultSet.getString(FIELD_LOGIN));
             user.setPassword(resultSet.getString(FIELD_PASSWORD));
-            Account account = new Account();
+            Account account ;
             if (!user.isAdmin()) {
-                account.setId(resultSet.getInt(FIELD_ACCOUNT_ID));
-                account.setAmount(resultSet.getLong(FIELD_ACCOUNT_AMOUNT));
+                account = new Account.Builder()
+                        .setId(resultSet.getInt(FIELD_ACCOUNT_ID))
+                        .setAmount(resultSet.getLong(FIELD_ACCOUNT_AMOUNT))
+                        .build();
+            } else {
+                account = new Account();
             }
             user.setAccount(account);
             user.setAdmin(resultSet.getBoolean(FIELD_IS_ADMIN));

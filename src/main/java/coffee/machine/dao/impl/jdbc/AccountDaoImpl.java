@@ -94,9 +94,10 @@ class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
     private List<Account> parseResultSet(ResultSet resultSet) throws SQLException {
         List<Account> accountList = new ArrayList<>();
         while (resultSet.next()) {
-            Account account = new Account();
-            account.setId(resultSet.getInt(FIELD_ID));
-            account.setAmount(resultSet.getLong(FIELD_AMOUNT));
+            Account account = new Account.Builder()
+                    .setId(resultSet.getInt(FIELD_ID))
+                    .setAmount(resultSet.getLong(FIELD_AMOUNT))
+                    .build();
             accountList.add(account);
         }
         return accountList;
