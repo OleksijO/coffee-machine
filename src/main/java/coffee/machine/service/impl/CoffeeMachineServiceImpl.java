@@ -60,7 +60,12 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
             decreaseItemQuantitiesInDatabaseByItemQuantitiesInDrinksToBuy(drinks, drinkDao, addonDao);
             performMoneyExchange(accountDao, userAccount, drinksPrice);
 
-            Order order = new Order(userId, new Date(), drinks, drinksPrice);
+            Order order = new Order.Builder()
+                    .setUserId(userId)
+                    .setDate(new Date())
+                    .setDrinks(drinks)
+                    .setAmount(drinksPrice)
+                    .build();
             orderDao.insert(order);
 
             connection.commitTransaction();

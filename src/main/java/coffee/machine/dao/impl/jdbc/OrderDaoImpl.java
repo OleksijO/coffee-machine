@@ -153,10 +153,9 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
             orderList.add(order);
         }
         while (rsDrink.next()) {
-            int orderId = rsDrink.getInt(FIELD_ID);
-            Order order = getOrderFromListById(orderList, orderId);
+            Order order = getOrderFromListById(orderList, rsDrink.getInt(FIELD_ID));
             Drink drink = getDrinkFromResultSet(rsDrink);
-            order.getDrinks().add(drink);
+            order.addDrink(drink);
         }
         while (rsAddon.next()) {
             Order order = getOrderFromListById(orderList, rsAddon.getInt(FIELD_ID));
@@ -169,13 +168,12 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     }
 
     private Order getOrderFromResultSet(ResultSet rsOrder) throws SQLException {
-        Order order = new Order();
-        order.setId(rsOrder.getInt(FIELD_ID));
-        order.setUserId(rsOrder.getInt(FIELD_USER_ID));
-        order.setDate(toDate(rsOrder.getTimestamp(FIELD_DATE_TIME)));
-        order.setAmount(rsOrder.getLong(FIELD_AMOUNT));
-        order.setDrinks(new ArrayList<>());
-        return order;
+        return new Order.Builder()
+                .setId(rsOrder.getInt(FIELD_ID))
+                .setUserId(rsOrder.getInt(FIELD_USER_ID))
+                .setDate(toDate(rsOrder.getTimestamp(FIELD_DATE_TIME)))
+                .setAmount(rsOrder.getLong(FIELD_AMOUNT))
+                .build();
     }
 
     private Drink getDrinkFromResultSet(ResultSet rsDrink) throws SQLException {

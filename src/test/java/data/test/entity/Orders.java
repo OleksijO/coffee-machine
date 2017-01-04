@@ -3,7 +3,6 @@ package data.test.entity;
 import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.item.Drink;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import static data.test.entity.Orders.ConstHolder.*;
@@ -30,24 +29,24 @@ public enum Orders {
 
 
     Orders(int id, int userId, Date date, long amount) {
-        order = new Order();
-        order.setId(id);
-        order.setUserId(userId);
-        order.setDate(date);
-        order.setAmount(amount);
-        order.setDrinks(new ArrayList<>());
+        order = new Order.Builder()
+                .setId(id)
+                .setUserId(userId)
+                .setDate(date)
+                .setAmount(amount)
+                .build();
         switch (id) {
             case 1:
                 Drink drink = Drinks.WATER.getCopy().getBaseDrink();
                 drink.setQuantity(1);
                 drink.setPrice(0);
-                order.getDrinks().add(drink);
+                order.addDrink(drink);
                 break;
             case 2:
                 Drink drink2 = Drinks.WATER.getCopy().getBaseDrink();
                 drink2.setQuantity(2);
                 drink2.setPrice(0);
-                order.getDrinks().add(drink2);
+                order.addDrink(drink2);
                 drink2 = Drinks.TEA_WITH_SUGAR.getCopy().getBaseDrink();
                 drink2.setQuantity(1);
                 drink2.setPrice(0);
@@ -57,7 +56,7 @@ public enum Orders {
                     }
                     addon.setPrice(0);
                 });
-                order.getDrinks().add(drink2);
+                order.addDrink(drink2);
                 drink2 = Drinks.ESPRESSO.getCopy().getBaseDrink();
                 drink2.setQuantity(3);
                 drink2.setPrice(0);
@@ -70,7 +69,7 @@ public enum Orders {
                     }
                     addon.setPrice(0);
                 });
-                order.getDrinks().add(drink2);
+                order.addDrink(drink2);
                 break;
 
         }

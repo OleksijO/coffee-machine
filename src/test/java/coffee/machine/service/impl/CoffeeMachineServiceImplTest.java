@@ -243,7 +243,7 @@ public class CoffeeMachineServiceImplTest {
     public void testPrepareDrinksForUserNotEnoughMoney() throws Exception {
 
         prepareDataForTestDrinkWithAddons(4, 1, 2);
-        userAccount.setAmount(0);
+        userAccount.withdraw(userAccountInitialAmount);
 
         try {
             service.prepareDrinksForUser(drinksToBuy, userId);
@@ -254,7 +254,7 @@ public class CoffeeMachineServiceImplTest {
             e.printStackTrace();
             fail(HERE_SHOULD_BE_APPLICATION_EXCEPTION);
         } finally {
-            userAccount.setAmount(userAccountInitialAmount);
+            userAccount.add(userAccountInitialAmount);
         }
 
         verifyDaoAccessionTimesAndCaptureCalledMethodArgs(0, 0, 0);

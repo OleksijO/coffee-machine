@@ -3,6 +3,7 @@ package coffee.machine.model.entity;
 import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.model.entity.item.Drink;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,15 +22,12 @@ public class Order {
     public Order() {
     }
 
-    public Order(int userId, Date date, List<Drink> drinks, long amount) {
-        this.userId = userId;
-        this.date = date;
-        this.drinks = drinks;
-        this.amount = amount;
-    }
-
     public double getRealAmount() {
         return CoffeeMachineConfig.DB_MONEY_COEFF * amount;
+    }
+
+    public void addDrink(Drink drink){
+        drinks.add(drink);
     }
 
     public int getId() {
@@ -44,32 +42,16 @@ public class Order {
         return userId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public Date getDate() {
         return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     public List<Drink> getDrinks() {
         return drinks;
     }
 
-    public void setDrinks(List<Drink> drinks) {
-        this.drinks = drinks;
-    }
-
     public long getAmount() {
         return amount;
-    }
-
-    public void setAmount(long amount) {
-        this.amount = amount;
     }
 
     @Override
@@ -106,5 +88,43 @@ public class Order {
                 ", drinks='" + drinks + '\'' +
                 ", amount=" + getRealAmount() +
                 '}';
+    }
+
+    public static class Builder {
+        private Order order = new Order();
+
+        public Builder setId(int id) {
+            order.id = id;
+            return this;
+        }
+
+        public Builder setUserId(int userId) {
+            order.userId = userId;
+            return this;
+        }
+
+        public Builder setDate(Date date) {
+            order.date = date;
+            return this;
+        }
+
+        public Builder setDrinks(List<Drink> drinks) {
+            order.drinks = drinks;
+            return this;
+        }
+
+        public Builder setAmount(long amount) {
+            order.amount = amount;
+            return this;
+        }
+
+        public Order build() {
+            if (order.drinks == null) {
+                order.drinks = new ArrayList<>();
+            }
+            return order;
+        }
+
+
     }
 }

@@ -76,14 +76,14 @@ public class AccountDaoTest {
 
     @Test
     public void testUpdate() {
-        Account account=testAccounts.get(1);
+        Account account = testAccounts.get(1);
         long amount = account.getAmount();
-        account.setAmount(0);
+        account.withdraw(amount);
 
         accountDao.update(account);
 
         assertEquals("1", 0, accountDao.getById(2).getAmount());
-        account.setAmount(amount);
+        account.add(amount);
         accountDao.update(account);
         assertEquals("2", testAccounts.get(1).getAmount(), accountDao.getById(2).getAmount());
 
@@ -91,9 +91,9 @@ public class AccountDaoTest {
 
     @Test
     public void testInsertDelete() {
-        Account account=testAccounts.get(1);
+        Account account = testAccounts.get(1);
         account.setId(0);
-        int newAccountId=accountDao.insert(account).getId();
+        int newAccountId = accountDao.insert(account).getId();
 
         account.setId(newAccountId);
 
@@ -109,7 +109,7 @@ public class AccountDaoTest {
     @Test
     public void testByUserId() {
 
-        assertEquals( testAccounts.get(1), accountDao.getByUserId(A.user.getId()));
+        assertEquals(testAccounts.get(1), accountDao.getByUserId(A.user.getId()));
 
     }
 
