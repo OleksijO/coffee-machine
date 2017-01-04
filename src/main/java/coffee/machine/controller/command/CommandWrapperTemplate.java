@@ -41,18 +41,24 @@ public abstract class CommandWrapperTemplate implements Command, ControllerError
             return view;
 
         } catch (ApplicationException e) {
-            logApplicationError(logger, request, e);
-            request.setAttribute(ERROR_MESSAGE, e.getMessage());
-            request.setAttribute(ERROR_ADDITIONAL_MESSAGE, e.getAdditionalMessage());
+            processApplicationException(request, e);
         } catch (Exception e) {
-            logError(logger, request, e);
-            request.setAttribute(ERROR_MESSAGE, GeneralKey.ERROR_UNKNOWN);
+            processException(request, e);
         }
 
-        placeNecessaryDataToRequest(request);
+        try {
+
+            placeNecessaryDataToRequest(request);
+
+        } catch (ApplicationException e) {
+            processApplicationException(request, e);
+        } catch (Exception e) {
+            processException(request, e);
+        }
 
         return pageAfterErrors;
     }
+
 
     /**
      * This method should be overridden in child classes and should place all needed for view data to request
@@ -69,4 +75,16 @@ public abstract class CommandWrapperTemplate implements Command, ControllerError
      */
     protected abstract String performExecute(HttpServletRequest request, HttpServletResponse response)
             throws IOException;
+
+    private void processException(HttpServletRequest request, Exception e) {
+        logError(logger, request, e);
+        request.setAttribute(ERROR_MESSAGE, GeneralKey.ERROR_UNKNOWN);
+    }
+
+    private void processApplicationException(HttpServletRequest request, ApplicationException e) {
+        logApplicationError(logger, request, e);
+        request.setAttribute(ERROR_MESSAGE, e.getMessage());
+        request.setAttribute(ERROR_ADDITIONAL_MESSAGE, e.getAdditionalMessage());
+    }
+
 }

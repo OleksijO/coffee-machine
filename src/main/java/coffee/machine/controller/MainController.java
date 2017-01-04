@@ -1,7 +1,6 @@
 package coffee.machine.controller;
 
 import coffee.machine.controller.logging.ControllerErrorLogging;
-import coffee.machine.exception.ApplicationException;
 import coffee.machine.view.PagesPaths;
 import org.apache.log4j.Logger;
 
@@ -10,11 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
-import static coffee.machine.i18n.message.key.GeneralKey.ERROR_UNKNOWN;
-import static coffee.machine.view.Attributes.ERROR_ADDITIONAL_MESSAGE;
-import static coffee.machine.view.Attributes.ERROR_MESSAGE;
-import static coffee.machine.view.PagesPaths.HOME_PAGE;
 
 /**
  * This class represents request dispatcher. It calls commands for correspondent request uri
@@ -51,34 +45,27 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
      */
     void processRequest(Command command, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        try {
-            if (command == null) {
-                logger.info(String.format(
-                        REQUESTED_PATH_IS_NOT_SUPPORTED_REDIRECTING_TO_HOME_PAGE_FORMAT,request.getRequestURI()));
-                response.sendRedirect(PagesPaths.HOME_PATH);
-                return;
-            }
 
-            String view = command.execute(request, response);
-
-            if (PagesPaths.REDIRECTED.equals(view)) {
-                return;     // redirected to reset uri
-            }
-
-            request.getRequestDispatcher(view).forward(request, response);
-
+        if (command == null) {
+            logUnsupportedUri(request.getRequestURI());
+            response.sendRedirect(PagesPaths.HOME_PATH);
             return;
-
-        } catch (ApplicationException e) {
-            logApplicationError(logger, request, e);
-            request.setAttribute(ERROR_MESSAGE, e.getMessage());
-            request.setAttribute(ERROR_ADDITIONAL_MESSAGE, e.getAdditionalMessage());
-        } catch (Exception e) {
-            logError(logger, request, e);
-            request.setAttribute(ERROR_MESSAGE, ERROR_UNKNOWN);
         }
 
-        request.getRequestDispatcher(HOME_PAGE).forward(request, response);
+        String view = command.execute(request, response);
+
+        if (!isRedirected(view)) {
+            request.getRequestDispatcher(view).forward(request, response);
+        }
+    }
+
+    private void logUnsupportedUri(String uri) {
+        logger.info(String.format(
+                REQUESTED_PATH_IS_NOT_SUPPORTED_REDIRECTING_TO_HOME_PAGE_FORMAT, uri));
+    }
+
+    private boolean isRedirected(String view) {
+        return PagesPaths.REDIRECTED.equals(view);
     }
 
     @Override
