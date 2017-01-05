@@ -1,8 +1,7 @@
 package data.test.entity;
 
-import coffee.machine.model.entity.item.Item;
 import coffee.machine.model.entity.item.Drink;
-import coffee.machine.model.entity.item.ItemType;
+import coffee.machine.model.entity.item.Item;
 
 import java.util.*;
 
@@ -25,17 +24,16 @@ public enum Drinks {
     public final Drink drink;
 
     Drinks(int id, String name, long price, int quantity, Item... addons) {
-        drink = new Drink();
-        drink.setId(id);
-        drink.setName(name);
-        drink.setPrice(price);
-        drink.setType(ItemType.DRINK);
-        drink.setQuantity(quantity);
-        Set<Item> drinkAddons = new TreeSet<>();
+        drink = new Drink.Builder()
+                .setId(id)
+                .setName(name)
+                .setPrice(price)
+                .setQuantity(quantity)
+                .build();
         if (addons != null) {
-            Collections.addAll(drinkAddons, addons);
+            drink.addAddons(Arrays.asList(addons));
         }
-        drink.setAddons(drinkAddons);
+
     }
 
     public static List<Drink> getAllDrinks() {
@@ -46,19 +44,18 @@ public enum Drinks {
 
     public static Map<Integer, Integer> getQuantitiesByIds() {
         Map<Integer, Integer> initialQuantitiesById = new HashMap<>();
-        Arrays.stream(values()).forEach(record -> initialQuantitiesById.put(record.drink.getId(),record.drink.getQuantity()));
+        Arrays.stream(values()).forEach(record -> initialQuantitiesById.put(record.drink.getId(), record.drink.getQuantity()));
         return initialQuantitiesById;
     }
 
     public Drink getCopy() {
-        Drink newDrink = new Drink();
-        newDrink.setId(drink.getId());
-        newDrink.setQuantity(drink.getQuantity());
-        newDrink.setName(drink.getName());
-        newDrink.setPrice(drink.getPrice());
-        Set<Item> addonSet=new TreeSet<>();
-        drink.getAddons().forEach(addon->addonSet.add(Addons.getCopyById(addon.getId())));
-        newDrink.setAddons(addonSet);
+        Drink newDrink = new Drink.Builder()
+                .setId(drink.getId())
+                .setQuantity(drink.getQuantity())
+                .setName(drink.getName())
+                .setPrice(drink.getPrice())
+                .build();
+        newDrink.getAddons().addAll(drink.getAddons());
         return newDrink;
     }
 

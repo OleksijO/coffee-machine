@@ -21,12 +21,12 @@ public enum Addons {
     public final Item addon;
 
     Addons(int id, String name, long price, int quantity) {
-        addon = new Item();
-        addon.setId(id);
-        addon.setName(name);
-        addon.setType(ItemType.ADDON);
-        addon.setPrice(price);
-        addon.setQuantity(quantity);
+        addon = new Item.Builder(ItemType.ADDON)
+                .setId(id)
+                .setName(name)
+                .setPrice(price)
+                .setQuantity(quantity)
+                .build();
     }
 
     public static List<Item> getAllAddons() {
@@ -36,26 +36,26 @@ public enum Addons {
     }
 
     public Item getCopy() {
-        Item newAddon = new Item();
-        newAddon.setId(addon.getId());
-        newAddon.setQuantity(addon.getQuantity());
-        newAddon.setName(addon.getName());
-        newAddon.setPrice(addon.getPrice());
-        return newAddon;
+        return new Item.Builder(addon.getType())
+                .setId(addon.getId())
+                .setQuantity(addon.getQuantity())
+                .setName(addon.getName())
+                .setPrice(addon.getPrice())
+                .build();
     }
 
-    public static Item getCopyById(int id){
-        for (Addons rec:values()){
-            if (rec.addon.getId()==id){
+    public static Item getCopyById(int id) {
+        for (Addons rec : values()) {
+            if (rec.addon.getId() == id) {
                 return rec.getCopy();
             }
         }
         return null;
     }
 
-    public static Map<Integer,Integer> getQuantitiesByIds() {
+    public static Map<Integer, Integer> getQuantitiesByIds() {
         Map<Integer, Integer> initialQuantitiesById = new HashMap<>();
-        Arrays.stream(values()).forEach(record -> initialQuantitiesById.put(record.addon.getId(),record.addon.getQuantity()));
+        Arrays.stream(values()).forEach(record -> initialQuantitiesById.put(record.addon.getId(), record.addon.getQuantity()));
         return initialQuantitiesById;
     }
 }

@@ -24,7 +24,6 @@ public class ItemFactory {
     }
 
     public Item getNewInstanceOfType(ItemType type) {
-        Objects.requireNonNull(type);
         Class clazz = supportedClasses.get(type);
         Objects.requireNonNull(clazz);
         try {

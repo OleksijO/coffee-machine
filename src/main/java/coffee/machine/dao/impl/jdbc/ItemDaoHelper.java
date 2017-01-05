@@ -1,7 +1,6 @@
 package coffee.machine.dao.impl.jdbc;
 
 import coffee.machine.model.entity.item.Item;
-import coffee.machine.model.entity.item.ItemFactory;
 import coffee.machine.model.entity.item.ItemType;
 import org.apache.log4j.Logger;
 
@@ -120,12 +119,12 @@ class ItemDaoHelper extends AbstractDao<Item> {
         while (resultSet.next()) {
 
             ItemType type = ItemType.valueOf(resultSet.getString(FIELD_TYPE));
-            Item item = ItemFactory.getInstance().getNewInstanceOfType(type);
-            item.setType(type);
-            item.setId(resultSet.getInt(FIELD_ID));
-            item.setName(resultSet.getString(FIELD_NAME));
-            item.setPrice(resultSet.getLong(FIELD_PRICE));
-            item.setQuantity(resultSet.getInt(FIELD_QUANTITY));
+            Item item = new Item.Builder(type)
+                    .setId(resultSet.getInt(FIELD_ID))
+                    .setName(resultSet.getString(FIELD_NAME))
+                    .setPrice(resultSet.getLong(FIELD_PRICE))
+                    .setQuantity(resultSet.getInt(FIELD_QUANTITY))
+                    .build();
             itemList.add(item);
         }
         return itemList;

@@ -2,22 +2,24 @@ package coffee.machine.model.entity.item;
 
 import coffee.machine.config.CoffeeMachineConfig;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 /**
  * This class represents Drink entity. NOTE: Drink = Item + List<Item>
  *
  * @author oleksij.onysymchuk@gmail.com
  */
 public class Drink extends Item {
-    Set<Item> addons;
+    private List<Item> addons = new ArrayList<>();
 
     public Drink() {
     }
 
     private Drink(Drink drink) {
         super(drink);
-        this.addons = drink.getAddonsCopy();
+        this.addAddons(drink.getAddonsCopy());
     }
 
     /**
@@ -50,12 +52,17 @@ public class Drink extends Item {
         return CoffeeMachineConfig.DB_MONEY_COEFF * getTotalPrice();
     }
 
-    public Set<Item> getAddons() {
+    public List<Item> getAddons() {
         return addons;
     }
 
-    public void setAddons(Set<Item> addons) {
-        this.addons = addons;
+    public void addAddons(List<Item> addons) {
+        Objects.requireNonNull(addons);
+        this.addons.addAll(addons);
+    }
+
+    public void addAddon(Item addon) {
+        this.addons.add(addon);
     }
 
     @Override
@@ -102,8 +109,8 @@ public class Drink extends Item {
         return true;
     }
 
-    private Set<Item> getAddonsCopy() {
-        Set<Item> baseAddons = new TreeSet<>();
+    private List<Item> getAddonsCopy() {
+        List<Item> baseAddons = new ArrayList<>(addons.size());
         for (Item addon : addons) {
             Item addonCopy = new Item(addon);
 
@@ -111,4 +118,48 @@ public class Drink extends Item {
         }
         return baseAddons;
     }
+
+    public static class Builder {
+        private Item.Builder itemBuilder;
+        private List<Item> addons = new ArrayList<>();
+
+
+        public Builder() {
+            this.itemBuilder = new Item.Builder(ItemType.DRINK);
+        }
+
+        public Builder setId(int id) {
+            itemBuilder.setId(id);
+            return this;
+        }
+
+        public Builder setName(String name) {
+            itemBuilder.setName(name);
+            return this;
+        }
+
+        public Builder setPrice(long price) {
+            itemBuilder.setPrice(price);
+            return this;
+        }
+
+        public Builder setQuantity(int quantity) {
+            itemBuilder.setQuantity(quantity);
+            return this;
+        }
+
+        public Builder addAddons(List<Item> addons) {
+            this.addons.addAll(addons);
+            return this;
+        }
+
+        public Drink build() {
+            Drink drink = (Drink) itemBuilder.build();
+            drink.addAddons(addons);
+            return drink;
+        }
+
+    }
+
+
 }

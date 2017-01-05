@@ -4,11 +4,14 @@ import coffee.machine.dao.OrderDao;
 import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
+import coffee.machine.model.entity.item.ItemType;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * This class is the implementation of Order entity DAO
@@ -177,20 +180,19 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     }
 
     private Drink getDrinkFromResultSet(ResultSet rsDrink) throws SQLException {
-        Drink drink = new Drink();
-        drink.setId(rsDrink.getInt(FIELD_DRINK_ID));
-        drink.setQuantity(rsDrink.getInt(FIELD_ITEM_QUANTITY));
-        drink.setName(rsDrink.getString(FIELD_ITEM_NAME));
-        drink.setAddons(new TreeSet<>());
-        return drink;
+        return new Drink.Builder()
+                .setId(rsDrink.getInt(FIELD_DRINK_ID))
+                .setQuantity(rsDrink.getInt(FIELD_ITEM_QUANTITY))
+                .setName(rsDrink.getString(FIELD_ITEM_NAME))
+                .build();
     }
 
     private Item getItemFromResultSet(ResultSet rsAddon) throws SQLException {
-        Item addon = new Item();
-        addon.setId(rsAddon.getInt(FIELD_ADDON_ID));
-        addon.setQuantity(rsAddon.getInt(FIELD_ITEM_QUANTITY));
-        addon.setName(rsAddon.getString(FIELD_ITEM_NAME));
-        return addon;
+        return new Item.Builder(ItemType.ADDON)
+                .setId(rsAddon.getInt(FIELD_ADDON_ID))
+                .setQuantity(rsAddon.getInt(FIELD_ITEM_QUANTITY))
+                .setName(rsAddon.getString(FIELD_ITEM_NAME))
+                .build();
     }
 
     private Order getOrderFromListById(List<Order> orderList, int orderId) {

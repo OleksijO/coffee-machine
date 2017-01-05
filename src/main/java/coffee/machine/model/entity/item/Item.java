@@ -24,7 +24,7 @@ public class Item implements Comparable<Item> {
         quantity = item.getQuantity();
     }
 
-    public Item getCopy(){
+    public Item getCopy() {
         return new Item(this);
     }
 
@@ -107,4 +107,43 @@ public class Item implements Comparable<Item> {
                 ", type=" + type +
                 '}';
     }
+
+    public static class Builder {
+        private Item item;
+
+        Builder() {
+            this.item = new Item();
+        }
+
+        public Builder(ItemType itemType) {
+            this.item = ItemFactory.getInstance().getNewInstanceOfType(itemType);
+            this.item.type = itemType;
+        }
+
+        public Builder setId(int id) {
+            item.id = id;
+            return this;
+        }
+
+        public Builder setName(String name) {
+            item.name = name;
+            return this;
+        }
+
+        public Builder setPrice(long price) {
+            item.price = price;
+            return this;
+        }
+
+        public Builder setQuantity(int quantity) {
+            item.quantity = quantity;
+            return this;
+        }
+
+        public Item build() {
+            return item;
+        }
+
+    }
+
 }
