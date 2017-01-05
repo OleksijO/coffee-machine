@@ -7,7 +7,7 @@ import coffee.machine.dao.UserDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.i18n.message.key.error.ServiceErrorKey;
 import coffee.machine.model.entity.Account;
-import coffee.machine.model.entity.user.User;
+import coffee.machine.model.entity.User;
 import coffee.machine.service.UserService;
 import coffee.machine.service.logging.ServiceErrorProcessing;
 import org.apache.log4j.Logger;

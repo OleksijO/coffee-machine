@@ -3,7 +3,7 @@ package coffee.machine.controller.command.admin.add.credit;
 import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.command.CommandWrapperTemplate;
 import coffee.machine.i18n.message.key.GeneralKey;
-import coffee.machine.model.entity.user.User;
+import coffee.machine.model.entity.User;
 import coffee.machine.service.AccountService;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.AccountServiceImpl;

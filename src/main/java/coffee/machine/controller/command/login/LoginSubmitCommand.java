@@ -2,7 +2,7 @@ package coffee.machine.controller.command.login;
 
 import coffee.machine.controller.command.CommandWrapperTemplate;
 import coffee.machine.controller.security.PasswordEncryptor;
-import coffee.machine.model.entity.user.User;
+import coffee.machine.model.entity.User;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.UserServiceImpl;
 import org.apache.log4j.Logger;

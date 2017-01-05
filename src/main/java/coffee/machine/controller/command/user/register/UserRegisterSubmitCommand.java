@@ -3,7 +3,7 @@ package coffee.machine.controller.command.user.register;
 import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.command.CommandWrapperTemplate;
 import coffee.machine.controller.security.PasswordEncryptor;
-import coffee.machine.model.entity.user.User;
+import coffee.machine.model.entity.User;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.UserServiceImpl;
 import coffee.machine.view.Attributes;
@@ -59,12 +59,13 @@ public class UserRegisterSubmitCommand extends CommandWrapperTemplate {
     }
 
     private User getUserFromFormData(RegisterFormData formData) {
-        User user = new User();
-        user.setAdmin(false);
-        user.setFullName(formData.getFullName());
-        user.setEmail(formData.getEmail());
-        user.setPassword(PasswordEncryptor.encryptPassword(formData.getPassword()));
-        return user;
+
+        return new User.Builder()
+                .setAdmin(false)
+                .setFullName(formData.getFullName())
+                .setEmail(formData.getEmail())
+                .setPassword(PasswordEncryptor.encryptPassword(formData.getPassword()))
+                .build()                ;
     }
 
     @Override

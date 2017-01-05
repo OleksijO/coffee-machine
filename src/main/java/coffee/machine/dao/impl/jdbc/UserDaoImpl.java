@@ -3,7 +3,7 @@ package coffee.machine.dao.impl.jdbc;
 import coffee.machine.dao.AccountDao;
 import coffee.machine.dao.UserDao;
 import coffee.machine.model.entity.Account;
-import coffee.machine.model.entity.user.User;
+import coffee.machine.model.entity.User;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
@@ -131,22 +131,17 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
     private List<User> parseResultSet(ResultSet resultSet) throws SQLException {
         List<User> userList = new ArrayList<>();
         while (resultSet.next()) {
-            User user = new User();
-            user.setId(resultSet.getInt(FIELD_ID));
-            user.setFullName(resultSet.getString(FIELD_FULL_NAME));
-            user.setEmail(resultSet.getString(FIELD_LOGIN));
-            user.setPassword(resultSet.getString(FIELD_PASSWORD));
-            Account account ;
-            if (!user.isAdmin()) {
-                account = new Account.Builder()
-                        .setId(resultSet.getInt(FIELD_ACCOUNT_ID))
-                        .setAmount(resultSet.getLong(FIELD_ACCOUNT_AMOUNT))
-                        .build();
-            } else {
-                account = new Account();
-            }
-            user.setAccount(account);
-            user.setAdmin(resultSet.getBoolean(FIELD_IS_ADMIN));
+            User user = new User.Builder()
+                    .setId(resultSet.getInt(FIELD_ID))
+                    .setEmail(resultSet.getString(FIELD_LOGIN))
+                    .setPassword(resultSet.getString(FIELD_PASSWORD))
+                    .setFullName(resultSet.getString(FIELD_FULL_NAME))
+                    .setAdmin(resultSet.getBoolean(FIELD_IS_ADMIN))
+                    .setAccount(new Account.Builder()
+                            .setId(resultSet.getInt(FIELD_ACCOUNT_ID))
+                            .setAmount(resultSet.getLong(FIELD_ACCOUNT_AMOUNT))
+                            .build())
+                    .build();
             userList.add(user);
         }
         return userList;

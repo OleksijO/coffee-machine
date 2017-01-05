@@ -1,6 +1,6 @@
 package coffee.machine.dao;
 
-import coffee.machine.model.entity.user.User;
+import coffee.machine.model.entity.User;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package data.test.entity;
 
 import coffee.machine.model.entity.Account;
-import coffee.machine.model.entity.user.User;
+import coffee.machine.model.entity.User;
 
 /**
  * This enum represents data for tests, corresponding to sql populate script
@@ -16,13 +16,14 @@ public enum Users {
     public final User user;
 
     Users(int id, String email, String password, String fullName, Account account, boolean admin) {
-        user = new User();
-        user.setId(id);
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setFullName(fullName);
-        user.setAccount(account);
-        user.setAdmin(admin);
+        user = new User.Builder()
+                .setId(id)
+                .setEmail(email)
+                .setPassword(password)
+                .setFullName(fullName)
+                .setAccount(account)
+                .setAdmin(admin)
+                .build();
     }
 }
 
