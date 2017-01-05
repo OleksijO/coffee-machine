@@ -5,16 +5,15 @@ import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.DrinkDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.item.Drink;
+import coffee.machine.model.entity.item.Item;
 import data.test.entity.Drinks;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -74,9 +73,11 @@ public class DrinkDaoTest {
     @Test
     public void testGetAllByListIds() {
 
-        List<Integer> drinkIds = new ArrayList<>();
-        testDrinks.forEach(drink -> drinkIds.add(drink.getId()));
-        assertEquals(testDrinks, drinkDao.getAllFromList(testDrinks));
+        List<Integer> drinkIds = testDrinks
+                .stream()
+                .map(Item::getId)
+                .collect(Collectors.toList());
+        assertEquals(testDrinks, drinkDao.getAllByIds(new HashSet<>(drinkIds)));
 
     }
 
