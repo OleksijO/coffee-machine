@@ -6,7 +6,10 @@ import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * This class is common DAO for Item hierarchy.
@@ -29,6 +32,7 @@ class ItemDaoHelper extends AbstractDao<Item> {
                     "DELETE FROM item WHERE id = ?; ";
     private static final String WHERE_ITEM_ID = " WHERE item.id = ?";
     private static final String WHERE_ITEM_IS = " WHERE type = '%s'";
+    private static final String WHERE_ITEM_ID_IN_LIST = " WHERE FIND_IN_SET(item.id,?)>0 ";
 
     static final String FIELD_NAME = "name";
     static final String FIELD_PRICE = "price";
@@ -182,4 +186,29 @@ class ItemDaoHelper extends AbstractDao<Item> {
         }
         throw new InternalError(); // STUB for compiler
     }
+
+
+    public List<Item> getAllByIds(Set<Integer> itemIds) {
+        if (itemIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+        String ids = getStringListOf(itemIds);
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_ITEM_ID_IN_LIST)) {
+
+            statement.setString(1, ids);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+
+                return parseResultSet(resultSet);
+            }
+        } catch (SQLException e) {
+            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_BY_ID, e);
+        }
+        throw new InternalError(); // STUB for compiler
+    }
+
+    String getStringListOf(Set<Integer> itemIds) {
+        return itemIds.stream().map(Object::toString).collect(Collectors.joining(","));
+    }
+
 }

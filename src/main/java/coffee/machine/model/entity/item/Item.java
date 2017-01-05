@@ -111,10 +111,6 @@ public class Item implements Comparable<Item> {
     public static class Builder {
         private Item item;
 
-        Builder() {
-            this.item = new Item();
-        }
-
         public Builder(ItemType itemType) {
             this.item = ItemFactory.getInstance().getNewInstanceOfType(itemType);
             this.item.type = itemType;

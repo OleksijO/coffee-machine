@@ -10,10 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static coffee.machine.dao.impl.jdbc.ItemDaoHelper.*;
@@ -185,16 +182,8 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
 
     @Override
     public List<Drink> getAllFromList(List<Drink> drinksToGet) {
-        List<Drink> items = new ArrayList<>();
-        drinksToGet.forEach(drink -> {
-            if (drink != null) {
-                Drink updatedDrink = getById(drink.getId());
-                if (updatedDrink != null) {
-                    items.add(updatedDrink);
-                }
-            }
-        });
-        return items;
+        Set<Integer> ids = drinksToGet.stream().map(Item::getId).collect(Collectors.toSet());
+        return getAllByIds(ids);
     }
 
     @Override
@@ -202,7 +191,7 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
         if (itemIds.isEmpty()) {
             return Collections.emptyList();
         }
-        String ids = getStringListOf(itemIds);
+        String ids = itemDaoHelper.getStringListOf(itemIds);
         try (PreparedStatement statement = connection.prepareStatement(
                 String.format(SELECT_ALL_DRINKS_WITH_ADDONS_FORMAT,
                         WHERE_ID_IN_LIST_OR_DRINK_ID_IN_LIST))) {
@@ -218,10 +207,6 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
             logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_BY_ID, e);
         }
         throw new InternalError(); // STUB for compiler
-    }
-
-    private String getStringListOf(Set<Integer> itemIds) {
-        return itemIds.stream().map(Object::toString).collect(Collectors.joining(","));
     }
 
     @Override

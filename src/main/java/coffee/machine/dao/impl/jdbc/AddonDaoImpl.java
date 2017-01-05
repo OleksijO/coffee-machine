@@ -5,11 +5,13 @@ import coffee.machine.model.entity.item.Item;
 import coffee.machine.model.entity.item.ItemType;
 
 import java.sql.Connection;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * This class is the implementation of Addon entity DAO
- *
+ * <p>
  * Mainly this is an adaptor for ItemDaoHelper, because Addon=Item, but extends it's functionality with some methods
  *
  * @author oleksij.onysymchuk@gmail.com
@@ -48,14 +50,7 @@ class AddonDaoImpl extends AbstractDao<Item> implements AddonDao {
 
     @Override
     public List<Item> getAllByIds(Set<Integer> itemIds) {
-        List<Item> addon = new ArrayList<>();
-        itemIds.forEach(id -> {
-            Item updatedDrink = getById(id);
-            if (updatedDrink != null) {
-                addon.add(updatedDrink);
-            }
-        });
-        return addon;
+        return itemDaoHelper.getAllByIds(itemIds);
     }
 
     @Override
