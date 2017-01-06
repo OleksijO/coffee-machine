@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This class is the implementation of Account entity DAO
@@ -126,8 +127,8 @@ class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
     }
 
     @Override
-    public Account getByUserId(int userId) {
-        return getAccountByQueryAndIntParameter(SELECT_BY_USER_ID_SQL, userId);
+    public Optional<Account> getByUserId(int userId) {
+        return Optional.ofNullable(getAccountByQueryAndIntParameter(SELECT_BY_USER_ID_SQL, userId));
 
     }
 

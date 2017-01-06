@@ -89,7 +89,7 @@ public class CoffeeMachineServiceImplTest {
         when(daoFactory.getConnection()).thenReturn(connection);
 
 
-        when(accountDao.getByUserId(2)).thenReturn(userAccount);
+        when(accountDao.getByUserId(2)).thenReturn(java.util.Optional.ofNullable(userAccount));
         when(accountDao.getById(1)).thenReturn(coffeeMachineAccount);
 
         List<Drink> baseDrinksToBuy = new ArrayList<>();

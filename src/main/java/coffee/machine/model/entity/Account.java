@@ -11,12 +11,14 @@ public class Account {
     private int id;
     private long amount;
 
-    public void withdraw(long amount) {
+    public Account withdraw(long amount) {
         this.amount -= amount;
+        return this;
     }
 
-    public void add(long amount) {
+    public Account add(long amount) {
         this.amount += amount;
+        return this;
     }
 
     public long getAmount() {

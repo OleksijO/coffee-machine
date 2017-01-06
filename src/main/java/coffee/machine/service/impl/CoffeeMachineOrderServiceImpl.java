@@ -53,7 +53,7 @@ public class CoffeeMachineOrderServiceImpl implements CoffeeMachineOrderService,
 
             connection.beginSerializableTransaction();
 
-            Account userAccount = accountDao.getByUserId(userId);
+            Account userAccount = accountDao.getByUserId(userId).orElseThrow(IllegalStateException::new);
             checkUserHaveEnoughMoney(drinksPrice, userAccount.getAmount());
             decreaseItemQuantitiesInDatabaseByItemQuantitiesInDrinksToBuy(drinks, drinkDao, addonDao);
             performMoneyExchange(accountDao, userAccount, drinksPrice);

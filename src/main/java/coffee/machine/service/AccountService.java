@@ -1,6 +1,9 @@
 package coffee.machine.service;
 
 import coffee.machine.model.entity.Account;
+import coffee.machine.model.entity.CreditsReceipt;
+
+import java.util.Optional;
 
 /**
  * This class represents account service
@@ -17,16 +20,15 @@ public interface AccountService {
 
     /**
      * @param userId  user's id whom account is to be found
-     * @return account or null if there is no account with specified user's id
+     * @return account of user with specified id
      */
-    Account getByUserId(int userId);
+    Optional<Account> getByUserId(int userId);
 
 
     /**
-     * Adds amount to account of user with specified id.
+     * Adds amount of credits to account of user specified in param.
      *
-     * @param userId user's id, whose account has to be updated
-     * @param amountToAdd amount to be add to account of user with specified id
+     * @param receipt Container for user and amount data
      */
-    void addToAccountByUserId(int userId, long amountToAdd);
+    void addCredits(CreditsReceipt receipt);
 }

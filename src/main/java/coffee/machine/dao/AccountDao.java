@@ -2,6 +2,8 @@ package coffee.machine.dao;
 
 import coffee.machine.model.entity.Account;
 
+import java.util.Optional;
+
 /**
  * This class represents account entity DAO functionality
  *
@@ -14,6 +16,6 @@ public interface AccountDao extends GenericDao<Account> {
 	 *            user's id, which account is searched for
 	 * @return Account entity
 	 */
-	Account getByUserId(int userId);
+	Optional<Account> getByUserId(int userId);
 
 }

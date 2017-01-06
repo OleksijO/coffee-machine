@@ -2,69 +2,45 @@ package coffee.machine.controller.command.admin.add.credit;
 
 import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.command.CommandWrapperTemplate;
-import coffee.machine.i18n.message.key.CommandKey;
 import coffee.machine.i18n.message.key.GeneralKey;
+import coffee.machine.model.entity.CreditsReceipt;
 import coffee.machine.model.entity.User;
 import coffee.machine.service.AccountService;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.AccountServiceImpl;
 import coffee.machine.service.impl.UserServiceImpl;
-import coffee.machine.view.Attributes;
 import coffee.machine.view.Parameters;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Optional;
 
-import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFF;
-import static coffee.machine.view.Attributes.COFFEE_MACHINE_BALANCE;
-import static coffee.machine.view.Attributes.PAGE_TITLE;
+import static coffee.machine.i18n.message.key.CommandKey.ADD_CREDITS_YOU_ADDED_CREDITS_SUCCESSFULLY_ON_ACCOUNT_OF_USER;
+import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.ADMIN_ADD_CREDITS_PAGE;
 import static coffee.machine.view.Parameters.CREDITS_TO_ADD;
 
 /**
- * Created by oleksij.onysymchuk@gmail
+ * This class represents admin's add credits post method request handler command.
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class AdminAddCreditSubmitCommand extends CommandWrapperTemplate {
+    private static Logger logger = Logger.getLogger(AdminAddCreditSubmitCommand.class);
+
     private static final String TO_USER_ID_ACCOUNT_ADDED_N_CREDITS_FORMAT =
             "To user's (id=%d) account added %.2f credits";
-    private static Logger logger = Logger.getLogger(AdminAddCreditSubmitCommand.class);
-    AccountService accountService = AccountServiceImpl.getInstance();
-    UserService userService = UserServiceImpl.getInstance();
+    private static final String USER_AMOUNT_SEPARATOR = " / ";
+    private static final String USERS_ID = "User's id = ";
+
+    private static final int COFFEE_MACHINE_ACCOUNT_ID = CoffeeMachineConfig.ACCOUNT_ID;
+
+    private AccountService accountService = AccountServiceImpl.getInstance();
+    private UserService userService = UserServiceImpl.getInstance();
 
     public AdminAddCreditSubmitCommand() {
         super(ADMIN_ADD_CREDITS_PAGE);
-    }
-
-    @Override
-    protected String performExecute(HttpServletRequest request, HttpServletResponse response) {
-
-        int userId = Integer.parseInt(request.getParameter(Parameters.USER_ID));
-        long amountToAdd =
-                (long) (Double.parseDouble(request.getParameter(CREDITS_TO_ADD)) / DB_MONEY_COEFF);
-        accountService.addToAccountByUserId(userId, amountToAdd);
-        List<User> users = userService.getAllNonAdminUsers();
-        request.setAttribute(Attributes.USER_LIST, users);
-        request.setAttribute(Attributes.USUAL_MESSAGE,
-                CommandKey.ADD_CREDITS_YOU_ADDED_CREDITS_SUCCESSFULLY_ON_ACCOUNT_OF_USER);
-        String userFullName = getUserFullNameByIdFromList(userId, users);
-        request.setAttribute(Attributes.USUAL_ADDITIONAL_MESSAGE,
-                userFullName + " / " + (amountToAdd * DB_MONEY_COEFF));
-        request.setAttribute(COFFEE_MACHINE_BALANCE, accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)
-                .getRealAmount());
-        logger.info(String.format(TO_USER_ID_ACCOUNT_ADDED_N_CREDITS_FORMAT, userId, amountToAdd * DB_MONEY_COEFF));
-        return ADMIN_ADD_CREDITS_PAGE;
-    }
-
-    private String getUserFullNameByIdFromList(int userId, List<User> users) {
-        Optional<User> userOpt = users.stream().filter(user -> user.getId() == userId).findAny();
-        if (userOpt.isPresent()) {
-            return userOpt.get().getFullName();
-        } else {
-            return USER_ID_IS + userId;
-        }
     }
 
     @Override
@@ -72,4 +48,54 @@ public class AdminAddCreditSubmitCommand extends CommandWrapperTemplate {
         request.setAttribute(PAGE_TITLE, GeneralKey.TITLE_ADMIN_ADD_CREDIT);
 
     }
+
+    @Override
+    protected String performExecute(HttpServletRequest request, HttpServletResponse response) {
+
+        CreditsReceipt receipt = getReceiptDataFromRequest(request);
+
+        accountService.addCredits(receipt);
+
+        List<User> users = userService.getAllNonAdminUsers();
+        placeUserDataToRequest(request, users);
+        placeMessageToRequest(request, receipt, users);
+        logDetails(receipt);
+        return ADMIN_ADD_CREDITS_PAGE;
+    }
+
+    private CreditsReceipt getReceiptDataFromRequest(HttpServletRequest request) {
+        return new CreditsReceipt.Builder()
+                .setUserId(Integer.parseInt(request.getParameter(Parameters.USER_ID)))
+                .setAmount(Double.parseDouble(request.getParameter(CREDITS_TO_ADD)))
+                .build();
+    }
+
+    private void placeUserDataToRequest(HttpServletRequest request, List<User> users) {
+        request.setAttribute(USER_LIST, users);
+    }
+
+    private void placeMessageToRequest(HttpServletRequest request, CreditsReceipt receipt, List<User> users) {
+        request.setAttribute(USUAL_MESSAGE, ADD_CREDITS_YOU_ADDED_CREDITS_SUCCESSFULLY_ON_ACCOUNT_OF_USER);
+        request.setAttribute(USUAL_ADDITIONAL_MESSAGE,
+                getUserFullName(receipt.getUserId(), users) + USER_AMOUNT_SEPARATOR + receipt.getRealAmount());
+        request.setAttribute(COFFEE_MACHINE_BALANCE,
+                accountService.getById(COFFEE_MACHINE_ACCOUNT_ID).getRealAmount());
+    }
+
+    private String getUserFullName(int userId, List<User> users) {
+        return users.stream()
+                .filter(user -> user.getId() == userId)
+                .map(User::getFullName)
+                .findAny()
+                .orElse(String.valueOf(USERS_ID + userId));
+
+    }
+
+    private void logDetails(CreditsReceipt receipt) {
+
+        logger.info(String.format(TO_USER_ID_ACCOUNT_ADDED_N_CREDITS_FORMAT,
+                receipt.getUserId(), receipt.getRealAmount()));
+    }
+
+
 }
