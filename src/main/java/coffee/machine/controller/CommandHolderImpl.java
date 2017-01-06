@@ -1,16 +1,13 @@
 package coffee.machine.controller;
 
-import coffee.machine.controller.Command;
-import coffee.machine.controller.CommandHolder;
 import coffee.machine.controller.command.HomeCommand;
-import coffee.machine.controller.command.login.LoginCommand;
-import coffee.machine.controller.command.login.LoginSubmitCommand;
 import coffee.machine.controller.command.admin.add.credit.AdminAddCreditCommand;
 import coffee.machine.controller.command.admin.add.credit.AdminAddCreditSubmitCommand;
 import coffee.machine.controller.command.admin.refill.AdminRefillCommand;
 import coffee.machine.controller.command.admin.refill.AdminRefillSubmitCommand;
-import coffee.machine.controller.command.logout.AdminLogoutCommand;
-import coffee.machine.controller.command.logout.UserLogoutCommand;
+import coffee.machine.controller.command.login.LoginCommand;
+import coffee.machine.controller.command.login.LoginSubmitCommand;
+import coffee.machine.controller.command.logout.LogoutCommand;
 import coffee.machine.controller.command.user.order.history.UserOrderHistoryCommand;
 import coffee.machine.controller.command.user.purchase.UserPurchaseCommand;
 import coffee.machine.controller.command.user.purchase.UserPurchaseSubmitCommand;
@@ -36,12 +33,11 @@ public class CommandHolderImpl implements CommandHolder {
             put(HOME_PATH, new HomeCommand());
             put(LOGIN_PATH, new LoginCommand());
 
-            put(USER_LOGOUT_PATH, new UserLogoutCommand());
+            put(LOGOUT_PATH, new LogoutCommand());
             put(USER_REGISTER_PATH, new UserRegisterCommand());
             put(USER_PURCHASE_PATH, new UserPurchaseCommand());
             put(USER_ORDER_HISTORY_PATH, new UserOrderHistoryCommand());
 
-            put(ADMIN_LOGOUT_PATH, new AdminLogoutCommand());
             put(ADMIN_REFILL_PATH, new AdminRefillCommand());
             put(ADMIN_ADD_CREDITS_PATH, new AdminAddCreditCommand());
         }

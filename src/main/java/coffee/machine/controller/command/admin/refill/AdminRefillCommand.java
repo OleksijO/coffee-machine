@@ -33,16 +33,16 @@ public class AdminRefillCommand extends CommandWrapperTemplate {
     @Override
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        request.setAttribute(Attributes.COFFEE_MACHINE_BALANCE,
-                accountService.getById(CoffeeMachineConfig.ACCOUNT_ID).getRealAmount());
-        request.setAttribute(Attributes.DRINKS, drinkService.getAll());
-        request.setAttribute(Attributes.ADDONS, addonService.getAll());
-
         return PagesPaths.ADMIN_REFILL_PAGE;
     }
 
     @Override
     protected void placeNecessaryDataToRequest(HttpServletRequest request) {
         request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_ADMIN_REFILL);
+        request.setAttribute(Attributes.COFFEE_MACHINE_BALANCE,
+                accountService.getById(CoffeeMachineConfig.ACCOUNT_ID).getRealAmount());
+        request.setAttribute(Attributes.DRINKS, drinkService.getAll());
+        request.setAttribute(Attributes.ADDONS, addonService.getAll());
+
     }
 }

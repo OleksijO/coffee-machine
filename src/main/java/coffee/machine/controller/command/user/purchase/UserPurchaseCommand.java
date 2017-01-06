@@ -1,6 +1,7 @@
 package coffee.machine.controller.command.user.purchase;
 
 import coffee.machine.controller.command.CommandWrapperTemplate;
+import coffee.machine.model.entity.Account;
 import coffee.machine.service.AccountService;
 import coffee.machine.service.DrinkService;
 import coffee.machine.service.impl.AccountServiceImpl;
@@ -22,12 +23,13 @@ public class UserPurchaseCommand extends CommandWrapperTemplate {
     }
 
 
-
     @Override
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         int userId = (int) request.getSession().getAttribute(Attributes.USER_ID);
-        request.setAttribute(Attributes.USER_ACCOUNT, accountService.getByUserId(userId));
+        request.setAttribute(Attributes.USER_BALANCE, accountService.getByUserId(userId)
+                .map(Account::getRealAmount)
+                .orElseThrow(IllegalStateException::new));
         request.setAttribute(Attributes.DRINKS, drinkService.getAll());
         return PagesPaths.USER_PURCHASE_PAGE;
     }

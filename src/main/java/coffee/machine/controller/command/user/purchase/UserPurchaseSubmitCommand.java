@@ -6,6 +6,7 @@ import coffee.machine.controller.command.request.data.extractor.PurchaseFormData
 import coffee.machine.controller.command.request.data.extractor.impl.ItemsStringFormDataExtractorImpl;
 import coffee.machine.controller.command.request.data.extractor.impl.PurchaseFormExtractorImpl;
 import coffee.machine.i18n.message.key.CommandKey;
+import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.service.AccountService;
@@ -103,6 +104,9 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
     @Override
     protected void placeNecessaryDataToRequest(HttpServletRequest request) {
         request.setAttribute(Attributes.DRINKS, drinkService.getAll());
-        request.setAttribute(Attributes.USER_ACCOUNT, accountService.getByUserId(getUserIdFromRequest(request)));
+        request.setAttribute(Attributes.USER_BALANCE,
+                accountService.getByUserId(getUserIdFromRequest(request))
+                .map(Account::getRealAmount)
+                .orElseThrow(IllegalStateException::new));
     }
 }

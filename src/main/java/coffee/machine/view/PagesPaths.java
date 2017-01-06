@@ -37,9 +37,7 @@ public final class PagesPaths {
 	public static final String USER_REGISTER_SUCCESS_PAGE =VIEW_JSP_CLASSPATH + USER + REGISTER +"Success"+ PAGE ;
 	public static final String USER_PURCHASE_PAGE = VIEW_JSP_CLASSPATH + USER + PURCHASE + PAGE;
 	public static final String USER_ORDER_HISTORY_PAGE = VIEW_JSP_CLASSPATH + USER + "/ordersHistory" + PAGE;
-	public static final String USER_LOGOUT_PATH = USER + LOGOUT;
 
-	public static final String ADMIN_LOGOUT_PATH = ADMIN + LOGOUT;
 	public static final String ADMIN_REFILL_PATH = ADMIN + REFILL;
 	public static final String ADMIN_ADD_CREDITS_PATH = ADMIN + ADD_CREDIT;
 

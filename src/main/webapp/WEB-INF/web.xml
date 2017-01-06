@@ -16,6 +16,7 @@
 		<servlet-name>main</servlet-name>
 		<url-pattern>/home/*</url-pattern>
 		<url-pattern>/login/*</url-pattern>
+		<url-pattern>/logout/*</url-pattern>
 		<url-pattern>/user/*</url-pattern>
 		<url-pattern>/admin/*</url-pattern>
 	</servlet-mapping>

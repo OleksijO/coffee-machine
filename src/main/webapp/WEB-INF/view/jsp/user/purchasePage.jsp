@@ -8,10 +8,10 @@
 <br>
 <form action="${PagesPaths.USER_PURCHASE_PATH}" method="post">
     <fmt:message key="user.purchase.your.balance.is"/>
-    <fmt:formatNumber value="${requestScope[Attributes.USER_ACCOUNT].realAmount}" type="number"
+    <fmt:formatNumber value="${requestScope[Attributes.USER_BALANCE]}" type="number"
                       minFractionDigits="2" maxFractionDigits="2"/>
     <fmt:message key="currency"/>.<br>
-    <c:if test="${requestScope[Attributes.USER_ACCOUNT].realAmount le requestScope[Attributes.BALANCE_LOW_WARN_LIMIT]}">
+    <c:if test="${requestScope[Attributes.USER_BALANCE] le requestScope[Attributes.BALANCE_LOW_WARN_LIMIT]}">
         <br>
         <p style="color: red"><fmt:message
                 key="user.purchase.your.balance.too.low.contact.administrator.to.add.credits"/>:
