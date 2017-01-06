@@ -5,11 +5,11 @@ import coffee.machine.i18n.message.key.error.ServiceErrorKey;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
-import coffee.machine.service.CoffeeMachineService;
+import coffee.machine.service.CoffeeMachineOrderService;
 import coffee.machine.service.exception.ServiceException;
 import data.test.entity.Accounts;
-import data.test.entity.Addons;
-import data.test.entity.Drinks;
+import data.test.entity.AddonsData;
+import data.test.entity.DrinksData;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,10 +61,10 @@ public class CoffeeMachineServiceImplTest {
     @Captor
     private ArgumentCaptor<List<Item>> addonListCaptor;
 
-    private CoffeeMachineService service;
+    private CoffeeMachineOrderService service;
 
-    Map<Integer, Integer> drinkQuantitiesById = Drinks.getQuantitiesByIds();
-    Map<Integer, Integer> addonQuantitiesById = Addons.getQuantitiesByIds();
+    Map<Integer, Integer> drinkQuantitiesById = DrinksData.getQuantitiesByIds();
+    Map<Integer, Integer> addonQuantitiesById = AddonsData.getQuantitiesByIds();
 
     Account coffeeMachineAccount = Accounts.COFFEE_MACHINE.getCopy();
     Account userAccount = Accounts.USER_A.getCopy();
@@ -93,18 +93,18 @@ public class CoffeeMachineServiceImplTest {
         when(accountDao.getById(1)).thenReturn(coffeeMachineAccount);
 
         List<Drink> baseDrinksToBuy = new ArrayList<>();
-        baseDrinksToBuy.add(Drinks.BORJOMI.drink);
-        baseDrinksToBuy.add(Drinks.ESPRESSO.drink);
-        baseDrinksToBuy.add(Drinks.MOCACCINO.drink);
+        baseDrinksToBuy.add(DrinksData.BORJOMI.drink);
+        baseDrinksToBuy.add(DrinksData.ESPRESSO.drink);
+        baseDrinksToBuy.add(DrinksData.MOCACCINO.drink);
         when(drinkDao.getAllFromList(any())).thenReturn(baseDrinksToBuy);
 
         List<Item> addonsToBuy = new ArrayList<>();
-        addonsToBuy.add(Addons.MILK.addon);
-        addonsToBuy.add(Addons.SUGAR.addon);
+        addonsToBuy.add(AddonsData.MILK.addon);
+        addonsToBuy.add(AddonsData.SUGAR.addon);
         when(addonDao.getAllFromList(any())).thenReturn(addonsToBuy);
 
-        service = CoffeeMachineServiceImpl.getInstance();
-        ((CoffeeMachineServiceImpl)service).daoFactory = daoFactory;
+        service = CoffeeMachineOrderServiceImpl.getInstance();
+        ((CoffeeMachineOrderServiceImpl)service).daoFactory = daoFactory;
 
         userAccountInitialAmount = userAccount.getAmount();
         cmAccountAmount = coffeeMachineAccount.getAmount();
@@ -154,9 +154,9 @@ public class CoffeeMachineServiceImplTest {
 
     private List<Drink> getTestDrinksWithoutAddons() {
         List<Drink> drinks = new ArrayList<>();
-        drinks.add(Drinks.BORJOMI.getCopy().getBaseDrink());
-        drinks.add(Drinks.ESPRESSO.getCopy().getBaseDrink());
-        drinks.add(Drinks.MOCACCINO.getCopy().getBaseDrink());
+        drinks.add(DrinksData.BORJOMI.getCopy().getBaseDrink());
+        drinks.add(DrinksData.ESPRESSO.getCopy().getBaseDrink());
+        drinks.add(DrinksData.MOCACCINO.getCopy().getBaseDrink());
         return drinks;
     }
 
@@ -226,11 +226,11 @@ public class CoffeeMachineServiceImplTest {
 
     private List<Drink> getTestDrinksWithAddons(int addonQuantity) {
         List<Drink> drinks = new ArrayList<>();
-        drinks.add(Drinks.BORJOMI.drink.getBaseDrink());
-        Drink drink = Drinks.ESPRESSO.drink.getBaseDrink();
+        drinks.add(DrinksData.BORJOMI.drink.getBaseDrink());
+        Drink drink = DrinksData.ESPRESSO.drink.getBaseDrink();
         drink.getAddons().iterator().next().setQuantity(addonQuantity);
         drinks.add(drink);
-        drink = Drinks.MOCACCINO.drink.getBaseDrink();
+        drink = DrinksData.MOCACCINO.drink.getBaseDrink();
         Iterator<Item> iterator = drink.getAddons().iterator();
         iterator.next();
         iterator.next().setQuantity(addonQuantity);
@@ -264,8 +264,8 @@ public class CoffeeMachineServiceImplTest {
     public void testPrepareDrinksForUserNotEnoughDrinks() throws Exception {
 
         prepareDataForTestDrinkWithAddons(4, 1, 2);
-        int memory = Drinks.ESPRESSO.drink.getQuantity();
-        Drinks.ESPRESSO.drink.setQuantity(0);
+        int memory = DrinksData.ESPRESSO.drink.getQuantity();
+        DrinksData.ESPRESSO.drink.setQuantity(0);
         try {
             service.prepareDrinksForUser(drinksToBuy, userId);
         } catch (ServiceException e) {
@@ -275,7 +275,7 @@ public class CoffeeMachineServiceImplTest {
             e.printStackTrace();
             fail(HERE_SHOULD_BE_APPLICATION_EXCEPTION);
         } finally {
-            Drinks.ESPRESSO.drink.setQuantity(memory);
+            DrinksData.ESPRESSO.drink.setQuantity(memory);
         }
 
         verifyDaoAccessionTimesAndCaptureCalledMethodArgs(0, 0, 0);

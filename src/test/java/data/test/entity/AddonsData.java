@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public enum Addons {
+public enum AddonsData {
     LEMON(5, "Лимон", 200, 20),
     SUGAR(7, "Дополнительный сахар", 100, 300),
     MILK(8, "Молоко", 200, 150),
@@ -20,7 +20,7 @@ public enum Addons {
 
     public final Item addon;
 
-    Addons(int id, String name, long price, int quantity) {
+    AddonsData(int id, String name, long price, int quantity) {
         addon = new Item.Builder(ItemType.ADDON)
                 .setId(id)
                 .setName(name)
@@ -45,7 +45,7 @@ public enum Addons {
     }
 
     public static Item getCopyById(int id) {
-        for (Addons rec : values()) {
+        for (AddonsData rec : values()) {
             if (rec.addon.getId() == id) {
                 return rec.getCopy();
             }

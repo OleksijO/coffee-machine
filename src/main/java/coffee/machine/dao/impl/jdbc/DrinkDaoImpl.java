@@ -56,7 +56,7 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
         }
 
         itemDaoHelper.insert(drink);
-        insertAddonSet(drink); // Addons as Items should already exist in table Item.
+        insertAddonSet(drink); // Addons as Drinks should already exist in table Item.
 
         return drink;
     }

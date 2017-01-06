@@ -12,4 +12,7 @@ public interface ServiceErrorKey {
 	String YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY = "user.purchase.you.did.not.specified.drinks.to.buy";
     String USER_WITH_SPECIFIED_EMAIL_ALREADY_REGISTERED =
 			"error.service.register.user.with.specified.email.already.registered";
+
+	String ADMIN_REFILL_NOTHING_TO_ADD = "error.command.nothing.to.refill";
+	String QUANTITY_SHOULD_BE_NON_NEGATIVE = "error.command.quantity.field.should.be.greater.than.or.equals.to.zero";
 }

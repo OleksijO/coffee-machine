@@ -9,10 +9,10 @@ import coffee.machine.i18n.message.key.CommandKey;
 import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.service.AccountService;
-import coffee.machine.service.CoffeeMachineService;
+import coffee.machine.service.CoffeeMachineOrderService;
 import coffee.machine.service.DrinkService;
 import coffee.machine.service.impl.AccountServiceImpl;
-import coffee.machine.service.impl.CoffeeMachineServiceImpl;
+import coffee.machine.service.impl.CoffeeMachineOrderServiceImpl;
 import coffee.machine.service.impl.DrinkServiceImpl;
 import coffee.machine.view.Attributes;
 import coffee.machine.view.PagesPaths;
@@ -30,7 +30,7 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
 
     private DrinkService drinkService = DrinkServiceImpl.getInstance();
     private AccountService accountService = AccountServiceImpl.getInstance();
-    private CoffeeMachineService coffeeMachine = CoffeeMachineServiceImpl.getInstance();
+    private CoffeeMachineOrderService coffeeMachine = CoffeeMachineOrderServiceImpl.getInstance();
 
     private PurchaseFormDataExtractor formExtractor = new PurchaseFormExtractorImpl();
     private ItemsStringFormDataExtractor formStringDataExtractor = new ItemsStringFormDataExtractorImpl();

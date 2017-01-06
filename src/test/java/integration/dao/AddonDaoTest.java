@@ -5,7 +5,7 @@ import coffee.machine.dao.AddonDao;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.item.Item;
-import data.test.entity.Addons;
+import data.test.entity.AddonsData;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -31,7 +31,7 @@ public class AddonDaoTest {
     private AddonDao addonDao;
 
     {
-        for (Addons addonEnum : Addons.values()) {
+        for (AddonsData addonEnum : AddonsData.values()) {
             testAddons.add(addonEnum.addon);
         }
 
@@ -155,10 +155,10 @@ public class AddonDaoTest {
     @Test
     public void testGetAllFromList() throws Exception {
         List<Item> itemsToRetrieve = new ArrayList<>();
-        Item addon = Addons.CREAM.getCopy();
+        Item addon = AddonsData.CREAM.getCopy();
         addon.setQuantity(4);
         itemsToRetrieve.add(addon);
-        addon = Addons.CINNAMON.getCopy();
+        addon = AddonsData.CINNAMON.getCopy();
         addon.setQuantity(4);
         itemsToRetrieve.add(addon);
         assertEquals(itemsToRetrieve, addonDao.getAllFromList(itemsToRetrieve));
@@ -167,8 +167,8 @@ public class AddonDaoTest {
     @Test
     public void testGetAllByIds() throws Exception {
         List<Item> itemsToRetrieve = new ArrayList<Item>() {{
-            add(Addons.CREAM.getCopy());
-            add(Addons.CINNAMON.getCopy());
+            add(AddonsData.CREAM.getCopy());
+            add(AddonsData.CINNAMON.getCopy());
         }};
         Set<Integer> ids = new TreeSet<Integer>(){{add(9);add(13);}};
         assertEquals(itemsToRetrieve, addonDao.getAllByIds(ids));

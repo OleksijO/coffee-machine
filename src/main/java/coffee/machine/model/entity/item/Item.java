@@ -28,6 +28,10 @@ public class Item implements Comparable<Item> {
         return new Item(this);
     }
 
+    public void incrementQuantityBy(int quantityToAdd){
+        quantity+=quantityToAdd;
+    }
+
     public int getId() {
         return id;
     }
@@ -110,6 +114,10 @@ public class Item implements Comparable<Item> {
 
     public static class Builder {
         private Item item;
+
+        public Builder() {
+            this.item = new Item();
+        }
 
         public Builder(ItemType itemType) {
             this.item = ItemFactory.getInstance().getNewInstanceOfType(itemType);

@@ -4,7 +4,6 @@ package coffee.machine.service;
 import coffee.machine.model.entity.item.Drink;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -21,14 +20,10 @@ public interface DrinkService {
 	List<Drink> getAll();
 
 	/**
-	 * Adds specified quantity for every drink with specified id
 	 *
-	 * @param quantitiesById Map of pairs (drinkId, quantityToAdd)
+	 * @param drinkIds List of ids of drinks to return
+	 * @return list of all drinks with specified ids with zero quantities and zero addon quantities.
 	 */
-	void refill(Map<Integer, Integer> quantitiesById);
-
-	List<Drink> getAllByIdSet(Set<Integer> integers);
-
-    List<Drink> getAllBaseByIdSet(Set<Integer> drinkIds);
+	List<Drink> getAllBaseByIdSet(Set<Integer> drinkIds);
 
 }

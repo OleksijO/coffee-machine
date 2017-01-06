@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public interface CoffeeMachineService {
+public interface CoffeeMachineOrderService {
 
     /**
      * Decreases quantities of drink and addons in them in database,

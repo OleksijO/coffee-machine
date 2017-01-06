@@ -9,6 +9,7 @@ import coffee.machine.service.DrinkService;
 import org.apache.log4j.Logger;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This class is an implementation of DrinkService
@@ -46,45 +47,20 @@ public class DrinkServiceImpl implements DrinkService {
     }
 
     @Override
-    public void refill(Map<Integer, Integer> quantitiesById) {
-        if ((quantitiesById == null) || (quantitiesById.size() == 0)) {
-            logger.error(
-                    QUANTITIES_BY_ID_SHOULD_CONTAIN_ANY_DATA_GOT_OBJECT + quantitiesById);
-            return;
-        }
-        try (AbstractConnection connection = daoFactory.getConnection()) {
-
-            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-            connection.beginSerializableTransaction();
-            List<Drink> drinksToUpdate = drinkDao.getAllByIds(quantitiesById.keySet());
-            drinksToUpdate.forEach(
-                    drink -> drink.setQuantity(drink.getQuantity() + quantitiesById.get(drink.getId())));
-            drinkDao.updateQuantityAllInList(drinksToUpdate);
-            connection.commitTransaction();
-
-        }
-    }
-
-    @Override
-    public List<Drink> getAllByIdSet(Set<Integer> drinkIds) {
-        Objects.requireNonNull(drinkIds);
-        try (AbstractConnection connection = daoFactory.getConnection()) {
-
-            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-            List<Drink> drinks = drinkDao.getAllByIds(drinkIds);
-            return (drinks == null) ? new ArrayList<>() : drinks;
-
-        }
-    }
-
-    @Override
     public List<Drink> getAllBaseByIdSet(Set<Integer> drinkIds) {
+        Objects.requireNonNull(drinkIds);
+        if (drinkIds.isEmpty()){
+            return Collections.emptyList();
+        }
+        try (AbstractConnection connection = daoFactory.getConnection()) {
 
-        List<Drink> drinks = getAllByIdSet(drinkIds);
-        List<Drink> baseDrinks = new ArrayList<>();
-        drinks.forEach(drink -> baseDrinks.add(drink.getBaseDrink()));
-        return baseDrinks;
+            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
 
+            return drinkDao.getAllByIds(drinkIds)
+                .stream()
+                .map(Drink::getBaseDrink)
+                .collect(Collectors.toList());
+        }
     }
 
 }

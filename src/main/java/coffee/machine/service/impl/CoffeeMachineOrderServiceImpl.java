@@ -2,40 +2,38 @@ package coffee.machine.service.impl;
 
 import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.dao.*;
+import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.Order;
-import coffee.machine.model.entity.item.Item;
-import coffee.machine.service.logging.ServiceErrorProcessing;
-import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.item.Drink;
-import coffee.machine.service.CoffeeMachineService;
+import coffee.machine.model.entity.item.Item;
+import coffee.machine.service.CoffeeMachineOrderService;
+import coffee.machine.service.logging.ServiceErrorProcessing;
 import org.apache.log4j.Logger;
 
 import java.util.*;
 
-import static coffee.machine.i18n.message.key.error.ServiceErrorKey.ITEM_NO_LONGER_AVAILABLE;
-import static coffee.machine.i18n.message.key.error.ServiceErrorKey.NOT_ENOUGH_MONEY;
-import static coffee.machine.i18n.message.key.error.ServiceErrorKey.YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY;
+import static coffee.machine.i18n.message.key.error.ServiceErrorKey.*;
 
 /**
- * This class is an implementation of CoffeeMachineService
+ * This class is an implementation of CoffeeMachineOrderService
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceErrorProcessing {
-    private static final Logger logger = Logger.getLogger(CoffeeMachineServiceImpl.class);
+public class CoffeeMachineOrderServiceImpl implements CoffeeMachineOrderService, ServiceErrorProcessing {
+    private static final Logger logger = Logger.getLogger(CoffeeMachineOrderServiceImpl.class);
 
     DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private final int COFFEE_MACHINE_ACCOUNT_ID = CoffeeMachineConfig.ACCOUNT_ID;
 
-    private CoffeeMachineServiceImpl() {
+    private CoffeeMachineOrderServiceImpl() {
     }
 
     private static class InstanceHolder {
-        private static final CoffeeMachineService instance = new CoffeeMachineServiceImpl();
+        private static final CoffeeMachineOrderService instance = new CoffeeMachineOrderServiceImpl();
     }
 
-    public static CoffeeMachineService getInstance() {
+    public static CoffeeMachineOrderService getInstance() {
         return InstanceHolder.instance;
     }
 
@@ -95,7 +93,6 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
                     String.format("%.2f", drinksPrice * CoffeeMachineConfig.DB_MONEY_COEFF));
         }
     }
-
 
 
     private void decreaseItemQuantitiesInDatabaseByItemQuantitiesInDrinksToBuy(List<Drink> drinks,
@@ -166,7 +163,6 @@ public class CoffeeMachineServiceImpl implements CoffeeMachineService, ServiceEr
 
         return addonsWithQuantity;
     }
-
 
 
     private <T extends Item> List<T> deductItemsToBuyFromAvailable(List<T> itemsToBuy, List<T> itemsAvailable) {

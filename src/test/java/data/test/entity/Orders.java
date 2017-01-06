@@ -37,17 +37,17 @@ public enum Orders {
                 .build();
         switch (id) {
             case 1:
-                Drink drink = Drinks.WATER.getCopy().getBaseDrink();
+                Drink drink = DrinksData.WATER.getCopy().getBaseDrink();
                 drink.setQuantity(1);
                 drink.setPrice(0);
                 order.addDrink(drink);
                 break;
             case 2:
-                Drink drink2 = Drinks.WATER.getCopy().getBaseDrink();
+                Drink drink2 = DrinksData.WATER.getCopy().getBaseDrink();
                 drink2.setQuantity(2);
                 drink2.setPrice(0);
                 order.addDrink(drink2);
-                drink2 = Drinks.TEA_WITH_SUGAR.getCopy().getBaseDrink();
+                drink2 = DrinksData.TEA_WITH_SUGAR.getCopy().getBaseDrink();
                 drink2.setQuantity(1);
                 drink2.setPrice(0);
                 drink2.getAddons().forEach(addon -> {
@@ -57,7 +57,7 @@ public enum Orders {
                     addon.setPrice(0);
                 });
                 order.addDrink(drink2);
-                drink2 = Drinks.ESPRESSO.getCopy().getBaseDrink();
+                drink2 = DrinksData.ESPRESSO.getCopy().getBaseDrink();
                 drink2.setQuantity(3);
                 drink2.setPrice(0);
                 drink2.getAddons().forEach(addon -> {
