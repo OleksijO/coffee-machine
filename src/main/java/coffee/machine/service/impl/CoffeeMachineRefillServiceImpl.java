@@ -5,6 +5,7 @@ import coffee.machine.dao.AddonDao;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.DrinkDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
+import coffee.machine.i18n.message.key.error.ServiceErrorKey;
 import coffee.machine.model.entity.item.Addons;
 import coffee.machine.model.entity.item.Drinks;
 import coffee.machine.model.entity.item.ItemReceipt;
@@ -63,7 +64,7 @@ public class CoffeeMachineRefillServiceImpl implements CoffeeMachineRefillServic
             logErrorAndThrowNewServiceException(logger, ADMIN_REFILL_NOTHING_TO_ADD);
         }
         if (receipt.hasNegativeQuantity()) {
-            logErrorAndThrowNewServiceException(logger, ADMIN_REFILL_NOTHING_TO_ADD);
+            logErrorAndThrowNewServiceException(logger, ServiceErrorKey.QUANTITY_SHOULD_BE_NON_NEGATIVE);
         }
     }
 

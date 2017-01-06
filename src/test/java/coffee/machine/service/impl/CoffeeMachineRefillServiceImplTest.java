@@ -30,10 +30,6 @@ import static org.mockito.Mockito.when;
  * Created by oleksij.onysymchuk@gmail on 06.01.2017.
  */
 public class CoffeeMachineRefillServiceImplTest {
-    private static final String DRINK_QUANTITY_MISMATCH = " drink quantity mismatch";
-    private static final String FIRST = "First";
-    private static final String SECOND = "Second";
-    private static final String THE_ONLY = "The only";
 
     @Mock
     private DaoFactory daoFactory;
@@ -80,6 +76,21 @@ public class CoffeeMachineRefillServiceImplTest {
 
     @Test(expected = ServiceException.class)
     public void testRefillWithEmpty() throws Exception {
+        service.refill(new ItemReceipt(new ArrayList<>(), new ArrayList<>()));
+    }
+
+    @Test(expected = ServiceException.class)
+    public void testRefillWithNegativeQuantity() throws Exception {
+        ItemReceipt receipt = new ItemReceipt();
+        int quantity = 3;
+        for (int i = 1; i <= 4; i++) {
+            Drink drink = new Drink.Builder()
+                    .setId(i)
+                    .setQuantity(quantity)
+                    .build();
+            receipt.addDrink(drink);
+            quantity--;
+        }
         service.refill(new ItemReceipt(new ArrayList<>(), new ArrayList<>()));
     }
 
