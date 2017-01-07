@@ -1,6 +1,7 @@
 package coffee.machine.service;
 
 import coffee.machine.model.entity.LoginData;
+import coffee.machine.model.entity.RegisterData;
 import coffee.machine.model.entity.User;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public interface UserService {
     /**
      * Creates account, sets it to user and saves user entity to database
      *
-     * @param user user entity to be saved in data base
+     * @param registerData register data of user to be created and saved in data base
      */
-    void createNewUser(User user);
+    User createNewUser(RegisterData registerData);
 }

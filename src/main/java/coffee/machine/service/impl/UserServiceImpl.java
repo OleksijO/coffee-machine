@@ -1,15 +1,16 @@
 package coffee.machine.service.impl;
 
 import coffee.machine.controller.RegExp;
-import coffee.machine.model.entity.LoginData;
 import coffee.machine.dao.AbstractConnection;
 import coffee.machine.dao.AccountDao;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.UserDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
-import coffee.machine.i18n.message.key.error.ServiceErrorKey;
 import coffee.machine.model.entity.Account;
+import coffee.machine.model.entity.LoginData;
+import coffee.machine.model.entity.RegisterData;
 import coffee.machine.model.entity.User;
+import coffee.machine.model.security.PasswordEncryptor;
 import coffee.machine.service.UserService;
 import coffee.machine.service.exception.ServiceException;
 import coffee.machine.service.logging.ServiceErrorProcessing;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-import static coffee.machine.controller.command.login.LoginCommandHelper.TRY_FAILED_WRONG_EMAIL_OR_PASSWORD;
+import static coffee.machine.i18n.message.key.error.CommandErrorKey.ERROR_REGISTER_FULL_NAME_DO_NOT_MATCH_PATTERN;
 import static coffee.machine.i18n.message.key.error.ServiceErrorKey.*;
 
 /**
@@ -32,9 +33,12 @@ public class UserServiceImpl implements UserService, ServiceErrorProcessing {
 
     private static final String TRY_TO_REGISTER_USER_WITH_ALREADY_USED_EMAIL =
             "Try to register user with already used email: ";
+    private static final String TRY_FAILED_WRONG_EMAIL_OR_PASSWORD =
+            "LOGIN TRY FAILED: no such combination of email and password. Entered e-mail: ";
 
     private static final Pattern PATTERN_EMAIL = Pattern.compile(RegExp.REGEXP_EMAIL);
     private static final Pattern PATTERN_PASSWORD = Pattern.compile(RegExp.REGEXP_PASSWORD);
+    private static final Pattern PATTERN_FULL_NAME = Pattern.compile(RegExp.REGEXP_FULL_NAME);
 
     DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
@@ -72,7 +76,7 @@ public class UserServiceImpl implements UserService, ServiceErrorProcessing {
                     .filter(user -> user.getPassword().equals(loginData.getPassword()))
                     .orElseThrow(() ->
                             new ServiceException(ERROR_LOGIN_NO_SUCH_COMBINATION)
-                            .addLogMessage(TRY_FAILED_WRONG_EMAIL_OR_PASSWORD + loginData.getEmail()));
+                                    .addLogMessage(TRY_FAILED_WRONG_EMAIL_OR_PASSWORD + loginData.getEmail()));
 
         }
     }
@@ -109,31 +113,56 @@ public class UserServiceImpl implements UserService, ServiceErrorProcessing {
     }
 
     @Override
-    public void createNewUser(User user) {
+    public User createNewUser(RegisterData registerData) {
+        checkRegisterData(registerData);
+        registerData.encryptPassword();
+        User user = getUserFromRegisterData(registerData);
+
         try (AbstractConnection connection = daoFactory.getConnection()) {
             AccountDao accountDao = daoFactory.getAccountDao(connection);
             UserDao userDao = daoFactory.getUserDao(connection);
 
             connection.beginTransaction();
-            checkIfUserAlreadyExists(user, userDao);
-            createNewUser(user, accountDao, userDao);
+            checkIfUserAlreadyExists(user.getEmail(), userDao);
+            user = createNewUser(user, accountDao, userDao);
             connection.commitTransaction();
         }
+        return user;
     }
 
-    private void checkIfUserAlreadyExists(User user, UserDao userDao) {
-        if (userDao.getUserByLogin(user.getEmail()) != null) {
-            logger.error(TRY_TO_REGISTER_USER_WITH_ALREADY_USED_EMAIL + user.getEmail());
-            logErrorAndThrowNewServiceException(
-                    logger, ServiceErrorKey.USER_WITH_SPECIFIED_EMAIL_ALREADY_REGISTERED);
+    private void checkRegisterData(RegisterData registerData) {
+        checkLoginData(registerData);
+        if (!isFullNameValid(registerData.getFullName())) {
+            throw new ServiceException(ERROR_REGISTER_FULL_NAME_DO_NOT_MATCH_PATTERN);
         }
     }
 
-    private void createNewUser(User user, AccountDao accountDao, UserDao userDao) {
+    private boolean isFullNameValid(String fullName) {
+        return checkToPattern(PATTERN_FULL_NAME, fullName);
+    }
+
+    private User getUserFromRegisterData(RegisterData formData) {
+
+        return new User.Builder()
+                .setAdmin(false)
+                .setFullName(formData.getFullName())
+                .setEmail(formData.getEmail())
+                .setPassword(PasswordEncryptor.encryptPassword(formData.getPassword()))
+                .build();
+    }
+
+    private void checkIfUserAlreadyExists(String email, UserDao userDao) {
+        if (userDao.getUserByLogin(email).isPresent()) {
+            throw new ServiceException(USER_WITH_SPECIFIED_EMAIL_ALREADY_REGISTERED)
+                    .addLogMessage(TRY_TO_REGISTER_USER_WITH_ALREADY_USED_EMAIL + email);
+        }
+    }
+
+    private User createNewUser(User user, AccountDao accountDao, UserDao userDao) {
         Account newAccount = new Account();
         newAccount = accountDao.insert(newAccount);
         user.setAccount(newAccount);
-        userDao.insert(user);
+        return userDao.insert(user);
     }
 
 }

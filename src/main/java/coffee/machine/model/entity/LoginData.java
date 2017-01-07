@@ -3,7 +3,7 @@ package coffee.machine.model.entity;
 import coffee.machine.model.security.PasswordEncryptor;
 
 /**
- * This class represents DTO for transfer data of login form and validation result
+ * This class represents value object for transfer data of login form and validation result
  *
  * @author oleksij.onysymchuk@gmail.com
  */

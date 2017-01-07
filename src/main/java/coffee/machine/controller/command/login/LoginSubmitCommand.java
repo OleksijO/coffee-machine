@@ -15,8 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static coffee.machine.controller.command.login.LoginCommandHelper.ADMIN_LOGGED_IN;
-import static coffee.machine.controller.command.login.LoginCommandHelper.USER_LOGGED_IN;
 import static coffee.machine.i18n.message.key.error.CommandErrorKey.ERROR_LOGIN_YOU_ARE_ALREADY_LOGGED_IN;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.*;
@@ -29,6 +27,9 @@ import static coffee.machine.view.Parameters.PASSWORD_PARAM;
  */
 public class LoginSubmitCommand extends CommandWrapperTemplate {
     private static final Logger logger = Logger.getLogger(LoginSubmitCommand.class);
+
+    private static final String USER_LOGGED_IN = "USER id=%d LOGGED IN.";
+    private static final String ADMIN_LOGGED_IN = "ADMIN id=%d LOGGED IN.";
 
     private UserService userService = UserServiceImpl.getInstance();
 

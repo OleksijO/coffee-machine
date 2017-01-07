@@ -1,4 +1,4 @@
-package coffee.machine.controller.command.user.order.history;
+package coffee.machine.controller.command.user;
 
 import coffee.machine.controller.command.CommandWrapperTemplate;
 import coffee.machine.i18n.message.key.GeneralKey;
@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import static coffee.machine.view.Attributes.PAGE_TITLE;
 import static coffee.machine.view.Attributes.USER_ID;
-import static coffee.machine.view.Attributes.USER_ORDER_LIST;
+import static coffee.machine.view.Attributes.USER_ORDERS;
 
 /**
  * This class represents user purchase history page handler command.
@@ -26,18 +26,17 @@ public class UserOrderHistoryCommand extends CommandWrapperTemplate {
         super(PagesPaths.USER_ORDER_HISTORY_PAGE);
     }
 
-
-
     @Override
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int userId = (int) request.getSession().getAttribute(USER_ID);
-        request.setAttribute(USER_ORDER_LIST, orderHistoryService.getAllByUserId(userId));
+
         return PagesPaths.USER_ORDER_HISTORY_PAGE;
     }
 
     @Override
     protected void placeNecessaryDataToRequest(HttpServletRequest request) {
         request.setAttribute(PAGE_TITLE, GeneralKey.TITLE_USER_ORDER_HISTORY);
+        int userId = (int) request.getSession().getAttribute(USER_ID);
+        request.setAttribute(USER_ORDERS, orderHistoryService.getAllByUserId(userId));
     }
 
 }

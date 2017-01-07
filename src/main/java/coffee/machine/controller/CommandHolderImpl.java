@@ -8,7 +8,7 @@ import coffee.machine.controller.command.admin.refill.AdminRefillSubmitCommand;
 import coffee.machine.controller.command.login.LoginCommand;
 import coffee.machine.controller.command.login.LoginSubmitCommand;
 import coffee.machine.controller.command.logout.LogoutCommand;
-import coffee.machine.controller.command.user.order.history.UserOrderHistoryCommand;
+import coffee.machine.controller.command.user.UserOrderHistoryCommand;
 import coffee.machine.controller.command.user.purchase.UserPurchaseCommand;
 import coffee.machine.controller.command.user.purchase.UserPurchaseSubmitCommand;
 import coffee.machine.controller.command.user.register.UserRegisterCommand;

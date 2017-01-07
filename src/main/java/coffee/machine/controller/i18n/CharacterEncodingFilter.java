@@ -17,13 +17,15 @@ public class CharacterEncodingFilter implements Filter {
     private static final Logger logger = Logger.getLogger(CharacterEncodingFilter.class);
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
         try {
             request.setCharacterEncoding(ENCODING);
             response.setCharacterEncoding(ENCODING);
         } catch (UnsupportedEncodingException e) {
             logger.error(e);
         }
+        chain.doFilter(request,response);
     }
 
     @Override

@@ -23,7 +23,7 @@
         </td>
     </tr>
 
-    <c:forEach items="${requestScope[Attributes.USER_ORDER_LIST]}" var="order">
+    <c:forEach items="${requestScope[Attributes.USER_ORDERS]}" var="order">
         <tr>
 
             <td>

@@ -26,7 +26,7 @@ public final class Attributes {
     public static final String ORDER = "order";
 
     public static final String COFFEE_MACHINE_BALANCE = "coffee_machine_balance";
-    public static final String USER_ORDER_LIST = "USER_ORDER_LIST";
+    public static final String USER_ORDERS = "USER_ORDERS";
 
     public static final String LOGIN_FORM_TITLE = "login_form_title";
     public static final String LOGIN_FORM_ACTION="login_form_action";

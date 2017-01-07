@@ -2,11 +2,14 @@ package coffee.machine.controller.command.user.register;
 
 import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.command.CommandWrapperTemplate;
-import coffee.machine.model.security.PasswordEncryptor;
+import coffee.machine.i18n.message.key.GeneralKey;
+import coffee.machine.model.entity.RegisterData;
 import coffee.machine.model.entity.User;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.UserServiceImpl;
 import coffee.machine.view.Attributes;
+import coffee.machine.view.PagesPaths;
+import coffee.machine.view.Parameters;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +20,8 @@ import static coffee.machine.view.Attributes.PREVIOUS_ENTERED_EMAIL;
 import static coffee.machine.view.Attributes.PREVIOUS_ENTERED_FULL_NAME;
 import static coffee.machine.view.PagesPaths.USER_REGISTER_PAGE;
 import static coffee.machine.view.PagesPaths.USER_REGISTER_SUCCESS_PAGE;
+import static coffee.machine.view.Parameters.FULL_NAME_PARAM;
+import static coffee.machine.view.Parameters.PASSWORD_PARAM;
 
 /**
  * Created by oleksij.onysymchuk@gmail
@@ -24,11 +29,9 @@ import static coffee.machine.view.PagesPaths.USER_REGISTER_SUCCESS_PAGE;
 public class UserRegisterSubmitCommand extends CommandWrapperTemplate {
     private static final Logger logger = Logger.getLogger(UserRegisterSubmitCommand.class);
 
-    private static final String CANT_CREATE_USER = "Can't create user=";
     private static final String NEW_USER_HAS_BEEN_REGISTERED_FORMAT =
             "New user with email '%s' has been registered with id=%d.";
 
-    private UserRegisterCommandHelper helper = new UserRegisterCommandHelper();
     private UserService userService = UserServiceImpl.getInstance();
 
     public UserRegisterSubmitCommand() {
@@ -38,38 +41,41 @@ public class UserRegisterSubmitCommand extends CommandWrapperTemplate {
     @Override
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        RegisterFormData formData = helper.processRegisterForm(request);
-
-        request.setAttribute(PREVIOUS_ENTERED_EMAIL, formData.getEmail());
-        request.setAttribute(PREVIOUS_ENTERED_FULL_NAME, formData.getFullName());
-
-//        if (!formData.isValid()) {
-//            return USER_REGISTER_PAGE;
-//        }
-
-        User user = getUserFromFormData(formData);
-
-        userService.createNewUser(user);
-
-        logger.info(String.format(NEW_USER_HAS_BEEN_REGISTERED_FORMAT, user.getEmail(), user.getId()));
-
-        request.setAttribute(Attributes.ADMIN_CONTACTS, CoffeeMachineConfig.ADMIN_CONTACT_INFO);
+        RegisterData registerData = getRegisterDataFromRequest(request);
+        saveFormData(request, registerData);
+        User user = userService.createNewUser(registerData);
+        processSuccessfulRegistration(request, user);
+        removeFormData(request);
 
         return USER_REGISTER_SUCCESS_PAGE;
     }
 
-    private User getUserFromFormData(RegisterFormData formData) {
+    private RegisterData getRegisterDataFromRequest(HttpServletRequest request) {
+        String email = request.getParameter(Parameters.LOGIN_PARAM);
+        String password = request.getParameter(PASSWORD_PARAM);
+        String fullName = request.getParameter(FULL_NAME_PARAM);
+        return new RegisterData(email, password, fullName);
+    }
 
-        return new User.Builder()
-                .setAdmin(false)
-                .setFullName(formData.getFullName())
-                .setEmail(formData.getEmail())
-                .setPassword(PasswordEncryptor.encryptPassword(formData.getPassword()))
-                .build()                ;
+    private void saveFormData(HttpServletRequest request, RegisterData formData) {
+        request.setAttribute(PREVIOUS_ENTERED_EMAIL, formData.getEmail());
+        request.setAttribute(PREVIOUS_ENTERED_FULL_NAME, formData.getFullName());
+    }
+
+    private void processSuccessfulRegistration(HttpServletRequest request, User user) {
+        logger.info(String.format(NEW_USER_HAS_BEEN_REGISTERED_FORMAT, user.getEmail(), user.getId()));
+        request.setAttribute(Attributes.ADMIN_CONTACTS, CoffeeMachineConfig.ADMIN_CONTACT_INFO);
+    }
+
+    private void removeFormData(HttpServletRequest request) {
+        request.removeAttribute(PREVIOUS_ENTERED_EMAIL);
+        request.removeAttribute(PREVIOUS_ENTERED_FULL_NAME);
     }
 
     @Override
     protected void placeNecessaryDataToRequest(HttpServletRequest request) {
-        helper.setGeneralRegisterPageAttributes(request);
+        request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_USER_REGISTER);
+        request.setAttribute(Attributes.REGISTER_FORM_TITLE, GeneralKey.REGISTER_USER_FORM_TITLE);
+        request.setAttribute(Attributes.REGISTER_FORM_ACTION, PagesPaths.USER_REGISTER_PATH);
     }
 }
