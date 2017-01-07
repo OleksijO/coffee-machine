@@ -48,8 +48,13 @@ public interface ControllerErrorLogging extends ApplicationErrorLogging {
      * @param e       throwable instance
      */
     default void logApplicationError(Logger logger, HttpServletRequest request, ApplicationException e) {
-        logApplicationError(logger, e.getMessage(),
-                ((e.getAdditionalMessage() == null) ? e.getAdditionalMessage() : null) + getRequestData(request), e);
+        logApplicationError(
+                logger,
+                e.getMessage(),
+                ((e.getLogMessage() != null) ? e.getLogMessage() : MESSAGE_IN_CASE_OF_EMPTY) + SEPARATOR +
+                        ((e.getAdditionalMessage() != null) ? e.getAdditionalMessage() : MESSAGE_IN_CASE_OF_EMPTY) +
+                        getRequestData(request),
+                e);
     }
 
     /**

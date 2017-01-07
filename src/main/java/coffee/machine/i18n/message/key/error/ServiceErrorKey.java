@@ -15,4 +15,8 @@ public interface ServiceErrorKey {
 
 	String ADMIN_REFILL_NOTHING_TO_ADD = "error.command.nothing.to.refill";
 	String QUANTITY_SHOULD_BE_NON_NEGATIVE = "error.command.quantity.field.should.be.greater.than.or.equals.to.zero";
+
+	String ERROR_LOGIN_EMAIL_DO_NOT_MATCH_PATTERN = "error.login.email.do.not.match.pattern";
+	String ERROR_LOGIN_PASSWORD_DO_NOT_MATCH_PATTERN = "error.login.password.do.not.match.pattern";
+	String ERROR_LOGIN_NO_SUCH_COMBINATION = "error.login.not.such.combination";
 }

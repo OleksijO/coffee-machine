@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This class is the implementation of User entity DAO
@@ -182,7 +183,7 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
     }
 
     @Override
-    public User getUserByLogin(String login) {
+    public Optional<User> getUserByLogin(String login) {
         try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_USER_EMAIL)) {
 
             statement.setString(1, login);
@@ -190,7 +191,7 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
                 List<User> userList = parseResultSet(resultSet);
                 checkSingleResult(userList);
 
-                return userList == null || userList.isEmpty() ? null : userList.get(0);
+                return userList.stream().findFirst();
             }
         } catch (SQLException e) {
             logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_BY_LOGIN, login, e);

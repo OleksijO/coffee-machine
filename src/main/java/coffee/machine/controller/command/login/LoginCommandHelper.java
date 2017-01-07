@@ -2,20 +2,12 @@ package coffee.machine.controller.command.login;
 
 import coffee.machine.controller.RegExp;
 import coffee.machine.controller.logging.ControllerErrorLogging;
-import coffee.machine.i18n.message.key.GeneralKey;
-import coffee.machine.i18n.message.key.error.CommandErrorKey;
-import coffee.machine.view.Attributes;
-import coffee.machine.view.Parameters;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.regex.Pattern;
-
-import static coffee.machine.view.Attributes.*;
-import static coffee.machine.view.PagesPaths.LOGIN_PATH;
-import static coffee.machine.view.Parameters.PASSWORD_PARAM;
 
 /**
  * This class represents login page main functionality helper.
@@ -36,24 +28,7 @@ public class LoginCommandHelper implements ControllerErrorLogging {
     public static final String ADMIN_LOGGED_IN = "ADMIN id=%d LOGGED IN.";
 
 
-    public LoginFormData processLoginForm(HttpServletRequest request) {
-        String email = request.getParameter(Parameters.LOGIN_PARAM);
-        String password = request.getParameter(PASSWORD_PARAM);
-        LoginFormData formData = new LoginFormData(email, password);
 
-        if (!checkLogin(email)) {
-            request.setAttribute(Attributes.ERROR_MESSAGE, CommandErrorKey.ERROR_LOGIN_EMAIL_DO_NOT_MATCH_PATTERN);
-            return formData;
-        }
-
-        if (!checkPassword(password)) {
-            request.setAttribute(Attributes.ERROR_MESSAGE, CommandErrorKey.ERROR_LOGIN_PASSWORD_DO_NOT_MATCH_PATTERN);
-            return formData;
-        }
-
-        formData.setValid(true);
-        return formData;
-    }
 
     public boolean checkPassword(String password) {
         return checkToPattern(PATTERN_PASSWORD, password);
@@ -67,14 +42,7 @@ public class LoginCommandHelper implements ControllerErrorLogging {
         return (stringToCheck != null) && (pattern.matcher(stringToCheck).matches());
     }
 
-    public boolean isDoubleLoginAttempt(HttpServletRequest request) {
-        if ((request.getSession().getAttribute(USER_ID) != null)
-                || (request.getSession().getAttribute(ADMIN_ID) != null)) {
-            request.setAttribute(ERROR_MESSAGE, CommandErrorKey.ERROR_LOGIN_YOU_ARE_ALREADY_LOGGED_IN);
-            return true;
-        }
-        return false;
-    }
+
 
     public void performActionsToLogInRole(HttpServletRequest request,
                                           HttpServletResponse response,
@@ -86,9 +54,4 @@ public class LoginCommandHelper implements ControllerErrorLogging {
         response.sendRedirect(redirectPath);
     }
 
-    public void setGeneralLoginPageAttributes(HttpServletRequest request) {
-        request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_LOGIN);
-        request.setAttribute(Attributes.LOGIN_FORM_TITLE, GeneralKey.LOGIN_FORM_TITLE);
-        request.setAttribute(Attributes.LOGIN_FORM_ACTION, LOGIN_PATH);
-    }
 }

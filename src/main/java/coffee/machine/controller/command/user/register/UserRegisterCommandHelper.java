@@ -36,11 +36,11 @@ public class UserRegisterCommandHelper implements ControllerErrorLogging {
         RegisterFormData formData = new RegisterFormData(email, password, fullName);
 
         if (!loginHelper.checkLogin(email)) {
-            request.setAttribute(Attributes.ERROR_MESSAGE, CommandErrorKey.ERROR_LOGIN_EMAIL_DO_NOT_MATCH_PATTERN);
+      //      request.setAttribute(Attributes.ERROR_MESSAGE, CommandErrorKey.ERROR_LOGIN_EMAIL_DO_NOT_MATCH_PATTERN);
             return formData;
         }
         if (!loginHelper.checkPassword(password)) {
-            request.setAttribute(Attributes.ERROR_MESSAGE, CommandErrorKey.ERROR_LOGIN_PASSWORD_DO_NOT_MATCH_PATTERN);
+     //       request.setAttribute(Attributes.ERROR_MESSAGE, CommandErrorKey.ERROR_LOGIN_PASSWORD_DO_NOT_MATCH_PATTERN);
             return formData;
         }
         if (!checkFullName(fullName)) {
@@ -48,7 +48,7 @@ public class UserRegisterCommandHelper implements ControllerErrorLogging {
             return formData;
         }
 
-        formData.setValid(true);
+     //   formData.setValid(true);
         return formData;
     }
 

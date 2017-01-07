@@ -1,20 +1,26 @@
 package coffee.machine.controller.command.login;
 
 import coffee.machine.controller.command.CommandWrapperTemplate;
-import coffee.machine.controller.security.PasswordEncryptor;
+import coffee.machine.i18n.message.key.GeneralKey;
+import coffee.machine.model.entity.LoginData;
 import coffee.machine.model.entity.User;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.UserServiceImpl;
+import coffee.machine.view.Attributes;
+import coffee.machine.view.Parameters;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static coffee.machine.controller.command.login.LoginCommandHelper.*;
-import static coffee.machine.i18n.message.key.error.CommandErrorKey.ERROR_LOGIN_NO_SUCH_COMBINATION;
+import static coffee.machine.controller.command.login.LoginCommandHelper.ADMIN_LOGGED_IN;
+import static coffee.machine.controller.command.login.LoginCommandHelper.USER_LOGGED_IN;
+import static coffee.machine.i18n.message.key.error.CommandErrorKey.ERROR_LOGIN_YOU_ARE_ALREADY_LOGGED_IN;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.*;
+import static coffee.machine.view.Parameters.PASSWORD_PARAM;
 
 /**
  * This class represents user login post request page handler command.
@@ -25,7 +31,6 @@ public class LoginSubmitCommand extends CommandWrapperTemplate {
     private static final Logger logger = Logger.getLogger(LoginSubmitCommand.class);
 
     private UserService userService = UserServiceImpl.getInstance();
-    private LoginCommandHelper helper = new LoginCommandHelper();
 
     public LoginSubmitCommand() {
         super(LOGIN_PAGE);
@@ -33,50 +38,65 @@ public class LoginSubmitCommand extends CommandWrapperTemplate {
 
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        LoginFormData formData = helper.processLoginForm(request);
+        LoginData loginData = getLoginDataFromRequest(request);
+        saveFormDataToRequest(request, loginData);
 
-        request.setAttribute(PREVIOUS_ENTERED_EMAIL, formData.getEmail());
-
-        if (helper.isDoubleLoginAttempt(request)) {
+        if (isDoubleLoginAttempt(request.getSession())) {
+            logAndPlaceErrorMessageToRequest(ERROR_LOGIN_YOU_ARE_ALREADY_LOGGED_IN, request);
             return LOGIN_PAGE;
         }
 
-        if (!formData.isValid()) {
-            return LOGIN_PAGE;
-        }
+        User user = userService.getUserByLoginData(loginData);
+        performActionsToLogIn(request, response, user);
+        return REDIRECTED;
+    }
 
-        String encryptedPassword = PasswordEncryptor.encryptPassword(formData.getPassword());
-        User user = userService.getUserByLogin(formData.getEmail());
 
-        if ((user == null) || (!encryptedPassword.equals(user.getPassword()))) {
-            logger.info(TRY_FAILED_WRONG_EMAIL_OR_PASSWORD + formData.getEmail());
-            request.setAttribute(ERROR_MESSAGE, ERROR_LOGIN_NO_SUCH_COMBINATION);
-        } else {
-            performActionsToLogIn(request, response, user);
-            return REDIRECTED;
-        }
+    private LoginData getLoginDataFromRequest(HttpServletRequest request) {
+        String email = request.getParameter(Parameters.LOGIN_PARAM);
+        String password = request.getParameter(PASSWORD_PARAM);
+        return new LoginData(email, password);
+    }
 
-        return LOGIN_PAGE;
+    private void saveFormDataToRequest(HttpServletRequest request, LoginData loginData) {
+
+        request.setAttribute(PREVIOUS_ENTERED_EMAIL, loginData.getEmail());
+    }
+
+    private boolean isDoubleLoginAttempt(HttpSession session) {
+        return (session.getAttribute(USER_ID) != null)
+                || (session.getAttribute(ADMIN_ID) != null);
+    }
+
+    private void logAndPlaceErrorMessageToRequest(String messageKey, HttpServletRequest request) {
+        logApplicationError(logger, messageKey);
+        request.setAttribute(ERROR_MESSAGE, messageKey);
     }
 
 
     private void performActionsToLogIn(HttpServletRequest request, HttpServletResponse response, User user)
             throws IOException {
         if (user.isAdmin()) {
-
-            helper.performActionsToLogInRole(request, response, ADMIN_LOGGED_IN,
-                    user.getId(), ADMIN_ID, ADMIN_HOME_PATH);
-
+            request.getSession().setAttribute(ADMIN_ID, user.getId());
+            logUserDetails(ADMIN_LOGGED_IN, user.getId());
+            response.sendRedirect(ADMIN_HOME_PATH);
         } else {
-
-            helper.performActionsToLogInRole(request, response, USER_LOGGED_IN,
-                    user.getId(), USER_ID, USER_HOME_PATH);
+            request.getSession().setAttribute(USER_ID, user.getId());
+            logUserDetails(USER_LOGGED_IN, user.getId());
+            response.sendRedirect(USER_HOME_PATH);
         }
+    }
+
+
+    private void logUserDetails(String logMessageFormat, int userId) {
+        logger.info(String.format(logMessageFormat, userId));
     }
 
     @Override
     protected void placeNecessaryDataToRequest(HttpServletRequest request) {
-        helper.setGeneralLoginPageAttributes(request);
+        request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_LOGIN);
+        request.setAttribute(Attributes.LOGIN_FORM_TITLE, GeneralKey.LOGIN_FORM_TITLE);
+        request.setAttribute(Attributes.LOGIN_FORM_ACTION, LOGIN_PATH);
     }
 }
 

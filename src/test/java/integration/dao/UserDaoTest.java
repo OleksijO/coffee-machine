@@ -83,7 +83,7 @@ public class UserDaoTest {
 
         int userTestListId = 1;
         String userLogin = testUsers.get(userTestListId).getEmail();
-        User user = userDao.getUserByLogin(userLogin);
+        User user = userDao.getUserByLogin(userLogin).get();
         System.out.println(testUsers.get(userTestListId));
         System.out.println(user);
         assertEquals("Not null", testUsers.get(userTestListId), user);

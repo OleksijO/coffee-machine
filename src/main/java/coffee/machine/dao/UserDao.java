@@ -3,6 +3,7 @@ package coffee.machine.dao;
 import coffee.machine.model.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This class represents user entity DAO functionality
@@ -16,9 +17,9 @@ public interface UserDao extends GenericDao<User> {
 	 * 
 	 * @param login
 	 *            user's email field
-	 * @return user entity
+	 * @return optional of user entity
 	 */
-	User getUserByLogin(String login);
+	Optional<User> getUserByLogin(String login);
 
 	/**
 	 * @return List of users, which have no admin privileges.

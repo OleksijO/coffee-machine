@@ -15,8 +15,13 @@ public class ApplicationException extends RuntimeException {
     private String additionalMessage;
 
     /**
+     * Message to be logged
+     */
+    private String logMessage;
+
+    /**
      * @param message resource bundle message key
-     * @param cause cause exception instance
+     * @param cause   cause exception instance
      */
     public ApplicationException(String message, Throwable cause) {
         super(message, cause);
@@ -30,7 +35,7 @@ public class ApplicationException extends RuntimeException {
     }
 
     /**
-     * @param message resource bundle message key
+     * @param message           resource bundle message key
      * @param additionalMessage usual text message to be shown on view
      */
     public ApplicationException(String message, String additionalMessage) {
@@ -39,9 +44,9 @@ public class ApplicationException extends RuntimeException {
     }
 
     /**
-     * @param message resource bundle message key
+     * @param message           resource bundle message key
      * @param additionalMessage usual text message to be shown on view
-     * @param cause cause exception instance
+     * @param cause             cause exception instance
      */
     public ApplicationException(String message, String additionalMessage, Throwable cause) {
         super(message, cause);
@@ -55,8 +60,17 @@ public class ApplicationException extends RuntimeException {
         super(cause);
     }
 
+    public ApplicationException addLogMessage(String logMessage) {
+        this.logMessage = logMessage;
+        return this;
+    }
+
     public String getAdditionalMessage() {
         return additionalMessage;
+    }
+
+    public String getLogMessage() {
+        return logMessage;
     }
 
     public void setAdditionalMessage(String additionalMessage) {

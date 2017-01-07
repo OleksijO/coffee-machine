@@ -1,18 +1,23 @@
-package coffee.machine.controller.command.login;
+package coffee.machine.model.entity;
+
+import coffee.machine.model.security.PasswordEncryptor;
 
 /**
  * This class represents DTO for transfer data of login form and validation result
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class LoginFormData {
+public class LoginData {
     private String email;
     private String password;
-    private boolean valid = false;
 
-    public LoginFormData(String email, String password) {
+    public LoginData(String email, String password) {
         this.email = email;
         this.password = password;
+    }
+
+    public void encryptPassword(){
+        password = PasswordEncryptor.encryptPassword(password);
     }
 
     public String getEmail() {
@@ -31,11 +36,4 @@ public class LoginFormData {
         this.password = password;
     }
 
-    public boolean isValid() {
-        return valid;
-    }
-
-    public void setValid(boolean valid) {
-        this.valid = valid;
-    }
-}
+ }

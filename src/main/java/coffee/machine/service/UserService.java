@@ -1,5 +1,6 @@
 package coffee.machine.service;
 
+import coffee.machine.model.entity.LoginData;
 import coffee.machine.model.entity.User;
 
 import java.util.List;
@@ -18,10 +19,10 @@ public interface UserService {
     User getById(int id);
 
     /**
-     * @param login user's email (login), whose entity will be returned
+     * @param loginData user's email (login), whose entity will be returned
      * @return user entity with specified email (login)
      */
-    User getUserByLogin(String login);
+    User getUserByLoginData(LoginData loginData);
 
     /**
       * @return list of user entity with field admin==false

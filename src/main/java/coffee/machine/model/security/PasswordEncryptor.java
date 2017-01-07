@@ -1,4 +1,4 @@
-package coffee.machine.controller.security;
+package coffee.machine.model.security;
 
 import org.apache.commons.codec.digest.DigestUtils;
 

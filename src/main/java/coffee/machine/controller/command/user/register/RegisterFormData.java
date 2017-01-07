@@ -1,13 +1,13 @@
 package coffee.machine.controller.command.user.register;
 
-import coffee.machine.controller.command.login.LoginFormData;
+import coffee.machine.model.entity.LoginData;
 
 /**
  * This class represents DTO for transfer data of user register form and validation result
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class RegisterFormData extends LoginFormData {
+public class RegisterFormData extends LoginData {
     private String fullName;
 
     public RegisterFormData(String email, String password, String fullName) {
