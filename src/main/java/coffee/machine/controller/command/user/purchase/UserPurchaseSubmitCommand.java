@@ -5,7 +5,6 @@ import coffee.machine.controller.command.request.data.extractor.ItemsStringFormD
 import coffee.machine.controller.command.request.data.extractor.PurchaseFormDataExtractor;
 import coffee.machine.controller.command.request.data.extractor.impl.ItemsStringFormDataExtractorImpl;
 import coffee.machine.controller.command.request.data.extractor.impl.PurchaseFormExtractorImpl;
-import coffee.machine.i18n.message.key.CommandKey;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.item.Drink;
@@ -15,8 +14,6 @@ import coffee.machine.service.DrinkService;
 import coffee.machine.service.impl.AccountServiceImpl;
 import coffee.machine.service.impl.CoffeeMachineOrderServiceImpl;
 import coffee.machine.service.impl.DrinkServiceImpl;
-import coffee.machine.view.Attributes;
-import coffee.machine.view.PagesPaths;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +21,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import static coffee.machine.i18n.message.key.CommandKey.PURCHASE_THANKS_MESSAGE;
+import static coffee.machine.view.Attributes.*;
+import static coffee.machine.view.PagesPaths.USER_PURCHASE_PAGE;
 
 public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
     private static final Logger logger = Logger.getLogger(UserPurchaseSubmitCommand.class);
@@ -39,14 +40,14 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
 
 
     public UserPurchaseSubmitCommand() {
-        super(PagesPaths.USER_PURCHASE_PAGE);
+        super(USER_PURCHASE_PAGE);
     }
 
     @Override
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         helper.setGeneralRegisterPageAttributes(request);
-        request.setAttribute(Attributes.PREVIOUS_VALUES_TABLE,
+        request.setAttribute(PREVIOUS_VALUES_TABLE,
                 formStringDataExtractor.getAllItemParameterValuesFromRequest(request));
 
         int userId = getUserIdFromRequest(request);
@@ -54,18 +55,18 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
 
         List<Drink> drinksToBuy = getDrinksFromRequest(request);
         Order order = coffeeMachine.prepareDrinksForUser(drinksToBuy, userId);
-        request.setAttribute(Attributes.ORDER, order);
+        request.setAttribute(ORDER, order);
 
         logger.info(String.format(USER_WITH_ID_MADE_PURCHASE_FORMAT, userId, order));
 
-        request.setAttribute(Attributes.USUAL_MESSAGE, CommandKey.PURCHASE_THANKS_MESSAGE);
-        request.removeAttribute(Attributes.PREVIOUS_VALUES_TABLE);  //clearing form in case of success purchase
+        request.setAttribute(USUAL_MESSAGE, PURCHASE_THANKS_MESSAGE);
+        request.removeAttribute(PREVIOUS_VALUES_TABLE);  //clearing form in case of success purchase
 
-        return PagesPaths.USER_PURCHASE_PAGE;
+        return USER_PURCHASE_PAGE;
     }
 
     private int getUserIdFromRequest(HttpServletRequest request) {
-        return (int) request.getSession().getAttribute(Attributes.USER_ID);
+        return (int) request.getSession().getAttribute(USER_ID);
     }
 
     List<Drink> getDrinksFromRequest(HttpServletRequest request) {
@@ -103,8 +104,8 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
 
     @Override
     protected void placeNecessaryDataToRequest(HttpServletRequest request) {
-        request.setAttribute(Attributes.DRINKS, drinkService.getAll());
-        request.setAttribute(Attributes.USER_BALANCE,
+        request.setAttribute(DRINKS, drinkService.getAll());
+        request.setAttribute(USER_BALANCE,
                 accountService.getByUserId(getUserIdFromRequest(request))
                 .map(Account::getRealAmount)
                 .orElseThrow(IllegalStateException::new));

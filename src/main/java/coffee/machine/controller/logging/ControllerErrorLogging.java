@@ -2,10 +2,11 @@ package coffee.machine.controller.logging;
 
 import coffee.machine.exception.ApplicationException;
 import coffee.machine.logging.ApplicationErrorLogging;
-import coffee.machine.view.Attributes;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static coffee.machine.view.Attributes.*;
 
 /**
  * This interface represents utility methods for logging errors in controller unit.
@@ -63,14 +64,14 @@ public interface ControllerErrorLogging extends ApplicationErrorLogging {
     default String getRequestData(HttpServletRequest request) {
         StringBuilder messageBuilder = new StringBuilder().append(STATE);
 
-        if (request.getSession().getAttribute(Attributes.USER_ID) != null) {
-            int userId = (int) request.getSession().getAttribute(Attributes.USER_ID);
+        if (request.getSession().getAttribute(USER_ID) != null) {
+            int userId = (int) request.getSession().getAttribute(USER_ID);
             if (userId > 0) {
                 messageBuilder.append(SEPARATOR).append(USER_ID_IS).append(userId);
             }
         }
-        if (request.getSession().getAttribute(Attributes.ADMIN_ID) != null) {
-            int adminId = (int) request.getSession().getAttribute(Attributes.ADMIN_ID);
+        if (request.getSession().getAttribute(ADMIN_ID) != null) {
+            int adminId = (int) request.getSession().getAttribute(ADMIN_ID);
             if (adminId > 0) {
                 messageBuilder.append(SEPARATOR).append(ADMIN_ID_IS).append(adminId);
             }
@@ -79,7 +80,7 @@ public interface ControllerErrorLogging extends ApplicationErrorLogging {
                 .append(SEPARATOR).append(REQUEST_METHOD).append(request.getMethod().toUpperCase())
                 .append(SEPARATOR).append(REQUEST_QUERY_IS).append(request.getQueryString())
                 .append(SEPARATOR)
-                .append(USER_LOCALE_IS).append(request.getSession().getAttribute(Attributes.USER_LOCALE));
+                .append(USER_LOCALE_IS).append(request.getSession().getAttribute(USER_LOCALE));
 
         return messageBuilder.toString();
     }

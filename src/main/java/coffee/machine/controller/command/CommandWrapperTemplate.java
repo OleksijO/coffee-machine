@@ -1,15 +1,15 @@
 package coffee.machine.controller.command;
 
+import coffee.machine.controller.Command;
 import coffee.machine.controller.logging.ControllerErrorLogging;
 import coffee.machine.exception.ApplicationException;
-import coffee.machine.i18n.message.key.GeneralKey;
-import coffee.machine.controller.Command;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static coffee.machine.i18n.message.key.GeneralKey.ERROR_UNKNOWN;
 import static coffee.machine.view.Attributes.ERROR_ADDITIONAL_MESSAGE;
 import static coffee.machine.view.Attributes.ERROR_MESSAGE;
 
@@ -78,7 +78,7 @@ public abstract class CommandWrapperTemplate implements Command, ControllerError
 
     private void processException(HttpServletRequest request, Exception e) {
         logError(logger, request, e);
-        request.setAttribute(ERROR_MESSAGE, GeneralKey.ERROR_UNKNOWN);
+        request.setAttribute(ERROR_MESSAGE, ERROR_UNKNOWN);
     }
 
     private void processApplicationException(HttpServletRequest request, ApplicationException e) {

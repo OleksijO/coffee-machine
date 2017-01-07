@@ -2,8 +2,6 @@ package coffee.machine.controller.command.request.data.extractor.impl;
 
 import coffee.machine.controller.RegExp;
 import coffee.machine.controller.exception.ControllerException;
-import coffee.machine.i18n.message.key.GeneralKey;
-import coffee.machine.i18n.message.key.error.CommandErrorKey;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static coffee.machine.i18n.message.key.GeneralKey.ERROR_UNKNOWN;
+import static coffee.machine.i18n.message.key.error.CommandErrorKey.QUANTITY_SHOULD_BE_INT;
+import static coffee.machine.i18n.message.key.error.CommandErrorKey.QUANTITY_SHOULD_BE_NON_NEGATIVE;
 
 /**
  * This class represents common functionality for form extractors
@@ -43,7 +45,7 @@ class ItemsBySimpleParameterExtractor {
                     itemQuantityByIds.put(itemId, itemQuantity);
                 } else if (itemQuantity < 0) {
                     logger.error(QUANTITY_UNDER_ZERO_IN_PARAM + param);
-                    throw new ControllerException(CommandErrorKey.QUANTITY_SHOULD_BE_NON_NEGATIVE);
+                    throw new ControllerException(QUANTITY_SHOULD_BE_NON_NEGATIVE);
                 }
             }
         }
@@ -58,7 +60,7 @@ class ItemsBySimpleParameterExtractor {
         } catch (Exception e) {
             logger.error(String.format(PROBLEMS_WITH_PARSING_INT_FROM_PARAMETER_FORMAT,
                     param, request.getParameter(param)));
-            throw new ControllerException(CommandErrorKey.QUANTITY_SHOULD_BE_INT);
+            throw new ControllerException(QUANTITY_SHOULD_BE_INT);
         }
 
     }
@@ -70,7 +72,7 @@ class ItemsBySimpleParameterExtractor {
             return Integer.parseInt(param.substring(matcher.start(), matcher.end()));
 
         } else {
-            throw new ControllerException(GeneralKey.ERROR_UNKNOWN); //this normally should not ever happen
+            throw new ControllerException(ERROR_UNKNOWN); //this normally should not ever happen
         }
     }
 
@@ -83,7 +85,7 @@ class ItemsBySimpleParameterExtractor {
                 return Integer.parseInt(param.substring(matcher.start(), matcher.end()));
             }
         }
-        throw new ControllerException(GeneralKey.ERROR_UNKNOWN);    // this should not happen
+        throw new ControllerException(ERROR_UNKNOWN);    // this should not happen
     }                                                               // in case of normal in-page operation
 
 }

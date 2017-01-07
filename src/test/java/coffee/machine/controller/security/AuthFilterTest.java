@@ -1,6 +1,5 @@
 package coffee.machine.controller.security;
 
-import coffee.machine.view.Attributes;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -11,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+import static coffee.machine.view.Attributes.ADMIN_ID;
+import static coffee.machine.view.Attributes.USER_ID;
 import static coffee.machine.view.PagesPaths.*;
 import static org.mockito.Mockito.*;
 
@@ -69,8 +70,8 @@ public class AuthFilterTest {
 
     private void setUpMocks(String uri, Integer adminId, Integer userId) {
         when(request.getRequestURI()).thenReturn(uri);
-        when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(adminId);
-        when(session.getAttribute(Attributes.USER_ID)).thenReturn(userId);
+        when(session.getAttribute(ADMIN_ID)).thenReturn(adminId);
+        when(session.getAttribute(USER_ID)).thenReturn(userId);
     }
 
     @Test

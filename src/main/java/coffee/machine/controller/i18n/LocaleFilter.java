@@ -2,7 +2,6 @@ package coffee.machine.controller.i18n;
 
 import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.i18n.SupportedLocale;
-import coffee.machine.view.Attributes;
 import coffee.machine.view.Parameters;
 import org.apache.log4j.Logger;
 
@@ -11,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Locale;
+
+import static coffee.machine.view.Attributes.BUNDLE_FILE;
+import static coffee.machine.view.Attributes.USER_LOCALE;
 
 /**
  * This class represents locale filter.
@@ -40,8 +42,8 @@ public class LocaleFilter implements Filter {
     }
 
     private void setUpResourceBundleSourceForView(HttpServletRequest request) {
-        if (request.getSession().getAttribute(Attributes.BUNDLE_FILE) == null) {
-            request.getSession().setAttribute(Attributes.BUNDLE_FILE, CoffeeMachineConfig.MESSAGES);
+        if (request.getSession().getAttribute(BUNDLE_FILE) == null) {
+            request.getSession().setAttribute(BUNDLE_FILE, CoffeeMachineConfig.MESSAGES);
         }
     }
 
@@ -50,7 +52,7 @@ public class LocaleFilter implements Filter {
         String localeParameter = request.getParameter(Parameters.USER_LOCALE);
         if (localeParameter != null) {
             Locale locale = findSupportedLocaleByParameter(localeParameter);
-            session.setAttribute(Attributes.USER_LOCALE, locale);
+            session.setAttribute(USER_LOCALE, locale);
         }
     }
 
@@ -65,12 +67,12 @@ public class LocaleFilter implements Filter {
 
     private void setUpUserLocaleIfAbsent(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        if (session.getAttribute(Attributes.USER_LOCALE) != null) {
+        if (session.getAttribute(USER_LOCALE) != null) {
             return;
         }
         Locale requestLocale = request.getLocale();
         Locale locale = findSupportedLocale(requestLocale);
-        session.setAttribute(Attributes.USER_LOCALE, locale);
+        session.setAttribute(USER_LOCALE, locale);
     }
 
     private Locale findSupportedLocale(Locale requestLocale) {

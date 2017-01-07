@@ -2,13 +2,10 @@ package coffee.machine.controller.command.user.register;
 
 import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.command.CommandWrapperTemplate;
-import coffee.machine.i18n.message.key.GeneralKey;
 import coffee.machine.model.entity.RegisterData;
 import coffee.machine.model.entity.User;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.UserServiceImpl;
-import coffee.machine.view.Attributes;
-import coffee.machine.view.PagesPaths;
 import coffee.machine.view.Parameters;
 import org.apache.log4j.Logger;
 
@@ -16,10 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static coffee.machine.view.Attributes.PREVIOUS_ENTERED_EMAIL;
-import static coffee.machine.view.Attributes.PREVIOUS_ENTERED_FULL_NAME;
-import static coffee.machine.view.PagesPaths.USER_REGISTER_PAGE;
-import static coffee.machine.view.PagesPaths.USER_REGISTER_SUCCESS_PAGE;
+import static coffee.machine.i18n.message.key.GeneralKey.REGISTER_USER_FORM_TITLE;
+import static coffee.machine.i18n.message.key.GeneralKey.TITLE_USER_REGISTER;
+import static coffee.machine.view.Attributes.*;
+import static coffee.machine.view.PagesPaths.*;
 import static coffee.machine.view.Parameters.FULL_NAME_PARAM;
 import static coffee.machine.view.Parameters.PASSWORD_PARAM;
 
@@ -64,7 +61,7 @@ public class UserRegisterSubmitCommand extends CommandWrapperTemplate {
 
     private void processSuccessfulRegistration(HttpServletRequest request, User user) {
         logger.info(String.format(NEW_USER_HAS_BEEN_REGISTERED_FORMAT, user.getEmail(), user.getId()));
-        request.setAttribute(Attributes.ADMIN_CONTACTS, CoffeeMachineConfig.ADMIN_CONTACT_INFO);
+        request.setAttribute(ADMIN_CONTACTS, CoffeeMachineConfig.ADMIN_CONTACT_INFO);
     }
 
     private void removeFormData(HttpServletRequest request) {
@@ -74,8 +71,8 @@ public class UserRegisterSubmitCommand extends CommandWrapperTemplate {
 
     @Override
     protected void placeNecessaryDataToRequest(HttpServletRequest request) {
-        request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_USER_REGISTER);
-        request.setAttribute(Attributes.REGISTER_FORM_TITLE, GeneralKey.REGISTER_USER_FORM_TITLE);
-        request.setAttribute(Attributes.REGISTER_FORM_ACTION, PagesPaths.USER_REGISTER_PATH);
+        request.setAttribute(PAGE_TITLE, TITLE_USER_REGISTER);
+        request.setAttribute(REGISTER_FORM_TITLE, REGISTER_USER_FORM_TITLE);
+        request.setAttribute(REGISTER_FORM_ACTION, USER_REGISTER_PATH);
     }
 }

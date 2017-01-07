@@ -2,19 +2,20 @@ package coffee.machine.controller.command.admin.refill;
 
 import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.command.CommandWrapperTemplate;
-import coffee.machine.i18n.message.key.GeneralKey;
 import coffee.machine.service.AccountService;
 import coffee.machine.service.AddonService;
+import coffee.machine.service.DrinkService;
 import coffee.machine.service.impl.AccountServiceImpl;
 import coffee.machine.service.impl.AddonServiceImpl;
-import coffee.machine.view.Attributes;
-import coffee.machine.view.PagesPaths;
-import coffee.machine.service.DrinkService;
 import coffee.machine.service.impl.DrinkServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import static coffee.machine.i18n.message.key.GeneralKey.TITLE_ADMIN_REFILL;
+import static coffee.machine.view.Attributes.*;
+import static coffee.machine.view.PagesPaths.ADMIN_REFILL_PAGE;
 
 /**
  * This class represents admin refill page get method request handler command.
@@ -27,22 +28,22 @@ public class AdminRefillCommand extends CommandWrapperTemplate {
     private final AccountService accountService = AccountServiceImpl.getInstance();
 
     public AdminRefillCommand() {
-        super(PagesPaths.ADMIN_REFILL_PAGE);
+        super(ADMIN_REFILL_PAGE);
     }
 
     @Override
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        return PagesPaths.ADMIN_REFILL_PAGE;
+        return ADMIN_REFILL_PAGE;
     }
 
     @Override
     protected void placeNecessaryDataToRequest(HttpServletRequest request) {
-        request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_ADMIN_REFILL);
-        request.setAttribute(Attributes.COFFEE_MACHINE_BALANCE,
+        request.setAttribute(PAGE_TITLE, TITLE_ADMIN_REFILL);
+        request.setAttribute(COFFEE_MACHINE_BALANCE,
                 accountService.getById(CoffeeMachineConfig.ACCOUNT_ID).getRealAmount());
-        request.setAttribute(Attributes.DRINKS, drinkService.getAll());
-        request.setAttribute(Attributes.ADDONS, addonService.getAll());
+        request.setAttribute(DRINKS, drinkService.getAll());
+        request.setAttribute(ADDONS, addonService.getAll());
 
     }
 }

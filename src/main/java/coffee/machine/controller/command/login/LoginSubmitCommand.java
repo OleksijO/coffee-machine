@@ -6,7 +6,6 @@ import coffee.machine.model.entity.LoginData;
 import coffee.machine.model.entity.User;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.UserServiceImpl;
-import coffee.machine.view.Attributes;
 import coffee.machine.view.Parameters;
 import org.apache.log4j.Logger;
 
@@ -15,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+import static coffee.machine.i18n.message.key.GeneralKey.TITLE_LOGIN;
 import static coffee.machine.i18n.message.key.error.CommandErrorKey.ERROR_LOGIN_YOU_ARE_ALREADY_LOGGED_IN;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.*;
@@ -95,9 +95,9 @@ public class LoginSubmitCommand extends CommandWrapperTemplate {
 
     @Override
     protected void placeNecessaryDataToRequest(HttpServletRequest request) {
-        request.setAttribute(Attributes.PAGE_TITLE, GeneralKey.TITLE_LOGIN);
-        request.setAttribute(Attributes.LOGIN_FORM_TITLE, GeneralKey.LOGIN_FORM_TITLE);
-        request.setAttribute(Attributes.LOGIN_FORM_ACTION, LOGIN_PATH);
+        request.setAttribute(PAGE_TITLE, TITLE_LOGIN);
+        request.setAttribute(LOGIN_FORM_TITLE, GeneralKey.LOGIN_FORM_TITLE);
+        request.setAttribute(LOGIN_FORM_ACTION, LOGIN_PATH);
     }
 }
 

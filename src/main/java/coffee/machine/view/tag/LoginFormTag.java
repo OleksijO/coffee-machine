@@ -2,7 +2,6 @@ package coffee.machine.view.tag;
 
 import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.RegExp;
-import coffee.machine.view.Attributes;
 import org.apache.log4j.Logger;
 
 import javax.servlet.jsp.JspException;
@@ -10,6 +9,8 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import static coffee.machine.view.Attributes.USER_LOCALE;
 
 /**
  * This class represent custom tag handler, which transforms tag to login form in HTML in user current locale.
@@ -63,7 +64,7 @@ public class LoginFormTag implements Tag {
     @Override
     public int doStartTag() throws JspException {
         try {
-            Locale locale = (Locale) pageContext.getSession().getAttribute(Attributes.USER_LOCALE);
+            Locale locale = (Locale) pageContext.getSession().getAttribute(USER_LOCALE);
             ResourceBundle bundle = ResourceBundle.getBundle(CoffeeMachineConfig.MESSAGES, locale);
             pageContext.getOut().println("" +
                     "<br>" +

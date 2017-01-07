@@ -2,7 +2,6 @@ package coffee.machine.controller.command.admin.add.credit;
 
 import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.command.CommandWrapperTemplate;
-import coffee.machine.i18n.message.key.GeneralKey;
 import coffee.machine.model.entity.CreditsReceipt;
 import coffee.machine.model.entity.User;
 import coffee.machine.service.AccountService;
@@ -17,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static coffee.machine.i18n.message.key.CommandKey.ADD_CREDITS_YOU_ADDED_CREDITS_SUCCESSFULLY_ON_ACCOUNT_OF_USER;
+import static coffee.machine.i18n.message.key.GeneralKey.TITLE_ADMIN_ADD_CREDIT;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.ADMIN_ADD_CREDITS_PAGE;
 import static coffee.machine.view.Parameters.CREDITS_TO_ADD;
@@ -45,7 +45,7 @@ public class AdminAddCreditSubmitCommand extends CommandWrapperTemplate {
 
     @Override
     protected void placeNecessaryDataToRequest(HttpServletRequest request) {
-        request.setAttribute(PAGE_TITLE, GeneralKey.TITLE_ADMIN_ADD_CREDIT);
+        request.setAttribute(PAGE_TITLE, TITLE_ADMIN_ADD_CREDIT);
 
     }
 

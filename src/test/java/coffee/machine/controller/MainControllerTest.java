@@ -1,6 +1,5 @@
 package coffee.machine.controller;
 
-import coffee.machine.view.PagesPaths;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static coffee.machine.view.PagesPaths.HOME_PATH;
+import static coffee.machine.view.PagesPaths.REDIRECTED;
 import static org.mockito.Mockito.*;
 
 /**
@@ -52,7 +52,7 @@ public class MainControllerTest {
 
     @Test
     public void testProcessRequestOnCommandRedirect() throws Exception {
-        when(command.execute(request, response)).thenReturn(PagesPaths.REDIRECTED);
+        when(command.execute(request, response)).thenReturn(REDIRECTED);
         controller.processRequest(command, request, response);
         verify(response, times(0)).sendRedirect(any());
         verify(requestDispatcher, times(0)).forward(request, response);

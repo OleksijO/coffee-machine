@@ -6,8 +6,6 @@ import coffee.machine.controller.command.CommandWrapperTemplate;
 import coffee.machine.controller.command.request.data.extractor.ItemsStringFormDataExtractor;
 import coffee.machine.controller.command.request.data.extractor.impl.ItemsStringFormDataExtractorImpl;
 import coffee.machine.controller.exception.ControllerException;
-import coffee.machine.i18n.message.key.GeneralKey;
-import coffee.machine.i18n.message.key.error.CommandErrorKey;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
 import coffee.machine.model.entity.item.ItemReceipt;
@@ -19,8 +17,6 @@ import coffee.machine.service.impl.AccountServiceImpl;
 import coffee.machine.service.impl.AddonServiceImpl;
 import coffee.machine.service.impl.CoffeeMachineRefillServiceImpl;
 import coffee.machine.service.impl.DrinkServiceImpl;
-import coffee.machine.view.Attributes;
-import coffee.machine.view.PagesPaths;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,9 +30,12 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static coffee.machine.i18n.message.key.CommandKey.ADMIN_REFILL_SUCCESSFUL;
+import static coffee.machine.i18n.message.key.GeneralKey.ERROR_UNKNOWN;
 import static coffee.machine.i18n.message.key.GeneralKey.TITLE_ADMIN_REFILL;
 import static coffee.machine.i18n.message.key.error.CommandErrorKey.ADMIN_REFILL_NOTHING_TO_ADD;
+import static coffee.machine.i18n.message.key.error.CommandErrorKey.QUANTITY_SHOULD_BE_INT;
 import static coffee.machine.view.Attributes.*;
+import static coffee.machine.view.PagesPaths.ADMIN_REFILL_PAGE;
 
 /**
  * This class represents admin refill page post method request handler command.
@@ -62,7 +61,7 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
     private final Pattern patternNumber = Pattern.compile(RegExp.REGEXP_NUMBER);
 
     public AdminRefillSubmitCommand() {
-        super(PagesPaths.ADMIN_REFILL_PAGE);
+        super(ADMIN_REFILL_PAGE);
     }
 
     @Override
@@ -90,12 +89,12 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
             clearFormData(request);
         }
 
-        return PagesPaths.ADMIN_REFILL_PAGE;
+        return ADMIN_REFILL_PAGE;
 
     }
 
     private void saveFormData(HttpServletRequest request) {
-        request.setAttribute(Attributes.PREVIOUS_VALUES_TABLE,
+        request.setAttribute(PREVIOUS_VALUES_TABLE,
                 formStringDataExtractor.getAllItemParameterValuesFromRequest(request));
     }
 
@@ -134,18 +133,18 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
         } catch (Exception e) {
             logger.error(String.format(PROBLEMS_WITH_PARSING_INT_FROM_PARAMETER_FORMAT,
                     param, request.getParameter(param)));
-            throw new ControllerException(CommandErrorKey.QUANTITY_SHOULD_BE_INT);
+            throw new ControllerException(QUANTITY_SHOULD_BE_INT);
         }
     }
 
-    private int getItemIdFromParam(String param) {
+    private int getItemIdFromParam(String param)  {
         Matcher matcher = patternNumber.matcher(param);
         if (matcher.find(0)) {
 
             return Integer.parseInt(param.substring(matcher.start(), matcher.end()));
 
         } else {
-            throw new ControllerException(GeneralKey.ERROR_UNKNOWN); //this normally should not ever happen
+            throw new ControllerException(ERROR_UNKNOWN); //this normally should not ever happen
         }
     }
 
@@ -174,12 +173,12 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
     }
 
     private void logRefillingDetails(HttpServletRequest request, ItemReceipt receipt) {
-        logger.info(String.format(ITEMS_ADDED, (int) request.getSession().getAttribute(Attributes.ADMIN_ID),
+        logger.info(String.format(ITEMS_ADDED, (int) request.getSession().getAttribute(ADMIN_ID),
                 receipt));
     }
 
     private void clearFormData(HttpServletRequest request) {
-        request.removeAttribute(Attributes.PREVIOUS_VALUES_TABLE);
+        request.removeAttribute(PREVIOUS_VALUES_TABLE);
     }
 
 }

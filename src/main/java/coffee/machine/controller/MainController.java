@@ -1,7 +1,6 @@
 package coffee.machine.controller;
 
 import coffee.machine.controller.logging.ControllerErrorLogging;
-import coffee.machine.view.PagesPaths;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -9,6 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import static coffee.machine.view.PagesPaths.HOME_PATH;
+import static coffee.machine.view.PagesPaths.REDIRECTED;
 
 /**
  * This class represents request dispatcher. It calls commands for correspondent request uri
@@ -48,7 +50,7 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
 
         if (command == null) {
             logUnsupportedUri(request.getRequestURI());
-            response.sendRedirect(PagesPaths.HOME_PATH);
+            response.sendRedirect(HOME_PATH);
             return;
         }
 
@@ -65,7 +67,7 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
     }
 
     private boolean isRedirected(String view) {
-        return PagesPaths.REDIRECTED.equals(view);
+        return REDIRECTED.equals(view);
     }
 
     @Override

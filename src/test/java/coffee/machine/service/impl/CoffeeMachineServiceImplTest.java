@@ -1,7 +1,6 @@
 package coffee.machine.service.impl;
 
 import coffee.machine.dao.*;
-import coffee.machine.i18n.message.key.error.ServiceErrorKey;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
@@ -23,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static coffee.machine.i18n.message.key.error.ServiceErrorKey.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -249,7 +249,7 @@ public class CoffeeMachineServiceImplTest {
             service.prepareDrinksForUser(drinksToBuy, userId);
         } catch (ServiceException e) {
             e.printStackTrace();
-            Assert.assertEquals(ServiceErrorKey.NOT_ENOUGH_MONEY, e.getMessage());
+            Assert.assertEquals(NOT_ENOUGH_MONEY, e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             fail(HERE_SHOULD_BE_APPLICATION_EXCEPTION);
@@ -270,7 +270,7 @@ public class CoffeeMachineServiceImplTest {
             service.prepareDrinksForUser(drinksToBuy, userId);
         } catch (ServiceException e) {
             e.printStackTrace();
-            Assert.assertEquals(ServiceErrorKey.ITEM_NO_LONGER_AVAILABLE, e.getMessage());
+            Assert.assertEquals(ITEM_NO_LONGER_AVAILABLE, e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             fail(HERE_SHOULD_BE_APPLICATION_EXCEPTION);
@@ -289,7 +289,7 @@ public class CoffeeMachineServiceImplTest {
             service.prepareDrinksForUser(drinksToBuy, userId);
         } catch (ServiceException e) {
             e.printStackTrace();
-            Assert.assertEquals(ServiceErrorKey.YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY, e.getMessage());
+            Assert.assertEquals(YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY, e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             fail(HERE_SHOULD_BE_APPLICATION_EXCEPTION);
