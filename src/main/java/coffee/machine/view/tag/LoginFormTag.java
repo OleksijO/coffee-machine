@@ -1,7 +1,7 @@
 package coffee.machine.view.tag;
 
 import coffee.machine.config.CoffeeMachineConfig;
-import coffee.machine.controller.RegExp;
+import coffee.machine.service.RegExp;
 import org.apache.log4j.Logger;
 
 import javax.servlet.jsp.JspException;
