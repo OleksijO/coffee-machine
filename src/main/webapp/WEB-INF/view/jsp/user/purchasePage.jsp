@@ -67,16 +67,17 @@
                                                                 .concat(drink.id)
                                                                 .concat(Parameters.ADDON_PARAMETER_STARTS_WITH)
                                                                 .concat(addon.id))}"/>
-                                                <option selected>
-                                                    <c:choose>
-                                                        <c:when test="${previousAddonQuantity gt addon.quantity}">
-                                                            0
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            ${previousAddonQuantity}
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </option>
+                                                <c:choose>
+                                                    <c:when test="${previousAddonQuantity gt addon.quantity}">
+                                                        <option selected>0</option>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:if test="${previousAddonQuantity gt 0}">
+                                                            <option selected>${previousAddonQuantity}</option>
+                                                        </c:if>
+                                                        <option value="0">0</option>
+                                                    </c:otherwise>
+                                                </c:choose>
                                                 <option value="1">1</option>
                                                 <c:if test="${addon.quantity gt 1}">
                                                     <option value="2">2</option>
