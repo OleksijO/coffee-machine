@@ -1,9 +1,11 @@
-package coffee.machine.model.entity;
+package coffee.machine.model.value.object;
 
 import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFF;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 06.01.2017.
+ * This class represents value object for transfer data of adding credits and user
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class CreditsReceipt {
     private int userId;

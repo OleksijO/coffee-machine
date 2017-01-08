@@ -1,4 +1,4 @@
-package coffee.machine.controller.command.logout;
+package coffee.machine.controller.command;
 
 import coffee.machine.controller.Command;
 import org.apache.log4j.Logger;

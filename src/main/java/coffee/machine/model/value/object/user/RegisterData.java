@@ -1,4 +1,4 @@
-package coffee.machine.model.entity;
+package coffee.machine.model.value.object.user;
 
 /**
  * This class represents value object for transfer data of user register form and validation result

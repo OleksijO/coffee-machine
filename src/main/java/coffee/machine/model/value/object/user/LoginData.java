@@ -1,4 +1,4 @@
-package coffee.machine.model.entity;
+package coffee.machine.model.value.object.user;
 
 import coffee.machine.model.security.PasswordEncryptor;
 

@@ -7,7 +7,6 @@ import coffee.machine.controller.command.helper.RequestDataExtractor;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.item.Drink;
-import coffee.machine.model.entity.item.Drinks;
 import coffee.machine.model.entity.item.Item;
 import coffee.machine.service.AccountService;
 import coffee.machine.service.CoffeeMachineOrderService;
@@ -21,7 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import static coffee.machine.i18n.message.key.CommandKey.PURCHASE_THANKS_MESSAGE;
@@ -81,17 +82,16 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
 
     private Order getOrderFromRequest(HttpServletRequest request) {
 
-        Drinks drinks = getBaseDrinksFromRequest(request);
+        List<Drink> drinks = getBaseDrinksFromRequest(request);
         drinks = getAddonsToDrinksFromRequest(drinks, request);
         return new Order.Builder()
-                .setDrinks(drinks.getDrinks())
+                .setDrinks(drinks)
                 .setUserId(getUserIdFromSession(request.getSession()))
                 .build();
     }
 
-    private Drinks getBaseDrinksFromRequest(HttpServletRequest request) {
-        Drinks drinks = new Drinks();
-        ;
+    private List<Drink> getBaseDrinksFromRequest(HttpServletRequest request) {
+        List<Drink> drinks = new ArrayList<>();
         Enumeration<String> params = request.getParameterNames();
         while (params.hasMoreElements()) {
             String param = params.nextElement();
@@ -102,7 +102,7 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
         return drinks;
     }
 
-    private void addDrinkWithNonZeroQuantity(Drinks drinks, String param, HttpServletRequest request) {
+    private void addDrinkWithNonZeroQuantity(List<Drink> drinks, String param, HttpServletRequest request) {
         int quantity = dataExtractorHelper.getIntFromRequestByParameter(request, param);
         if (quantity != 0) {
             drinks.add(new Drink.Builder()
@@ -112,7 +112,7 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
         }
     }
 
-    private Drinks getAddonsToDrinksFromRequest(Drinks drinks, HttpServletRequest request) {
+    private List<Drink> getAddonsToDrinksFromRequest(List<Drink> drinks, HttpServletRequest request) {
         Enumeration<String> params = request.getParameterNames();
         while (params.hasMoreElements()) {
             String param = params.nextElement();
@@ -124,19 +124,18 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
 
     }
 
-    private void addAddonWithNonZeroQuantityToDrink(Drinks drinks, String param, HttpServletRequest request) {
+    private void addAddonWithNonZeroQuantityToDrink(List<Drink> drinks, String param, HttpServletRequest request) {
         int quantity = dataExtractorHelper.getIntFromRequestByParameter(request, param);
         if (quantity != 0) {
             int drinkId = dataExtractorHelper.getFirstNumberFromParameterName(param);
             int addonId = dataExtractorHelper.getSecondNumberFromParameterName(param);
-            drinks.getDrinks().stream()
+            drinks.stream()
                     .filter(drink -> drink.getId() == drinkId)
                     .findFirst()
                     .ifPresent(drink -> drink.addAddon(new Item.Builder()
                             .setId(addonId)
                             .setQuantity(quantity)
                             .build()));
-
         }
     }
 

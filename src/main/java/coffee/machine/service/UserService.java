@@ -1,7 +1,7 @@
 package coffee.machine.service;
 
-import coffee.machine.model.entity.LoginData;
-import coffee.machine.model.entity.RegisterData;
+import coffee.machine.model.value.object.user.LoginData;
+import coffee.machine.model.value.object.user.RegisterData;
 import coffee.machine.model.entity.User;
 
 import java.util.List;

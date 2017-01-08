@@ -2,7 +2,7 @@ package coffee.machine.controller.command.login;
 
 import coffee.machine.controller.command.CommandWrapperTemplate;
 import coffee.machine.i18n.message.key.GeneralKey;
-import coffee.machine.model.entity.LoginData;
+import coffee.machine.model.value.object.user.LoginData;
 import coffee.machine.model.entity.User;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.UserServiceImpl;

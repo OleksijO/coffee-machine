@@ -5,13 +5,14 @@ import coffee.machine.dao.AddonDao;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.DrinkDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
-import coffee.machine.model.entity.item.Addons;
-import coffee.machine.model.entity.item.Drinks;
+import coffee.machine.model.entity.item.Drink;
+import coffee.machine.model.entity.item.Item;
 import coffee.machine.model.entity.item.ItemReceipt;
 import coffee.machine.service.CoffeeMachineRefillService;
 import coffee.machine.service.logging.ServiceErrorProcessing;
 import org.apache.log4j.Logger;
 
+import java.util.List;
 import java.util.Objects;
 
 import static coffee.machine.i18n.message.key.error.ServiceErrorKey.ADMIN_REFILL_NOTHING_TO_ADD;
@@ -72,28 +73,29 @@ public class CoffeeMachineRefillServiceImpl implements CoffeeMachineRefillServic
         if (receipt.getDrinks().isEmpty()){
             return;
         }
-        Drinks actualDrinks = loadActualDrinks(receipt, drinkDao);
-        actualDrinks.incrementQuantities(receipt.getDrinks());
-        drinkDao.updateQuantityAllInList(actualDrinks.getDrinks());
+        List<Drink> actualDrinks = drinkDao.getAllFromList(receipt.getDrinks());
+        incrementQuantitiesInListByAnotherItemList(actualDrinks, receipt.getDrinks());
+        drinkDao.updateQuantityAllInList(actualDrinks);
     }
 
-    private Drinks loadActualDrinks(ItemReceipt receipt, DrinkDao drinkDao) {
-        return new Drinks()
-                .add(drinkDao.getAllFromList(receipt.getDrinks()));
+
+    private void incrementQuantitiesInListByAnotherItemList(List<? extends Item> items, List<? extends Item> addingItems) {
+        for (Item addingItem : addingItems) {
+            items.stream()
+                    .filter(item -> item.getId() == addingItem.getId())
+                    .findFirst()
+                    .orElseThrow(IllegalStateException::new)
+                    .incrementQuantityBy(addingItem.getQuantity());
+        }
     }
 
     private void refillAddons(ItemReceipt receipt, AddonDao addonDao) {
         if (receipt.getAddons().isEmpty()){
             return;
         }
-        Addons actualAddons = loadActualAddons(receipt, addonDao);
-        actualAddons.incrementQuantities(receipt.getAddons());
-        addonDao.updateQuantityAllInList(actualAddons.getAddons());
-    }
-
-    private Addons loadActualAddons(ItemReceipt receipt, AddonDao addonDao) {
-        return new Addons()
-                .add(addonDao.getAllFromList(receipt.getAddons()));
+        List<Item> actualAddons = addonDao.getAllFromList(receipt.getAddons());
+        incrementQuantitiesInListByAnotherItemList(actualAddons, receipt.getAddons());
+        addonDao.updateQuantityAllInList(actualAddons);
     }
 
     public void setDaoFactory(DaoFactory daoFactory) {

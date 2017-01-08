@@ -2,7 +2,7 @@ package coffee.machine.controller.command.user.register;
 
 import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.command.CommandWrapperTemplate;
-import coffee.machine.model.entity.RegisterData;
+import coffee.machine.model.value.object.user.RegisterData;
 import coffee.machine.model.entity.User;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.UserServiceImpl;

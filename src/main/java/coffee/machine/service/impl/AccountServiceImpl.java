@@ -5,7 +5,7 @@ import coffee.machine.dao.AccountDao;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Account;
-import coffee.machine.model.entity.CreditsReceipt;
+import coffee.machine.model.value.object.CreditsReceipt;
 import coffee.machine.service.AccountService;
 import coffee.machine.service.exception.ServiceException;
 
@@ -82,7 +82,7 @@ public class AccountServiceImpl implements AccountService {
                     String.format(AMOUNT_FOR_ADD_SHOULD_BE_GREATER_THAN_ZERO_FORMAT, userId, amountToAdd));
         }
 
-        if (userId < 1) {
+        if (userId <= 0) {
             throw new ServiceException(
                     String.format(USER_ID_SHOULD_BE_GREATER_ZERO, userId));
         }

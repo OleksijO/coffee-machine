@@ -1,7 +1,7 @@
 package coffee.machine.service;
 
 import coffee.machine.model.entity.Account;
-import coffee.machine.model.entity.CreditsReceipt;
+import coffee.machine.model.value.object.CreditsReceipt;
 
 import java.util.Optional;
 
