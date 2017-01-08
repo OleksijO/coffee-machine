@@ -1,13 +1,14 @@
 package coffee.machine.controller.command.user.purchase;
 
+import coffee.machine.config.CoffeeMachineConfig;
+import coffee.machine.controller.RegExp;
 import coffee.machine.controller.command.CommandWrapperTemplate;
-import coffee.machine.controller.command.request.data.extractor.ItemsStringFormDataExtractor;
-import coffee.machine.controller.command.request.data.extractor.PurchaseFormDataExtractor;
-import coffee.machine.controller.command.request.data.extractor.impl.ItemsStringFormDataExtractorImpl;
-import coffee.machine.controller.command.request.data.extractor.impl.PurchaseFormExtractorImpl;
+import coffee.machine.controller.command.helper.RequestDataExtractor;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.item.Drink;
+import coffee.machine.model.entity.item.Drinks;
+import coffee.machine.model.entity.item.Item;
 import coffee.machine.service.AccountService;
 import coffee.machine.service.CoffeeMachineOrderService;
 import coffee.machine.service.DrinkService;
@@ -18,11 +19,13 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.util.Enumeration;
+import java.util.regex.Pattern;
 
 import static coffee.machine.i18n.message.key.CommandKey.PURCHASE_THANKS_MESSAGE;
+import static coffee.machine.i18n.message.key.GeneralKey.TITLE_USER_PURCHASE;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.USER_PURCHASE_PAGE;
 
@@ -34,9 +37,10 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
     private AccountService accountService = AccountServiceImpl.getInstance();
     private CoffeeMachineOrderService coffeeMachine = CoffeeMachineOrderServiceImpl.getInstance();
 
-    private PurchaseFormDataExtractor formExtractor = new PurchaseFormExtractorImpl();
-    private ItemsStringFormDataExtractor formStringDataExtractor = new ItemsStringFormDataExtractorImpl();
-    private UserPurchaseCommandHelper helper = new UserPurchaseCommandHelper();
+    private final Pattern patternItem = Pattern.compile(RegExp.REGEXP_ANY_ITEM);
+    private final Pattern patternDrink = Pattern.compile(RegExp.REGEXP_DRINK_PARAM);
+    private final Pattern patternAddon = Pattern.compile(RegExp.REGEXP_ADDON_IN_DRINK_PARAM);
+    private RequestDataExtractor dataExtractorHelper = new RequestDataExtractor();
 
 
     public UserPurchaseSubmitCommand() {
@@ -44,70 +48,107 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
     }
 
     @Override
-    protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        helper.setGeneralRegisterPageAttributes(request);
-        request.setAttribute(PREVIOUS_VALUES_TABLE,
-                formStringDataExtractor.getAllItemParameterValuesFromRequest(request));
-
-        int userId = getUserIdFromRequest(request);
-
-
-        List<Drink> drinksToBuy = getDrinksFromRequest(request);
-        Order order = coffeeMachine.prepareDrinksForUser(drinksToBuy, userId);
-        request.setAttribute(ORDER, order);
-
-        logger.info(String.format(USER_WITH_ID_MADE_PURCHASE_FORMAT, userId, order));
-
-        request.setAttribute(USUAL_MESSAGE, PURCHASE_THANKS_MESSAGE);
-        request.removeAttribute(PREVIOUS_VALUES_TABLE);  //clearing form in case of success purchase
-
-        return USER_PURCHASE_PAGE;
-    }
-
-    private int getUserIdFromRequest(HttpServletRequest request) {
-        return (int) request.getSession().getAttribute(USER_ID);
-    }
-
-    List<Drink> getDrinksFromRequest(HttpServletRequest request) {
-
-        Map<Integer, Integer> drinkQuantityByIds = formExtractor.getDrinksQuantityByIdFromRequest(request);
-        List<Drink> drinks = drinkService.getAllBaseByIdSet(drinkQuantityByIds.keySet());
-        setDrinkQuantities(drinks, drinkQuantityByIds);
-        Map<Integer, Map<Integer, Integer>> addonsQuantityInDrinksById =
-                formExtractor.getAddonsQuantityInDrinksByIdFromRequest(request);
-        setAddonsQuantityInDrinks(addonsQuantityInDrinksById, drinks);
-
-        return drinks;
-    }
-
-
-    void setDrinkQuantities(List<Drink> drinks, Map<Integer, Integer> drinkQuantityByIds) {
-
-        drinks.forEach(drink -> drink.setQuantity(drinkQuantityByIds.get(drink.getId())));
-    }
-
-    void setAddonsQuantityInDrinks(Map<Integer, Map<Integer, Integer>> addonsQuantityInDrinksById, List<Drink> drinks) {
-
-        drinks.forEach(drink -> {
-            Map<Integer, Integer> addonsQuantityById = addonsQuantityInDrinksById.get(drink.getId());
-            if (addonsQuantityById != null) {
-                drink.getAddons().forEach(addon -> {
-                    Integer quantity = addonsQuantityById.get(addon.getId());
-                    if (quantity != null) {
-                        addon.setQuantity(quantity);
-                    }
-                });
-            }
-        });
+    protected void placeNecessaryDataToRequest(HttpServletRequest request) {
+        request.setAttribute(PAGE_TITLE, TITLE_USER_PURCHASE);
+        request.setAttribute(ADMIN_CONTACTS, CoffeeMachineConfig.ADMIN_CONTACT_INFO);
+        request.setAttribute(BALANCE_LOW_WARN_LIMIT, CoffeeMachineConfig.BALANCE_WARN_LIMIT);
+        request.setAttribute(DRINKS, drinkService.getAll());
+        request.setAttribute(USER_BALANCE,
+                accountService.getByUserId(getUserIdFromSession(request.getSession()))
+                        .map(Account::getRealAmount)
+                        .orElseThrow(IllegalStateException::new));
     }
 
     @Override
-    protected void placeNecessaryDataToRequest(HttpServletRequest request) {
-        request.setAttribute(DRINKS, drinkService.getAll());
-        request.setAttribute(USER_BALANCE,
-                accountService.getByUserId(getUserIdFromRequest(request))
-                .map(Account::getRealAmount)
-                .orElseThrow(IllegalStateException::new));
+    protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        saveFormData(request);
+        Order preOrder = getOrderFromRequest(request);
+        Order order = coffeeMachine.prepareOrder(preOrder);
+        logDetailsAndPlaceMessageToRequest(request, order);
+        clearFormData(request);
+        return USER_PURCHASE_PAGE;
     }
+
+    private void saveFormData(HttpServletRequest request) {
+        request.setAttribute(PREVIOUS_VALUES_TABLE,
+                dataExtractorHelper.getParametersFromRequestByPattern(request, patternItem));
+    }
+
+    private int getUserIdFromSession(HttpSession session) {
+        return (int) session.getAttribute(USER_ID);
+    }
+
+    private Order getOrderFromRequest(HttpServletRequest request) {
+
+        Drinks drinks = getBaseDrinksFromRequest(request);
+        drinks = getAddonsToDrinksFromRequest(drinks, request);
+        return new Order.Builder()
+                .setDrinks(drinks.getDrinks())
+                .setUserId(getUserIdFromSession(request.getSession()))
+                .build();
+    }
+
+    private Drinks getBaseDrinksFromRequest(HttpServletRequest request) {
+        Drinks drinks = new Drinks();
+        ;
+        Enumeration<String> params = request.getParameterNames();
+        while (params.hasMoreElements()) {
+            String param = params.nextElement();
+            if (patternDrink.matcher(param).matches()) {
+                addDrinkWithNonZeroQuantity(drinks, param, request);
+            }
+        }
+        return drinks;
+    }
+
+    private void addDrinkWithNonZeroQuantity(Drinks drinks, String param, HttpServletRequest request) {
+        int quantity = dataExtractorHelper.getIntFromRequestByParameter(request, param);
+        if (quantity != 0) {
+            drinks.add(new Drink.Builder()
+                    .setQuantity(quantity)
+                    .setId(dataExtractorHelper.getFirstNumberFromParameterName(param))
+                    .build());
+        }
+    }
+
+    private Drinks getAddonsToDrinksFromRequest(Drinks drinks, HttpServletRequest request) {
+        Enumeration<String> params = request.getParameterNames();
+        while (params.hasMoreElements()) {
+            String param = params.nextElement();
+            if (patternAddon.matcher(param).matches()) {
+                addAddonWithNonZeroQuantityToDrink(drinks, param, request);
+            }
+        }
+        return drinks;
+
+    }
+
+    private void addAddonWithNonZeroQuantityToDrink(Drinks drinks, String param, HttpServletRequest request) {
+        int quantity = dataExtractorHelper.getIntFromRequestByParameter(request, param);
+        if (quantity != 0) {
+            int drinkId = dataExtractorHelper.getFirstNumberFromParameterName(param);
+            int addonId = dataExtractorHelper.getSecondNumberFromParameterName(param);
+            drinks.getDrinks().stream()
+                    .filter(drink -> drink.getId() == drinkId)
+                    .findFirst()
+                    .ifPresent(drink -> drink.addAddon(new Item.Builder()
+                            .setId(addonId)
+                            .setQuantity(quantity)
+                            .build()));
+
+        }
+    }
+
+    private void logDetailsAndPlaceMessageToRequest(HttpServletRequest request, Order order) {
+        logger.info(String.format(USER_WITH_ID_MADE_PURCHASE_FORMAT, order.getUserId(), order));
+        request.setAttribute(ORDER, order);
+        request.setAttribute(USUAL_MESSAGE, PURCHASE_THANKS_MESSAGE);
+    }
+
+    private void clearFormData(HttpServletRequest request) {
+        request.removeAttribute(PREVIOUS_VALUES_TABLE);
+    }
+
+
 }

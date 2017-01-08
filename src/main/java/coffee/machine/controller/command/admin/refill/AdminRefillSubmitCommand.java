@@ -3,9 +3,7 @@ package coffee.machine.controller.command.admin.refill;
 import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.RegExp;
 import coffee.machine.controller.command.CommandWrapperTemplate;
-import coffee.machine.controller.command.request.data.extractor.ItemsStringFormDataExtractor;
-import coffee.machine.controller.command.request.data.extractor.impl.ItemsStringFormDataExtractorImpl;
-import coffee.machine.controller.exception.ControllerException;
+import coffee.machine.controller.command.helper.RequestDataExtractor;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
 import coffee.machine.model.entity.item.ItemReceipt;
@@ -30,10 +28,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static coffee.machine.i18n.message.key.CommandKey.ADMIN_REFILL_SUCCESSFUL;
-import static coffee.machine.i18n.message.key.GeneralKey.ERROR_UNKNOWN;
 import static coffee.machine.i18n.message.key.GeneralKey.TITLE_ADMIN_REFILL;
-import static coffee.machine.i18n.message.key.error.CommandErrorKey.ADMIN_REFILL_NOTHING_TO_ADD;
-import static coffee.machine.i18n.message.key.error.CommandErrorKey.QUANTITY_SHOULD_BE_INT;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.ADMIN_REFILL_PAGE;
 
@@ -54,11 +49,11 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
     private final AddonService addonService = AddonServiceImpl.getInstance();
     private final AccountService accountService = AccountServiceImpl.getInstance();
 
-    private final ItemsStringFormDataExtractor formStringDataExtractor = new ItemsStringFormDataExtractorImpl();
-
+    private final Pattern PATTERN_ITEM = Pattern.compile(RegExp.REGEXP_ANY_ITEM);
     private final Pattern patternDrink = Pattern.compile(RegExp.REGEXP_DRINK_PARAM);
     private final Pattern patternAddon = Pattern.compile(RegExp.REGEXP_ADDON_PARAM);
-    private final Pattern patternNumber = Pattern.compile(RegExp.REGEXP_NUMBER);
+
+    private RequestDataExtractor dataExtractorHelper = new RequestDataExtractor();
 
     public AdminRefillSubmitCommand() {
         super(ADMIN_REFILL_PAGE);
@@ -80,25 +75,21 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
         saveFormData(request);
 
         ItemReceipt receipt = getReceiptFromRequest(request);
-        if (receipt.isEmpty()) {
-            request.setAttribute(ERROR_MESSAGE, ADMIN_REFILL_NOTHING_TO_ADD);
-        } else {
-            coffeeMachine.refill(receipt);
-            request.setAttribute(USUAL_MESSAGE, ADMIN_REFILL_SUCCESSFUL);
-            logRefillingDetails(request, receipt);
-            clearFormData(request);
-        }
+
+        coffeeMachine.refill(receipt);
+        placeMessageToRequest(request);
+        logRefillingDetails(request, receipt);
+        clearFormData(request);
 
         return ADMIN_REFILL_PAGE;
-
     }
 
     private void saveFormData(HttpServletRequest request) {
         request.setAttribute(PREVIOUS_VALUES_TABLE,
-                formStringDataExtractor.getAllItemParameterValuesFromRequest(request));
+                dataExtractorHelper.getParametersFromRequestByPattern(request, PATTERN_ITEM));
     }
 
-    private ItemReceipt getReceiptFromRequest(HttpServletRequest request){
+    private ItemReceipt getReceiptFromRequest(HttpServletRequest request) {
         List<Drink> drinksToAdd = getDrinksToAddFromRequest(request);
         List<Item> addonsToAdd = getAddonsToAddFromRequest(request);
         return new ItemReceipt(drinksToAdd, addonsToAdd);
@@ -117,37 +108,13 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
             String param = params.nextElement();
             Matcher matcher = itemParameterPattern.matcher(param);
             if (matcher.matches()) {
-                int itemQuantity = getIntFromRequestByParameter(param, request);
-                int itemId = getItemIdFromParam(param);
+                int itemQuantity = dataExtractorHelper.getIntFromRequestByParameter(request, param);
+                int itemId = dataExtractorHelper.getFirstNumberFromParameterName(param);
                 itemQuantityByIds.put(itemId, itemQuantity);
             }
         }
         return itemQuantityByIds;
     }
-
-    private int getIntFromRequestByParameter(String param, HttpServletRequest request) {
-        try {
-
-            return Integer.parseInt(request.getParameter(param));
-
-        } catch (Exception e) {
-            logger.error(String.format(PROBLEMS_WITH_PARSING_INT_FROM_PARAMETER_FORMAT,
-                    param, request.getParameter(param)));
-            throw new ControllerException(QUANTITY_SHOULD_BE_INT);
-        }
-    }
-
-    private int getItemIdFromParam(String param)  {
-        Matcher matcher = patternNumber.matcher(param);
-        if (matcher.find(0)) {
-
-            return Integer.parseInt(param.substring(matcher.start(), matcher.end()));
-
-        } else {
-            throw new ControllerException(ERROR_UNKNOWN); //this normally should not ever happen
-        }
-    }
-
 
     private List<Drink> getDrinksByIdsAndQuantities(Map<Integer, Integer> drinkQuantityByIds) {
         return drinkQuantityByIds.entrySet().stream()
@@ -170,6 +137,10 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
                         .setQuantity(entry.getValue())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    private void placeMessageToRequest(HttpServletRequest request) {
+        request.setAttribute(USUAL_MESSAGE, ADMIN_REFILL_SUCCESSFUL);
     }
 
     private void logRefillingDetails(HttpServletRequest request, ItemReceipt receipt) {

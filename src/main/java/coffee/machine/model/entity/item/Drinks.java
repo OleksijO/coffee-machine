@@ -14,6 +14,11 @@ public class Drinks {
         return this;
     }
 
+    public Drinks add(Drink drink) {
+        this.drinks.add(drink);
+        return this;
+    }
+
     public void incrementQuantities(List<Drink> drinksToAdd) {
         for (Drink drink : drinksToAdd) {
             drinks.stream()

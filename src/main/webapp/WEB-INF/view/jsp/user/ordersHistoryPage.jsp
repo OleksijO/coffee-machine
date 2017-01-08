@@ -44,7 +44,7 @@
                     </c:forEach></div>
             </td>
             <td>
-                <div align="right"><fmt:formatNumber value="${order.realAmount}" type="number"
+                <div align="right"><fmt:formatNumber value="${order.realTotalCost}" type="number"
                                                      minFractionDigits="2" maxFractionDigits="2"/></div>
             </td>
         </tr>

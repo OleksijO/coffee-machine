@@ -33,7 +33,7 @@ public enum Orders {
                 .setId(id)
                 .setUserId(userId)
                 .setDate(date)
-                .setAmount(amount)
+                .setTotalCost(amount)
                 .build();
         switch (id) {
             case 1:

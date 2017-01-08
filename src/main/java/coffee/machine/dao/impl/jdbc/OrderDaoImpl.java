@@ -83,7 +83,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
 
             statement.setInt(1, order.getUserId());
             statement.setTimestamp(2, toTimestamp(order.getDate()));
-            statement.setLong(3, order.getAmount());
+            statement.setLong(3, order.getTotalCost());
             int orderId = executeInsertStatement(statement);
             order.setId(orderId);
             insertOrderDrinks(order);
@@ -175,7 +175,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
                 .setId(rsOrder.getInt(FIELD_ID))
                 .setUserId(rsOrder.getInt(FIELD_USER_ID))
                 .setDate(toDate(rsOrder.getTimestamp(FIELD_DATE_TIME)))
-                .setAmount(rsOrder.getLong(FIELD_AMOUNT))
+                .setTotalCost(rsOrder.getLong(FIELD_AMOUNT))
                 .build();
     }
 

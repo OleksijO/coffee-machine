@@ -28,8 +28,23 @@ public class Item implements Comparable<Item> {
         return new Item(this);
     }
 
-    public void incrementQuantityBy(int quantityToAdd){
-        quantity+=quantityToAdd;
+    public void incrementQuantityBy(int quantityToAdd) {
+        quantity += quantityToAdd;
+    }
+
+    public void fillAbsentItemData(Item itemData) {
+        if ((id != itemData.getId()) || (itemData.getType() == null)) {
+            throw new IllegalArgumentException();
+        }
+        if ((name == null) || (name.isEmpty())) {
+            name = itemData.getName();
+        }
+        if (price == 0) {
+            price = itemData.getPrice();
+        }
+        if (quantity == 0) {
+            quantity = itemData.getQuantity();
+        }
     }
 
     public int getId() {

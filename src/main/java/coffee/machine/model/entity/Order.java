@@ -2,10 +2,13 @@ package coffee.machine.model.entity;
 
 import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.model.entity.item.Drink;
+import coffee.machine.model.entity.item.Item;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * This class represents Order entity.
@@ -17,16 +20,75 @@ public class Order {
     private int userId;
     private Date date;
     private List<Drink> drinks;
-    private long amount;
+    private long totalCost;
 
     public Order() {
     }
 
-    public double getRealAmount() {
-        return CoffeeMachineConfig.DB_MONEY_COEFF * amount;
+    public double getRealTotalCost() {
+        return CoffeeMachineConfig.DB_MONEY_COEFF * totalCost;
     }
 
-    public void addDrink(Drink drink){
+    public void clearZeroItems() {
+        drinks = drinks.stream()
+                .filter(drink -> drink.getQuantity() != 0)
+                .collect(Collectors.toList());
+        drinks.forEach(drink -> drink.setAddons(drink.getAddons().stream()
+                .filter(addon -> addon.getQuantity() != 0)
+                .collect(Collectors.toList())))
+        ;
+    }
+
+    public boolean isEmpty() {
+        return (drinks == null) || (drinks.isEmpty());
+    }
+
+    public boolean hasNegativeQuantity() {
+        return drinks.stream()
+                .filter(drink ->
+                        (drink.getQuantity() < 0) ||
+                                (drink.getAddons().stream()
+                                        .filter(addon -> addon.getQuantity() < 0)
+                                        .findAny()
+                                        .isPresent()))
+                .findAny()
+                .isPresent();
+    }
+
+    public Order fillAbsentDrinkData(List<Drink> actualDrinks) {
+        drinks.forEach(
+                drink -> drink.fillAbsentItemData(
+                        actualDrinks.stream()
+                                .filter(d -> d.getId() == drink.getId())
+                                .findFirst()
+                                .orElseThrow(IllegalArgumentException::new)));
+        return this;
+    }
+
+    public Order fillAbsentAddonData(List<Item> actualAddons) {
+        drinks.stream()
+                .flatMap(drink -> drink.getAddons().stream())
+                .forEach(
+                        addon -> addon.fillAbsentItemData(
+                                actualAddons.stream()
+                                        .filter(a -> a.getId() == addon.getId())
+                                        .findFirst()
+                                        .orElseThrow(IllegalArgumentException::new)));
+        return this;
+    }
+
+    public Order setCurrentDate() {
+        date = new Date();
+        return this;
+    }
+
+    public Order calculateTotalPrice() {
+        totalCost = drinks.stream().mapToLong(drink -> drink.getQuantity() * drink.getTotalPrice()).sum();
+        return this;
+    }
+
+
+    public void addDrink(Drink drink) {
         drinks.add(drink);
     }
 
@@ -50,8 +112,8 @@ public class Order {
         return drinks;
     }
 
-    public long getAmount() {
-        return amount;
+    public long getTotalCost() {
+        return totalCost;
     }
 
     @Override
@@ -63,7 +125,7 @@ public class Order {
 
         if (id != that.id) return false;
         if (userId != that.userId) return false;
-        if (amount != that.amount) return false;
+        if (totalCost != that.totalCost) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
         return drinks != null ? drinks.equals(that.drinks) : that.drinks == null;
 
@@ -75,7 +137,7 @@ public class Order {
         result = 31 * result + userId;
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (drinks != null ? drinks.hashCode() : 0);
-        result = 31 * result + (int) (amount ^ (amount >>> 32));
+        result = 31 * result + (int) (totalCost ^ (totalCost >>> 32));
         return result;
     }
 
@@ -86,9 +148,24 @@ public class Order {
                 ", userId=" + userId +
                 ", date=" + date +
                 ", drinks='" + drinks + '\'' +
-                ", amount=" + getRealAmount() +
+                ", amount=" + getRealTotalCost() +
                 '}';
     }
+
+    public Set<Integer> getDrinkIds() {
+        return drinks.stream()
+                .map(Item::getId)
+                .collect(Collectors.toSet());
+    }
+
+    public Set<Integer> getAddonIds() {
+        return drinks.stream()
+                .flatMap(drink ->
+                        drink.getAddons().stream()
+                                .map(Item::getId))
+                .collect(Collectors.toSet());
+    }
+
 
     public static class Builder {
         private Order order = new Order();
@@ -113,8 +190,8 @@ public class Order {
             return this;
         }
 
-        public Builder setAmount(long amount) {
-            order.amount = amount;
+        public Builder setTotalCost(long totalCost) {
+            order.totalCost = totalCost;
             return this;
         }
 
@@ -124,7 +201,5 @@ public class Order {
             }
             return order;
         }
-
-
     }
 }

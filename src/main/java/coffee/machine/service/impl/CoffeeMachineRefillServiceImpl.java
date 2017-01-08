@@ -42,7 +42,6 @@ public class CoffeeMachineRefillServiceImpl implements CoffeeMachineRefillServic
     public void refill(ItemReceipt receipt) {
 
         checkReceipt(receipt);
-        receipt.clearZeroItems();
 
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
@@ -60,6 +59,7 @@ public class CoffeeMachineRefillServiceImpl implements CoffeeMachineRefillServic
 
     private void checkReceipt(ItemReceipt receipt) {
         Objects.requireNonNull(receipt);
+        receipt.clearZeroItems();
         if (receipt.isEmpty()) {
             logErrorAndThrowNewServiceException(logger, ADMIN_REFILL_NOTHING_TO_ADD);
         }

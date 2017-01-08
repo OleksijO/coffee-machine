@@ -34,7 +34,7 @@
             </tr>
             <tr>
                 <td><fmt:message key="user.purchase.details.amount"/> :</td>
-                <td>${order.realAmount} <fmt:message key="currency"/></td>
+                <td>${order.realTotalCost} <fmt:message key="currency"/></td>
             </tr>
         </table>
     </div>

@@ -36,13 +36,10 @@ public class Drink extends Item {
      * @return Total price of base drink and sum of prices of all addons in it
      */
     public long getTotalPrice() {
-        long totalPrice = price;
-        for (Item addon : addons) {
-            if (addon.getQuantity() > 0) {
-                totalPrice += addon.getPrice() * addon.getQuantity();
-            }
-        }
-        return totalPrice;
+        return price +
+                addons.stream()
+                        .mapToLong(addon -> addon.getPrice() * addon.getQuantity())
+                        .sum();
     }
 
     /**
@@ -63,6 +60,10 @@ public class Drink extends Item {
 
     public void addAddon(Item addon) {
         this.addons.add(addon);
+    }
+
+    public void setAddons(List<Item> addons) {
+        this.addons = addons;
     }
 
     @Override
