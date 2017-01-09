@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static coffee.machine.i18n.message.key.GeneralKey.TITLE_USER_ORDER_HISTORY;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.TITLE_USER_ORDER_HISTORY;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.USER_ORDER_HISTORY_PAGE;
 

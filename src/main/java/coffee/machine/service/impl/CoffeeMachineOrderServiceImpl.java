@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFF;
-import static coffee.machine.i18n.message.key.error.ServiceErrorKey.*;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.*;
 
 /**
  * This class is an implementation of CoffeeMachineOrderService

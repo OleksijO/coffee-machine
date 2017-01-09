@@ -14,8 +14,8 @@ import coffee.machine.service.exception.ServiceException;
 import java.util.List;
 import java.util.Objects;
 
-import static coffee.machine.i18n.message.key.error.ServiceErrorKey.ADMIN_REFILL_NOTHING_TO_ADD;
-import static coffee.machine.i18n.message.key.error.ServiceErrorKey.QUANTITY_SHOULD_BE_NON_NEGATIVE;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ADMIN_REFILL_NOTHING_TO_ADD;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.QUANTITY_SHOULD_BE_NON_NEGATIVE;
 
 /**
  * This class is an implementation of CoffeeMachineOrderService

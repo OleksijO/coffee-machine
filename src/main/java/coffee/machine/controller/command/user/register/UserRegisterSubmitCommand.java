@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static coffee.machine.i18n.message.key.GeneralKey.REGISTER_USER_FORM_TITLE;
-import static coffee.machine.i18n.message.key.GeneralKey.TITLE_USER_REGISTER;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.REGISTER_USER_FORM_TITLE;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.TITLE_USER_REGISTER;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.*;
 import static coffee.machine.view.Parameters.FULL_NAME_PARAM;

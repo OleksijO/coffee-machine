@@ -19,8 +19,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-import static coffee.machine.i18n.message.key.error.ServiceErrorKey.ERROR_REGISTER_FULL_NAME_DO_NOT_MATCH_PATTERN;
-import static coffee.machine.i18n.message.key.error.ServiceErrorKey.*;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_REGISTER_FULL_NAME_DO_NOT_MATCH_PATTERN;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.*;
 
 /**
  * This class is an implementation of UserService

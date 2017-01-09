@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-import static coffee.machine.i18n.message.key.CommandKey.ADD_CREDITS_YOU_ADDED_CREDITS_SUCCESSFULLY_ON_ACCOUNT_OF_USER;
-import static coffee.machine.i18n.message.key.GeneralKey.TITLE_ADMIN_ADD_CREDIT;
+import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.ADD_CREDITS_YOU_ADDED_CREDITS_SUCCESSFULLY_ON_ACCOUNT_OF_USER;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.TITLE_ADMIN_ADD_CREDIT;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.ADMIN_ADD_CREDITS_PAGE;
 import static coffee.machine.view.Parameters.CREDITS_TO_ADD;

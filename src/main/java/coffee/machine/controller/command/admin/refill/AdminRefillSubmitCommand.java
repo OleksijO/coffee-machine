@@ -27,8 +27,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static coffee.machine.i18n.message.key.CommandKey.ADMIN_REFILL_SUCCESSFUL;
-import static coffee.machine.i18n.message.key.GeneralKey.TITLE_ADMIN_REFILL;
+import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.ADMIN_REFILL_SUCCESSFUL;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.TITLE_ADMIN_REFILL;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.ADMIN_REFILL_PAGE;
 

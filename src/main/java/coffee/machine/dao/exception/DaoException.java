@@ -1,7 +1,7 @@
 package coffee.machine.dao.exception;
 
 import coffee.machine.exception.ApplicationException;
-import coffee.machine.i18n.message.key.error.DaoErrorKey;
+import coffee.machine.dao.i18n.message.key.error.DaoErrorMessageKey;
 
 /**
  * This class represents custom application exception for controller unit.
@@ -14,7 +14,7 @@ public class DaoException extends ApplicationException {
 	 * Creates instance with default message key for view
 	 */
 	public DaoException(){
-		super(DaoErrorKey.DAO_ERROR);
+		super(DaoErrorMessageKey.DAO_ERROR);
 	}
 
 	/**
@@ -23,7 +23,7 @@ public class DaoException extends ApplicationException {
 	 * @param cause throwable instance
 	 */
 	public DaoException(Throwable cause) {
-		super(DaoErrorKey.DAO_ERROR, cause);
+		super(DaoErrorMessageKey.DAO_ERROR, cause);
 	}
 
 	@Override

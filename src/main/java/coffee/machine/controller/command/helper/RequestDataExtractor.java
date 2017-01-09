@@ -12,8 +12,8 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static coffee.machine.i18n.message.key.GeneralKey.ERROR_UNKNOWN;
-import static coffee.machine.i18n.message.key.error.CommandErrorKey.QUANTITY_SHOULD_BE_INT;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_UNKNOWN;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.QUANTITY_SHOULD_BE_INT;
 
 /**
  * This class represents functionality for extract data from request

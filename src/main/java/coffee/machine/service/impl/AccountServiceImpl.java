@@ -11,7 +11,7 @@ import coffee.machine.service.exception.ServiceException;
 
 import java.util.Optional;
 
-import static coffee.machine.i18n.message.key.error.ServiceErrorKey.ERROR_ADD_CREDITS_AMOUNT_IS_NEGATIVE;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_ADD_CREDITS_AMOUNT_IS_NEGATIVE;
 
 /**
  * This class is an implementation of AccountService

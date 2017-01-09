@@ -25,8 +25,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static coffee.machine.i18n.message.key.CommandKey.PURCHASE_THANKS_MESSAGE;
-import static coffee.machine.i18n.message.key.GeneralKey.TITLE_USER_PURCHASE;
+import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.PURCHASE_THANKS_MESSAGE;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.TITLE_USER_PURCHASE;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.USER_PURCHASE_PAGE;
 

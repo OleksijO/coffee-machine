@@ -10,7 +10,7 @@ import coffee.machine.service.impl.UserServiceImpl;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static coffee.machine.i18n.message.key.GeneralKey.TITLE_ADMIN_ADD_CREDIT;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.TITLE_ADMIN_ADD_CREDIT;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.ADMIN_ADD_CREDITS_PAGE;
 

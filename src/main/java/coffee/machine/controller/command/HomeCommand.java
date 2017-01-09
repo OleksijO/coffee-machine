@@ -5,7 +5,7 @@ import coffee.machine.controller.Command;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static coffee.machine.i18n.message.key.GeneralKey.TITLE_HOME;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.TITLE_HOME;
 import static coffee.machine.view.Attributes.PAGE_TITLE;
 import static coffee.machine.view.PagesPaths.HOME_PAGE;
 
