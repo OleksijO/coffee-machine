@@ -17,21 +17,6 @@ public class Drink extends Item {
     public Drink() {
     }
 
-    private Drink(Drink drink) {
-        super(drink);
-        this.addAddons(drink.getAddonsCopy());
-    }
-
-    /**
-     * @return Base drink: with quantity = 0 and set of available addons also with zero quantity.
-     */
-    public Drink getBaseDrink() {
-        Drink baseDrink = new Drink(this);
-        baseDrink.getAddons().forEach(addon -> addon.setQuantity(0));
-        baseDrink.setQuantity(0);
-        return baseDrink;
-    }
-
     /**
      * @return Total price of base drink and sum of prices of all addons in it
      */
@@ -108,16 +93,6 @@ public class Drink extends Item {
         } else if (!addons.equals(other.addons))
             return false;
         return true;
-    }
-
-    private List<Item> getAddonsCopy() {
-        List<Item> baseAddons = new ArrayList<>(addons.size());
-        for (Item addon : addons) {
-            Item addonCopy = new Item(addon);
-
-            baseAddons.add(addonCopy);
-        }
-        return baseAddons;
     }
 
     public static class Builder {

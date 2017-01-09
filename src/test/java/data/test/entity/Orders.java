@@ -2,9 +2,12 @@ package data.test.entity;
 
 import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.item.Drink;
+import coffee.machine.model.entity.item.Item;
 
 import java.util.Date;
 
+import static data.test.entity.AddonsData.*;
+import static data.test.entity.DrinksData.*;
 import static data.test.entity.Orders.ConstHolder.*;
 
 /**
@@ -37,44 +40,39 @@ public enum Orders {
                 .build();
         switch (id) {
             case 1:
-                Drink drink = DrinksData.WATER.getCopy().getBaseDrink();
-                drink.setQuantity(1);
-                drink.setPrice(0);
-                order.addDrink(drink);
+                order.addDrink(getDrinkForOrderByDataAndQuantity(WATER, 1));
                 break;
             case 2:
-                Drink drink2 = DrinksData.WATER.getCopy().getBaseDrink();
-                drink2.setQuantity(2);
-                drink2.setPrice(0);
+                order.addDrink(getDrinkForOrderByDataAndQuantity(WATER, 2));
+                Item lemon = getAddonForOrderByDataAndQuantity(LEMON,1);
+                Drink drink2 = getDrinkForOrderByDataAndQuantity(TEA_WITH_SUGAR, 1);
+                drink2.getAddons().add(lemon);
                 order.addDrink(drink2);
-                drink2 = DrinksData.TEA_WITH_SUGAR.getCopy().getBaseDrink();
-                drink2.setQuantity(1);
-                drink2.setPrice(0);
-                drink2.getAddons().forEach(addon -> {
-                    if (addon.getId() == 5) {
-                        addon.setQuantity(1);
-                    }
-                    addon.setPrice(0);
-                });
-                order.addDrink(drink2);
-                drink2 = DrinksData.ESPRESSO.getCopy().getBaseDrink();
-                drink2.setQuantity(3);
-                drink2.setPrice(0);
-                drink2.getAddons().forEach(addon -> {
-                    if (addon.getId() == 7) {
-                        addon.setQuantity(2);
-                    }
-                    if (addon.getId() == 8) {
-                        addon.setQuantity(1);
-                    }
-                    addon.setPrice(0);
-                });
+                drink2 = getDrinkForOrderByDataAndQuantity(ESPRESSO, 3);
+                Item sugar = getAddonForOrderByDataAndQuantity(SUGAR,2);
+                Item milk = getAddonForOrderByDataAndQuantity(MILK, 1);
+                drink2.getAddons().add(sugar);
+                drink2.getAddons().add(milk);
                 order.addDrink(drink2);
                 break;
-
         }
 
 
+    }
+
+    private Item getAddonForOrderByDataAndQuantity(AddonsData addonData, int quantity) {
+        Item lemon = addonData.getCopy();
+        lemon.setQuantity(quantity);
+        lemon.setPrice(0);
+        return lemon;
+    }
+
+    private Drink getDrinkForOrderByDataAndQuantity(DrinksData drinkData, int quantity) {
+        Drink drink = drinkData.getCopy();
+        drink.getAddons().clear();
+        drink.setQuantity(quantity);
+        drink.setPrice(0);
+        return drink;
     }
 }
 

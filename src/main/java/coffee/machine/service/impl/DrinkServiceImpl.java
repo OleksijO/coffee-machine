@@ -8,8 +8,8 @@ import coffee.machine.model.entity.item.Drink;
 import coffee.machine.service.DrinkService;
 import org.apache.log4j.Logger;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is an implementation of DrinkService
@@ -43,23 +43,6 @@ public class DrinkServiceImpl implements DrinkService {
             List<Drink> drinks = drinkDao.getAll();
             return (drinks == null) ? new ArrayList<>() : drinks;
 
-        }
-    }
-
-    @Override
-    public List<Drink> getAllBaseByIdSet(Set<Integer> drinkIds) {
-        Objects.requireNonNull(drinkIds);
-        if (drinkIds.isEmpty()){
-            return Collections.emptyList();
-        }
-        try (AbstractConnection connection = daoFactory.getConnection()) {
-
-            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-
-            return drinkDao.getAllByIds(drinkIds)
-                .stream()
-                .map(Drink::getBaseDrink)
-                .collect(Collectors.toList());
         }
     }
 

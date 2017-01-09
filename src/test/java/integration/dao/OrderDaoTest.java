@@ -54,7 +54,7 @@ public class OrderDaoTest {
     public void testGetAll() {
 
         List<Order> orders = orderDao.getAll();
-        assertEquals(testOrders.toString(), orders.toString());
+        assertEquals(testOrders, orders);
 
     }
 
@@ -63,7 +63,7 @@ public class OrderDaoTest {
         Order testOrder = Orders.A2.order;
         Order order = orderDao.getById(testOrder.getId()).get();
         assertEquals("Order gotten by id should be identical to test one",
-                testOrder.toString(), order.toString());
+                testOrder, order);
         assertFalse(orderDao.getById(7).isPresent());
     }
 
@@ -98,7 +98,7 @@ public class OrderDaoTest {
         assertEquals("Total entity count should be the same to test one",
                 testOrders.size(), resultList.size());
         assertEquals("List of retrieved entities should be the same to test one ",
-                testOrders.toString(), resultList.toString());
+                testOrders, resultList);
     }
 
     @Test
