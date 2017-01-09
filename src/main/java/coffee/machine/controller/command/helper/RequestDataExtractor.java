@@ -2,7 +2,6 @@ package coffee.machine.controller.command.helper;
 
 import coffee.machine.controller.RegExp;
 import coffee.machine.controller.exception.ControllerException;
-import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
@@ -12,8 +11,8 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_UNKNOWN;
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.QUANTITY_SHOULD_BE_INT;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_UNKNOWN;
 
 /**
  * This class represents functionality for extract data from request
@@ -21,10 +20,10 @@ import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMe
  * @author oleksij.onysymchuk@gmail.com
  */
 public class RequestDataExtractor {
-    private final static Logger logger = Logger.getLogger(RequestDataExtractor.class);
-
-    private final static String PROBLEMS_WITH_PARSING_INT_FROM_PARAMETER_FORMAT =
+    private final static String LOG_MESSAGE_PROBLEMS_WITH_PARSING_INT_FROM_PARAMETER_FORMAT =
             "Problems with parsing INT from parameter '%s', its value ='%s'";
+    private static final String LOG_MESSAGE_CANNOT_FIND_FIRST_ID_IN_PARAM = "Cannot find first id in param ";
+    private static final String LOG_MESSAGE_CANNOT_FIND_SECOND_ID_IN_PARAM = "Cannot find second id in param ";
 
     private final Pattern patternNumber = Pattern.compile(RegExp.REGEXP_NUMBER);
 
@@ -49,7 +48,7 @@ public class RequestDataExtractor {
 
     /**
      * @param request Request instance
-     * @param param Request parameter name
+     * @param param   Request parameter name
      * @return Int value of specified parameter name
      */
     public int getIntFromRequestByParameter(HttpServletRequest request, String param) {
@@ -58,9 +57,10 @@ public class RequestDataExtractor {
             return Integer.parseInt(request.getParameter(param));
 
         } catch (Exception e) {
-            logger.error(String.format(PROBLEMS_WITH_PARSING_INT_FROM_PARAMETER_FORMAT,
-                    param, request.getParameter(param)));
-            throw new ControllerException(QUANTITY_SHOULD_BE_INT);
+            throw new ControllerException()
+                    .addMessageKey(QUANTITY_SHOULD_BE_INT)
+                    .addLogMessage(String.format(LOG_MESSAGE_PROBLEMS_WITH_PARSING_INT_FROM_PARAMETER_FORMAT,
+                            param, request.getParameter(param)));
         }
     }
 
@@ -75,7 +75,9 @@ public class RequestDataExtractor {
             return Integer.parseInt(param.substring(matcher.start(), matcher.end()));
 
         } else {
-            throw new ControllerException(ERROR_UNKNOWN); //this normally should not ever happen
+            throw new ControllerException()
+                    .addMessageKey(ERROR_UNKNOWN)
+                    .addLogMessage(LOG_MESSAGE_CANNOT_FIND_FIRST_ID_IN_PARAM + param);
         }
     }
 
@@ -90,7 +92,9 @@ public class RequestDataExtractor {
             return Integer.parseInt(param.substring(matcher.start(), matcher.end()));
 
         } else {
-            throw new ControllerException(ERROR_UNKNOWN); //this normally should not ever happen
+            throw new ControllerException()
+                    .addMessageKey(ERROR_UNKNOWN)
+                    .addLogMessage(LOG_MESSAGE_CANNOT_FIND_SECOND_ID_IN_PARAM + param);
         }
     }
 

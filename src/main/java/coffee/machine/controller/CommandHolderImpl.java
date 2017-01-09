@@ -1,18 +1,20 @@
 package coffee.machine.controller;
 
 import coffee.machine.controller.command.HomeCommand;
+import coffee.machine.controller.command.LogoutCommand;
+import coffee.machine.controller.command.UnsupportedPathCommand;
 import coffee.machine.controller.command.admin.add.credit.AdminAddCreditCommand;
 import coffee.machine.controller.command.admin.add.credit.AdminAddCreditSubmitCommand;
 import coffee.machine.controller.command.admin.refill.AdminRefillCommand;
 import coffee.machine.controller.command.admin.refill.AdminRefillSubmitCommand;
 import coffee.machine.controller.command.login.LoginCommand;
 import coffee.machine.controller.command.login.LoginSubmitCommand;
-import coffee.machine.controller.command.LogoutCommand;
 import coffee.machine.controller.command.user.UserOrderHistoryCommand;
 import coffee.machine.controller.command.user.purchase.UserPurchaseCommand;
 import coffee.machine.controller.command.user.purchase.UserPurchaseSubmitCommand;
 import coffee.machine.controller.command.user.register.UserRegisterCommand;
 import coffee.machine.controller.command.user.register.UserRegisterSubmitCommand;
+import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +27,10 @@ import static coffee.machine.view.PagesPaths.*;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class CommandHolderImpl implements CommandHolder {
+    public static final Logger logger = Logger.getLogger(CommandHolderImpl.class);
+
+    private final Command unsupportedPathCommand = new UnsupportedPathCommand();
+
     /**
      * Holder for GET commands
      */
@@ -59,12 +65,25 @@ public class CommandHolderImpl implements CommandHolder {
 
     @Override
     public Command get(String path) {
-        return getCommands.get(path);
+        Command command = getCommands.get(path);
+        command = changeForUnsupportedCommandIfNull(command, path);
+        return command;
+    }
+
+    private Command changeForUnsupportedCommandIfNull(Command command, String path) {
+        if (command==null){
+            command = unsupportedPathCommand;
+        }
+        return command;
     }
 
     @Override
     public Command post(String path) {
-        return postCommands.get(path);
+        Command command = postCommands.get(path);
+        command = changeForUnsupportedCommandIfNull(command, path);
+        return command;
     }
+
+
 
 }

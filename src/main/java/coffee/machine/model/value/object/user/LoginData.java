@@ -16,7 +16,7 @@ public class LoginData {
         this.password = password;
     }
 
-    public void encryptPassword(){
+    public void encryptPassword() {
         password = PasswordEncryptor.encryptPassword(password);
     }
 
@@ -36,4 +36,11 @@ public class LoginData {
         this.password = password;
     }
 
- }
+    @Override
+    public String toString() {
+        return "LoginData{" +
+                "email='" + email + '\'' +
+                ", password " + ((password != null) ? "is entered" : "is null") +
+                '}';
+    }
+}

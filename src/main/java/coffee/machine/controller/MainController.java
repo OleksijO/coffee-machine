@@ -1,6 +1,5 @@
 package coffee.machine.controller;
 
-import coffee.machine.controller.logging.ControllerErrorLogging;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -18,11 +17,10 @@ import static coffee.machine.view.PagesPaths.REDIRECTED;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class MainController extends HttpServlet implements ControllerErrorLogging {
+public class MainController extends HttpServlet {
     private static final Logger logger = Logger.getLogger(MainController.class);
     private static final String URI_IS = " : uri = ";
-    private static final String REQUESTED_PATH_IS_NOT_SUPPORTED_REDIRECTING_TO_HOME_PAGE_FORMAT =
-            "Requested path '%s' is not supported. Redirecting to home page.";
+
 
     /**
      * Command holder instance
@@ -48,12 +46,6 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
     void processRequest(Command command, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
-        if (command == null) {
-            logUnsupportedUri(request.getRequestURI());
-            response.sendRedirect(HOME_PATH);
-            return;
-        }
-
         String view = command.execute(request, response);
 
         if (!isRedirected(view)) {
@@ -61,10 +53,7 @@ public class MainController extends HttpServlet implements ControllerErrorLoggin
         }
     }
 
-    private void logUnsupportedUri(String uri) {
-        logger.info(String.format(
-                REQUESTED_PATH_IS_NOT_SUPPORTED_REDIRECTING_TO_HOME_PAGE_FORMAT, uri));
-    }
+
 
     private boolean isRedirected(String view) {
         return REDIRECTED.equals(view);

@@ -22,7 +22,7 @@ public class DaoException extends ApplicationException {
 	 *
 	 * @param cause throwable instance
 	 */
-	public DaoException(Throwable cause) {
+	public DaoException(Exception cause) {
 		super(DaoErrorMessageKey.DAO_ERROR, cause);
 	}
 

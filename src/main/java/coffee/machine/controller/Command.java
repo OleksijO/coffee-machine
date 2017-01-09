@@ -9,6 +9,7 @@ import java.io.IOException;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
+@FunctionalInterface
 public interface Command {
 
 	/**

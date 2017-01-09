@@ -3,7 +3,6 @@ package coffee.machine.controller.i18n;
 import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.i18n.SupportedLocale;
 import coffee.machine.view.Parameters;
-import org.apache.log4j.Logger;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -24,8 +23,6 @@ import static coffee.machine.view.Attributes.USER_LOCALE;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class LocaleFilter implements Filter {
-    private static final Logger logger = Logger.getLogger(LocaleFilter.class);
-
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -51,18 +48,9 @@ public class LocaleFilter implements Filter {
         HttpSession session = request.getSession();
         String localeParameter = request.getParameter(Parameters.USER_LOCALE);
         if (localeParameter != null) {
-            Locale locale = findSupportedLocaleByParameter(localeParameter);
+            Locale locale = SupportedLocale.getSupportedOrDefault(localeParameter);
             session.setAttribute(USER_LOCALE, locale);
         }
-    }
-
-    private Locale findSupportedLocaleByParameter(String localeParameter) {
-        for (SupportedLocale loc : SupportedLocale.values()) {
-            if (loc.getParam().equals(localeParameter)) {
-                return loc.getLocale();
-            }
-        }
-        return SupportedLocale.getDefault();
     }
 
     private void setUpUserLocaleIfAbsent(HttpServletRequest request) {
@@ -71,20 +59,8 @@ public class LocaleFilter implements Filter {
             return;
         }
         Locale requestLocale = request.getLocale();
-        Locale locale = findSupportedLocale(requestLocale);
+        Locale locale = SupportedLocale.getSupportedOrDefault(requestLocale);
         session.setAttribute(USER_LOCALE, locale);
-    }
-
-    private Locale findSupportedLocale(Locale requestLocale) {
-        if (requestLocale == null) {
-            return SupportedLocale.getDefault();
-        }
-        for (SupportedLocale loc : SupportedLocale.values()) {
-            if (loc.getLocale().equals(requestLocale)) {
-                return loc.getLocale();
-            }
-        }
-        return SupportedLocale.getDefault();
     }
 
     @Override

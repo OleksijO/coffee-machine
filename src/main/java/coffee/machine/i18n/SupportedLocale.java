@@ -1,5 +1,6 @@
 package coffee.machine.i18n;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 /**
@@ -35,5 +36,21 @@ public enum SupportedLocale {
 
     public static SupportedLocale[] getLocales() {
         return values();
+    }
+
+    public static Locale getSupportedOrDefault(Locale locale) {
+        return Arrays.stream(values())
+                .map(SupportedLocale::getLocale)
+                .filter(loc->loc.equals(locale))
+                .findAny()
+                .orElse(getDefault());
+    }
+
+    public static Locale getSupportedOrDefault(String param){
+        return Arrays.stream(values())
+                .filter(holder->holder.param.equals(param))
+                .map(SupportedLocale::getLocale)
+                .findAny()
+                .orElse(getDefault());
     }
 }

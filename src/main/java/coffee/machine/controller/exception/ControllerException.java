@@ -9,11 +9,22 @@ import coffee.machine.exception.ApplicationException;
  */
 public class ControllerException extends ApplicationException {
 
-    /**
-     * @param messageKey message key from resource bundle, which corresponds needed message
-     */
-    public ControllerException(String messageKey) {
-        super(messageKey);
+    @Override
+    public ControllerException addLogMessage(String logMessage) {
+        super.addLogMessage(logMessage);
+        return this;
+    }
+
+    @Override
+    public ControllerException addMessageKey(String messageKey) {
+        super.addMessageKey(messageKey);
+        return this;
+    }
+
+    @Override
+    public ControllerException addAdditionalMessage(String additionalMessage) {
+        super.addAdditionalMessage(additionalMessage);
+        return this;
     }
 
 }
