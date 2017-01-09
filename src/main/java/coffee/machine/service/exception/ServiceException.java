@@ -9,12 +9,25 @@ import coffee.machine.exception.ApplicationException;
  */
 public class ServiceException extends ApplicationException {
 
-	public ServiceException(String messageKey) {
-		super(messageKey);
+	public ServiceException() {
 	}
 
-	public ServiceException(String messageKey, String additionalMessage) {
-		super(messageKey, additionalMessage);
+	@Override
+	public ServiceException addLogMessage(String logMessage) {
+		super.addLogMessage(logMessage);
+		return this;
+	}
+
+	@Override
+	public ServiceException addMessageKey(String messageKey) {
+		super.addMessageKey(messageKey);
+		return this;
+	}
+
+	@Override
+	public ServiceException addAdditionalMessage(String additionalMessage) {
+		super.addAdditionalMessage(additionalMessage);
+		return this;
 	}
 
 }

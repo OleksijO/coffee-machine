@@ -8,12 +8,12 @@ import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
 import coffee.machine.service.CoffeeMachineOrderService;
-import coffee.machine.service.logging.ServiceErrorProcessing;
-import org.apache.log4j.Logger;
+import coffee.machine.service.exception.ServiceException;
 
 import java.util.List;
 import java.util.Objects;
 
+import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFF;
 import static coffee.machine.i18n.message.key.error.ServiceErrorKey.*;
 
 /**
@@ -21,10 +21,13 @@ import static coffee.machine.i18n.message.key.error.ServiceErrorKey.*;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class CoffeeMachineOrderServiceImpl implements CoffeeMachineOrderService, ServiceErrorProcessing {
-    private static final Logger logger = Logger.getLogger(CoffeeMachineOrderServiceImpl.class);
+public class CoffeeMachineOrderServiceImpl implements CoffeeMachineOrderService {
+    private static final String LOG_MESSAGE_NOT_ENOUGH_FORMAT = "There is not enough item id=%d (%s). Ordered = %d, available = %d";
+    private static final String LOG_MESSAGE_NOT_ENOUGH_MONEY_FORMAT = "User has insufficient funds. Available amount = %.2f, order cost = %s";
+    private static final String LOG_MESSAGE_QUANTITY_SHOULD_BE_NON_NEGATIVE = "Item quantity is negative. Order details: ";
+    private static final String LOG_MESSAGE_YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY = "Order is empty. Order details: ";
 
-    DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+    private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private final int COFFEE_MACHINE_ACCOUNT_ID = CoffeeMachineConfig.ACCOUNT_ID;
 
     private CoffeeMachineOrderServiceImpl() {
@@ -75,13 +78,16 @@ public class CoffeeMachineOrderServiceImpl implements CoffeeMachineOrderService,
         Objects.requireNonNull(order);
         order.clearZeroItems();
         if (order.isEmpty()) {
-            logErrorAndThrowNewServiceException(logger, YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY);
+            throw new ServiceException()
+                    .addMessageKey(YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY)
+                    .addLogMessage(LOG_MESSAGE_YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY +order);
         }
         if (order.hasNegativeQuantity()) {
-            logErrorAndThrowNewServiceException(logger, QUANTITY_SHOULD_BE_NON_NEGATIVE);
+            throw new ServiceException()
+                    .addMessageKey(QUANTITY_SHOULD_BE_NON_NEGATIVE)
+                    .addLogMessage(LOG_MESSAGE_QUANTITY_SHOULD_BE_NON_NEGATIVE + order);
         }
     }
-
 
 
     private Order fillOrderWithAbsentData(Order preOrder, List<Drink> actualDrinks, List<Item> actualAddons) {
@@ -93,11 +99,16 @@ public class CoffeeMachineOrderServiceImpl implements CoffeeMachineOrderService,
     }
 
 
-    private void checkUserHaveEnoughMoney(long drinksPrice, long userAccountAmount) {
-        if (userAccountAmount < drinksPrice) {
-            logErrorAndThrowNewServiceException(
-                    logger, NOT_ENOUGH_MONEY,
-                    String.format("%.2f", drinksPrice * CoffeeMachineConfig.DB_MONEY_COEFF));
+    private void checkUserHaveEnoughMoney(long orderCost, long userAccountAmount) {
+        if (userAccountAmount < orderCost) {
+            String realOrderCost = String.format("%.2f", orderCost * DB_MONEY_COEFF);
+            throw new ServiceException()
+                    .addMessageKey(NOT_ENOUGH_MONEY)
+                    .addAdditionalMessage(realOrderCost)
+                    .addLogMessage(
+                            String.format(LOG_MESSAGE_NOT_ENOUGH_MONEY_FORMAT,
+                                    userAccountAmount*DB_MONEY_COEFF,
+                                    realOrderCost));
         }
     }
 
@@ -131,7 +142,15 @@ public class CoffeeMachineOrderServiceImpl implements CoffeeMachineOrderService,
         if (actualQuantity >= quantityToBuy) {
             actualDrink.setQuantity(actualQuantity - quantityToBuy);
         } else {
-            logErrorAndThrowNewServiceException(logger, ITEM_NO_LONGER_AVAILABLE, orderedItem.getName());
+            throw new ServiceException()
+                    .addMessageKey(ITEM_NO_LONGER_AVAILABLE)
+                    .addAdditionalMessage(orderedItem.getName())
+                    .addLogMessage(
+                            String.format(LOG_MESSAGE_NOT_ENOUGH_FORMAT,
+                                    orderedItem.getId(),
+                                    orderedItem.getName(),
+                                    quantityToBuy,
+                                    actualQuantity));
         }
     }
 
@@ -156,5 +175,7 @@ public class CoffeeMachineOrderServiceImpl implements CoffeeMachineOrderService,
         orderDao.insert(order);
     }
 
-
+    public void setDaoFactory(DaoFactory daoFactory) {
+        this.daoFactory = daoFactory;
+    }
 }

@@ -19,4 +19,7 @@ public interface ServiceErrorKey {
 	String ERROR_LOGIN_EMAIL_DO_NOT_MATCH_PATTERN = "error.login.email.do.not.match.pattern";
 	String ERROR_LOGIN_PASSWORD_DO_NOT_MATCH_PATTERN = "error.login.password.do.not.match.pattern";
 	String ERROR_LOGIN_NO_SUCH_COMBINATION = "error.login.not.such.combination";
+
+	String ERROR_ADD_CREDITS_AMOUNT_IS_NEGATIVE = "error.add.credits.amount.is.negative";
+    String ERROR_REGISTER_FULL_NAME_DO_NOT_MATCH_PATTERN = "error.register.full.name.do.not.match.pattern" ;
 }

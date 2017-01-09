@@ -11,6 +11,8 @@ import coffee.machine.service.exception.ServiceException;
 
 import java.util.Optional;
 
+import static coffee.machine.i18n.message.key.error.ServiceErrorKey.ERROR_ADD_CREDITS_AMOUNT_IS_NEGATIVE;
+
 /**
  * This class is an implementation of AccountService
  *
@@ -19,7 +21,7 @@ import java.util.Optional;
 public class AccountServiceImpl implements AccountService {
     private static final String AMOUNT_FOR_ADD_SHOULD_BE_GREATER_THAN_ZERO_FORMAT =
             "Amount to add should be greater than zero. UserId=%d, amount=%d.";
-    private static final String CANT_FIND_ACCOUNT_WITH_ID = "Can't find account with id = ";
+    private static final String CANT_FIND_ACCOUNT_OF_USER_WITH_ID = "Can't find account of user with id = ";
     private static final String USER_ID_SHOULD_BE_GREATER_ZERO = "User's id=%d and should be greater zero";
 
     DaoFactory daoFactory = DaoFactoryImpl.getInstance();
@@ -65,7 +67,7 @@ public class AccountServiceImpl implements AccountService {
             connection.beginSerializableTransaction();
 
             accountDao.update(accountDao.getByUserId(userId)
-                    .orElseThrow(() -> new IllegalArgumentException(CANT_FIND_ACCOUNT_WITH_ID + userId))
+                    .orElseThrow(() -> new IllegalArgumentException(CANT_FIND_ACCOUNT_OF_USER_WITH_ID + userId))
                     .add(amountToAdd));
 
             connection.commitTransaction();
@@ -78,13 +80,14 @@ public class AccountServiceImpl implements AccountService {
         int userId = receipt.getUserId();
 
         if (amountToAdd <= 0) {
-            throw new ServiceException(
-                    String.format(AMOUNT_FOR_ADD_SHOULD_BE_GREATER_THAN_ZERO_FORMAT, userId, amountToAdd));
+            throw new ServiceException()
+                    .addMessageKey(ERROR_ADD_CREDITS_AMOUNT_IS_NEGATIVE)
+                    .addLogMessage(
+                            String.format(AMOUNT_FOR_ADD_SHOULD_BE_GREATER_THAN_ZERO_FORMAT, userId, amountToAdd));
         }
 
         if (userId <= 0) {
-            throw new ServiceException(
-                    String.format(USER_ID_SHOULD_BE_GREATER_ZERO, userId));
+            throw new IllegalStateException(String.format(USER_ID_SHOULD_BE_GREATER_ZERO, userId));
         }
     }
 }

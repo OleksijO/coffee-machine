@@ -24,6 +24,9 @@ public class ApplicationException extends RuntimeException {
      */
     private String logMessage;
 
+    public ApplicationException() {
+    }
+
     /**
      * @param messageKey resource bundle message key
      * @param cause   cause exception instance

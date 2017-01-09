@@ -63,4 +63,12 @@ public class ItemReceipt {
     public List<Drink> getDrinks() {
         return drinks;
     }
+
+    @Override
+    public String toString() {
+        return "ItemReceipt{" +
+                "addons=" + addons +
+                ", drinks=" + drinks +
+                '}';
+    }
 }

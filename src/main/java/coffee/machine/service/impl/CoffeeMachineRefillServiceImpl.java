@@ -9,8 +9,7 @@ import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
 import coffee.machine.model.entity.item.ItemReceipt;
 import coffee.machine.service.CoffeeMachineRefillService;
-import coffee.machine.service.logging.ServiceErrorProcessing;
-import org.apache.log4j.Logger;
+import coffee.machine.service.exception.ServiceException;
 
 import java.util.List;
 import java.util.Objects;
@@ -23,8 +22,9 @@ import static coffee.machine.i18n.message.key.error.ServiceErrorKey.QUANTITY_SHO
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class CoffeeMachineRefillServiceImpl implements CoffeeMachineRefillService, ServiceErrorProcessing {
-    private static final Logger logger = Logger.getLogger(CoffeeMachineRefillServiceImpl.class);
+public class CoffeeMachineRefillServiceImpl implements CoffeeMachineRefillService {
+    private static final String LOG_MESSAGE_ADMIN_REFILL_NOTHING_TO_ADD = "Nothing to add. Details: ";
+    private static final String LOG_MESSAGE_QUANTITY_SHOULD_BE_NON_NEGATIVE = "Item quantity is negative. Details: ";
 
     private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
@@ -62,10 +62,16 @@ public class CoffeeMachineRefillServiceImpl implements CoffeeMachineRefillServic
         Objects.requireNonNull(receipt);
         receipt.clearZeroItems();
         if (receipt.isEmpty()) {
-            logErrorAndThrowNewServiceException(logger, ADMIN_REFILL_NOTHING_TO_ADD);
+
+            throw new ServiceException()
+                    .addMessageKey(ADMIN_REFILL_NOTHING_TO_ADD)
+                    .addLogMessage(LOG_MESSAGE_ADMIN_REFILL_NOTHING_TO_ADD + receipt);
+
         }
         if (receipt.hasNegativeQuantity()) {
-            logErrorAndThrowNewServiceException(logger, QUANTITY_SHOULD_BE_NON_NEGATIVE);
+            throw new ServiceException()
+                    .addMessageKey(QUANTITY_SHOULD_BE_NON_NEGATIVE)
+                    .addLogMessage(LOG_MESSAGE_QUANTITY_SHOULD_BE_NON_NEGATIVE + receipt);
         }
     }
 

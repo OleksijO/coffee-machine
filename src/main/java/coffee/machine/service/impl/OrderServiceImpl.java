@@ -15,7 +15,7 @@ import java.util.List;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class OrderServiceImpl implements OrderService {
-    DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+    private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
     private OrderServiceImpl() {
     }
@@ -38,4 +38,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    public void setDaoFactory(DaoFactory daoFactory) {
+        this.daoFactory = daoFactory;
+    }
 }

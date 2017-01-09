@@ -4,7 +4,6 @@ package coffee.machine.service;
 import coffee.machine.model.entity.item.Item;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * This class represents addon service
@@ -17,12 +16,5 @@ public interface AddonService {
      * @return list of all addons with specified available quantity.
      */
     List<Item> getAll();
-
-    /**
-     * Adds specified quantity for every addon with specified id
-     *
-     * @param quantitiesById Map of pairs (addonId, quantityToAdd)
-     */
-    void refill(Map<Integer, Integer> quantitiesById);
 
 }
