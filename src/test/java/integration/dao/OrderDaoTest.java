@@ -60,37 +60,51 @@ public class OrderDaoTest {
 
     @Test
     public void testGetById() {
-
-        Order order = orderDao.getById(2);
-        assertEquals("Must be identical", testOrders.get(0).toString(), order.toString());
-        order = orderDao.getById(7);
-        assertNull("Must be null", order);
+        Order testOrder = Orders.A2.order;
+        Order order = orderDao.getById(testOrder.getId()).get();
+        assertEquals("Order gotten by id should be identical to test one",
+                testOrder.toString(), order.toString());
+        assertFalse(orderDao.getById(7).isPresent());
     }
 
     @Test
+    public void testGetByIdIsNotPresent() {
+        assertFalse(orderDao.getById(100500).isPresent());
+    }
+
+
+
+    @Test
     public void testInsertDelete() {
-        Order order = testOrders.get(1);
+        Order order = Orders.A1.order;
+        int savedId = order.getId();
         order.setId(0);
         int newOrderId = orderDao.insert(order).getId();
-        assertTrue("new Id must be greater of total number of present records", newOrderId > 2);
-        order.setId(newOrderId);
 
-        assertEquals("1", order.toString(), orderDao.getById(newOrderId).toString());
-        order.setId(1);
-        assertEquals("2", testOrders.size() + 1, orderDao.getAll().size());
+        assertEquals("New entity should be placed to DB and be the same to test one",
+                order, orderDao.getById(newOrderId).get());
+        order.setId(savedId);
+        assertEquals("Total count of entities should increase by 1", testOrders.size() + 1, orderDao.getAll().size());
         orderDao.deleteById(newOrderId);
-        assertNull("3", orderDao.getById(newOrderId));
-        assertEquals("4", testOrders.size(), orderDao.getAll().size());
+        assertFalse("Inserted entity should be deleted", orderDao.getById(newOrderId).isPresent());
+        assertEquals("Total count of entities should decrease by 1", testOrders.size(), orderDao.getAll().size());
 
     }
 
     @Test
     public void testGetAllByUserId() {
         List<Order> resultList = new ArrayList<>();
-        resultList.addAll(orderDao.getAllByUserId(1));
-        assertEquals("1.", 0, resultList.size());
         resultList.addAll(orderDao.getAllByUserId(2));
-        assertEquals("2.", 2, resultList.size());
-        assertEquals("3", testOrders.toString(), resultList.toString());
+        assertEquals("Total entity count should be the same to test one",
+                testOrders.size(), resultList.size());
+        assertEquals("List of retrieved entities should be the same to test one ",
+                testOrders.toString(), resultList.toString());
+    }
+
+    @Test
+    public void testGetAllByUserIdEmptyList() {
+        List<Order> resultList = new ArrayList<>();
+        resultList.addAll(orderDao.getAllByUserId(1));
+        assertTrue(resultList.isEmpty());
     }
 }

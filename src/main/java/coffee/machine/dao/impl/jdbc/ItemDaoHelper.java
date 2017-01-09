@@ -5,10 +5,7 @@ import coffee.machine.model.entity.item.Item;
 import coffee.machine.model.entity.item.ItemType;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -131,7 +128,7 @@ class ItemDaoHelper extends AbstractDao<Item> {
     }
 
     @Override
-    public Item getById(int id) {
+    public Optional<Item> getById(int id) {
         try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_ITEM_ID)) {
 
             statement.setInt(1, id);
@@ -139,7 +136,7 @@ class ItemDaoHelper extends AbstractDao<Item> {
             try (ResultSet resultSet = statement.executeQuery()) {
                 List<Item> itemList = parseResultSet(resultSet);
                 checkSingleResult(itemList);
-                return itemList == null || itemList.isEmpty() ? null : itemList.get(0);
+                return Optional.ofNullable(itemList.isEmpty() ? null : itemList.get(0));
             }
         } catch (SQLException e) {
             throw new DaoException(e)

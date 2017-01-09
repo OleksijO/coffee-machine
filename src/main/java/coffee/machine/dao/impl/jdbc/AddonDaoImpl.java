@@ -6,6 +6,7 @@ import coffee.machine.model.entity.item.ItemType;
 
 import java.sql.Connection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -58,7 +59,7 @@ class AddonDaoImpl extends AbstractDao<Item> implements AddonDao {
     }
 
     @Override
-    public Item getById(int id) {
+    public Optional<Item> getById(int id) {
         return itemDaoHelper.getById(id);
     }
 

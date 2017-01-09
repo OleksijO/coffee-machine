@@ -79,7 +79,9 @@ public class AdminAddCreditSubmitCommand extends CommandWrapperTemplate {
         request.setAttribute(USUAL_ADDITIONAL_MESSAGE,
                 getUserFullName(receipt.getUserId(), users) + USER_AMOUNT_SEPARATOR + receipt.getRealAmount());
         request.setAttribute(COFFEE_MACHINE_BALANCE,
-                accountService.getById(COFFEE_MACHINE_ACCOUNT_ID).getRealAmount());
+                accountService.getById(COFFEE_MACHINE_ACCOUNT_ID)
+                        .orElseThrow(IllegalStateException::new)
+                        .getRealAmount());
     }
 
     private String getUserFullName(int userId, List<User> users) {

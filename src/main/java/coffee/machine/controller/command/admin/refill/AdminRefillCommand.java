@@ -41,7 +41,9 @@ public class AdminRefillCommand extends CommandWrapperTemplate {
     protected void placeNecessaryDataToRequest(HttpServletRequest request) {
         request.setAttribute(PAGE_TITLE, TITLE_ADMIN_REFILL);
         request.setAttribute(COFFEE_MACHINE_BALANCE,
-                accountService.getById(CoffeeMachineConfig.ACCOUNT_ID).getRealAmount());
+                accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)
+                        .orElseThrow(IllegalStateException::new)
+                        .getRealAmount());
         request.setAttribute(DRINKS, drinkService.getAll());
         request.setAttribute(ADDONS, addonService.getAll());
 

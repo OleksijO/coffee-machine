@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Performs tests of corresponding DAO on real test database (it should be already created)
@@ -84,57 +83,55 @@ public class AddonDaoTest {
 
     @Test
     public void testGetById() {
-        int addonId = 7;
-        int addonTestListId = 1;
-        Item addon = addonDao.getById(addonId);
-        System.out.println(testAddons.get(addonTestListId));
-        System.out.println(addon);
-        assertEquals("Not null", testAddons.get(addonTestListId), addon);
-        addon = addonDao.getById(456);
-        assertNull("Null", addon);
+        Item testAddon = AddonsData.SUGAR.getCopy();
+        Item addon = addonDao.getById(testAddon.getId()).get();
+        assertEquals(testAddon, addon);
+
+    }
+
+    @Test
+    public void testGetByIdIsNotPresent() {
+        assertFalse(addonDao.getById(456).isPresent());
     }
 
     @Test
     public void testUpdate() {
-        int addonTestListId = 1;
-        Item addon = testAddons.get(addonTestListId);
-        int addonId = 7;
-        long amount = addon.getPrice();
-        addon.setPrice(0);
+        Item testAddon = AddonsData.SUGAR.getCopy();
+        long amount = testAddon.getPrice();
+        testAddon.setPrice(0);
 
-        addonDao.update(addon);
+        addonDao.update(testAddon);
 
-        assertEquals("1", 0, addonDao.getById(addonId).getPrice());
-        addon.setPrice(amount);
-        addonDao.update(addon);
-        assertEquals("2", testAddons.get(addonTestListId).getPrice(), addonDao.getById(addonId).getPrice());
+        assertEquals("Addon price should be updated", 0, addonDao.getById(testAddon.getId()).get().getPrice());
+
+        testAddon.setPrice(amount);
+        addonDao.update(testAddon);
+        assertEquals("State after test should be as before test",
+                testAddon.getPrice(), addonDao.getById(testAddon.getId()).get().getPrice());
 
     }
 
     @Test
     public void testInsertDelete() {
-        int addonTestListId = 1;
-        Item addon = testAddons.get(addonTestListId);
+        Item testAddon = AddonsData.SUGAR.getCopy();
         int size = testAddons.size();
-        int addonId = 7;
-        addon.setId(0);
-        int newAddonId = addonDao.insert(addon).getId();
+        int addonId = testAddon.getId();
+        testAddon.setId(0);
+        int newAddonId = addonDao.insert(testAddon).getId();
 
-        addon.setId(newAddonId);
-
-        assertEquals("1", addon, addonDao.getById(newAddonId));
-        addon.setId(addonId);
-        assertEquals("2", size + 1, addonDao.getAll().size());
+        assertEquals("New addon should be placed to DB and be the same", testAddon, addonDao.getById(newAddonId).get());
+        testAddon.setId(addonId);
+        assertEquals("Total size of addons should increase by 1", size + 1, addonDao.getAll().size());
         addonDao.deleteById(newAddonId);
-        assertNull("3", addonDao.getById(newAddonId));
-        assertEquals("4", size, addonDao.getAll().size());
+        assertFalse("Inserted addon should be deleted", addonDao.getById(newAddonId).isPresent());
+        assertEquals("Total size of addons should decrease by 1", size, addonDao.getAll().size());
 
     }
 
     @Test
     public void testUpdateQuantity() {
-        int addonTestListId = 1;
-        Item testAddon = testAddons.get(addonTestListId);
+
+        Item testAddon = AddonsData.SUGAR.getCopy();
         Item addon = new Item();
         int newQuantity = testAddon.getQuantity() + 1;
         addon.setId(testAddon.getId());
@@ -144,13 +141,11 @@ public class AddonDaoTest {
 
         addonDao.updateQuantity(addon);
 
-        assertEquals("1", newQuantity, addonDao.getById(testAddon.getId()).getQuantity());
+        assertEquals("Quantity of addon should be updated", newQuantity, addonDao.getById(testAddon.getId()).get().getQuantity());
         addon.setQuantity(testAddon.getQuantity());
         addonDao.updateQuantity(addon);
-        addon = addonDao.getById(testAddon.getId());
-        assertEquals("2", testAddon, addon);
-
-
+        addon = addonDao.getById(testAddon.getId()).get();
+        assertEquals("check state after test", testAddon, addon);
     }
 
     @Test

@@ -36,7 +36,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account getById(int id) {
+    public Optional<Account> getById(int id) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             AccountDao accountDao = daoFactory.getAccountDao(connection);

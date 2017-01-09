@@ -144,7 +144,8 @@ public class CoffeeMachineOrderServiceImpl implements CoffeeMachineOrderService,
     }
 
     private void performMoneyExchange(AccountDao accountDao, Account userAccount, long drinksPrice) {
-        Account coffeeMachineAccount = accountDao.getById(COFFEE_MACHINE_ACCOUNT_ID);
+        Account coffeeMachineAccount = accountDao.getById(COFFEE_MACHINE_ACCOUNT_ID)
+                .orElseThrow(IllegalStateException::new);
         userAccount.withdraw(drinksPrice);
         coffeeMachineAccount.add(drinksPrice);
         accountDao.update(coffeeMachineAccount);

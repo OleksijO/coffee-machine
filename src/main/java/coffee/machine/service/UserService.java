@@ -5,6 +5,7 @@ import coffee.machine.model.value.object.user.RegisterData;
 import coffee.machine.model.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This class represents user service
@@ -17,7 +18,7 @@ public interface UserService {
      * @param id user's id, whose entity will be returned
      * @return user entity with specified id
      */
-    User getById(int id);
+    Optional<User> getById(int id);
 
     /**
      * @param loginData user's email (login), whose entity will be returned

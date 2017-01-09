@@ -16,7 +16,7 @@ public interface AccountService {
      * @param id id of the account
      * @return account or null if there is no account with specified id
      */
-    Account getById(int id);
+    Optional<Account> getById(int id);
 
     /**
      * @param userId  user's id whom account is to be found

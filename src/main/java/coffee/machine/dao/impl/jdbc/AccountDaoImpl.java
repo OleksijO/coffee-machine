@@ -95,9 +95,8 @@ class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
     }
 
     @Override
-    public Account getById(int id) {
-        return getAccountByQueryAndIntParameter(SELECT_ALL_SQL + WHERE_ID, id);
-
+    public Optional<Account> getById(int id) {
+        return Optional.ofNullable(getAccountByQueryAndIntParameter(SELECT_ALL_SQL + WHERE_ID, id));
     }
 
     private Account getAccountByQueryAndIntParameter(String sql, int id) {

@@ -10,10 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static coffee.machine.dao.impl.jdbc.ItemDaoHelper.*;
@@ -151,7 +148,7 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
     }
 
     @Override
-    public Drink getById(int id) {
+    public Optional<Drink> getById(int id) {
         try (PreparedStatement statement =
                      connection.prepareStatement(
                              String.format(SELECT_ALL_DRINKS_WITH_ADDONS_FORMAT, WHERE_ID_OR_DRINK_ID))) {
@@ -163,7 +160,7 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
 
                 List<Drink> drinks = parseResultSet(resultSet);
                 checkSingleResult(drinks);
-                return drinks == null || drinks.isEmpty() ? null : drinks.get(0);
+                return Optional.ofNullable(drinks.isEmpty() ? null : drinks.get(0));
             }
         } catch (SQLException e) {
             throw new DaoException(e)
@@ -173,7 +170,7 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
 
     @Override
     public void deleteById(int id) {
-        Drink drink = getById(id);
+        Drink drink = getById(id).orElse(null);
         if (drink == null) {
             return;
         }

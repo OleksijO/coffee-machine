@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Performs tests of corresponding DAO on real test database (it should be already created)
@@ -84,52 +84,51 @@ public class DrinkDaoTest {
 
     @Test
     public void testGetById() {
-        int drinkId = 6;
-        int drinkTestListId = 4;
-        Drink drink = drinkDao.getById(drinkId);
-        System.out.println(testDrinks.get(drinkTestListId));
-        System.out.println(drink);
-        assertEquals("Not null", testDrinks.get(drinkTestListId), drink);
-        drink = drinkDao.getById(456);
-        assertNull("Null", drink);
+        Drink testDrink = DrinksData.ESPRESSO.getCopy();
+        int drinkId = testDrink.getId();
+        Drink drink = drinkDao.getById(drinkId).get();
+        assertEquals(testDrink, drink);
+    }
+
+    @Test
+    public void testGetByIdIsNotPresent() {
+        assertFalse(drinkDao.getById(456).isPresent());
     }
 
     @Test
     public void testUpdate() {
-        int drinkTestListId = 4;
-        Drink drink = testDrinks.get(drinkTestListId);
-        int drinkId = 6;
+        Drink testDrink = DrinksData.ESPRESSO.getCopy();
+        int drinkId = testDrink.getId();
         
-        long amount = drink.getPrice();
-        drink.setPrice(0);
+        long amount = testDrink.getPrice();
+        testDrink.setPrice(0);
 
-        drinkDao.update(drink);
+        drinkDao.update(testDrink);
 
-        assertEquals("1", 0, drinkDao.getById(drinkId).getPrice());
-        drink.setPrice(amount);
-        drinkDao.update(drink);
-        assertEquals("2", testDrinks.get(drinkTestListId).getPrice(), drinkDao.getById(drinkId).getPrice());
+        assertEquals(0, drinkDao.getById(drinkId).get().getPrice());
+
+        testDrink.setPrice(amount);
+        drinkDao.update(testDrink);
+        assertEquals("Check state after test",testDrink.getPrice(), drinkDao.getById(drinkId).get().getPrice());
 
     }
 
     @Test
     public void testInsertDelete() {
-        int drinkTestListId = 4;
-        Drink drink = testDrinks.get(drinkTestListId);
+        Drink testDrink = DrinksData.ESPRESSO.getCopy();
         int size = testDrinks.size();
-        int drinkId = 6;
+        int drinkId = testDrink.getId();
 
-        drink.setId(0);
-        int newDrinkId = drinkDao.insert(drink).getId();
+        testDrink.setId(0);
+        int newDrinkId = drinkDao.insert(testDrink).getId();
 
-        drink.setId(newDrinkId);
-        Drink drinkToTest = drinkDao.getById(newDrinkId);
-        assertEquals("1", drink, drinkToTest);
-        drink.setId(drinkId);
-        assertEquals("2", size + 1, drinkDao.getAll().size());
+        Drink drinkToTest = drinkDao.getById(newDrinkId).get();
+        assertEquals("New addon should be placed to DB and be the same",testDrink, drinkToTest);
+        testDrink.setId(drinkId);
+        assertEquals("Total size of drinks should increase by 1", size + 1, drinkDao.getAll().size());
         drinkDao.deleteById(newDrinkId);
-        assertNull("3", drinkDao.getById(newDrinkId));
-        assertEquals("4", size, drinkDao.getAll().size());
+        assertFalse("Inserted drink should be deleted", drinkDao.getById(newDrinkId).isPresent());
+        assertEquals("Total size of drinks should decrease by 1", size, drinkDao.getAll().size());
 
     }
 
@@ -146,10 +145,10 @@ public class DrinkDaoTest {
 
         drinkDao.updateQuantity(drink);
 
-        assertEquals("1", newQuantity, drinkDao.getById(testDrink.getId()).getQuantity());
+        assertEquals("Quantity of drink is updated", newQuantity, drinkDao.getById(testDrink.getId()).get().getQuantity());
         drink.setQuantity(testDrink.getQuantity());
-        assertEquals("2", testDrink, drinkDao.getById(testDrink.getId()));
         drinkDao.updateQuantity(drink);
+        assertEquals("Check state after test", testDrink, drinkDao.getById(testDrink.getId()).get());
 
     }
 

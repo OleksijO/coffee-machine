@@ -138,14 +138,14 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
     }
 
     @Override
-    public User getById(int id) {
+    public Optional<User> getById(int id) {
         try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_USER_ID)) {
 
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 List<User> userList = parseResultSet(resultSet);
                 checkSingleResult(userList);
-                return userList == null || userList.isEmpty() ? null : userList.get(0);
+                return Optional.ofNullable(userList.isEmpty() ? null : userList.get(0));
             }
         } catch (SQLException e) {
             throw new DaoException(e)

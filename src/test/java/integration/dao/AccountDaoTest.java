@@ -17,7 +17,7 @@ import java.util.NoSuchElementException;
 
 import static data.test.entity.Users.A;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Performs tests of corresponding DAO on real test database (it should be already created)
@@ -67,13 +67,14 @@ public class AccountDaoTest {
     @Test
     public void testGetById() {
         Account testAccount = Accounts.USER_A.getCopy();
-        Account account = accountDao.getById(testAccount.getId());
+        Account account = accountDao.getById(testAccount.getId())
+                .orElse(null);
         assertEquals(testAccount, account);
     }
 
     @Test
     public void testGetByIdIsNotPresent() {
-        assertNull("Null", accountDao.getById(1005001));
+        assertFalse(accountDao.getById(1005001).isPresent());
     }
 
     @Test
@@ -84,10 +85,11 @@ public class AccountDaoTest {
 
         accountDao.update(account);
 
-        assertEquals("1", 0, accountDao.getById(2).getAmount());
+        assertEquals("account amount must be updated", 0, accountDao.getById(2).get().getAmount());
         account.add(amount);
         accountDao.update(account);
-        assertEquals("2", testAccounts.get(1).getAmount(), accountDao.getById(2).getAmount());
+        assertEquals("check state after test",
+                testAccounts.get(1).getAmount(), accountDao.getById(2).get().getAmount());
 
     }
 
@@ -99,12 +101,13 @@ public class AccountDaoTest {
 
         account.setId(newAccountId);
 
-        assertEquals("1", account, accountDao.getById(newAccountId));
+        assertEquals("New entity should be placed to DB and be the same to test one",
+                account, accountDao.getById(newAccountId).get());
         account.setId(2);
-        assertEquals("2", 4, accountDao.getAll().size());
+        assertEquals("Total count of entities should increase by 1", 4, accountDao.getAll().size());
         accountDao.deleteById(newAccountId);
-        assertNull("3", accountDao.getById(newAccountId));
-        assertEquals("4", 3, accountDao.getAll().size());
+        assertFalse("Inserted entity should be deleted", accountDao.getById(newAccountId).isPresent());
+        assertEquals("Total count of entities should decrease by 1", 3, accountDao.getAll().size());
 
     }
 

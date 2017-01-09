@@ -1,6 +1,7 @@
 package coffee.machine.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This class represents common DAO functionality
@@ -36,9 +37,9 @@ public interface GenericDao<T> {
 	 * 
 	 * @param id
 	 *            instance's field id
-	 * @return Returns NULL if there is no entity with specified Id
+	 * @return Optional of entity with specified Id
 	 */
-	T getById(int id);
+	Optional<T> getById(int id);
 
 	/**
 	 * Searches for saved instance by id and removes it from BD

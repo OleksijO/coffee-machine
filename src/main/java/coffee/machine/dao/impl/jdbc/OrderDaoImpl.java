@@ -11,6 +11,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This class is the implementation of Order entity DAO
@@ -209,7 +210,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     }
 
     @Override
-    public Order getById(int id) {
+    public Optional<Order> getById(int id) {
         try (PreparedStatement statementOrder =
                      connection.prepareStatement(SELECT_ALL_ORDERS_SQL + WHERE_ID);
              PreparedStatement statementDrink =
@@ -227,7 +228,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
                 List<Order> orderList = parseResultSets(resultSetOrder, resultSetDrink, resultSetAddon);
                 checkSingleResult(orderList);
 
-                return orderList == null || orderList.isEmpty() ? null : orderList.get(0);
+                return Optional.ofNullable(orderList.isEmpty() ? null : orderList.get(0));
             }
         } catch (SQLException e) {
             throw new DaoException(e)

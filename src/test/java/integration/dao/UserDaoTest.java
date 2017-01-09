@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Performs tests of corresponding DAO on real test database (it should be already created)
@@ -69,26 +69,28 @@ public class UserDaoTest {
 
     @Test
     public void testGetById() {
-        int userId = 2;
-        int userTestListId = 1;
-        User user = userDao.getById(userId);
-        System.out.println(testUsers.get(userTestListId));
-        System.out.println(user);
-        assertEquals("Not null", testUsers.get(userTestListId), user);
-        user = userDao.getById(456);
-        assertNull("Null", user);
+        User testUser = Users.B.user;
+        int userId = testUser.getId();
+        User user = userDao.getById(userId).get();
+        assertEquals(testUser, user);
+    }
+
+    @Test
+    public void testGetByIdIsNotPreset() {
+        assertFalse(userDao.getById(100500).isPresent());
     }
 
     @Test
     public void testGetByLogin() {
+        User testUser = Users.B.user;
+        String login = testUser.getEmail();
+        User user = userDao.getUserByLogin(login).get();
+        assertEquals(testUser, user);
+    }
 
-        int userTestListId = 1;
-        String userLogin = testUsers.get(userTestListId).getEmail();
-        User user = userDao.getUserByLogin(userLogin).get();
-        System.out.println(testUsers.get(userTestListId));
-        System.out.println(user);
-        assertEquals("Not null", testUsers.get(userTestListId), user);
-
+    @Test
+    public void testGetByLoginIsNotPreset() {
+        assertFalse(userDao.getUserByLogin("100500").isPresent());
     }
 
     @Test
@@ -97,15 +99,16 @@ public class UserDaoTest {
         User user = Users.A.user;
         int updatedUserId = user.getId();
         String savedFullName = user.getFullName();
-        user = getUserCopyWithChangedFullName(user, "1111");
-
+        String newFullName = "1111";
+        user = getUserCopyWithChangedFullName(user,  newFullName);
 
         userDao.update(user);
 
-        assertEquals("1", "1111", userDao.getById(updatedUserId).getFullName());
+        assertEquals("Property should be updated", newFullName, userDao.getById(updatedUserId).get().getFullName());
         user = getUserCopyWithChangedFullName(user, savedFullName);;
         userDao.update(user);
-        assertEquals("2", Users.A.user.getFullName(), userDao.getById(updatedUserId).getFullName());
+        assertEquals("DB state should be the same as before test ",
+                user.getFullName(), userDao.getById(updatedUserId).get().getFullName());
 
     }
 
@@ -116,13 +119,13 @@ public class UserDaoTest {
         user = getUserCopyWithChangedEmailAndId(user, user.getEmail() + ".ua", 0);
 
         int newUserId = userDao.insert(user).getId();
-        User userToTest = userDao.getById(newUserId);
+        User userToTest = userDao.getById(newUserId).get();
 
-        assertEquals("1", user, userToTest);
-        assertEquals("2", initialNumberOfUsers + 1, userDao.getAll().size());
+        assertEquals("New entity should be placed to DB and be the same to test one", user, userToTest);
+        assertEquals("Total count of entities should increase by 1", initialNumberOfUsers + 1, userDao.getAll().size());
         userDao.deleteById(newUserId);
-        assertNull("3", userDao.getById(newUserId));
-        assertEquals("4", initialNumberOfUsers, userDao.getAll().size());
+        assertFalse("Inserted entity should be deleted", userDao.getById(newUserId).isPresent());
+        assertEquals("Total count of entities should decrease by 1", initialNumberOfUsers, userDao.getAll().size());
 
     }
 

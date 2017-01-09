@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import static coffee.machine.i18n.message.key.error.CommandErrorKey.ERROR_REGISTER_FULL_NAME_DO_NOT_MATCH_PATTERN;
@@ -54,7 +55,7 @@ public class UserServiceImpl implements UserService, ServiceErrorProcessing {
     }
 
     @Override
-    public User getById(int id) {
+    public Optional<User> getById(int id) {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             UserDao userDao = daoFactory.getUserDao(connection);
