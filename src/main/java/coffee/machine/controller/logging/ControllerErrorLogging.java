@@ -51,7 +51,7 @@ public interface ControllerErrorLogging extends ApplicationErrorLogging {
     default void logApplicationError(Logger logger, HttpServletRequest request, ApplicationException e) {
         logApplicationError(
                 logger,
-                e.getMessage(),
+                e.getMessageKey(),
                 ((e.getLogMessage() != null) ? e.getLogMessage() : MESSAGE_IN_CASE_OF_EMPTY) + SEPARATOR +
                         ((e.getAdditionalMessage() != null) ? e.getAdditionalMessage() : MESSAGE_IN_CASE_OF_EMPTY) +
                         getRequestData(request),

@@ -83,7 +83,7 @@ public abstract class CommandWrapperTemplate implements Command, ControllerError
 
     private void processApplicationException(HttpServletRequest request, ApplicationException e) {
         logApplicationError(logger, request, e);
-        request.setAttribute(ERROR_MESSAGE, e.getMessage());
+        request.setAttribute(ERROR_MESSAGE, e.getMessageKey());
         request.setAttribute(ERROR_ADDITIONAL_MESSAGE, e.getAdditionalMessage());
     }
 

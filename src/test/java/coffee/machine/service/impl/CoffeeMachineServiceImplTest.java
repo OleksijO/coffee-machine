@@ -223,7 +223,7 @@ public class CoffeeMachineServiceImplTest {
 //            service.prepareOrder(drinksToBuy);
 //        } catch (ServiceException e) {
 //            e.printStackTrace();
-//            Assert.assertEquals(NOT_ENOUGH_MONEY, e.getMessage());
+//            Assert.assertEquals(NOT_ENOUGH_MONEY, e.getMessageKey());
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //            fail(HERE_SHOULD_BE_APPLICATION_EXCEPTION);
@@ -244,7 +244,7 @@ public class CoffeeMachineServiceImplTest {
 //            service.prepareOrder(drinksToBuy);
 //        } catch (ServiceException e) {
 //            e.printStackTrace();
-//            Assert.assertEquals(ITEM_NO_LONGER_AVAILABLE, e.getMessage());
+//            Assert.assertEquals(ITEM_NO_LONGER_AVAILABLE, e.getMessageKey());
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //            fail(HERE_SHOULD_BE_APPLICATION_EXCEPTION);
@@ -263,7 +263,7 @@ public class CoffeeMachineServiceImplTest {
 //            service.prepareOrder(drinksToBuy);
 //        } catch (ServiceException e) {
 //            e.printStackTrace();
-//            Assert.assertEquals(YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY, e.getMessage());
+//            Assert.assertEquals(YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY, e.getMessageKey());
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //            fail(HERE_SHOULD_BE_APPLICATION_EXCEPTION);

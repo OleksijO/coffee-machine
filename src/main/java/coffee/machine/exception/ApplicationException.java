@@ -10,6 +10,11 @@ package coffee.machine.exception;
 public class ApplicationException extends RuntimeException {
 
     /**
+     * Error text message bundle key
+     */
+    private String messageKey;
+
+    /**
      * Additional usual text message (NON resource bundle key)
      */
     private String additionalMessage;
@@ -20,36 +25,38 @@ public class ApplicationException extends RuntimeException {
     private String logMessage;
 
     /**
-     * @param message resource bundle message key
+     * @param messageKey resource bundle message key
      * @param cause   cause exception instance
      */
-    public ApplicationException(String message, Throwable cause) {
-        super(message, cause);
+    public ApplicationException(String messageKey, Throwable cause) {
+        super(cause);
+        this.messageKey = messageKey;
     }
 
     /**
-     * @param message resource bundle message key
+     * @param messageKey resource bundle message key
      */
-    public ApplicationException(String message) {
-        super(message);
+    public ApplicationException(String messageKey) {
+        this.messageKey = messageKey;
     }
 
     /**
-     * @param message           resource bundle message key
+     * @param messageKey           resource bundle message key
      * @param additionalMessage usual text message to be shown on view
      */
-    public ApplicationException(String message, String additionalMessage) {
-        super(message);
+    public ApplicationException(String messageKey, String additionalMessage) {
+        this.messageKey = messageKey;
         this.additionalMessage = additionalMessage;
     }
 
     /**
-     * @param message           resource bundle message key
+     * @param messageKey           resource bundle message key
      * @param additionalMessage usual text message to be shown on view
      * @param cause             cause exception instance
      */
-    public ApplicationException(String message, String additionalMessage, Throwable cause) {
-        super(message, cause);
+    public ApplicationException(String messageKey, String additionalMessage, Throwable cause) {
+        super(cause);
+        this.messageKey = messageKey;
         this.additionalMessage = additionalMessage;
     }
 
@@ -65,6 +72,16 @@ public class ApplicationException extends RuntimeException {
         return this;
     }
 
+    public ApplicationException addMessageKey(String messageKey) {
+        this.messageKey = messageKey;
+        return this;
+    }
+
+    public ApplicationException addAdditionalMessage(String additionalMessage) {
+        this.additionalMessage = additionalMessage;
+        return this;
+    }
+
     public String getAdditionalMessage() {
         return additionalMessage;
     }
@@ -73,7 +90,8 @@ public class ApplicationException extends RuntimeException {
         return logMessage;
     }
 
-    public void setAdditionalMessage(String additionalMessage) {
-        this.additionalMessage = additionalMessage;
+    public String getMessageKey() {
+        return messageKey;
     }
+
 }

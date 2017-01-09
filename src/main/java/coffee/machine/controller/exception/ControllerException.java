@@ -10,10 +10,10 @@ import coffee.machine.exception.ApplicationException;
 public class ControllerException extends ApplicationException {
 
     /**
-     * @param message message key from resource bundle, which corresponds needed message
+     * @param messageKey message key from resource bundle, which corresponds needed message
      */
-    public ControllerException(String message) {
-        super(message);
+    public ControllerException(String messageKey) {
+        super(messageKey);
     }
 
 }
