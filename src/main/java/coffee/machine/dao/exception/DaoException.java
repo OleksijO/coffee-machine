@@ -26,4 +26,21 @@ public class DaoException extends ApplicationException {
 		super(DaoErrorKey.DAO_ERROR, cause);
 	}
 
+	@Override
+	public DaoException addLogMessage(String logMessage) {
+		super.addLogMessage(logMessage);
+		return this;
+	}
+
+	@Override
+	public DaoException addMessageKey(String messageKey) {
+		super.addMessageKey(messageKey);
+		return this;
+	}
+
+	@Override
+	public DaoException addAdditionalMessage(String additionalMessage) {
+		super.addAdditionalMessage(additionalMessage);
+		return this;
+	}
 }

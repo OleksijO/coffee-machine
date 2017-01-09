@@ -48,7 +48,8 @@ public class UserDaoTest {
     }
 
     @After
-    public void post() {
+    public void tearDown() {
+        connection.commitTransaction();
         connection.close();
     }
 
@@ -132,6 +133,7 @@ public class UserDaoTest {
                 .setPassword(user.getPassword())
                 .setFullName(user.getFullName())
                 .setAdmin(user.isAdmin())
+                .setAccount(user.getAccount())
                 .build();
     }
 

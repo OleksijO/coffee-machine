@@ -1,17 +1,16 @@
 package coffee.machine.dao.impl.jdbc;
 
 import coffee.machine.dao.OrderDao;
+import coffee.machine.dao.exception.DaoException;
 import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
 import coffee.machine.model.entity.item.ItemType;
-import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * This class is the implementation of Order entity DAO
@@ -19,9 +18,6 @@ import java.util.Optional;
  * @author oleksij.onysymchuk@gmail.com
  */
 class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
-
-    private static final Logger logger = Logger.getLogger(OrderDaoImpl.class);
-
     private static final String SELECT_ALL_ORDERS_SQL =
             " SELECT orders.id, user_id, date_time, amount " +
                     " FROM orders ";
@@ -63,6 +59,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     private static final String FIELD_ADDON_ID = "addon_id";
     private static final String FIELD_ITEM_QUANTITY = "item_quantity";
     private static final String FIELD_ITEM_NAME = "item_name";
+    public static final String DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID = "Database error while getting all by user id = ";
 
     private final Connection connection;
 
@@ -72,12 +69,8 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
 
     @Override
     public Order insert(Order order) {
-        if (order == null) {
-            logErrorAndThrowDaoException(logger, CAN_NOT_CREATE_EMPTY);
-        }
-        if (order.getId() != 0) {
-            logErrorAndThrowDaoException(logger, CAN_NOT_CREATE_ALREADY_SAVED);
-        }
+        checkForNull(order);
+        checkIsUnsaved(order);
 
         try (PreparedStatement statement = connection.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -89,14 +82,15 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
             insertOrderDrinks(order);
 
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_INSERTING, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_INSERTING + order);
         }
         return order;
     }
 
     private void insertOrderDrinks(Order order) throws SQLException {
         List<Drink> drinks = order.getDrinks();
-        if (drinks == null) {
+        if ((drinks == null) || (drinks.isEmpty())) {
             return;
         }
         PreparedStatement statementDrink =
@@ -144,9 +138,9 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
 
             }
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_BY_ID, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_GETTING_BY_ID);
         }
-        throw new InternalError(); // STUB for compiler
     }
 
     private List<Order> parseResultSets(ResultSet rsOrder, ResultSet rsDrink, ResultSet rsAddon) throws SQLException {
@@ -196,25 +190,18 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     }
 
     private Order getOrderFromListById(List<Order> orderList, int orderId) {
-        Order order;
-        Optional<Order> orderOptional = orderList.stream().filter(o -> o.getId() == orderId).findFirst();
-        if (orderOptional.isPresent()) {
-            order = orderOptional.get();
-        } else {
-            throw new IllegalStateException();
-        }
-        return order;
+        return orderList.stream()
+                .filter(o -> o.getId() == orderId)
+                .findFirst()
+                .orElseThrow(IllegalStateException::new);
     }
 
     private Drink getDrinkFromListById(List<Drink> drinks, int drinkId) {
-        Drink drink;
-        Optional<Drink> orderOptional = drinks.stream().filter(d -> d.getId() == drinkId).findFirst();
-        if (orderOptional.isPresent()) {
-            drink = orderOptional.get();
-        } else {
-            throw new IllegalStateException();
-        }
-        return drink;
+        return drinks.stream()
+                .filter(d -> d.getId() == drinkId)
+                .findFirst()
+                .orElseThrow(IllegalStateException::new);
+
     }
 
     private Date toDate(Timestamp timestamp) {
@@ -243,25 +230,22 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
                 return orderList == null || orderList.isEmpty() ? null : orderList.get(0);
             }
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_BY_ID, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_GETTING_BY_ID + id);
         }
-        throw new InternalError(); // STUB for compiler
-
     }
 
     @Override
     public void deleteById(int id) {
-        Order order = getById(id);
-        if (order == null) {
-            return;
-        }
+
         try (PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
 
             statement.setInt(1, id);
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_DELETING_BY_ID, order, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_DELETING_BY_ID + id);
         }
     }
 
@@ -283,8 +267,8 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
                 return parseResultSets(resultSetOrder, resultSetDrink, resultSetAddon);
             }
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_BY_ID, e);
+            throw new DaoException(e)
+                    .addLogMessage(DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID +userId);
         }
-        throw new InternalError(); // STUB for compiler
     }
 }

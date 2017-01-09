@@ -1,8 +1,7 @@
 package coffee.machine.dao.impl.jdbc;
 
 import coffee.machine.dao.*;
-import coffee.machine.dao.logging.DaoErrorProcessing;
-import org.apache.log4j.Logger;
+import coffee.machine.dao.exception.DaoException;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -13,9 +12,7 @@ import java.sql.SQLException;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class DaoFactoryImpl implements DaoFactory, DaoErrorProcessing {
-    private static final Logger logger = Logger.getLogger(DaoFactoryImpl.class);
-
+public class DaoFactoryImpl implements DaoFactory {
     private static final String SQL_CONNECTION_CAN_NOT_BE_NULL =
             "SQL connection can not be null. Datasource returned no connection.";
     private static final String CONNECTION_CAN_NOT_BE_NULL = "Connection can not be null.";
@@ -36,15 +33,16 @@ public class DaoFactoryImpl implements DaoFactory, DaoErrorProcessing {
 
     @Override
     public AbstractConnection getConnection() {
-        Connection connection=null;
+        Connection connection;
         try {
             connection = dataSource.getConnection();
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, e);
+            throw new DaoException(e);
         }
 
         if (connection == null) {
-            logErrorAndThrowDaoException(logger, SQL_CONNECTION_CAN_NOT_BE_NULL);
+            throw new DaoException()
+                    .addLogMessage(SQL_CONNECTION_CAN_NOT_BE_NULL);
         }
 
         return new AbstractConnectionImpl(connection);
@@ -65,10 +63,12 @@ public class DaoFactoryImpl implements DaoFactory, DaoErrorProcessing {
     private void checkConnection(AbstractConnection connection) {
 
         if (connection == null) {
-            logErrorAndThrowDaoException(logger, CONNECTION_CAN_NOT_BE_NULL);
+            throw new DaoException()
+                    .addLogMessage(CONNECTION_CAN_NOT_BE_NULL);
         }
         if (!(connection instanceof AbstractConnectionImpl)) {
-            logErrorAndThrowDaoException(logger, CONNECTION_IS_NOT_AN_ABSTRACT_CONNECTION_IMPL_FOR_JDBC);
+            throw new DaoException()
+                    .addLogMessage(CONNECTION_IS_NOT_AN_ABSTRACT_CONNECTION_IMPL_FOR_JDBC);
         }
 
     }

@@ -1,16 +1,19 @@
 package coffee.machine.dao.impl.jdbc;
 
 import coffee.machine.dao.DrinkDao;
+import coffee.machine.dao.exception.DaoException;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
 import coffee.machine.model.entity.item.ItemType;
-import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static coffee.machine.dao.impl.jdbc.ItemDaoHelper.*;
@@ -21,7 +24,6 @@ import static coffee.machine.dao.impl.jdbc.ItemDaoHelper.*;
  * @author oleksij.onysymchuk@gmail.com
  */
 class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
-    private static final Logger logger = Logger.getLogger(DrinkDaoImpl.class);
     private static final String SELECT_ALL_DRINKS_WITH_ADDONS_FORMAT = "" +
             " SELECT id, name, price, quantity, type, drink_id AS parent_id " +
             " FROM item " +
@@ -36,6 +38,8 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
     private static final String DELETE_ADDON_FROM_SET_SQL = "DELETE FROM drink_addons WHERE drink_id = ?; ";
 
     private static final String FIELD_PARENT_ID = "parent_id";
+    private static final String DATABASE_ERROR_WHILE_DELETING_DRINK_ADDONS = "Database error wile deleting drink addons: ";
+    private static final String DATABASE_ERROR_WHILE_GETTING_ALL_BY_ID = "Database error while getting all drinks by id ";
 
     private final Connection connection;
     private ItemDaoHelper itemDaoHelper;
@@ -48,15 +52,11 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
 
     @Override
     public Drink insert(Drink drink) {
-        if (drink == null) {
-            logErrorAndThrowDaoException(logger, CAN_NOT_CREATE_EMPTY);
-        }
-        if (drink.getId() != 0) {
-            logErrorAndThrowDaoException(logger, CAN_NOT_CREATE_ALREADY_SAVED);
-        }
+        checkForNull(drink);
+        checkIsUnsaved(drink);
 
         itemDaoHelper.insert(drink);
-        insertAddonSet(drink); // Addons as Drinks should already exist in table Item.
+        insertAddonSet(drink);
 
         return drink;
     }
@@ -72,7 +72,8 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
                 }
             }
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_INSERTING_ADDONS, drink, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_INSERTING_ADDONS + drink.toString());
         }
     }
 
@@ -101,7 +102,8 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
             statementForDeleteAddonsFromSet.executeUpdate();
 
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_UPDATING, drink, e);
+            throw new DaoException(e)
+                    .addLogMessage(DATABASE_ERROR_WHILE_DELETING_DRINK_ADDONS + drink.toString());
         }
     }
 
@@ -114,9 +116,9 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
             return parseResultSet(resultSet);
 
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_ALL, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_GETTING_ALL);
         }
-        throw new InternalError(); // STUB for compiler
     }
 
     private List<Drink> parseResultSet(ResultSet resultSet) throws SQLException {
@@ -164,10 +166,9 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
                 return drinks == null || drinks.isEmpty() ? null : drinks.get(0);
             }
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_BY_ID, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_GETTING_BY_ID);
         }
-        throw new InternalError(); // STUB for compiler
-
     }
 
     @Override
@@ -188,6 +189,7 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
 
     @Override
     public List<Drink> getAllByIds(Set<Integer> itemIds) {
+        checkForNull(itemIds);
         if (itemIds.isEmpty()) {
             return Collections.emptyList();
         }
@@ -204,9 +206,9 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
                 return parseResultSet(resultSet);
             }
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_BY_ID, e);
+            throw new DaoException(e)
+                    .addLogMessage(DATABASE_ERROR_WHILE_GETTING_ALL_BY_ID + itemIds.toString());
         }
-        throw new InternalError(); // STUB for compiler
     }
 
     @Override

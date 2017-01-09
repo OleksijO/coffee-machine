@@ -2,9 +2,9 @@ package coffee.machine.dao.impl.jdbc;
 
 import coffee.machine.dao.AccountDao;
 import coffee.machine.dao.UserDao;
+import coffee.machine.dao.exception.DaoException;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.User;
-import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,9 +17,8 @@ import java.util.Optional;
  * @author oleksij.onysymchuk@gmail.com
  */
 class UserDaoImpl extends AbstractDao<User> implements UserDao {
-    private static final Logger logger = Logger.getLogger(UserDaoImpl.class);
-
     private static final String DB_ERROR_WHILE_GETTING_BY_LOGIN = "Database error while getting user by login";
+    private static final String DB_ERROR_WHILE_GETTING_ALL_NON_ADMIN = DB_ERROR_WHILE_GETTING_ALL + "non admin users";
 
     private static final String SELECT_ALL_SQL =
             "SELECT users.id, email, password, full_name, account_id, amount, is_admin FROM users " +
@@ -44,32 +43,23 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
     private static final String FIELD_ACCOUNT_AMOUNT = "amount";
 
     private final Connection connection;
-    private final AccountDao accountDao;
 
     UserDaoImpl(Connection connection, AccountDao accountDao) {
         this.connection = connection;
-        this.accountDao = accountDao;
     }
 
     @Override
     public User insert(User user) {
-        if (user == null) {
-            logErrorAndThrowDaoException(logger, CAN_NOT_CREATE_EMPTY);
-        }
-        if (user.getId() != 0) {
-            logErrorAndThrowDaoException(logger, CAN_NOT_CREATE_ALREADY_SAVED);
-        }
+        checkForNull(user);
+        checkIsUnsaved(user);
         int accountId;
         if (user.isAdmin()) {
             accountId = 0;
         } else {
-            if ((user.getAccount() != null) && (user.getAccount().getId() != 0)) {
-                // if account was created before and set to user, f.e. in service layer
-                accountId = user.getAccount().getId();
-            } else {
-                // if account was not created before
-                accountId = accountDao.insert(user.getAccount()).getId();
-            }
+            Account account = user.getAccount();
+            checkForNull(account);
+            checkIsSaved(account);
+            accountId = account.getId();
         }
 
         try (PreparedStatement statement = connection.prepareStatement(INSERT_SQL,
@@ -85,19 +75,18 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
             user.setId(userId);
 
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_INSERTING, user, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_INSERTING + user.toString());
         }
         return user;
     }
 
     @Override
     public void update(User user) {
-        if (user == null) {
-            logErrorAndThrowDaoException(logger, CAN_NOT_UPDATE_EMPTY);
-        }
-        if (user.getId() == 0) {
-            logErrorAndThrowDaoException(logger, CAN_NOT_UPDATE_UNSAVED);
-        }
+
+        checkForNull(user);
+        checkIsSaved(user);
+
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_SQL)) {
 
             statement.setString(1, user.getEmail());
@@ -110,7 +99,8 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_UPDATING, user, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_UPDATING + user.toString());
         }
 
     }
@@ -123,10 +113,9 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
             return parseResultSet(resultSet);
 
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_ALL, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_GETTING_ALL);
         }
-        throw new InternalError(); // STUB for compiler
-
     }
 
     private List<User> parseResultSet(ResultSet resultSet) throws SQLException {
@@ -159,27 +148,23 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
                 return userList == null || userList.isEmpty() ? null : userList.get(0);
             }
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_BY_ID, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_GETTING_BY_ID + id);
         }
-        throw new InternalError(); // STUB for compiler
-
     }
 
     @Override
     public void deleteById(int id) {
-        User user = getById(id);
-        if (user == null) {
-            return;
-        }
+
         try (PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
 
             statement.setInt(1, id);
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_DELETING_BY_ID, user, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_DELETING_BY_ID + id);
         }
-        accountDao.deleteById(user.getAccount().getId());
     }
 
     @Override
@@ -194,10 +179,9 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
                 return userList.stream().findFirst();
             }
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_BY_LOGIN, login, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_GETTING_BY_LOGIN + login);
         }
-        throw new InternalError(); // STUB for compiler
-
     }
 
     @Override
@@ -208,9 +192,9 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
             return parseResultSet(resultSet);
 
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_ALL, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_GETTING_ALL_NON_ADMIN);
         }
-        throw new InternalError(); // STUB for compiler
     }
 
 }

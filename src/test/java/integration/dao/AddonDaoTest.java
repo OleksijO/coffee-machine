@@ -51,7 +51,8 @@ public class AddonDaoTest {
     }
 
     @After
-    public void post() {
+    public void tearDown() {
+        connection.commitTransaction();
         connection.close();
     }
 

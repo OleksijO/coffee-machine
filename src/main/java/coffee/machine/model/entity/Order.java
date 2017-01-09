@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class Order {
+public class Order implements Identified{
     private int id;
     private int userId;
     private Date date;

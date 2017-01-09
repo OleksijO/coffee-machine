@@ -1,7 +1,6 @@
 package coffee.machine.dao.impl.jdbc;
 
 import coffee.machine.dao.exception.DaoException;
-import coffee.machine.dao.logging.DaoErrorProcessing;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.apache.log4j.Logger;
 
@@ -14,7 +13,7 @@ import java.util.ResourceBundle;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-class JdbcPooledDataSource implements DaoErrorProcessing {
+class JdbcPooledDataSource {
     private static final String CAN_NOT_READ_PROPERTY_FOR_MIN_JDBC_CONNECTION_POOL_SIZE =
             "Can not read property for min jdbc connection pool size. Setting default = 5.";
     private static final Logger logger = Logger.getLogger(JdbcPooledDataSource.class);
@@ -46,8 +45,7 @@ class JdbcPooledDataSource implements DaoErrorProcessing {
         try {
             cpds.setDriverClass(jdbcProperties.getString(JDBC_DRIVER));
         } catch (PropertyVetoException e) {
-            logger.error(e);
-            throw new DaoException();
+            throw new DaoException(e);
         }
         cpds.setJdbcUrl(jdbcProperties.getString(JDBC_URL));
         cpds.setUser(jdbcProperties.getString(JDBC_USER));

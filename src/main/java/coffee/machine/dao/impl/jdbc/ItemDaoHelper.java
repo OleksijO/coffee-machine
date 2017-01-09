@@ -1,8 +1,8 @@
 package coffee.machine.dao.impl.jdbc;
 
+import coffee.machine.dao.exception.DaoException;
 import coffee.machine.model.entity.item.Item;
 import coffee.machine.model.entity.item.ItemType;
-import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,8 +17,6 @@ import java.util.stream.Collectors;
  * @author oleksij.onysymchuk@gmail.com
  */
 class ItemDaoHelper extends AbstractDao<Item> {
-    private static final Logger logger = Logger.getLogger(ItemDaoHelper.class);
-
     private static final String SELECT_ALL_SQL =
             "SELECT item.id, name, price, quantity, type FROM item ";
     private static final String UPDATE_SQL =
@@ -34,6 +32,9 @@ class ItemDaoHelper extends AbstractDao<Item> {
     private static final String WHERE_ITEM_IS = " WHERE type = '%s'";
     private static final String WHERE_ITEM_ID_IN_LIST = " WHERE FIND_IN_SET(item.id,?)>0 ";
 
+    private static final String DB_ERROR_WHILE_GETTING_ALL_BY_ID = "Database error while getting all items by id ";
+
+
     static final String FIELD_NAME = "name";
     static final String FIELD_PRICE = "price";
     static final String FIELD_QUANTITY = "quantity";
@@ -48,12 +49,9 @@ class ItemDaoHelper extends AbstractDao<Item> {
 
     @Override
     public Item insert(Item item) {
-        if (item == null) {
-            logErrorAndThrowDaoException(logger, CAN_NOT_CREATE_EMPTY);
-        }
-        if (item.getId() != 0) {
-            logErrorAndThrowDaoException(logger, CAN_NOT_CREATE_ALREADY_SAVED);
-        }
+
+        checkForNull(item);
+        checkIsUnsaved(item);
 
         try (PreparedStatement statement = connection.prepareStatement(INSERT_SQL,
                 Statement.RETURN_GENERATED_KEYS)) {
@@ -66,18 +64,17 @@ class ItemDaoHelper extends AbstractDao<Item> {
             int itemId = executeInsertStatement(statement);
             item.setId(itemId);
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_INSERTING, item, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_INSERTING + item.toString());
         }
         return item;
     }
 
     public void updateQuantity(Item item) {
-        if (item == null) {
-            logErrorAndThrowDaoException(logger, CAN_NOT_UPDATE_EMPTY);
-        }
-        if (item.getId() == 0) {
-            logErrorAndThrowDaoException(logger, CAN_NOT_UPDATE_UNSAVED);
-        }
+
+        checkForNull(item);
+        checkIsSaved(item);
+
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_ITEM_QUANTITY_SQL)) {
 
             statement.setInt(1, item.getQuantity());
@@ -85,18 +82,16 @@ class ItemDaoHelper extends AbstractDao<Item> {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_UPDATING, item, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_UPDATING + item.toString());
         }
     }
 
     @Override
     public void update(Item item) {
-        if (item == null) {
-            logErrorAndThrowDaoException(logger, CAN_NOT_UPDATE_EMPTY);
-        }
-        if (item.getId() == 0) {
-            logErrorAndThrowDaoException(logger, CAN_NOT_UPDATE_UNSAVED);
-        }
+
+        checkForNull(item);
+        checkIsSaved(item);
 
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_SQL)) {
 
@@ -108,7 +103,8 @@ class ItemDaoHelper extends AbstractDao<Item> {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_UPDATING, item, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_UPDATING + item.toString());
         }
     }
 
@@ -118,7 +114,7 @@ class ItemDaoHelper extends AbstractDao<Item> {
     }
 
 
-    List<Item> parseResultSet(ResultSet resultSet) throws SQLException {
+    private List<Item> parseResultSet(ResultSet resultSet) throws SQLException {
         List<Item> itemList = new ArrayList<>();
         while (resultSet.next()) {
 
@@ -146,17 +142,14 @@ class ItemDaoHelper extends AbstractDao<Item> {
                 return itemList == null || itemList.isEmpty() ? null : itemList.get(0);
             }
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_BY_ID, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_GETTING_BY_ID + id);
         }
-        throw new InternalError(); // STUB for compiler
     }
 
     @Override
     public void deleteById(int id) {
-        Item item = getById(id);
-        if (item == null) {
-            return;
-        }
+
         try (PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
 
             statement.setInt(1, id);
@@ -165,7 +158,8 @@ class ItemDaoHelper extends AbstractDao<Item> {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_DELETING_BY_ID, item, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_DELETING_BY_ID + id);
         }
     }
 
@@ -182,9 +176,9 @@ class ItemDaoHelper extends AbstractDao<Item> {
             return parseResultSet(resultSet);
 
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_ALL, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_GETTING_ALL);
         }
-        throw new InternalError(); // STUB for compiler
     }
 
 
@@ -202,9 +196,9 @@ class ItemDaoHelper extends AbstractDao<Item> {
                 return parseResultSet(resultSet);
             }
         } catch (SQLException e) {
-            logErrorAndThrowDaoException(logger, DB_ERROR_WHILE_GETTING_BY_ID, e);
+            throw new DaoException(e)
+                    .addLogMessage(DB_ERROR_WHILE_GETTING_ALL_BY_ID + itemIds);
         }
-        throw new InternalError(); // STUB for compiler
     }
 
     String getStringListOf(Set<Integer> itemIds) {

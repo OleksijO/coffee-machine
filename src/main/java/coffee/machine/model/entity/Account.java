@@ -7,7 +7,7 @@ import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFF;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class Account {
+public class Account implements Identified{
     private int id;
     private long amount;
 

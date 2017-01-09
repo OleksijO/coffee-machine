@@ -1,5 +1,7 @@
 package coffee.machine.model.entity.item;
 
+import coffee.machine.model.entity.Identified;
+
 import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFF;
 
 /**
@@ -7,7 +9,7 @@ import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFF;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class Item implements Comparable<Item> {
+public class Item implements Comparable<Item>, Identified {
     protected int id;
     protected String name;
     protected long price;

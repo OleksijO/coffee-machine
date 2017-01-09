@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static data.test.entity.Users.A;
 import static org.junit.Assert.assertEquals;
@@ -48,7 +49,7 @@ public class AccountDaoTest {
     }
 
     @After
-    public void post() {
+    public void tearDown() {
         connection.commitTransaction();
         connection.close();
     }
@@ -65,13 +66,14 @@ public class AccountDaoTest {
 
     @Test
     public void testGetById() {
+        Account testAccount = Accounts.USER_A.getCopy();
+        Account account = accountDao.getById(testAccount.getId());
+        assertEquals(testAccount, account);
+    }
 
-        Account account = accountDao.getById(2);
-        System.out.println(testAccounts.get(1));
-        System.out.println(account);
-        assertEquals("Not null", testAccounts.get(1), account);
-        account = accountDao.getById(4);
-        assertNull("Null", account);
+    @Test
+    public void testGetByIdIsNotPresent() {
+        assertNull("Null", accountDao.getById(1005001));
     }
 
     @Test
@@ -109,7 +111,9 @@ public class AccountDaoTest {
     @Test
     public void testByUserId() {
 
-        assertEquals(testAccounts.get(1), accountDao.getByUserId(A.user.getId()));
+        assertEquals(Accounts.USER_A.getCopy(),
+                accountDao.getByUserId(A.user.getId())
+                        .orElseThrow(NoSuchElementException::new));
 
     }
 

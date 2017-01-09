@@ -7,7 +7,7 @@ package coffee.machine.model.entity;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class User {
+public class User implements Identified{
     private int id;
     /**
      * Email field is used as login
