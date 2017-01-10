@@ -152,10 +152,8 @@ public class AddonDaoTest {
     public void testGetAllFromList() throws Exception {
         List<Item> itemsToRetrieve = new ArrayList<>();
         Item addon = AddonsData.CREAM.getCopy();
-        addon.setQuantity(4);
         itemsToRetrieve.add(addon);
         addon = AddonsData.CINNAMON.getCopy();
-        addon.setQuantity(4);
         itemsToRetrieve.add(addon);
         assertEquals(itemsToRetrieve, addonDao.getAllFromList(itemsToRetrieve));
     }

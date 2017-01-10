@@ -49,4 +49,31 @@ public class CreditsReceipt {
     public double getRealAmount() {
         return amount * DB_MONEY_COEFF;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CreditsReceipt that = (CreditsReceipt) o;
+
+        if (userId != that.userId) return false;
+        return amount == that.amount;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = userId;
+        result = 31 * result + (int) (amount ^ (amount >>> 32));
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "CreditsReceipt{" +
+                "userId=" + userId +
+                ", amount=" + amount +
+                '}';
+    }
 }

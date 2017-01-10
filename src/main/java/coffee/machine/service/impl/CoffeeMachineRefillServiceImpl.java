@@ -7,7 +7,7 @@ import coffee.machine.dao.DrinkDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
-import coffee.machine.model.entity.item.ItemReceipt;
+import coffee.machine.model.value.object.ItemReceipt;
 import coffee.machine.service.CoffeeMachineRefillService;
 import coffee.machine.service.exception.ServiceException;
 

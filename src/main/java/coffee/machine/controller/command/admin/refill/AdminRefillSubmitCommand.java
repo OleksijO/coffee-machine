@@ -6,7 +6,7 @@ import coffee.machine.controller.command.CommandWrapperTemplate;
 import coffee.machine.controller.command.helper.RequestDataExtractor;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
-import coffee.machine.model.entity.item.ItemReceipt;
+import coffee.machine.model.value.object.ItemReceipt;
 import coffee.machine.service.AccountService;
 import coffee.machine.service.AddonService;
 import coffee.machine.service.CoffeeMachineRefillService;
@@ -28,7 +28,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.ADMIN_REFILL_SUCCESSFUL;
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.TITLE_ADMIN_REFILL;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.QUANTITY_SHOULD_BE_NON_NEGATIVE;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.TITLE_ADMIN_REFILL;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.ADMIN_REFILL_PAGE;
 
@@ -41,10 +42,7 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
     private static final Logger logger = Logger.getLogger(AdminRefillSubmitCommand.class);
 
     private static final String ITEMS_ADDED = "Coffee-machine was refilled by admin id=%d. %s";
-    private static final String PROBLEMS_WITH_PARSING_INT_FROM_PARAMETER_FORMAT =
-            "Problems with parsing INT from parameter '%s', its value ='%s'";
 
-    private final CoffeeMachineRefillService coffeeMachine = CoffeeMachineRefillServiceImpl.getInstance();
     private final DrinkService drinkService = DrinkServiceImpl.getInstance();
     private final AddonService addonService = AddonServiceImpl.getInstance();
     private final AccountService accountService = AccountServiceImpl.getInstance();
@@ -54,6 +52,8 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
     private final Pattern patternAddon = Pattern.compile(RegExp.REGEXP_ADDON_PARAM);
 
     private RequestDataExtractor dataExtractorHelper = new RequestDataExtractor();
+
+    private CoffeeMachineRefillService coffeeMachine = CoffeeMachineRefillServiceImpl.getInstance();
 
     public AdminRefillSubmitCommand() {
         super(ADMIN_REFILL_PAGE);
@@ -110,7 +110,8 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
             String param = params.nextElement();
             Matcher matcher = itemParameterPattern.matcher(param);
             if (matcher.matches()) {
-                int itemQuantity = dataExtractorHelper.getIntFromRequestByParameter(request, param);
+                int itemQuantity = dataExtractorHelper
+                        .getIntFromRequestByParameter(request, param, QUANTITY_SHOULD_BE_NON_NEGATIVE);
                 int itemId = dataExtractorHelper.getFirstNumberFromParameterName(param);
                 itemQuantityByIds.put(itemId, itemQuantity);
             }
@@ -154,4 +155,7 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
         request.removeAttribute(PREVIOUS_VALUES_TABLE);
     }
 
+    public void setCoffeeMachineRefillService(CoffeeMachineRefillService coffeeMachine) {
+        this.coffeeMachine = coffeeMachine;
+    }
 }

@@ -19,7 +19,7 @@ import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageK
  * @author oleksij.onysymchuk@gmail.com
  */
 public class AccountServiceImpl implements AccountService {
-    private static final String AMOUNT_FOR_ADD_SHOULD_BE_GREATER_THAN_ZERO_FORMAT =
+    public static final String AMOUNT_FOR_ADD_SHOULD_BE_GREATER_THAN_ZERO_FORMAT =
             "Amount to add should be greater than zero. UserId=%d, amount=%d.";
     private static final String CANT_FIND_ACCOUNT_OF_USER_WITH_ID = "Can't find account of user with id = ";
     private static final String USER_ID_SHOULD_BE_GREATER_ZERO = "User's id=%d and should be greater zero";

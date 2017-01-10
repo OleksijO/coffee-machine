@@ -1,6 +1,6 @@
 package coffee.machine.service;
 
-import coffee.machine.model.entity.item.ItemReceipt;
+import coffee.machine.model.value.object.ItemReceipt;
 
 /**
  * This class represents service for main project logic

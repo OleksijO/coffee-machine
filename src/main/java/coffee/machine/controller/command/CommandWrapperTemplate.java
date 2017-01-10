@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_UNKNOWN;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_UNKNOWN;
 import static coffee.machine.view.Attributes.ERROR_ADDITIONAL_MESSAGE;
 import static coffee.machine.view.Attributes.ERROR_MESSAGE;
 

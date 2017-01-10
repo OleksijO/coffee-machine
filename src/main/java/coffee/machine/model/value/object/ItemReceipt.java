@@ -1,4 +1,7 @@
-package coffee.machine.model.entity.item;
+package coffee.machine.model.value.object;
+
+import coffee.machine.model.entity.item.Drink;
+import coffee.machine.model.entity.item.Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +65,25 @@ public class ItemReceipt {
 
     public List<Drink> getDrinks() {
         return drinks;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ItemReceipt that = (ItemReceipt) o;
+
+        if (addons != null ? !addons.equals(that.addons) : that.addons != null) return false;
+        return drinks != null ? drinks.equals(that.drinks) : that.drinks == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = addons != null ? addons.hashCode() : 0;
+        result = 31 * result + (drinks != null ? drinks.hashCode() : 0);
+        return result;
     }
 
     @Override

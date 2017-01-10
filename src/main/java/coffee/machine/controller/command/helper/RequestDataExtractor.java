@@ -11,8 +11,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.QUANTITY_SHOULD_BE_INT;
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_UNKNOWN;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_UNKNOWN;
 
 /**
  * This class represents functionality for extract data from request
@@ -20,10 +19,14 @@ import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageK
  * @author oleksij.onysymchuk@gmail.com
  */
 public class RequestDataExtractor {
-    private final static String LOG_MESSAGE_PROBLEMS_WITH_PARSING_INT_FROM_PARAMETER_FORMAT =
-            "Problems with parsing INT from parameter '%s', its value ='%s'";
+
     private static final String LOG_MESSAGE_CANNOT_FIND_FIRST_ID_IN_PARAM = "Cannot find first id in param ";
     private static final String LOG_MESSAGE_CANNOT_FIND_SECOND_ID_IN_PARAM = "Cannot find second id in param ";
+
+    private static final String LOG_MESSAGE_PROBLEMS_WITH_PARSING_INT_FROM_PARAMETER_FORMAT =
+            "Problems with parsing INT from parameter '%s', its value ='%s'";
+    private static final String LOG_MESSAGE_PROBLEMS_WITH_PARSING_DOUBLE_FROM_PARAMETER_FORMAT =
+            "Problems with parsing DOUBLE from parameter '%s', its value ='%s'";
 
     private final Pattern patternNumber = Pattern.compile(RegExp.REGEXP_NUMBER);
 
@@ -49,17 +52,35 @@ public class RequestDataExtractor {
     /**
      * @param request Request instance
      * @param param   Request parameter name
-     * @return Int value of specified parameter name
+     * @return Parsed value of specified parameter name
      */
-    public int getIntFromRequestByParameter(HttpServletRequest request, String param) {
+    public int getIntFromRequestByParameter(HttpServletRequest request, String param, String ErrorMessageKey) {
         try {
 
             return Integer.parseInt(request.getParameter(param));
 
         } catch (Exception e) {
             throw new ControllerException()
-                    .addMessageKey(QUANTITY_SHOULD_BE_INT)
+                    .addMessageKey(ErrorMessageKey)
                     .addLogMessage(String.format(LOG_MESSAGE_PROBLEMS_WITH_PARSING_INT_FROM_PARAMETER_FORMAT,
+                            param, request.getParameter(param)));
+        }
+    }
+
+    /**
+     * @param request Request instance
+     * @param param   Request parameter name
+     * @return Parsed value of specified parameter name
+     */
+    public double getDoubleFromRequestByParameter(HttpServletRequest request, String param, String ErrorMessageKey) {
+        try {
+
+            return Double.parseDouble(request.getParameter(param));
+
+        } catch (Exception e) {
+            throw new ControllerException()
+                    .addMessageKey(ErrorMessageKey)
+                    .addLogMessage(String.format(LOG_MESSAGE_PROBLEMS_WITH_PARSING_DOUBLE_FROM_PARAMETER_FORMAT,
                             param, request.getParameter(param)));
         }
     }
@@ -97,5 +118,4 @@ public class RequestDataExtractor {
                     .addLogMessage(LOG_MESSAGE_CANNOT_FIND_SECOND_ID_IN_PARAM + param);
         }
     }
-
 }

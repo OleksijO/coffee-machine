@@ -157,10 +157,8 @@ public class DrinkDaoTest {
     public void testGetAllFromList() throws Exception {
         List<Drink> itemsToRetrieve = new ArrayList<>();
         Drink addon = DrinksData.BORJOMI.getCopy();
-        addon.setQuantity(4);
         itemsToRetrieve.add(addon);
         addon = DrinksData.MOCACCINO.getCopy();
-        addon.setQuantity(4);
         itemsToRetrieve.add(addon);
         assertEquals(itemsToRetrieve, drinkDao.getAllFromList(itemsToRetrieve));
     }

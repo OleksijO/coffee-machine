@@ -1,5 +1,6 @@
 package coffee.machine.controller;
 
+import coffee.machine.controller.command.UnsupportedPathCommand;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,7 +61,8 @@ public class MainControllerTest {
 
     @Test
     public void testProcessRequestNoSuchPage() throws Exception {
-        controller.processRequest(null, request, response);
+        when(request.getMethod()).thenReturn("get");
+        controller.processRequest(new UnsupportedPathCommand() , request, response);
         verify(response, times(1)).sendRedirect(HOME_PATH);
         verify(requestDispatcher, times(0)).forward(request, response);
     }

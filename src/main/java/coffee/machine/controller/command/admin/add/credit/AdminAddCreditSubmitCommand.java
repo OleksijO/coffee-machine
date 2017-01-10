@@ -2,21 +2,26 @@ package coffee.machine.controller.command.admin.add.credit;
 
 import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.command.CommandWrapperTemplate;
-import coffee.machine.model.value.object.CreditsReceipt;
+import coffee.machine.controller.command.helper.RequestDataExtractor;
 import coffee.machine.model.entity.User;
+import coffee.machine.model.value.object.CreditsReceipt;
 import coffee.machine.service.AccountService;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.AccountServiceImpl;
 import coffee.machine.service.impl.UserServiceImpl;
+import coffee.machine.view.Attributes;
 import coffee.machine.view.Parameters;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.ADD_CREDITS_YOU_ADDED_CREDITS_SUCCESSFULLY_ON_ACCOUNT_OF_USER;
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.TITLE_ADMIN_ADD_CREDIT;
+import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.CREDITS_AMOUNT_IS_NOT_DOUBLE;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_UNKNOWN;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.TITLE_ADMIN_ADD_CREDIT;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.ADMIN_ADD_CREDITS_PAGE;
 import static coffee.machine.view.Parameters.CREDITS_TO_ADD;
@@ -31,6 +36,7 @@ public class AdminAddCreditSubmitCommand extends CommandWrapperTemplate {
 
     private static final String TO_USER_ID_ACCOUNT_ADDED_N_CREDITS_FORMAT =
             "To user's (id=%d) account added %.2f credits";
+
     private static final String USER_AMOUNT_SEPARATOR = " / ";
     private static final String USERS_ID = "User's id = ";
 
@@ -38,6 +44,8 @@ public class AdminAddCreditSubmitCommand extends CommandWrapperTemplate {
 
     private AccountService accountService = AccountServiceImpl.getInstance();
     private UserService userService = UserServiceImpl.getInstance();
+
+    private RequestDataExtractor dataExtractorHelper = new RequestDataExtractor();
 
     public AdminAddCreditSubmitCommand() {
         super(ADMIN_ADD_CREDITS_PAGE);
@@ -64,10 +72,18 @@ public class AdminAddCreditSubmitCommand extends CommandWrapperTemplate {
     }
 
     private CreditsReceipt getReceiptDataFromRequest(HttpServletRequest request) {
+
         return new CreditsReceipt.Builder()
-                .setUserId(Integer.parseInt(request.getParameter(Parameters.USER_ID)))
-                .setAmount(Double.parseDouble(request.getParameter(CREDITS_TO_ADD)))
+                .setUserId(dataExtractorHelper
+                        .getIntFromRequestByParameter(request, Parameters.USER_ID, ERROR_UNKNOWN))
+                .setAmount(dataExtractorHelper
+                        .getDoubleFromRequestByParameter(
+                                request, CREDITS_TO_ADD, CREDITS_AMOUNT_IS_NOT_DOUBLE))
                 .build();
+    }
+
+    private int getAdminIdFromSession(HttpSession session) {
+        return (int) session.getAttribute(Attributes.ADMIN_ID);
     }
 
     private void placeUserDataToRequest(HttpServletRequest request, List<User> users) {
@@ -99,5 +115,7 @@ public class AdminAddCreditSubmitCommand extends CommandWrapperTemplate {
                 receipt.getUserId(), receipt.getRealAmount()));
     }
 
-
+    public void setAccountService(AccountService accountService) {
+        this.accountService = accountService;
+    }
 }

@@ -53,22 +53,34 @@ public class Drink extends Item {
 
     @Override
     public String toString() {
-        return "Drink [" + name + ", " + convertAddonsToString() +
-                ", quantity=" + this.getQuantity() +
-                ", price=" + this.getRealTotalPrice()
-
-                + "]";
+        return "Drink{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", addons=" + addons +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", type=" + type +
+                "} ";
     }
 
-    private String convertAddonsToString() {
-        String addonList = "addons=[ ";
-        for (Item addon : addons) {
-            if (addon.getQuantity() > 0) {
-                addonList += ", " + addon.getName() + "=" + addon.getQuantity();
-            }
-        }
-        return addonList.replaceFirst(", ", "") + "]";
-    }
+    //    @Override
+//    public String toString() {
+//        return "Drink [" + name + ", " + convertAddonsToString() +
+//                ", quantity=" + this.getQuantity() +
+//                ", price=" + this.getRealTotalPrice()
+//
+//                + "]";
+//    }
+//
+//    private String convertAddonsToString() {
+//        String addonList = "addons=[ ";
+//        for (Item addon : addons) {
+//            if (addon.getQuantity() > 0) {
+//                addonList += ", " + addon.getName() + "=" + addon.getQuantity();
+//            }
+//        }
+//        return addonList.replaceFirst(", ", "") + "]";
+//    }
 
     @Override
     public int hashCode() {

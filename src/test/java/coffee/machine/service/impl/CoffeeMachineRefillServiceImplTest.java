@@ -7,7 +7,7 @@ import coffee.machine.dao.DrinkDao;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
-import coffee.machine.model.entity.item.ItemReceipt;
+import coffee.machine.model.value.object.ItemReceipt;
 import coffee.machine.service.CoffeeMachineRefillService;
 import coffee.machine.service.exception.ServiceException;
 import data.test.entity.AddonsData;
@@ -112,7 +112,7 @@ public class CoffeeMachineRefillServiceImplTest {
         service.refill(receipt);
 
         Drink updatedDrink = DrinksData.AMERICANO.getCopy();
-        updatedDrink.setQuantity(actualDrink.getQuantity() + quantityToAdd);
+        updatedDrink.setQuantity(updatedDrink.getQuantity() + quantityToAdd);
         List<Drink> updatedDrinks = new ArrayList<>();
         updatedDrinks.add(updatedDrink);
 
@@ -137,7 +137,7 @@ public class CoffeeMachineRefillServiceImplTest {
         service.refill(receipt);
 
         Item updatedAddon = AddonsData.CINNAMON.getCopy();
-        updatedAddon.setQuantity(actualAddon.getQuantity() + quantityToAdd);
+        updatedAddon.setQuantity(updatedAddon.getQuantity() + quantityToAdd);
         List<Item> updatedAddons = new ArrayList<>();
         updatedAddons.add(updatedAddon);
 

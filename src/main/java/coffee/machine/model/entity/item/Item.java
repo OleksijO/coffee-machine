@@ -105,9 +105,15 @@ public class Item implements Comparable<Item>, Identified {
 
         Item that = (Item) o;
 
+        if (type != that.type) return false;
         if (id != that.id) return false;
         if (price != that.price) return false;
-        return name != null ? name.equals(that.name) : that.name == null;
+        if (quantity != that.quantity) return false;
+        if ((name == null) && (that.name == null)) {
+            return true;
+        } else {
+            return name != null ? name.equals(that.name) : that.name == null;
+        }
 
     }
 
@@ -116,6 +122,8 @@ public class Item implements Comparable<Item>, Identified {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (int) (price ^ (price >>> 32));
+        result = 31 * result + quantity;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
         return result;
     }
 
@@ -125,6 +133,7 @@ public class Item implements Comparable<Item>, Identified {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", price=" + price +
+                ", quantity=" + quantity +
                 ", type=" + type +
                 '}';
     }
@@ -134,6 +143,7 @@ public class Item implements Comparable<Item>, Identified {
 
         public Builder() {
             this.item = new Item();
+            this.item.type = ItemType.ADDON;
         }
 
         public Builder(ItemType itemType) {

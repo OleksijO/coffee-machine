@@ -28,7 +28,7 @@ public class LocaleFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-        HttpServletRequest req = ((HttpServletRequest) request);
+        HttpServletRequest req = (HttpServletRequest) request;
 
         setUpResourceBundleSourceForView(req);
         changeUserLocaleByRequestParameter(req);

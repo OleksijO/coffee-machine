@@ -22,7 +22,7 @@ public class Order implements Identified{
     private List<Drink> drinks;
     private long totalCost;
 
-    public Order() {
+    private Order() {
     }
 
     public double getRealTotalCost() {
