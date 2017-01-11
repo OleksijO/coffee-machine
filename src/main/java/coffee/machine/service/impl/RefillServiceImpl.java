@@ -22,17 +22,17 @@ import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageK
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class CoffeeMachineRefillServiceImpl implements CoffeeMachineRefillService {
+public class RefillServiceImpl implements CoffeeMachineRefillService {
     private static final String LOG_MESSAGE_ADMIN_REFILL_NOTHING_TO_ADD = "Nothing to add. Details: ";
     private static final String LOG_MESSAGE_QUANTITY_SHOULD_BE_NON_NEGATIVE = "Item quantity is negative. Details: ";
 
     private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
-    private CoffeeMachineRefillServiceImpl() {
+    private RefillServiceImpl() {
     }
 
     private static class InstanceHolder {
-        private static final CoffeeMachineRefillService instance = new CoffeeMachineRefillServiceImpl();
+        private static final CoffeeMachineRefillService instance = new RefillServiceImpl();
     }
 
     public static CoffeeMachineRefillService getInstance() {

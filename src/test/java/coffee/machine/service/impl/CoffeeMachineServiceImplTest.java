@@ -77,8 +77,8 @@ public class CoffeeMachineServiceImplTest {
 //        addonsToBuy.add(AddonsData.SUGAR.addon);
 //        when(addonDao.getAllFromList(any())).thenReturn(addonsToBuy);
 //
-//        service = CoffeeMachineOrderServiceImpl.getInstance();
-//        ((CoffeeMachineOrderServiceImpl)service).daoFactory = daoFactory;
+//        service = DrinkPreparationServiceImpl.getInstance();
+//        ((DrinkPreparationServiceImpl)service).daoFactory = daoFactory;
 //
 //        userAccountInitialAmount = userAccount.getAmount();
 //        cmAccountAmount = coffeeMachineAccount.getAmount();

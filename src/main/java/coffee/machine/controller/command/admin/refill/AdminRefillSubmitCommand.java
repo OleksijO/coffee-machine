@@ -13,7 +13,7 @@ import coffee.machine.service.CoffeeMachineRefillService;
 import coffee.machine.service.DrinkService;
 import coffee.machine.service.impl.AccountServiceImpl;
 import coffee.machine.service.impl.AddonServiceImpl;
-import coffee.machine.service.impl.CoffeeMachineRefillServiceImpl;
+import coffee.machine.service.impl.RefillServiceImpl;
 import coffee.machine.service.impl.DrinkServiceImpl;
 import org.apache.log4j.Logger;
 
@@ -41,7 +41,8 @@ import static coffee.machine.view.PagesPaths.ADMIN_REFILL_PAGE;
 public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
     private static final Logger logger = Logger.getLogger(AdminRefillSubmitCommand.class);
 
-    private static final String ITEMS_ADDED = "Coffee-machine was refilled by admin id=%s. %s";
+    private static final String ITEMS_ADDED = "Coffe" +
+            "e-machine was refilled by admin id=%s. %s";
 
     private final DrinkService drinkService = DrinkServiceImpl.getInstance();
     private final AddonService addonService = AddonServiceImpl.getInstance();
@@ -53,7 +54,7 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
 
     private RequestDataExtractor dataExtractorHelper = new RequestDataExtractor();
 
-    private CoffeeMachineRefillService coffeeMachine = CoffeeMachineRefillServiceImpl.getInstance();
+    private CoffeeMachineRefillService coffeeMachine = RefillServiceImpl.getInstance();
 
     public AdminRefillSubmitCommand() {
         super(ADMIN_REFILL_PAGE);

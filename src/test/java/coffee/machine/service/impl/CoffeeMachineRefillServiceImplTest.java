@@ -60,8 +60,8 @@ public class CoffeeMachineRefillServiceImplTest {
         when(daoFactory.getConnection()).thenReturn(connection);
 
 
-        service = CoffeeMachineRefillServiceImpl.getInstance();
-        ((CoffeeMachineRefillServiceImpl) service).setDaoFactory(daoFactory);
+        service = RefillServiceImpl.getInstance();
+        ((RefillServiceImpl) service).setDaoFactory(daoFactory);
 
         drinksToUpdate = new ArrayList<>();
         addonsToUpdate = new ArrayList<>();

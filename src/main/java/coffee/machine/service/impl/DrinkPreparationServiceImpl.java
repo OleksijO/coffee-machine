@@ -21,7 +21,7 @@ import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageK
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class CoffeeMachineOrderServiceImpl implements CoffeeMachineOrderService {
+public class DrinkPreparationServiceImpl implements CoffeeMachineOrderService {
     private static final String LOG_MESSAGE_NOT_ENOUGH_FORMAT = "There is not enough item id=%d (%s). Ordered = %d, available = %d";
     private static final String LOG_MESSAGE_NOT_ENOUGH_MONEY_FORMAT = "User has insufficient funds. Available amount = %.2f, order cost = %s";
     private static final String LOG_MESSAGE_QUANTITY_SHOULD_BE_NON_NEGATIVE = "Item quantity is negative. Order details: ";
@@ -30,11 +30,11 @@ public class CoffeeMachineOrderServiceImpl implements CoffeeMachineOrderService 
     private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private final int COFFEE_MACHINE_ACCOUNT_ID = CoffeeMachineConfig.ACCOUNT_ID;
 
-    private CoffeeMachineOrderServiceImpl() {
+    private DrinkPreparationServiceImpl() {
     }
 
     private static class InstanceHolder {
-        private static final CoffeeMachineOrderService instance = new CoffeeMachineOrderServiceImpl();
+        private static final CoffeeMachineOrderService instance = new DrinkPreparationServiceImpl();
     }
 
     public static CoffeeMachineOrderService getInstance() {

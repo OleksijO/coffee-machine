@@ -12,7 +12,7 @@ import coffee.machine.service.AccountService;
 import coffee.machine.service.CoffeeMachineOrderService;
 import coffee.machine.service.DrinkService;
 import coffee.machine.service.impl.AccountServiceImpl;
-import coffee.machine.service.impl.CoffeeMachineOrderServiceImpl;
+import coffee.machine.service.impl.DrinkPreparationServiceImpl;
 import coffee.machine.service.impl.DrinkServiceImpl;
 import org.apache.log4j.Logger;
 
@@ -41,7 +41,7 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
 
     private DrinkService drinkService = DrinkServiceImpl.getInstance();
     private AccountService accountService = AccountServiceImpl.getInstance();
-    private CoffeeMachineOrderService coffeeMachine = CoffeeMachineOrderServiceImpl.getInstance();
+    private CoffeeMachineOrderService coffeeMachine = DrinkPreparationServiceImpl.getInstance();
 
     private RequestDataExtractor dataExtractorHelper = new RequestDataExtractor();
 
