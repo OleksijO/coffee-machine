@@ -82,7 +82,7 @@ public class Order implements Identified{
         return this;
     }
 
-    public Order calculateTotalPrice() {
+    public Order calculateTotalCost() {
         totalCost = drinks.stream().mapToLong(drink -> drink.getQuantity() * drink.getTotalPrice()).sum();
         return this;
     }
@@ -106,6 +106,10 @@ public class Order implements Identified{
 
     public Date getDate() {
         return new Date(date.getTime());
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public List<Drink> getDrinks() {

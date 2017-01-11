@@ -8,14 +8,14 @@ import java.util.Date;
 
 import static data.test.entity.AddonsData.*;
 import static data.test.entity.DrinksData.*;
-import static data.test.entity.Orders.ConstHolder.*;
+import static data.test.entity.OrdersData.ConstHolder.*;
 
 /**
  * This enum represents data for tests, corresponding to sql populate script
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public enum Orders {
+public enum OrdersData {
     A1(1, 2, new Date(YEAR2016 + 6 * MONTH + 12 * HOUR + 5 * MIN), 1000),
     A2(2, 2, new Date(YEAR2016 + 6 * MONTH + 12 * HOUR + 15 * MIN), 2000);
 
@@ -31,7 +31,7 @@ public enum Orders {
     }
 
 
-    Orders(int id, int userId, Date date, long amount) {
+    OrdersData(int id, int userId, Date date, long amount) {
         order = new Order.Builder()
                 .setId(id)
                 .setUserId(userId)

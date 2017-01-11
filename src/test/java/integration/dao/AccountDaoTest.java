@@ -5,7 +5,7 @@ import coffee.machine.dao.AccountDao;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Account;
-import data.test.entity.Accounts;
+import data.test.entity.AccountsData;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static data.test.entity.Users.A;
+import static data.test.entity.UsersData.A;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -31,7 +31,7 @@ public class AccountDaoTest {
     private AccountDao accountDao;
 
     {
-        for (Accounts accountEnum : Accounts.values()) {
+        for (AccountsData accountEnum : AccountsData.values()) {
             testAccounts.add(accountEnum.getCopy());
         }
     }
@@ -66,7 +66,7 @@ public class AccountDaoTest {
 
     @Test
     public void testGetById() {
-        Account testAccount = Accounts.USER_A.getCopy();
+        Account testAccount = AccountsData.USER_A.getCopy();
         Account account = accountDao.getById(testAccount.getId())
                 .orElse(null);
         assertEquals(testAccount, account);
@@ -114,7 +114,7 @@ public class AccountDaoTest {
     @Test
     public void testByUserId() {
 
-        assertEquals(Accounts.USER_A.getCopy(),
+        assertEquals(AccountsData.USER_A.getCopy(),
                 accountDao.getByUserId(A.user.getId())
                         .orElseThrow(NoSuchElementException::new));
 

@@ -5,7 +5,7 @@ import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.UserDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.User;
-import data.test.entity.Users;
+import data.test.entity.UsersData;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -29,7 +29,7 @@ public class UserDaoTest {
     private UserDao userDao;
 
     {
-        for (Users userEnum : Users.values()) {
+        for (UsersData userEnum : UsersData.values()) {
             testUsers.add(userEnum.user);
         }
     }
@@ -69,7 +69,7 @@ public class UserDaoTest {
 
     @Test
     public void testGetById() {
-        User testUser = Users.B.user;
+        User testUser = UsersData.B.user;
         int userId = testUser.getId();
         User user = userDao.getById(userId).get();
         assertEquals(testUser, user);
@@ -82,7 +82,7 @@ public class UserDaoTest {
 
     @Test
     public void testGetByLogin() {
-        User testUser = Users.B.user;
+        User testUser = UsersData.B.user;
         String login = testUser.getEmail();
         User user = userDao.getUserByLogin(login).get();
         assertEquals(testUser, user);
@@ -96,7 +96,7 @@ public class UserDaoTest {
     @Test
     public void testUpdate() {
 
-        User user = Users.A.user;
+        User user = UsersData.A.user;
         int updatedUserId = user.getId();
         String savedFullName = user.getFullName();
         String newFullName = "1111";
@@ -114,8 +114,8 @@ public class UserDaoTest {
 
     @Test
     public void testInsertDelete() {
-        User user = Users.A.user;
-        int initialNumberOfUsers = Users.values().length;
+        User user = UsersData.A.user;
+        int initialNumberOfUsers = UsersData.values().length;
         user = getUserCopyWithChangedEmailAndId(user, user.getEmail() + ".ua", 0);
 
         int newUserId = userDao.insert(user).getId();

@@ -5,7 +5,7 @@ import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.OrderDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Order;
-import data.test.entity.Orders;
+import data.test.entity.OrdersData;
 import org.junit.*;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class OrderDaoTest {
     private OrderDao orderDao;
 
     {
-        for (Orders oderEnum : Orders.values()) {
+        for (OrdersData oderEnum : OrdersData.values()) {
             testOrders.add(oderEnum.order);
             Collections.sort(testOrders,(o1,o2)-> o2.getDate().compareTo(o1.getDate()));
         }
@@ -60,7 +60,7 @@ public class OrderDaoTest {
 
     @Test
     public void testGetById() {
-        Order testOrder = Orders.A2.order;
+        Order testOrder = OrdersData.A2.order;
         Order order = orderDao.getById(testOrder.getId()).get();
         assertEquals("Order gotten by id should be identical to test one",
                 testOrder, order);
@@ -76,7 +76,7 @@ public class OrderDaoTest {
 
     @Test
     public void testInsertDelete() {
-        Order order = Orders.A1.order;
+        Order order = OrdersData.A1.order;
         int savedId = order.getId();
         order.setId(0);
         int newOrderId = orderDao.insert(order).getId();

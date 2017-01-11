@@ -43,7 +43,8 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
 
     @Override
     public Order prepareOrder(Order preOrder) {
-
+        Objects.requireNonNull(preOrder);
+        preOrder.clearZeroItems();
         checkOrder(preOrder);
 
         try (AbstractConnection connection = daoFactory.getConnection()) {
@@ -75,8 +76,6 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
     }
 
     private void checkOrder(Order order) {
-        Objects.requireNonNull(order);
-        order.clearZeroItems();
         if (order.isEmpty()) {
             throw new ServiceException()
                     .addMessageKey(YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY)
@@ -95,7 +94,7 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
                 .fillAbsentDrinkData(actualDrinks)
                 .fillAbsentAddonData(actualAddons)
                 .setCurrentDate()
-                .calculateTotalPrice();
+                .calculateTotalCost();
     }
 
 

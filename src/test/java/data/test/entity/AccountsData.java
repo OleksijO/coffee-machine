@@ -7,7 +7,7 @@ import coffee.machine.model.entity.Account;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public enum Accounts {
+public enum AccountsData {
     COFFEE_MACHINE(1, 0),
     USER_A(2, 9999999999L),
     USER_B(3, 999999);
@@ -15,7 +15,7 @@ public enum Accounts {
 
     public final Account account;
 
-    Accounts(int id, long amount) {
+    AccountsData(int id, long amount) {
         account = new Account.Builder()
                 .setId(id)
                 .setAmount(amount)
