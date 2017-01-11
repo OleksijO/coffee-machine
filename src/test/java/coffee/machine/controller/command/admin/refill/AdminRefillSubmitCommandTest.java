@@ -2,7 +2,7 @@ package coffee.machine.controller.command.admin.refill;
 
 import coffee.machine.controller.Command;
 import coffee.machine.controller.command.helper.LoggingHelper;
-import coffee.machine.service.CoffeeMachineRefillService;
+import coffee.machine.service.RefillService;
 import coffee.machine.service.exception.ServiceException;
 import coffee.machine.view.PagesPaths;
 import org.junit.Before;
@@ -42,7 +42,7 @@ public class AdminRefillSubmitCommandTest {
     @Mock
     private LoggingHelper loggingHelper;
     @Mock
-    private CoffeeMachineRefillService refillService;
+    private RefillService refillService;
 
     private Command command = new AdminRefillSubmitCommand();
 

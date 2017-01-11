@@ -36,18 +36,6 @@ public enum DrinksData {
 
     }
 
-    public static List<Drink> getAllDrinks() {
-        List<Drink> drinks = new ArrayList<>();
-        Arrays.stream(values()).forEach(record -> drinks.add(record.drink));
-        return drinks;
-    }
-
-    public static Map<Integer, Integer> getQuantitiesByIds() {
-        Map<Integer, Integer> initialQuantitiesById = new HashMap<>();
-        Arrays.stream(values()).forEach(record -> initialQuantitiesById.put(record.drink.getId(), record.drink.getQuantity()));
-        return initialQuantitiesById;
-    }
-
     public Drink getCopy() {
         Drink newDrink = new Drink.Builder()
                 .setId(drink.getId())

@@ -8,7 +8,7 @@ import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
 import coffee.machine.model.value.object.ItemReceipt;
-import coffee.machine.service.CoffeeMachineRefillService;
+import coffee.machine.service.RefillService;
 import coffee.machine.service.exception.ServiceException;
 
 import java.util.List;
@@ -18,11 +18,11 @@ import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageK
 import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.QUANTITY_SHOULD_BE_NON_NEGATIVE;
 
 /**
- * This class is an implementation of CoffeeMachineOrderService
+ * This class is an implementation of OrderPreparationService
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class RefillServiceImpl implements CoffeeMachineRefillService {
+public class RefillServiceImpl implements RefillService {
     private static final String LOG_MESSAGE_ADMIN_REFILL_NOTHING_TO_ADD = "Nothing to add. Details: ";
     private static final String LOG_MESSAGE_QUANTITY_SHOULD_BE_NON_NEGATIVE = "Item quantity is negative. Details: ";
 
@@ -32,10 +32,10 @@ public class RefillServiceImpl implements CoffeeMachineRefillService {
     }
 
     private static class InstanceHolder {
-        private static final CoffeeMachineRefillService instance = new RefillServiceImpl();
+        private static final RefillService instance = new RefillServiceImpl();
     }
 
-    public static CoffeeMachineRefillService getInstance() {
+    public static RefillService getInstance() {
         return InstanceHolder.instance;
     }
 

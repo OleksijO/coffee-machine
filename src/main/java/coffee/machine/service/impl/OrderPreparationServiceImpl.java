@@ -7,7 +7,7 @@ import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
-import coffee.machine.service.CoffeeMachineOrderService;
+import coffee.machine.service.OrderPreparationService;
 import coffee.machine.service.exception.ServiceException;
 
 import java.util.List;
@@ -17,11 +17,11 @@ import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFF;
 import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.*;
 
 /**
- * This class is an implementation of CoffeeMachineOrderService
+ * This class is an implementation of OrderPreparationService
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class DrinkPreparationServiceImpl implements CoffeeMachineOrderService {
+public class OrderPreparationServiceImpl implements OrderPreparationService {
     private static final String LOG_MESSAGE_NOT_ENOUGH_FORMAT = "There is not enough item id=%d (%s). Ordered = %d, available = %d";
     private static final String LOG_MESSAGE_NOT_ENOUGH_MONEY_FORMAT = "User has insufficient funds. Available amount = %.2f, order cost = %s";
     private static final String LOG_MESSAGE_QUANTITY_SHOULD_BE_NON_NEGATIVE = "Item quantity is negative. Order details: ";
@@ -30,14 +30,14 @@ public class DrinkPreparationServiceImpl implements CoffeeMachineOrderService {
     private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private final int COFFEE_MACHINE_ACCOUNT_ID = CoffeeMachineConfig.ACCOUNT_ID;
 
-    private DrinkPreparationServiceImpl() {
+    private OrderPreparationServiceImpl() {
     }
 
     private static class InstanceHolder {
-        private static final CoffeeMachineOrderService instance = new DrinkPreparationServiceImpl();
+        private static final OrderPreparationService instance = new OrderPreparationServiceImpl();
     }
 
-    public static CoffeeMachineOrderService getInstance() {
+    public static OrderPreparationService getInstance() {
         return InstanceHolder.instance;
     }
 

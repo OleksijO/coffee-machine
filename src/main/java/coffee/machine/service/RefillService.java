@@ -7,7 +7,7 @@ import coffee.machine.model.value.object.ItemReceipt;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public interface CoffeeMachineRefillService {
+public interface RefillService {
 
     /**
      * Refills coffee machine with quantity of drinks and items specified in receipt

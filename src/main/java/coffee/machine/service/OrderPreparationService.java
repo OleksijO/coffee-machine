@@ -7,7 +7,7 @@ import coffee.machine.model.entity.Order;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public interface CoffeeMachineOrderService {
+public interface OrderPreparationService {
 
     /**
      * Decreases quantities of drink and addons in them in database,

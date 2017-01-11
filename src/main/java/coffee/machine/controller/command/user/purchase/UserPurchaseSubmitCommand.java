@@ -9,10 +9,10 @@ import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
 import coffee.machine.service.AccountService;
-import coffee.machine.service.CoffeeMachineOrderService;
+import coffee.machine.service.OrderPreparationService;
 import coffee.machine.service.DrinkService;
 import coffee.machine.service.impl.AccountServiceImpl;
-import coffee.machine.service.impl.DrinkPreparationServiceImpl;
+import coffee.machine.service.impl.OrderPreparationServiceImpl;
 import coffee.machine.service.impl.DrinkServiceImpl;
 import org.apache.log4j.Logger;
 
@@ -41,7 +41,7 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
 
     private DrinkService drinkService = DrinkServiceImpl.getInstance();
     private AccountService accountService = AccountServiceImpl.getInstance();
-    private CoffeeMachineOrderService coffeeMachine = DrinkPreparationServiceImpl.getInstance();
+    private OrderPreparationService coffeeMachine = OrderPreparationServiceImpl.getInstance();
 
     private RequestDataExtractor dataExtractorHelper = new RequestDataExtractor();
 
@@ -153,7 +153,7 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
         request.removeAttribute(PREVIOUS_VALUES_TABLE);
     }
 
-    public void setCoffeeMachineOrderService(CoffeeMachineOrderService coffeeMachine) {
+    public void setCoffeeMachineOrderService(OrderPreparationService coffeeMachine) {
         this.coffeeMachine = coffeeMachine;
     }
 }

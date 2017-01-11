@@ -9,7 +9,7 @@ import coffee.machine.model.entity.item.Item;
 import coffee.machine.model.value.object.ItemReceipt;
 import coffee.machine.service.AccountService;
 import coffee.machine.service.AddonService;
-import coffee.machine.service.CoffeeMachineRefillService;
+import coffee.machine.service.RefillService;
 import coffee.machine.service.DrinkService;
 import coffee.machine.service.impl.AccountServiceImpl;
 import coffee.machine.service.impl.AddonServiceImpl;
@@ -54,7 +54,7 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
 
     private RequestDataExtractor dataExtractorHelper = new RequestDataExtractor();
 
-    private CoffeeMachineRefillService coffeeMachine = RefillServiceImpl.getInstance();
+    private RefillService coffeeMachine = RefillServiceImpl.getInstance();
 
     public AdminRefillSubmitCommand() {
         super(ADMIN_REFILL_PAGE);
@@ -156,7 +156,7 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
         request.removeAttribute(PREVIOUS_VALUES_TABLE);
     }
 
-    public void setCoffeeMachineRefillService(CoffeeMachineRefillService coffeeMachine) {
+    public void setCoffeeMachineRefillService(RefillService coffeeMachine) {
         this.coffeeMachine = coffeeMachine;
     }
 }

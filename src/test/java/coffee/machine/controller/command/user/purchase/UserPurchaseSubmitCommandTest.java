@@ -3,7 +3,7 @@ package coffee.machine.controller.command.user.purchase;
 import coffee.machine.controller.Command;
 import coffee.machine.controller.command.helper.LoggingHelper;
 import coffee.machine.model.entity.Order;
-import coffee.machine.service.CoffeeMachineOrderService;
+import coffee.machine.service.OrderPreparationService;
 import coffee.machine.service.exception.ServiceException;
 import coffee.machine.view.PagesPaths;
 import org.junit.Before;
@@ -42,7 +42,7 @@ public class UserPurchaseSubmitCommandTest {
     @Mock
     private LoggingHelper loggingHelper;
     @Mock
-    private CoffeeMachineOrderService orderService;
+    private OrderPreparationService orderService;
 
     private Command command = new UserPurchaseSubmitCommand();
 

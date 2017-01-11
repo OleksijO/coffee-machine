@@ -8,7 +8,7 @@ import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.item.Drink;
 import coffee.machine.model.entity.item.Item;
 import coffee.machine.model.value.object.ItemReceipt;
-import coffee.machine.service.CoffeeMachineRefillService;
+import coffee.machine.service.RefillService;
 import coffee.machine.service.exception.ServiceException;
 import data.test.entity.AddonsData;
 import data.test.entity.DrinksData;
@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 /**
  * Created by oleksij.onysymchuk@gmail on 06.01.2017.
  */
-public class CoffeeMachineRefillServiceImplTest {
+public class RefillServiceImplTest {
 
     @Mock
     private DaoFactory daoFactory;
@@ -45,7 +45,7 @@ public class CoffeeMachineRefillServiceImplTest {
     @Captor
     private ArgumentCaptor<List<Drink>> drinkListCaptor;
 
-    private CoffeeMachineRefillService service;
+    private RefillService service;
 
     private List<Drink> drinksToUpdate;
     private List<Item> addonsToUpdate;
