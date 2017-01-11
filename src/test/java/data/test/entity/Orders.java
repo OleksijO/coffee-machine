@@ -55,6 +55,7 @@ public enum Orders {
                 drink2.getAddons().add(milk);
                 order.addDrink(drink2);
                 break;
+            default: throw new IllegalArgumentException("Specified id is not supported yet");
         }
 
 

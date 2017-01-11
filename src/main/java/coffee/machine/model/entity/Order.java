@@ -105,7 +105,7 @@ public class Order implements Identified{
     }
 
     public Date getDate() {
-        return date;
+        return new Date(date.getTime());
     }
 
     public List<Drink> getDrinks() {

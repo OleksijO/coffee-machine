@@ -56,7 +56,7 @@ public class TestDatabaseInitializer {
         ScriptRunner scriptRunner = new ScriptRunner(con, false, false);
 
         Reader reader = new BufferedReader(
-                new InputStreamReader(ddlSQL));
+                new InputStreamReader(ddlSQL,"UTF-8"));
         scriptRunner.runScript(reader);
 
         System.out.println("=============================================");

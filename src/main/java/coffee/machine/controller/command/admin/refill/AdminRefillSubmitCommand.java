@@ -41,7 +41,7 @@ import static coffee.machine.view.PagesPaths.ADMIN_REFILL_PAGE;
 public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
     private static final Logger logger = Logger.getLogger(AdminRefillSubmitCommand.class);
 
-    private static final String ITEMS_ADDED = "Coffee-machine was refilled by admin id=%d. %s";
+    private static final String ITEMS_ADDED = "Coffee-machine was refilled by admin id=%s. %s";
 
     private final DrinkService drinkService = DrinkServiceImpl.getInstance();
     private final AddonService addonService = AddonServiceImpl.getInstance();
@@ -147,7 +147,7 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
     }
 
     private void logRefillingDetails(HttpServletRequest request, ItemReceipt receipt) {
-        logger.info(String.format(ITEMS_ADDED, (int) request.getSession().getAttribute(ADMIN_ID),
+        logger.info(String.format(ITEMS_ADDED, request.getSession().getAttribute(ADMIN_ID).toString(),
                 receipt));
     }
 

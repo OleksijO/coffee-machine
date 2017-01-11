@@ -94,20 +94,22 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
         if ((drinks == null) || (drinks.isEmpty())) {
             return;
         }
-        PreparedStatement statementDrink =
-                connection.prepareStatement(INSERT_ORDER_DRINK_SQL, Statement.RETURN_GENERATED_KEYS);
-        PreparedStatement statementAddon = connection.prepareStatement(INSERT_ORDER_DRINK_ADDON_SQL);
-        for (Drink drink : drinks) {
-            statementDrink.setInt(1, order.getId());
-            statementDrink.setInt(2, drink.getId());
-            statementDrink.setInt(3, drink.getQuantity());
-            int ordersDrinkId = executeInsertStatement(statementDrink);
-            for (Item addon : drink.getAddons()) {
-                if (addon.getQuantity() > 0) {
-                    statementAddon.setInt(1, ordersDrinkId);
-                    statementAddon.setInt(2, addon.getId());
-                    statementAddon.setInt(3, addon.getQuantity());
-                    statementAddon.executeUpdate();
+
+        try (PreparedStatement statementDrink =
+                     connection.prepareStatement(INSERT_ORDER_DRINK_SQL, Statement.RETURN_GENERATED_KEYS);
+             PreparedStatement statementAddon = connection.prepareStatement(INSERT_ORDER_DRINK_ADDON_SQL)) {
+            for (Drink drink : drinks) {
+                statementDrink.setInt(1, order.getId());
+                statementDrink.setInt(2, drink.getId());
+                statementDrink.setInt(3, drink.getQuantity());
+                int ordersDrinkId = executeInsertStatement(statementDrink);
+                for (Item addon : drink.getAddons()) {
+                    if (addon.getQuantity() > 0) {
+                        statementAddon.setInt(1, ordersDrinkId);
+                        statementAddon.setInt(2, addon.getId());
+                        statementAddon.setInt(3, addon.getQuantity());
+                        statementAddon.executeUpdate();
+                    }
                 }
             }
         }
@@ -269,7 +271,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
             }
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID +userId);
+                    .addLogMessage(DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID + userId);
         }
     }
 }
