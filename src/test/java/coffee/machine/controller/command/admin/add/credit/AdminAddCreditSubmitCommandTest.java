@@ -54,7 +54,7 @@ public class AdminAddCreditSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteNormallyReturnPage() throws Exception {
+    public void testExecuteReturnsCorrectPageIfNoError() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("2");
         when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
@@ -63,7 +63,7 @@ public class AdminAddCreditSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteAfterErrorReturnPage() throws Exception {
+    public void testExecuteReturnsCorrectPageIfErrorOccurred() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("2");
         when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
@@ -74,7 +74,7 @@ public class AdminAddCreditSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteAfterErrorPlacedErrorMessageToRequest() throws Exception {
+    public void testExecutePlacesErrorMessageToRequestIfErrorOccurred() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("2");
         when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
@@ -85,7 +85,7 @@ public class AdminAddCreditSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteNormallyPlacedMessageToRequest() throws Exception {
+    public void testExecutePlacesMessageToRequestIfNoError() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("2");
         when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
@@ -94,7 +94,7 @@ public class AdminAddCreditSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteZeroAmount() throws Exception {
+    public void testExecuteCallsServiceIfFormHasNonPositiveAmount() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("0");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("1");
         when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
@@ -110,7 +110,7 @@ public class AdminAddCreditSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteWrongUserId() throws Exception {
+    public void testExecuteCallsServiceIfUserIdIsNonPositive() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2.50");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("0");
         when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
@@ -125,7 +125,7 @@ public class AdminAddCreditSubmitCommandTest {
     }
 
     @Test
-    public void testExecute() throws Exception {
+    public void testExecuteCallsServiceWithCorrectArgsIfFormIsFilled() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2.50");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("5");
         when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);

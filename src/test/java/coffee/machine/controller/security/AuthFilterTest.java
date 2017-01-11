@@ -40,7 +40,7 @@ public class AuthFilterTest {
     }
 
     @Test
-    public void testDoFilterNotLoggedRootPaths() throws Exception {
+    public void testDoFilterPassesNonLoggedInUsersToRootPath() throws Exception {
         performTest("", null, null, "", 0);
         performTest("/", null, null, "/", 0);
         performTest("/", 1, null, "/", 0);
@@ -75,55 +75,55 @@ public class AuthFilterTest {
     }
 
     @Test
-    public void testDoFilterNotLoggedHomePath() throws Exception {
+    public void testDoFilterPassesNonAuthorizedToHomePath() throws Exception {
         performTest(HOME_PATH, null, null, HOME_PATH, 0);
     }
 
     @Test
-    public void testDoFilterNotLoggedAnyUnRestrictedPath() throws Exception {
+    public void testDoFilterForwardsNonAuthorizedToHomePathFromAnyUnRestrictedPath() throws Exception {
         performTest("/kdfvblkjsdfbjkv", null, null, HOME_PATH, 0);
     }
 
 
     @Test
-    public void testDoFilterNotLoggedLoginPath() throws Exception {
+    public void testDoFilterPassesNonAuthorizedToLoginPath() throws Exception {
         performTest("/login", null, null, "/login", 0);
     }
 
     @Test
-    public void testDoFilterNotLoggedRegisterPath() throws Exception {
+    public void testDoFilterPassesNonAuthorizedToRegisterPath() throws Exception {
         performTest("/user/register", null, null, "/user/register", 0);
     }
 
     @Test
-    public void testDoFilterUserLoggedInNoForward() throws Exception {
+    public void testDoFilterPassesAuthorizedUserToUserPages() throws Exception {
         performTest(USER_ORDER_HISTORY_PATH, null, 1, USER_ORDER_HISTORY_PATH, 0);
         performTest("/user/any", null, 1, "/user/any", 0);
     }
 
     @Test
-    public void testDoFilterAdminLoggedInNoForward() throws Exception {
+    public void testDoFilterPassesAuthorizedAdminToAdminPages() throws Exception {
         performTest(ADMIN_HOME_PATH, 1, null, ADMIN_HOME_PATH, 0);
         performTest("/admin/any", 1, null, "/admin/any", 0);
     }
 
     @Test
-    public void testDoFilterNotLoggedInTryToGetUserPages() throws Exception {
+    public void testDoFilterForwardsAllNonAuthorizedFromUserPagesToLoginPath() throws Exception {
         performTest("/user/any", null, null, LOGIN_PATH, 1);
     }
 
     @Test
-    public void testDoFilterNotLoggedInTryToGetAdminPages() throws Exception {
+    public void testDoFilterForwardsAllNonAuthorizedFromAdminPagesToLoginPath() throws Exception {
         performTest("/admin/any", null, null, LOGIN_PATH, 1);
     }
 
     @Test
-    public void testDoFilterUserLoggedInTryToGetAdminPages() throws Exception {
+    public void testDoFilterForwardsAuthorizedUserFromAdminPagesToLoginPath() throws Exception {
         performTest(ADMIN_HOME_PATH, null, 1, LOGIN_PATH, 1);
     }
 
     @Test
-    public void testDoFilterAdminLoggedInTryToGetUserPages() throws Exception {
+    public void testDoFilterForwardsAuthorizedAdminFromUserPagesToLoginPath() throws Exception {
         performTest(USER_ORDER_HISTORY_PATH, 1, null, LOGIN_PATH, 1);
     }
 }

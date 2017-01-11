@@ -74,7 +74,7 @@ public class OrderPreparationServiceImplTest {
 
 
     @Test
-    public void testPrepareOrderThrowsExceptionOnEmptyOrder() throws Exception {
+    public void testPrepareOrderThrowsExceptionIfOrderHasEmptyDrinks() throws Exception {
         Order emptyOrder = getEmptyOrder();
         //emptyOrder = getFilledOrder();
         try {
@@ -87,7 +87,7 @@ public class OrderPreparationServiceImplTest {
     }
 
     @Test
-    public void testPrepareOrderDoNotStoresDataOnEmptyOrder() throws Exception {
+    public void testPrepareOrderDoNotStoresDataIfOrderHasEmptyDrinks() throws Exception {
         Order emptyOrder = getEmptyOrder();
         // emptyOrder = getFilledOrder();
         try {
@@ -106,7 +106,7 @@ public class OrderPreparationServiceImplTest {
 
 
     @Test
-    public void testPrepareOrderThrowsExceptionOnOrderWithNegativeDrinkQuantity() throws Exception {
+    public void testPrepareOrderThrowsExceptionIfOrderHasWithNegativeDrinkQuantity() throws Exception {
         Order orderWithNegativeDrinkQuantity = getOrderWithNegativeDrinkQuantity();
         // orderWithNegativeDrinkQuantity= getEmptyOrder();
         try {
@@ -119,7 +119,7 @@ public class OrderPreparationServiceImplTest {
     }
 
     @Test
-    public void testPrepareOrderUpdatesOrderDataOnCorrectFilledOrder() {
+    public void testPrepareOrderUpdatesOrderDataIfOrderHasItemsWithPositiveQuantity() {
         Order order = getFilledOrder();
         // order = getEmptyOrder();
         Order testOrder = getPreparedForStoreOrder();
@@ -130,7 +130,7 @@ public class OrderPreparationServiceImplTest {
     }
 
     @Test
-    public void testPrepareOrderUpdatesQuantitesOfDrinksInDatabaseOnCorrectFilledOrder() {
+    public void testPrepareOrderUpdatesQuantitiesOfDrinksInDatabaseIfOrderHasItemsWithPositiveQuantity() {
         Order order = getFilledOrder();
         // order = getEmptyOrder();
         List<Drink> drinks = getDrinksReadyForUpdateQuantity();
@@ -139,7 +139,7 @@ public class OrderPreparationServiceImplTest {
     }
 
     @Test
-    public void testPrepareOrderUpdatesQuantitesOfAddonsInDatabaseOnCorrectFilledOrder() {
+    public void testPrepareOrderUpdatesQuantitesOfAddonsInDatabaseIfOrderHasItemsWithPositiveQuantity() {
         Order order = getFilledOrder();
         // order = getEmptyOrder();
         List<Item> addons = getAddonsReadyForUpdateQuantity();
@@ -148,7 +148,7 @@ public class OrderPreparationServiceImplTest {
     }
 
     @Test
-    public void testPrepareOrderWithdrawsCreditsFromUserAccountOnCorrectFilledOrder() {
+    public void testPrepareOrderWithdrawsCreditsFromUserAccountIfOrderHasItemsWithPositiveQuantity() {
         Order order = getFilledOrder();
         // order = getEmptyOrder();
         Order testOrder = getPreparedForStoreOrder();
@@ -163,7 +163,7 @@ public class OrderPreparationServiceImplTest {
     }
 
     @Test
-    public void testPrepareAddsCreditsToCoffeeMachineAccountOnCorrectFilledOrder() {
+    public void testPrepareAddsCreditsToCoffeeMachineAccountIfOrderHasItemsWithPositiveQuantity() {
         Order order = getFilledOrder();
         // order = getEmptyOrder();
         Order testOrder = getPreparedForStoreOrder();
@@ -178,7 +178,7 @@ public class OrderPreparationServiceImplTest {
     }
 
     @Test
-    public void testPrepareOrderDoNotStoresDataOnOrderWithNegativeDrinkQuantity() throws Exception {
+    public void testPrepareOrderDoNotStoresDataIfOrderHasNegativeDrinkQuantity() throws Exception {
         Order order = getOrderWithNegativeDrinkQuantity();
         // order = getFilledOrder();
         try {
@@ -189,7 +189,7 @@ public class OrderPreparationServiceImplTest {
     }
 
     @Test
-    public void testPrepareOrderThrowsExceptionOnOrderWithNegativeAddonQuantity() throws Exception {
+    public void testPrepareOrderThrowsExceptionIfOrderHasNegativeAddonQuantity() throws Exception {
         Order order = getOrderWithNegativeAddonQuantity();
         // order = getFilledOrder();
         try {
@@ -202,7 +202,7 @@ public class OrderPreparationServiceImplTest {
     }
 
     @Test
-    public void testPrepareOrderDoNotStoresDataOnOrderWithNegativeAddonQuantity() throws Exception {
+    public void testPrepareOrderDoNotStoresDataIfOrderHasNegativeAddonQuantity() throws Exception {
         Order order = getOrderWithNegativeAddonQuantity();
         // order = getFilledOrder();
         try {

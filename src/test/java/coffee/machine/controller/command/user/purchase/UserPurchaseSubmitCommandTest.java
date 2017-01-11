@@ -56,7 +56,7 @@ public class UserPurchaseSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteNormallyReturnPage() throws Exception {
+    public void testExecuteReturnsCorrectPageIfReceiptIsEmpty() throws Exception {
         setupRequestParams(EMPTY_DATA);
         when(orderService.prepareOrder(any())).thenReturn(new Order.Builder().build());
         assertEquals(
@@ -65,7 +65,7 @@ public class UserPurchaseSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteAfterErrorReturnPage() throws Exception {
+    public void testExecuteReturnsCorrectPageIfErrorOccurred() throws Exception {
         setupRequestParams(EMPTY_DATA);
         when(session.getAttribute(USER_ID)).thenReturn(1);
         doThrow(new ServiceException()
@@ -78,7 +78,7 @@ public class UserPurchaseSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteEmptyForm() throws Exception {
+    public void testExecuteCallsServiceWithCorrectArgsIfReceiptIsEmpty() throws Exception {
         setupRequestParams(EMPTY_DATA);
         when(session.getAttribute(USER_ID)).thenReturn(1);
         doThrow(new ServiceException()
@@ -90,7 +90,7 @@ public class UserPurchaseSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteFilledForm() throws Exception {
+    public void testExecuteCallsServiceWithCorrectArgsIfReceiptIsFilled() throws Exception {
         setupRequestParams(PURCHASE_FULL_DATA);
         when(request.getMethod()).thenReturn("get");
         when(session.getAttribute(USER_ID)).thenReturn(1);
@@ -100,7 +100,7 @@ public class UserPurchaseSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteAfterErrorPlacedErrorMessageToRequest() throws Exception {
+    public void testExecutePlacesErrorMessageToRequestIfErrorOccurred() throws Exception {
         setupRequestParams(EMPTY_DATA);
         when(session.getAttribute(USER_ID)).thenReturn(1);
         doThrow(new ServiceException()
@@ -112,7 +112,7 @@ public class UserPurchaseSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteNormallyPlacedUsualMessageToRequest() throws Exception {
+    public void testExecutePlacesUsualMessageToRequestIfNoError() throws Exception {
         setupRequestParams(PURCHASE_FULL_DATA);
         when(request.getMethod()).thenReturn("get");
         when(session.getAttribute(USER_ID)).thenReturn(1);

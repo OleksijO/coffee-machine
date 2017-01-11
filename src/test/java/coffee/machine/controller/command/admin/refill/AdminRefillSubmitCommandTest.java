@@ -56,7 +56,7 @@ public class AdminRefillSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteNormallyReturnPage() throws Exception {
+    public void testExecuteReturnsCorrectPageIfNoError() throws Exception {
         setupRequestParams(EMPTY_DATA);
         assertEquals(
                 PagesPaths.ADMIN_REFILL_PAGE,
@@ -64,7 +64,7 @@ public class AdminRefillSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteAfterErrorReturnPage() throws Exception {
+    public void testExecuteReturnsCorrectPageIfErrorOccurred() throws Exception {
         setupRequestParams(EMPTY_DATA);
         doThrow(new ServiceException()
                 .addMessageKey(ADMIN_REFILL_NOTHING_TO_ADD)
@@ -76,14 +76,14 @@ public class AdminRefillSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteEmptyForm() throws Exception {
+    public void testExecuteCallsServiceIfFormIsEmpty() throws Exception {
         setupRequestParams(EMPTY_DATA);
         command.execute(request, response);
         verify(refillService).refill(EMPTY_DATA.itemReceipt);
     }
 
     @Test
-    public void testExecuteFilledForm() throws Exception {
+    public void testExecuteCallsServiceWithCorrectArgsIfFormIsFilledWithData() throws Exception {
         setupRequestParams(REFILL_FULL_DATA);
         when(request.getMethod()).thenReturn("get");
         when(session.getAttribute(ADMIN_ID)).thenReturn(1);
@@ -92,7 +92,7 @@ public class AdminRefillSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteAfterErrorPlacedErrorMessageToRequest() throws Exception {
+    public void testExecutePlacesErrorMessageToRequestIfErrorOccurred() throws Exception {
         setupRequestParams(EMPTY_DATA);
         doThrow(new ServiceException()
                 .addMessageKey(ADMIN_REFILL_NOTHING_TO_ADD)
@@ -103,7 +103,7 @@ public class AdminRefillSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteNormallyPlacedUsualMessageToRequest() throws Exception {
+    public void testExecutePlacesUsualMessageToRequestIfNoError() throws Exception {
         setupRequestParams(REFILL_FULL_DATA);
         when(request.getMethod()).thenReturn("get");
         when(session.getAttribute(ADMIN_ID)).thenReturn(1);
