@@ -5,6 +5,7 @@ import coffee.machine.model.entity.item.Item;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This class represents addon service
@@ -24,5 +25,7 @@ public interface AddonService {
      * @param quantitiesById Map of pairs (addonId, quantityToAdd)
      */
     void refill(Map<Integer, Integer> quantitiesById);
+
+    List<Item> getAllByIdSet(Set<Integer> addonIds);
 
 }

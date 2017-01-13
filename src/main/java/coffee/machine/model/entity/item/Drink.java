@@ -111,4 +111,49 @@ public class Drink extends Item {
         }
         return baseAddons;
     }
+
+    public static class Builder{
+        Drink drink;
+
+        public Builder() {
+            drink = new Drink();
+            drink.setAddons(new TreeSet());
+        }
+
+        public Builder id(int id){
+            drink.setId(id);
+            return this;
+        }
+
+        public Builder name(String name){
+            drink.setName(name);
+            return this;
+        }
+
+        public Builder quantity(int quantity){
+            drink.setQuantity(quantity);
+            return this;
+        }
+
+        public Builder price(long price){
+            drink.setPrice(price);
+            return this;
+        }
+
+        public Builder addAddon(Item addon){
+            drink.getAddons().add(addon);
+            return this;
+        }
+
+        public Builder setAddons(Set<Item> addons){
+            drink.setAddons(addons);
+            return this;
+        }
+
+        public Drink getDrink(){
+            return drink;
+        }
+
+
+    }
 }

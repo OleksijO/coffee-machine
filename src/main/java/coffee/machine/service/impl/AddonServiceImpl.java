@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This class is an implementation of AddonService
@@ -64,5 +65,20 @@ public class AddonServiceImpl implements AddonService {
             addonDao.updateQuantityAllInList(addonsToUpdate);
             connection.commitTransaction();
         }
+    }
+
+    @Override
+    public List<Item> getAllByIdSet(Set<Integer> addonIds) {
+
+        try (AbstractConnection connection = daoFactory.getConnection()) {
+
+            AddonDao addonDao = daoFactory.getAddonDao(connection);
+
+            List<Item> drinks = addonDao.getAllByIds(addonIds);
+
+            return (drinks == null) ? new ArrayList<>() : drinks;
+
+        }
+
     }
 }

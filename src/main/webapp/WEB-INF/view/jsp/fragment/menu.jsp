@@ -25,6 +25,7 @@
 
     <c:if test='${not empty sessionScope[Attributes.USER_ID]}'>
         <a href="${PagesPaths.USER_PURCHASE_PATH}"><fmt:message key="user.purchase.page"/></a> |
+        <a href="${PagesPaths.USER_PURCHASE_OWN_PATH}"><fmt:message key="user.purchase.own.drink.page"/></a> |
         <a href="${PagesPaths.USER_ORDER_HISTORY_PATH}"><fmt:message key="user.orders.history.page"/></a> |
         <a href="${PagesPaths.USER_LOGOUT_PATH}"><fmt:message key="logout"/></a> |
 

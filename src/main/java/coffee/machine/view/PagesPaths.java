@@ -16,6 +16,7 @@ public final class PagesPaths {
 	public static final String HOME_PATH = "/home";
 	public static final String ORDERS_HISTORY = "/orders/history";
 	public static final String PURCHASE = "/purchase";
+	public static final String PURCHASE_OWN_DRINK = "/purchase/own";
 	public static final String REFILL = "/refill";
 	public static final String ADD_CREDIT = "/add_credits";
 	public static final String REDIRECTED = "REDIRECTED";
@@ -30,12 +31,14 @@ public final class PagesPaths {
 	public static final String USER_REGISTER_PATH = USER + REGISTER;
 	public static final String USER_ORDER_HISTORY_PATH = USER + ORDERS_HISTORY;
 	public static final String USER_PURCHASE_PATH = USER + PURCHASE;
+	public static final String USER_PURCHASE_OWN_PATH = USER + PURCHASE_OWN_DRINK;
 
 	public static final String USER_HOME_PATH = USER_PURCHASE_PATH;
 
 	public static final String USER_REGISTER_PAGE = VIEW_JSP_CLASSPATH + USER + REGISTER + PAGE;
 	public static final String USER_REGISTER_SUCCESS_PAGE =VIEW_JSP_CLASSPATH + USER + REGISTER +"Success"+ PAGE ;
 	public static final String USER_PURCHASE_PAGE = VIEW_JSP_CLASSPATH + USER + PURCHASE + PAGE;
+	public static final String USER_PURCHASE_OWN_PAGE = VIEW_JSP_CLASSPATH + USER + "/purchaseOwnDrink"+PAGE;
 	public static final String USER_ORDER_HISTORY_PAGE = VIEW_JSP_CLASSPATH + USER + "/ordersHistory" + PAGE;
 	public static final String USER_LOGOUT_PATH = USER + LOGOUT;
 

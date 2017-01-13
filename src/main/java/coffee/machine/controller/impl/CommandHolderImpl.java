@@ -30,6 +30,7 @@ public class CommandHolderImpl implements CommandHolder {
             put(USER_LOGOUT_PATH, new UserLogoutCommand());
             put(USER_REGISTER_PATH, new UserRegisterCommand());
             put(USER_PURCHASE_PATH, new UserPurchaseCommand());
+            put(USER_PURCHASE_OWN_PATH, new UserPurchaseOwnDrinkCommand());
             put(USER_ORDER_HISTORY_PATH, new UserOrderHistoryCommand());
 
             put(ADMIN_LOGOUT_PATH, new AdminLogoutCommand());
@@ -46,6 +47,7 @@ public class CommandHolderImpl implements CommandHolder {
             put(LOGIN_PATH, new LoginSubmitCommand());
             put(USER_REGISTER_PATH, new UserRegisterSubmitCommand());
             put(USER_PURCHASE_PATH, new UserPurchaseSubmitCommand());
+            put(USER_PURCHASE_OWN_PATH, new UserPurchaseOwnDrinkSubmitCommand());
 
             put(ADMIN_REFILL_PATH, new AdminRefillSubmitCommand());
             put(ADMIN_ADD_CREDITS_PATH, new AdminAddCreditSubmitCommand());

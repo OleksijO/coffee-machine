@@ -89,4 +89,12 @@ public class DrinkServiceImpl implements DrinkService {
 
     }
 
+    @Override
+    public Drink getById(int id) {
+        try (AbstractConnection connection = daoFactory.getConnection()) {
+            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
+            return drinkDao.getById(id);
+        }
+    }
+
 }

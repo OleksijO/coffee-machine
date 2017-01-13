@@ -31,4 +31,5 @@ public interface DrinkService {
 
     List<Drink> getAllBaseByIdSet(Set<Integer> drinkIds);
 
+    Drink getById(int id);
 }
