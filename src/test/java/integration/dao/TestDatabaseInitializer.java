@@ -1,11 +1,8 @@
 package integration.dao;
 
-import com.ibatis.common.jdbc.ScriptRunner;
+import org.apache.commons.io.FileUtils;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ResourceBundle;
@@ -13,7 +10,7 @@ import java.util.ResourceBundle;
 /**
  * This class represents functionality to put test database to initial state by running sql script,
  * which contains DDL commands and test data to be put into test database
- *
+ * <p>
  * For success perform of refilling database with test data it should be already created,
  * because method connects directly to database, specified in database.properties.
  *
@@ -39,25 +36,28 @@ public class TestDatabaseInitializer {
     public void initTestJdbcDB() throws Exception {
         ResourceBundle jdbcProperties = ResourceBundle.getBundle("database");
 
-
-        InputStream ddlSQL = this.getClass().getClassLoader()
-                .getResourceAsStream(ddlPopulate);
-
-        Class.forName(jdbcProperties.getString(JDBC_DRIVER));
-        Connection con = DriverManager.getConnection(
-                jdbcProperties.getString(JDBC_URL),
-                jdbcProperties.getString(JDBC_USER),
-                jdbcProperties.getString(JDBC_PASSWORD));
+        File script = new File(
+                this.getClass()
+                        .getClassLoader()
+                        .getResource(ddlPopulate)
+                        .getFile());
+        if (script==null) {
+            throw new IllegalStateException();
+        }
+        String multiQuery = FileUtils.readFileToString(script, "utf-8");
 
         System.out.println("=============================================");
         System.out.println("            Running SQL scripts...");
         System.out.println("=============================================");
 
-        ScriptRunner scriptRunner = new ScriptRunner(con, false, false);
+        Class.forName(jdbcProperties.getString(JDBC_DRIVER));
+        try (Connection con = DriverManager.getConnection(
+                jdbcProperties.getString(JDBC_URL),
+                jdbcProperties.getString(JDBC_USER),
+                jdbcProperties.getString(JDBC_PASSWORD))) {
 
-        Reader reader = new BufferedReader(
-                new InputStreamReader(ddlSQL,"UTF-8"));
-        scriptRunner.runScript(reader);
+            con.createStatement().execute(multiQuery);
+        }
 
         System.out.println("=============================================");
         System.out.println("            Running SQL scripts...DONE");
