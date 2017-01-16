@@ -5,9 +5,9 @@ import coffee.machine.dao.AddonDao;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.DrinkDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
-import coffee.machine.model.entity.item.Drink;
-import coffee.machine.model.entity.item.Item;
-import coffee.machine.model.value.object.ItemReceipt;
+import coffee.machine.model.entity.product.Drink;
+import coffee.machine.model.entity.product.Product;
+import coffee.machine.model.value.object.ProductsReceipt;
 import coffee.machine.service.RefillService;
 import coffee.machine.service.exception.ServiceException;
 
@@ -24,7 +24,7 @@ import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageK
  */
 public class RefillServiceImpl implements RefillService {
     private static final String LOG_MESSAGE_ADMIN_REFILL_NOTHING_TO_ADD = "Nothing to add. Details: ";
-    private static final String LOG_MESSAGE_QUANTITY_SHOULD_BE_NON_NEGATIVE = "Item quantity is negative. Details: ";
+    private static final String LOG_MESSAGE_QUANTITY_SHOULD_BE_NON_NEGATIVE = "Product quantity is negative. Details: ";
 
     private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
@@ -40,7 +40,7 @@ public class RefillServiceImpl implements RefillService {
     }
 
     @Override
-    public void refill(ItemReceipt receipt) {
+    public void refill(ProductsReceipt receipt) {
 
         checkReceipt(receipt);
 
@@ -58,9 +58,9 @@ public class RefillServiceImpl implements RefillService {
         }
     }
 
-    private void checkReceipt(ItemReceipt receipt) {
+    private void checkReceipt(ProductsReceipt receipt) {
         Objects.requireNonNull(receipt);
-        receipt.clearZeroItems();
+        receipt.clearZeroProducts();
         if (receipt.isEmpty()) {
 
             throw new ServiceException()
@@ -75,32 +75,32 @@ public class RefillServiceImpl implements RefillService {
         }
     }
 
-    private void refillDrinks(ItemReceipt receipt, DrinkDao drinkDao) {
+    private void refillDrinks(ProductsReceipt receipt, DrinkDao drinkDao) {
         if (receipt.getDrinks().isEmpty()){
             return;
         }
         List<Drink> actualDrinks = drinkDao.getAllFromList(receipt.getDrinks());
-        incrementQuantitiesInListByAnotherItemList(actualDrinks, receipt.getDrinks());
+        incrementQuantitiesInListByAnotherProductList(actualDrinks, receipt.getDrinks());
         drinkDao.updateQuantityAllInList(actualDrinks);
     }
 
 
-    private void incrementQuantitiesInListByAnotherItemList(List<? extends Item> items, List<? extends Item> addingItems) {
-        for (Item addingItem : addingItems) {
-            items.stream()
-                    .filter(item -> item.getId() == addingItem.getId())
+    private void incrementQuantitiesInListByAnotherProductList(List<? extends Product> products, List<? extends Product> addingProducts) {
+        for (Product addingProduct : addingProducts) {
+            products.stream()
+                    .filter(product -> product.getId() == addingProduct.getId())
                     .findFirst()
                     .orElseThrow(IllegalStateException::new)
-                    .incrementQuantityBy(addingItem.getQuantity());
+                    .incrementQuantityBy(addingProduct.getQuantity());
         }
     }
 
-    private void refillAddons(ItemReceipt receipt, AddonDao addonDao) {
+    private void refillAddons(ProductsReceipt receipt, AddonDao addonDao) {
         if (receipt.getAddons().isEmpty()){
             return;
         }
-        List<Item> actualAddons = addonDao.getAllFromList(receipt.getAddons());
-        incrementQuantitiesInListByAnotherItemList(actualAddons, receipt.getAddons());
+        List<Product> actualAddons = addonDao.getAllFromList(receipt.getAddons());
+        incrementQuantitiesInListByAnotherProductList(actualAddons, receipt.getAddons());
         addonDao.updateQuantityAllInList(actualAddons);
     }
 

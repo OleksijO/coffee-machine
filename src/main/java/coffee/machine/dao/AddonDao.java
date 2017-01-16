@@ -1,6 +1,6 @@
 package coffee.machine.dao;
 
-import coffee.machine.model.entity.item.Item;
+import coffee.machine.model.entity.product.Product;
 
 import java.util.List;
 import java.util.Set;
@@ -10,7 +10,7 @@ import java.util.Set;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public interface AddonDao extends GenericDao<Item> {
+public interface AddonDao extends GenericDao<Product> {
 
 	/**
 	 * Updates quantity of all addons in list in corresponding saved entities in
@@ -19,7 +19,7 @@ public interface AddonDao extends GenericDao<Item> {
 	 * @param addons
 	 *            Entities, which quantities have to be updated.
 	 */
-	void updateQuantityAllInList(List<Item> addons);
+	void updateQuantityAllInList(List<Product> addons);
 
 	/**
 	 * Updates quantity of corresponding saved entity in database
@@ -27,19 +27,19 @@ public interface AddonDao extends GenericDao<Item> {
 	 * @param addon
 	 *            Entities, which quantities have to be updated.
 	 */
-	void updateQuantity(Item addon);
+	void updateQuantity(Product addon);
 
 	/**
 	 * @param addons
 	 *            Addon list to be retrieved from database in actual state
 	 * @return actual list of addons, listed in argument
 	 */
-	List<Item> getAllFromList(List<Item> addons);
+	List<Product> getAllFromList(List<Product> addons);
 
 	/**
 	 * @param addonIds
 	 *            list of ids, which entities has to be retrieved from database
 	 * @return actual list of addons, which id's specified in argument
 	 */
-	List<Item> getAllByIds(Set<Integer> addonIds);
+	List<Product> getAllByIds(Set<Integer> addonIds);
 }

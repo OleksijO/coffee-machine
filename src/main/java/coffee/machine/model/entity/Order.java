@@ -1,8 +1,8 @@
 package coffee.machine.model.entity;
 
 import coffee.machine.config.CoffeeMachineConfig;
-import coffee.machine.model.entity.item.Drink;
-import coffee.machine.model.entity.item.Item;
+import coffee.machine.model.entity.product.Drink;
+import coffee.machine.model.entity.product.Product;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,7 +29,7 @@ public class Order implements Identified{
         return CoffeeMachineConfig.DB_MONEY_COEFF * totalCost;
     }
 
-    public void clearZeroItems() {
+    public void clearZeroProducts() {
         drinks = drinks.stream()
                 .filter(drink -> drink.getQuantity() != 0)
                 .collect(Collectors.toList());
@@ -55,9 +55,9 @@ public class Order implements Identified{
                 .isPresent();
     }
 
-    public Order fillAbsentDrinkData(List<Drink> actualDrinks) {
+    public Order fillAbsentDrinkData(List<? extends Product> actualDrinks) {
         drinks.forEach(
-                drink -> drink.fillAbsentItemData(
+                drink -> drink.fillAbsentData(
                         actualDrinks.stream()
                                 .filter(d -> d.getId() == drink.getId())
                                 .findFirst()
@@ -65,11 +65,11 @@ public class Order implements Identified{
         return this;
     }
 
-    public Order fillAbsentAddonData(List<Item> actualAddons) {
+    public Order fillAbsentAddonData(List<Product> actualAddons) {
         drinks.stream()
                 .flatMap(drink -> drink.getAddons().stream())
                 .forEach(
-                        addon -> addon.fillAbsentItemData(
+                        addon -> addon.fillAbsentData(
                                 actualAddons.stream()
                                         .filter(a -> a.getId() == addon.getId())
                                         .findFirst()
@@ -83,7 +83,7 @@ public class Order implements Identified{
     }
 
     public Order calculateTotalCost() {
-        totalCost = drinks.stream().mapToLong(drink -> drink.getQuantity() * drink.getTotalPrice()).sum();
+        totalCost = drinks.stream().mapToLong(drink -> drink.getTotalPrice()).sum();
         return this;
     }
 
@@ -158,7 +158,7 @@ public class Order implements Identified{
 
     public Set<Integer> getDrinkIds() {
         return drinks.stream()
-                .map(Item::getId)
+                .map(Product::getId)
                 .collect(Collectors.toSet());
     }
 
@@ -166,7 +166,7 @@ public class Order implements Identified{
         return drinks.stream()
                 .flatMap(drink ->
                         drink.getAddons().stream()
-                                .map(Item::getId))
+                                .map(Product::getId))
                 .collect(Collectors.toSet());
     }
 

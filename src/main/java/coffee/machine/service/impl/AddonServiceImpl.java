@@ -4,7 +4,7 @@ import coffee.machine.dao.AbstractConnection;
 import coffee.machine.dao.AddonDao;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
-import coffee.machine.model.entity.item.Item;
+import coffee.machine.model.entity.product.Product;
 import coffee.machine.service.AddonService;
 
 import java.util.ArrayList;
@@ -30,11 +30,11 @@ public class AddonServiceImpl implements AddonService {
     }
 
     @Override
-    public List<Item> getAll() {
+    public List<Product> getAll() {
         try (AbstractConnection connection = daoFactory.getConnection()) {
 
             AddonDao addonDao = daoFactory.getAddonDao(connection);
-            List<Item> addons = addonDao.getAll();
+            List<Product> addons = addonDao.getAll();
             return (addons == null) ? new ArrayList<>() : addons;
 
         }

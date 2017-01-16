@@ -5,8 +5,8 @@ import coffee.machine.dao.*;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.Order;
-import coffee.machine.model.entity.item.Drink;
-import coffee.machine.model.entity.item.Item;
+import coffee.machine.model.entity.product.Drink;
+import coffee.machine.model.entity.product.Product;
 import coffee.machine.service.OrderPreparationService;
 import coffee.machine.service.exception.ServiceException;
 
@@ -22,9 +22,9 @@ import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageK
  * @author oleksij.onysymchuk@gmail.com
  */
 public class OrderPreparationServiceImpl implements OrderPreparationService {
-    private static final String LOG_MESSAGE_NOT_ENOUGH_FORMAT = "There is not enough item id=%d (%s). Ordered = %d, available = %d";
+    private static final String LOG_MESSAGE_NOT_ENOUGH_FORMAT = "There is not enough product id=%d (%s). Ordered = %d, available = %d";
     private static final String LOG_MESSAGE_NOT_ENOUGH_MONEY_FORMAT = "User has insufficient funds. Available amount = %.2f, order cost = %s";
-    private static final String LOG_MESSAGE_QUANTITY_SHOULD_BE_NON_NEGATIVE = "Item quantity is negative. Order details: ";
+    private static final String LOG_MESSAGE_QUANTITY_SHOULD_BE_NON_NEGATIVE = "Product quantity is negative. Order details: ";
     private static final String LOG_MESSAGE_YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY = "Order is empty. Order details: ";
 
     private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
@@ -44,7 +44,7 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
     @Override
     public Order prepareOrder(Order preOrder) {
         Objects.requireNonNull(preOrder);
-        preOrder.clearZeroItems();
+        preOrder.clearZeroProducts();
         checkOrder(preOrder);
 
         try (AbstractConnection connection = daoFactory.getConnection()) {
@@ -56,13 +56,13 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
             connection.beginSerializableTransaction();
 
             List<Drink> actualDrinks = drinkDao.getAllByIds(preOrder.getDrinkIds());
-            List<Item> actualAddons = addonDao.getAllByIds(preOrder.getAddonIds());
+            List<Product> actualAddons = addonDao.getAllByIds(preOrder.getAddonIds());
             Order order = fillOrderWithAbsentData(preOrder, actualDrinks, actualAddons);
             Account userAccount = accountDao.getByUserId(order.getUserId())
                     .orElseThrow(IllegalStateException::new);
 
             checkUserHaveEnoughMoney(order.getTotalCost(), userAccount.getAmount());
-            deductActualQuantitiesByOrderQuantities(actualDrinks, actualAddons, order);
+            decreaseActualQuantitiesByOrderQuantities(actualDrinks, actualAddons, order);
 
             saveUpdatedDrinkQuantities(drinkDao, actualDrinks);
             saveUpdatedAddonQuantities(addonDao, actualAddons);
@@ -89,7 +89,7 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
     }
 
 
-    private Order fillOrderWithAbsentData(Order preOrder, List<Drink> actualDrinks, List<Item> actualAddons) {
+    private Order fillOrderWithAbsentData(Order preOrder, List<Drink> actualDrinks, List<Product> actualAddons) {
         return preOrder
                 .fillAbsentDrinkData(actualDrinks)
                 .fillAbsentAddonData(actualAddons)
@@ -111,43 +111,43 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
         }
     }
 
-    private void deductActualQuantitiesByOrderQuantities(List<Drink> actualDrinks,
-                                                         List<Item> actualAddons,
-                                                         Order order) {
+    private void decreaseActualQuantitiesByOrderQuantities(List<Drink> actualDrinks,
+                                                           List<Product> actualAddons,
+                                                           Order order) {
         for (Drink orderedDrink : order.getDrinks()) {
-            deductActualQuantityByItemQuantity(actualDrinks, orderedDrink);
-            for (Item orderedAddon : orderedDrink.getAddons()) {
-                deductActualQuantityByItemQuantity(actualAddons, orderedAddon, orderedDrink.getQuantity());
+            deductActualQuantityByProductQuantity(actualDrinks, orderedDrink);
+            for (Product orderedAddon : orderedDrink.getAddons()) {
+                deductActualQuantityByProductQuantity(actualAddons, orderedAddon, orderedDrink.getQuantity());
             }
         }
     }
 
-    private void deductActualQuantityByItemQuantity(List<? extends Item> actualItems, Item orderedItem) {
+    private void deductActualQuantityByProductQuantity(List<? extends Product> actualProducts, Product orderedProduct) {
         int quantityWithoutParent = 1;
-        deductActualQuantityByItemQuantity(actualItems, orderedItem, quantityWithoutParent);
+        deductActualQuantityByProductQuantity(actualProducts, orderedProduct, quantityWithoutParent);
     }
 
-    private void deductActualQuantityByItemQuantity(List<? extends Item> actualItems,
-                                                    Item orderedItem,
+    private void deductActualQuantityByProductQuantity(List<? extends Product> actualProducts,
+                                                    Product orderedProduct,
                                                     int parentQuantity) {
-        Item actualDrink = actualItems.stream()
-                .filter(item -> item.getId() == orderedItem.getId())
+        Product actualDrink = actualProducts.stream()
+                .filter(product -> product.getId() == orderedProduct.getId())
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
 
         int actualQuantity = actualDrink.getQuantity();
-        int quantityToBuy = orderedItem.getQuantity() * parentQuantity;
+        int quantityToBuy = orderedProduct.getQuantity() * parentQuantity;
 
         if (actualQuantity >= quantityToBuy) {
             actualDrink.setQuantity(actualQuantity - quantityToBuy);
         } else {
             throw new ServiceException()
-                    .addMessageKey(ITEM_NO_LONGER_AVAILABLE)
-                    .addAdditionalMessage(orderedItem.getName())
+                    .addMessageKey(PRODUCT_NO_LONGER_AVAILABLE)
+                    .addAdditionalMessage(orderedProduct.getName())
                     .addLogMessage(
                             String.format(LOG_MESSAGE_NOT_ENOUGH_FORMAT,
-                                    orderedItem.getId(),
-                                    orderedItem.getName(),
+                                    orderedProduct.getId(),
+                                    orderedProduct.getName(),
                                     quantityToBuy,
                                     actualQuantity));
         }
@@ -157,7 +157,7 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
         drinkDao.updateQuantityAllInList(actualDrinks);
     }
 
-    private void saveUpdatedAddonQuantities(AddonDao addonDao, List<Item> actualAddons) {
+    private void saveUpdatedAddonQuantities(AddonDao addonDao, List<Product> actualAddons) {
         addonDao.updateQuantityAllInList(actualAddons);
     }
 

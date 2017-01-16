@@ -1,53 +1,59 @@
-package coffee.machine.model.entity.item;
+package coffee.machine.model.entity.product;
 
 import coffee.machine.model.entity.Identified;
 
 import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFF;
 
 /**
- * This class represents Addon entity. NOTE: Addon=Item.
+ * This class represents Parent class for product hierarchy.
+ * Also, NOTE: this class represents drink's Addon.
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class Item implements Comparable<Item>, Identified {
+public class Product implements Comparable<Product>, Identified {
     protected int id;
     protected String name;
     protected long price;
     protected int quantity;
-    protected ItemType type;
+    protected ProductType type;
 
-    public Item() {
+    public Product() {
     }
 
-    protected Item(Item item) {
-        id = item.getId();
-        name = item.getName();
-        price = item.getPrice();
-        quantity = item.getQuantity();
+    protected Product(Product product) {
+        id = product.getId();
+        name = product.getName();
+        price = product.getPrice();
+        quantity = product.getQuantity();
     }
 
-    public Item getCopy() {
-        return new Item(this);
+    public Product getCopy() {
+        return new Product(this);
     }
 
     public void incrementQuantityBy(int quantityToAdd) {
         quantity += quantityToAdd;
     }
 
-    public void fillAbsentItemData(Item itemData) {
-        if ((id != itemData.getId()) || (itemData.getType() == null)) {
+    public void fillAbsentData(Product productData) {
+        if ((id != productData.getId()) || (productData.getType() == null)) {
             throw new IllegalArgumentException();
         }
         if ((name == null) || (name.isEmpty())) {
-            name = itemData.getName();
+            name = productData.getName();
         }
         if (price == 0) {
-            price = itemData.getPrice();
+            price = productData.getPrice();
         }
         if (quantity == 0) {
-            quantity = itemData.getQuantity();
+            quantity = productData.getQuantity();
         }
     }
+
+    public long getTotalPrice() {
+        return price * quantity;
+    }
+
 
     public int getId() {
         return id;
@@ -85,16 +91,16 @@ public class Item implements Comparable<Item>, Identified {
         this.quantity = quantity;
     }
 
-    public ItemType getType() {
+    public ProductType getType() {
         return type;
     }
 
-    public void setType(ItemType type) {
+    public void setType(ProductType type) {
         this.type = type;
     }
 
     @Override
-    public int compareTo(Item obj) {
+    public int compareTo(Product obj) {
         return Integer.compare(this.id, obj.id);
     }
 
@@ -103,7 +109,7 @@ public class Item implements Comparable<Item>, Identified {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Item that = (Item) o;
+        Product that = (Product) o;
 
         if (type != that.type) return false;
         if (id != that.id) return false;
@@ -129,50 +135,51 @@ public class Item implements Comparable<Item>, Identified {
 
     @Override
     public String toString() {
-        return "Item{" +
+        return "Product{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", quantity=" + quantity +
+                ", totalPrice=" + getTotalPrice() +
                 ", type=" + type +
                 '}';
     }
 
     public static class Builder {
-        private Item item;
+        private Product product;
 
         public Builder() {
-            this.item = new Item();
-            this.item.type = ItemType.ADDON;
+            this.product = new Product();
+            this.product.type = ProductType.ADDON;
         }
 
-        public Builder(ItemType itemType) {
-            this.item = ItemFactory.getInstance().getNewInstanceOfType(itemType);
-            this.item.type = itemType;
+        public Builder(ProductType productType) {
+            this.product = ProductFactory.getInstance().getNewInstanceOfType(productType);
+            this.product.type = productType;
         }
 
         public Builder setId(int id) {
-            item.id = id;
+            product.id = id;
             return this;
         }
 
         public Builder setName(String name) {
-            item.name = name;
+            product.name = name;
             return this;
         }
 
         public Builder setPrice(long price) {
-            item.price = price;
+            product.price = price;
             return this;
         }
 
         public Builder setQuantity(int quantity) {
-            item.quantity = quantity;
+            product.quantity = quantity;
             return this;
         }
 
-        public Item build() {
-            return item;
+        public Product build() {
+            return product;
         }
 
     }

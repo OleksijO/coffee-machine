@@ -1,7 +1,7 @@
 package coffee.machine.model.value.object;
 
-import coffee.machine.model.entity.item.Drink;
-import coffee.machine.model.entity.item.Item;
+import coffee.machine.model.entity.product.Drink;
+import coffee.machine.model.entity.product.Product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,14 +10,14 @@ import java.util.stream.Collectors;
 /**
  * Created by oleksij.onysymchuk@gmail on 05.01.2017.
  */
-public class ItemReceipt {
-    private List<Item> addons = new ArrayList<>();
+public class ProductsReceipt {
+    private List<Product> addons = new ArrayList<>();
     private List<Drink> drinks = new ArrayList<>();
 
-    public ItemReceipt() {
+    public ProductsReceipt() {
     }
 
-    public ItemReceipt(List<Drink> drinks, List<Item> addons) {
+    public ProductsReceipt(List<Drink> drinks, List<Product> addons) {
         addAddons(addons);
         addDrinks(drinks);
     }
@@ -26,7 +26,7 @@ public class ItemReceipt {
         return addons.size() + drinks.size() == 0;
     }
 
-    public ItemReceipt clearZeroItems() {
+    public ProductsReceipt clearZeroProducts() {
         addons = addons
                 .stream()
                 .filter(addon -> addon.getQuantity() != 0)
@@ -51,15 +51,15 @@ public class ItemReceipt {
         this.drinks.addAll(drinks);
     }
 
-    public void addAddon(Item addon) {
+    public void addAddon(Product addon) {
         addons.add(addon);
     }
 
-    public void addAddons(List<Item> addons) {
+    public void addAddons(List<Product> addons) {
         this.addons.addAll(addons);
     }
 
-    public List<Item> getAddons() {
+    public List<Product> getAddons() {
         return addons;
     }
 
@@ -72,7 +72,7 @@ public class ItemReceipt {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ItemReceipt that = (ItemReceipt) o;
+        ProductsReceipt that = (ProductsReceipt) o;
 
         if (addons != null ? !addons.equals(that.addons) : that.addons != null) return false;
         return drinks != null ? drinks.equals(that.drinks) : that.drinks == null;
@@ -88,7 +88,7 @@ public class ItemReceipt {
 
     @Override
     public String toString() {
-        return "ItemReceipt{" +
+        return "ProductsReceipt{" +
                 "addons=" + addons +
                 ", drinks=" + drinks +
                 '}';

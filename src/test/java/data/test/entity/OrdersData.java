@@ -1,8 +1,8 @@
 package data.test.entity;
 
 import coffee.machine.model.entity.Order;
-import coffee.machine.model.entity.item.Drink;
-import coffee.machine.model.entity.item.Item;
+import coffee.machine.model.entity.product.Drink;
+import coffee.machine.model.entity.product.Product;
 
 import java.util.Date;
 
@@ -44,13 +44,13 @@ public enum OrdersData {
                 break;
             case 2:
                 order.addDrink(getDrinkForOrderByDataAndQuantity(WATER, 2));
-                Item lemon = getAddonForOrderByDataAndQuantity(LEMON,1);
+                Product lemon = getAddonForOrderByDataAndQuantity(LEMON,1);
                 Drink drink2 = getDrinkForOrderByDataAndQuantity(TEA_WITH_SUGAR, 1);
                 drink2.getAddons().add(lemon);
                 order.addDrink(drink2);
                 drink2 = getDrinkForOrderByDataAndQuantity(ESPRESSO, 3);
-                Item sugar = getAddonForOrderByDataAndQuantity(SUGAR,2);
-                Item milk = getAddonForOrderByDataAndQuantity(MILK, 1);
+                Product sugar = getAddonForOrderByDataAndQuantity(SUGAR,2);
+                Product milk = getAddonForOrderByDataAndQuantity(MILK, 1);
                 drink2.getAddons().add(sugar);
                 drink2.getAddons().add(milk);
                 order.addDrink(drink2);
@@ -61,8 +61,8 @@ public enum OrdersData {
 
     }
 
-    private Item getAddonForOrderByDataAndQuantity(AddonsData addonData, int quantity) {
-        Item lemon = addonData.getCopy();
+    private Product getAddonForOrderByDataAndQuantity(AddonsData addonData, int quantity) {
+        Product lemon = addonData.getCopy();
         lemon.setQuantity(quantity);
         lemon.setPrice(0);
         return lemon;

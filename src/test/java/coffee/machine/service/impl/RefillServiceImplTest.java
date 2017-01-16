@@ -5,9 +5,9 @@ import coffee.machine.dao.AddonDao;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.DrinkDao;
 import coffee.machine.model.entity.Account;
-import coffee.machine.model.entity.item.Drink;
-import coffee.machine.model.entity.item.Item;
-import coffee.machine.model.value.object.ItemReceipt;
+import coffee.machine.model.entity.product.Drink;
+import coffee.machine.model.entity.product.Product;
+import coffee.machine.model.value.object.ProductsReceipt;
 import coffee.machine.service.RefillService;
 import coffee.machine.service.exception.ServiceException;
 import data.test.entity.AddonsData;
@@ -48,7 +48,7 @@ public class RefillServiceImplTest {
     private RefillService service;
 
     private List<Drink> drinksToUpdate;
-    private List<Item> addonsToUpdate;
+    private List<Product> addonsToUpdate;
 
 
     @Before
@@ -76,33 +76,33 @@ public class RefillServiceImplTest {
 
     @Test(expected = ServiceException.class)
     public void testRefillThrowsExceptionIfReceiptIsEmpty() throws Exception {
-        service.refill(new ItemReceipt(new ArrayList<>(), new ArrayList<>()));
+        service.refill(new ProductsReceipt(new ArrayList<>(), new ArrayList<>()));
     }
 
     @Test(expected = ServiceException.class)
-    public void testRefillThrowsExceptionIfReceiptHasItemsWithOnlyZeroQuantities() throws Exception {
-        ItemReceipt receipt = new ItemReceipt();
+    public void testRefillThrowsExceptionIfReceiptHasProductsWithOnlyZeroQuantities() throws Exception {
+        ProductsReceipt receipt = new ProductsReceipt();
         receipt.addDrink(new Drink.Builder().setId(1).setQuantity(0).build());
-        receipt.addAddon(new Item.Builder().setId(2).setQuantity(0).build());
-        service.refill(new ItemReceipt(new ArrayList<>(), new ArrayList<>()));
+        receipt.addAddon(new Product.Builder().setId(2).setQuantity(0).build());
+        service.refill(new ProductsReceipt(new ArrayList<>(), new ArrayList<>()));
     }
 
     @Test(expected = ServiceException.class)
     public void testRefillThrowsExceptionIfReceiptHasDrinkWithNegativeQuantity() throws Exception {
-        ItemReceipt receipt = new ItemReceipt();
+        ProductsReceipt receipt = new ProductsReceipt();
         receipt.addDrink(new Drink.Builder().setId(1).setQuantity(1).build());
         receipt.addDrink(new Drink.Builder().setId(2).setQuantity(-1).build());
         receipt.addDrink(new Drink.Builder().setId(3).setQuantity(1).build());
-        service.refill(new ItemReceipt(new ArrayList<>(), new ArrayList<>()));
+        service.refill(new ProductsReceipt(new ArrayList<>(), new ArrayList<>()));
     }
 
     @Test(expected = ServiceException.class)
     public void testRefillThrowsExceptionIfReceiptHasAddonWithNegativeQuantity() throws Exception {
-        ItemReceipt receipt = new ItemReceipt();
-        receipt.addAddon(new Item.Builder().setId(1).setQuantity(1).build());
-        receipt.addAddon(new Item.Builder().setId(2).setQuantity(-1).build());
-        receipt.addAddon(new Item.Builder().setId(3).setQuantity(1).build());
-        service.refill(new ItemReceipt(new ArrayList<>(), new ArrayList<>()));
+        ProductsReceipt receipt = new ProductsReceipt();
+        receipt.addAddon(new Product.Builder().setId(1).setQuantity(1).build());
+        receipt.addAddon(new Product.Builder().setId(2).setQuantity(-1).build());
+        receipt.addAddon(new Product.Builder().setId(3).setQuantity(1).build());
+        service.refill(new ProductsReceipt(new ArrayList<>(), new ArrayList<>()));
     }
 
     @Test
@@ -113,7 +113,7 @@ public class RefillServiceImplTest {
 
         int quantityToAdd = 5;
 
-        ItemReceipt receipt = createCorrectReceipt(quantityToAdd, 0);
+        ProductsReceipt receipt = createCorrectReceipt(quantityToAdd, 0);
 
         service.refill(receipt);
 
@@ -127,19 +127,19 @@ public class RefillServiceImplTest {
 
     @Test
     public void testRefillUpdatesAddonsIfReceiptHasOnlyOneAddon() {
-        Item actualAddon = AddonsData.CINNAMON.getCopy();
+        Product actualAddon = AddonsData.CINNAMON.getCopy();
         addonsToUpdate.add(actualAddon);
         when(addonDao.getAllFromList(any())).thenReturn(addonsToUpdate);
 
         int quantityToAdd = 5;
 
-        ItemReceipt receipt = createCorrectReceipt(0, quantityToAdd);
+        ProductsReceipt receipt = createCorrectReceipt(0, quantityToAdd);
 
         service.refill(receipt);
 
-        Item updatedAddon = AddonsData.CINNAMON.getCopy();
+        Product updatedAddon = AddonsData.CINNAMON.getCopy();
         updatedAddon.setQuantity(updatedAddon.getQuantity() + quantityToAdd);
-        List<Item> updatedAddons = new ArrayList<>();
+        List<Product> updatedAddons = new ArrayList<>();
         updatedAddons.add(updatedAddon);
 
         verify(addonDao).updateQuantityAllInList(updatedAddons);
@@ -158,21 +158,21 @@ public class RefillServiceImplTest {
         when(addonDao.getAllFromList(any())).thenReturn(addonsToUpdate);
 
         int quantityToAdd = 5;
-        ItemReceipt receipt = createCorrectReceipt(quantityToAdd, quantityToAdd);
+        ProductsReceipt receipt = createCorrectReceipt(quantityToAdd, quantityToAdd);
         service.refill(receipt);
 
         List<Drink> updatedDrinks = getCopyOfDrinksToBeUpdated();
-        increaseEachItemQuantityInListBy(updatedDrinks, quantityToAdd);
-        List<Item> updatedAddons = getCopyOfAddonsToBeUpdated();
-        increaseEachItemQuantityInListBy(updatedAddons, quantityToAdd);
+        increaseEachProductQuantityInListBy(updatedDrinks, quantityToAdd);
+        List<Product> updatedAddons = getCopyOfAddonsToBeUpdated();
+        increaseEachProductQuantityInListBy(updatedAddons, quantityToAdd);
 
         verify(drinkDao).updateQuantityAllInList(updatedDrinks);
         verify(addonDao).updateQuantityAllInList(updatedAddons);
 
     }
 
-    private ItemReceipt createCorrectReceipt(int drinkQuantityToAdd, int addonQuantityToAdd) {
-        ItemReceipt receipt = new ItemReceipt();
+    private ProductsReceipt createCorrectReceipt(int drinkQuantityToAdd, int addonQuantityToAdd) {
+        ProductsReceipt receipt = new ProductsReceipt();
         for (Drink drink : drinksToUpdate) {
             Drink newDrinkToAdd = new Drink.Builder()
                     .setId(drink.getId())
@@ -181,8 +181,8 @@ public class RefillServiceImplTest {
 
             receipt.addDrink(newDrinkToAdd);
         }
-        for (Item addon : addonsToUpdate) {
-            Item newAddonToAdd = new Item.Builder()
+        for (Product addon : addonsToUpdate) {
+            Product newAddonToAdd = new Product.Builder()
                     .setId(addon.getId())
                     .setQuantity(addonQuantityToAdd)
                     .build();
@@ -200,16 +200,16 @@ public class RefillServiceImplTest {
         }};
     }
 
-    private ArrayList<Item> getCopyOfAddonsToBeUpdated() {
-        return new ArrayList<Item>() {{
+    private ArrayList<Product> getCopyOfAddonsToBeUpdated() {
+        return new ArrayList<Product>() {{
             add(AddonsData.CINNAMON.getCopy());
             add(AddonsData.SUGAR.getCopy());
         }};
     }
 
 
-    private void increaseEachItemQuantityInListBy(List<? extends Item> items, int quantityToAdd) {
-        items.forEach(item -> item.setQuantity(item.getQuantity() + quantityToAdd));
+    private void increaseEachProductQuantityInListBy(List<? extends Product> products, int quantityToAdd) {
+        products.forEach(product -> product.setQuantity(product.getQuantity() + quantityToAdd));
     }
 
 

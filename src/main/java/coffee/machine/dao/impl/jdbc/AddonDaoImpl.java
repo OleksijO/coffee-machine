@@ -1,8 +1,8 @@
 package coffee.machine.dao.impl.jdbc;
 
 import coffee.machine.dao.AddonDao;
-import coffee.machine.model.entity.item.Item;
-import coffee.machine.model.entity.item.ItemType;
+import coffee.machine.model.entity.product.Product;
+import coffee.machine.model.entity.product.ProductType;
 
 import java.sql.Connection;
 import java.util.List;
@@ -13,64 +13,65 @@ import java.util.stream.Collectors;
 /**
  * This class is the implementation of Addon entity DAO
  * <p>
- * Mainly this is an adaptor for ItemDaoHelper, because Addon=Item, but extends it's functionality with some methods
+ * Mainly this is an adaptor for ProductDaoHelper, because Addon is Product,
+ * but extends it's functionality with some methods
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-class AddonDaoImpl extends AbstractDao<Item> implements AddonDao {
-    private ItemDaoHelper itemDaoHelper;
+class AddonDaoImpl extends AbstractDao<Product> implements AddonDao {
+    private ProductDaoHelper productDaoHelper;
 
     AddonDaoImpl(Connection connection) {
-        itemDaoHelper = new ItemDaoHelper(connection);
+        productDaoHelper = new ProductDaoHelper(connection);
     }
 
 
     @Override
-    public Item insert(Item item) {
-        return itemDaoHelper.insert(item);
+    public Product insert(Product product) {
+        return productDaoHelper.insert(product);
     }
 
     @Override
-    public void updateQuantity(Item item) {
-        itemDaoHelper.updateQuantity(item);
+    public void updateQuantity(Product product) {
+        productDaoHelper.updateQuantity(product);
     }
 
     @Override
-    public List<Item> getAllFromList(List<Item> addonsToGet) {
+    public List<Product> getAllFromList(List<Product> addonsToGet) {
 
-        return itemDaoHelper.getAllByIds(addonsToGet.stream()
-                .map(Item::getId)
+        return productDaoHelper.getAllByIds(addonsToGet.stream()
+                .map(Product::getId)
                 .collect(Collectors.toSet()));
     }
 
     @Override
-    public List<Item> getAllByIds(Set<Integer> itemIds) {
-        return itemDaoHelper.getAllByIds(itemIds);
+    public List<Product> getAllByIds(Set<Integer> productIds) {
+        return productDaoHelper.getAllByIds(productIds);
     }
 
     @Override
-    public void update(Item item) {
-        itemDaoHelper.update(item);
+    public void update(Product product) {
+        productDaoHelper.update(product);
     }
 
     @Override
-    public List<Item> getAll() {
-        return itemDaoHelper.getAll(ItemType.ADDON);
+    public List<Product> getAll() {
+        return productDaoHelper.getAll(ProductType.ADDON);
     }
 
     @Override
-    public Optional<Item> getById(int id) {
-        return itemDaoHelper.getById(id);
+    public Optional<Product> getById(int id) {
+        return productDaoHelper.getById(id);
     }
 
     @Override
     public void deleteById(int id) {
-        itemDaoHelper.deleteById(id);
+        productDaoHelper.deleteById(id);
     }
 
     @Override
-    public void updateQuantityAllInList(List<Item> items) {
-        itemDaoHelper.updateQuantityAllInList(items);
+    public void updateQuantityAllInList(List<Product> products) {
+        productDaoHelper.updateQuantityAllInList(products);
     }
 
 }

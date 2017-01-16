@@ -1,7 +1,7 @@
 package coffee.machine.service;
 
 
-import coffee.machine.model.entity.item.Item;
+import coffee.machine.model.entity.product.Product;
 
 import java.util.List;
 
@@ -15,6 +15,6 @@ public interface AddonService {
     /**
      * @return list of all addons with specified available quantity.
      */
-    List<Item> getAll();
+    List<Product> getAll();
 
 }

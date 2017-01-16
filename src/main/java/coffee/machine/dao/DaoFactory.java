@@ -29,7 +29,7 @@ public interface DaoFactory {
 	/**
 	 * @param connection
 	 *            Abstract connection instance
-	 * @return addon/item entity DAO
+	 * @return addon entity DAO
 	 */
 	AddonDao getAddonDao(AbstractConnection connection);
 

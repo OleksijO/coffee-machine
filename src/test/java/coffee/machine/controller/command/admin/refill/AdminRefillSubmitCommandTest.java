@@ -18,8 +18,8 @@ import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
 import java.util.Iterator;
 
-import static coffee.machine.controller.command.admin.refill.ItemRefillTestData.EMPTY_DATA;
-import static coffee.machine.controller.command.admin.refill.ItemRefillTestData.REFILL_FULL_DATA;
+import static coffee.machine.controller.command.admin.refill.ProductRefillTestData.EMPTY_DATA;
+import static coffee.machine.controller.command.admin.refill.ProductRefillTestData.REFILL_FULL_DATA;
 import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ADMIN_REFILL_NOTHING_TO_ADD;
 import static coffee.machine.view.Attributes.ADMIN_ID;
 import static coffee.machine.view.Attributes.ERROR_MESSAGE;
@@ -79,7 +79,7 @@ public class AdminRefillSubmitCommandTest {
     public void testExecuteCallsServiceIfFormIsEmpty() throws Exception {
         setupRequestParams(EMPTY_DATA);
         command.execute(request, response);
-        verify(refillService).refill(EMPTY_DATA.itemReceipt);
+        verify(refillService).refill(EMPTY_DATA.productsReceipt);
     }
 
     @Test
@@ -88,7 +88,7 @@ public class AdminRefillSubmitCommandTest {
         when(request.getMethod()).thenReturn("get");
         when(session.getAttribute(ADMIN_ID)).thenReturn(1);
         command.execute(request, response);
-        verify(refillService).refill(REFILL_FULL_DATA.itemReceipt);
+        verify(refillService).refill(REFILL_FULL_DATA.productsReceipt);
     }
 
     @Test
@@ -111,7 +111,7 @@ public class AdminRefillSubmitCommandTest {
         verify(request).setAttribute(eq(USUAL_MESSAGE), any());
     }
 
-    private void setupRequestParams(ItemRefillTestData testData) {
+    private void setupRequestParams(ProductRefillTestData testData) {
 
         when(request.getParameterNames()).thenReturn(getEnumeration(testData));
 
@@ -124,7 +124,7 @@ public class AdminRefillSubmitCommandTest {
         });
     }
 
-    private Enumeration<String> getEnumeration(final ItemRefillTestData testData) {
+    private Enumeration<String> getEnumeration(final ProductRefillTestData testData) {
         return new Enumeration<String>() {
             Iterator<String> iterator = testData.requestParams.keySet().iterator();
 

@@ -1,8 +1,8 @@
 package coffee.machine.controller.command.user.purchase;
 
 import coffee.machine.model.entity.Order;
-import coffee.machine.model.entity.item.Drink;
-import coffee.machine.model.entity.item.Item;
+import coffee.machine.model.entity.product.Drink;
+import coffee.machine.model.entity.product.Product;
 import coffee.machine.view.Parameters;
 
 import java.util.*;
@@ -40,35 +40,35 @@ enum PurchaseDrinksTestData {
             new Order.Builder()
                     .setDrinks(new ArrayList<Drink>() {
                         {
-                            List<Item> addons = new ArrayList<Item>() {{
-                                add(new Item.Builder().setId(10).setQuantity(0).build());
-                                add(new Item.Builder().setId(20).setQuantity(1).build());
+                            List<Product> addons = new ArrayList<Product>() {{
+                                add(new Product.Builder().setId(10).setQuantity(0).build());
+                                add(new Product.Builder().setId(20).setQuantity(1).build());
                             }};
                             add(new Drink.Builder().setId(1).setQuantity(0).addAddons(addons).build());
 
-                            addons = new ArrayList<Item>() {{
-                                add(new Item.Builder().setId(10).setQuantity(0).build());
-                                add(new Item.Builder().setId(20).setQuantity(0).build());
+                            addons = new ArrayList<Product>() {{
+                                add(new Product.Builder().setId(10).setQuantity(0).build());
+                                add(new Product.Builder().setId(20).setQuantity(0).build());
                             }};
                             add(new Drink.Builder().setId(2).setQuantity(1).addAddons(addons).build());
 
-                            addons = new ArrayList<Item>() {{
-                                add(new Item.Builder().setId(10).setQuantity(1).build());
-                                add(new Item.Builder().setId(20).setQuantity(0).build());
+                            addons = new ArrayList<Product>() {{
+                                add(new Product.Builder().setId(10).setQuantity(1).build());
+                                add(new Product.Builder().setId(20).setQuantity(0).build());
                             }};
                             add(new Drink.Builder().setId(3).setQuantity(2).addAddons(addons).build());
 
-                            addons = new ArrayList<Item>() {{
-                                add(new Item.Builder().setId(10).setQuantity(-1).build());
-                                add(new Item.Builder().setId(20).setQuantity(1).build());
+                            addons = new ArrayList<Product>() {{
+                                add(new Product.Builder().setId(10).setQuantity(-1).build());
+                                add(new Product.Builder().setId(20).setQuantity(1).build());
                             }};
                             add(new Drink.Builder().setId(4).setQuantity(3).addAddons(addons).build());
 
                             add(new Drink.Builder().setId(5).setQuantity(-1).build());
 
-                            addons = new ArrayList<Item>() {{
-                                add(new Item.Builder().setId(10).setQuantity(2).build());
-                                add(new Item.Builder().setId(20).setQuantity(2).build());
+                            addons = new ArrayList<Product>() {{
+                                add(new Product.Builder().setId(10).setQuantity(2).build());
+                                add(new Product.Builder().setId(20).setQuantity(2).build());
                             }};
                             add(new Drink.Builder().setId(6).setQuantity(4).addAddons(addons).build());
                         }

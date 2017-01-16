@@ -1,7 +1,7 @@
 package data.test.entity;
 
-import coffee.machine.model.entity.item.Drink;
-import coffee.machine.model.entity.item.Item;
+import coffee.machine.model.entity.product.Drink;
+import coffee.machine.model.entity.product.Product;
 
 import java.util.*;
 
@@ -23,7 +23,7 @@ public enum DrinksData {
 
     public final Drink drink;
 
-    DrinksData(int id, String name, long price, int quantity, Item... addons) {
+    DrinksData(int id, String name, long price, int quantity, Product... addons) {
         drink = new Drink.Builder()
                 .setId(id)
                 .setName(name)

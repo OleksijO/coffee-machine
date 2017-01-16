@@ -6,8 +6,8 @@ import coffee.machine.controller.command.CommandWrapperTemplate;
 import coffee.machine.controller.command.helper.RequestDataExtractor;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.Order;
-import coffee.machine.model.entity.item.Drink;
-import coffee.machine.model.entity.item.Item;
+import coffee.machine.model.entity.product.Drink;
+import coffee.machine.model.entity.product.Product;
 import coffee.machine.service.AccountService;
 import coffee.machine.service.OrderPreparationService;
 import coffee.machine.service.DrinkService;
@@ -35,7 +35,7 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
     private static final Logger logger = Logger.getLogger(UserPurchaseSubmitCommand.class);
     private static final String USER_WITH_ID_MADE_PURCHASE_FORMAT = "User with id = %d made purchase: %s";
 
-    private final Pattern patternItem = Pattern.compile(RegExp.REGEXP_ANY_ITEM);
+    private final Pattern patternProduct = Pattern.compile(RegExp.REGEXP_ANY_PRODUCT);
     private final Pattern patternDrink = Pattern.compile(RegExp.REGEXP_DRINK_PARAM);
     private final Pattern patternAddon = Pattern.compile(RegExp.REGEXP_ADDON_IN_DRINK_PARAM);
 
@@ -75,7 +75,7 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
 
     private void saveFormData(HttpServletRequest request) {
         request.setAttribute(PREVIOUS_VALUES_TABLE,
-                dataExtractorHelper.getParametersFromRequestByPattern(request, patternItem));
+                dataExtractorHelper.getParametersFromRequestByPattern(request, patternProduct));
     }
 
     private int getUserIdFromSession(HttpSession session) {
@@ -136,7 +136,7 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
                 .filter(drink -> drink.getId() == drinkId)
                 .findFirst()
                 .orElseThrow(IllegalStateException::new)
-                .addAddon(new Item.Builder()
+                .addAddon(new Product.Builder()
                         .setId(addonId)
                         .setQuantity(quantity)
                         .build());

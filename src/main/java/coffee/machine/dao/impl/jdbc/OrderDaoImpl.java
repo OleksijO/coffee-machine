@@ -3,9 +3,9 @@ package coffee.machine.dao.impl.jdbc;
 import coffee.machine.dao.OrderDao;
 import coffee.machine.dao.exception.DaoException;
 import coffee.machine.model.entity.Order;
-import coffee.machine.model.entity.item.Drink;
-import coffee.machine.model.entity.item.Item;
-import coffee.machine.model.entity.item.ItemType;
+import coffee.machine.model.entity.product.Drink;
+import coffee.machine.model.entity.product.Product;
+import coffee.machine.model.entity.product.ProductType;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -24,23 +24,23 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
                     " FROM orders ";
     private static final String SELECT_ALL_ORDER_DRINKS_SQL =
             " SELECT orders.id, " +
-                    " orders_drink.drink_id, item.name AS item_name, orders_drink.quantity AS item_quantity " +
+                    " orders_drink.drink_id, product.name AS product_name, orders_drink.quantity AS product_quantity " +
                     " FROM orders " +
                     " LEFT JOIN orders_drink " +
                     " ON orders.id=orders_drink.orders_id " +
-                    " LEFT JOIN item " +
-                    " ON orders_drink.drink_id = item.id ";
+                    " LEFT JOIN product " +
+                    " ON orders_drink.drink_id = product.id ";
     private static final String SELECT_ALL_ORDER_DRINK_ADDONS_SQL =
             " SELECT orders.id, " +
                     " orders_drink.drink_id, " +
-                    " addon_id, item.name AS item_name, orders_addon.quantity AS item_quantity " +
+                    " addon_id, product.name AS product_name, orders_addon.quantity AS product_quantity " +
                     " FROM orders " +
                     " LEFT JOIN orders_drink " +
                     " ON orders.id=orders_drink.orders_id " +
                     " INNER JOIN orders_addon " +
                     " ON orders_drink.id=orders_addon.orders_drink_id " +
-                    " LEFT JOIN item " +
-                    " ON orders_addon.addon_id = item.id";
+                    " LEFT JOIN product " +
+                    " ON orders_addon.addon_id = product.id";
     private static final String INSERT_SQL =
             "INSERT INTO orders (user_id, date_time, amount) VALUES (?,?,?)";
     private static final String INSERT_ORDER_DRINK_SQL =
@@ -58,8 +58,8 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     private static final String FIELD_AMOUNT = "amount";
     private static final String FIELD_DRINK_ID = "drink_id";
     private static final String FIELD_ADDON_ID = "addon_id";
-    private static final String FIELD_ITEM_QUANTITY = "item_quantity";
-    private static final String FIELD_ITEM_NAME = "item_name";
+    private static final String FIELD_PRODUCT_QUANTITY = "product_quantity";
+    private static final String FIELD_PRODUCT_NAME = "product_name";
     public static final String DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID = "Database error while getting all by user id = ";
 
     private final Connection connection;
@@ -103,7 +103,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
                 statementDrink.setInt(2, drink.getId());
                 statementDrink.setInt(3, drink.getQuantity());
                 int ordersDrinkId = executeInsertStatement(statementDrink);
-                for (Item addon : drink.getAddons()) {
+                for (Product addon : drink.getAddons()) {
                     if (addon.getQuantity() > 0) {
                         statementAddon.setInt(1, ordersDrinkId);
                         statementAddon.setInt(2, addon.getId());
@@ -160,7 +160,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
         while (rsAddon.next()) {
             Order order = getOrderFromListById(orderList, rsAddon.getInt(FIELD_ID));
             Drink drink = getDrinkFromListById(order.getDrinks(), rsAddon.getInt(FIELD_DRINK_ID));
-            Item addon = getItemFromResultSet(rsAddon);
+            Product addon = getProductFromResultSet(rsAddon);
             drink.getAddons().add(addon);
         }
 
@@ -179,16 +179,16 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     private Drink getDrinkFromResultSet(ResultSet rsDrink) throws SQLException {
         return new Drink.Builder()
                 .setId(rsDrink.getInt(FIELD_DRINK_ID))
-                .setQuantity(rsDrink.getInt(FIELD_ITEM_QUANTITY))
-                .setName(rsDrink.getString(FIELD_ITEM_NAME))
+                .setQuantity(rsDrink.getInt(FIELD_PRODUCT_QUANTITY))
+                .setName(rsDrink.getString(FIELD_PRODUCT_NAME))
                 .build();
     }
 
-    private Item getItemFromResultSet(ResultSet rsAddon) throws SQLException {
-        return new Item.Builder(ItemType.ADDON)
+    private Product getProductFromResultSet(ResultSet rsAddon) throws SQLException {
+        return new Product.Builder(ProductType.ADDON)
                 .setId(rsAddon.getInt(FIELD_ADDON_ID))
-                .setQuantity(rsAddon.getInt(FIELD_ITEM_QUANTITY))
-                .setName(rsAddon.getString(FIELD_ITEM_NAME))
+                .setQuantity(rsAddon.getInt(FIELD_PRODUCT_QUANTITY))
+                .setName(rsAddon.getString(FIELD_PRODUCT_NAME))
                 .build();
     }
 

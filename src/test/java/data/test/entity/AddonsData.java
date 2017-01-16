@@ -1,7 +1,7 @@
 package data.test.entity;
 
-import coffee.machine.model.entity.item.Item;
-import coffee.machine.model.entity.item.ItemType;
+import coffee.machine.model.entity.product.Product;
+import coffee.machine.model.entity.product.ProductType;
 
 import java.util.*;
 
@@ -18,10 +18,10 @@ public enum AddonsData {
     CINNAMON(13, "Корица", 150, 75);
 
 
-    public final Item addon;
+    public final Product addon;
 
     AddonsData(int id, String name, long price, int quantity) {
-        addon = new Item.Builder(ItemType.ADDON)
+        addon = new Product.Builder(ProductType.ADDON)
                 .setId(id)
                 .setName(name)
                 .setPrice(price)
@@ -29,14 +29,14 @@ public enum AddonsData {
                 .build();
     }
 
-    public static List<Item> getAllAddons() {
-        List<Item> addons = new ArrayList<>();
+    public static List<Product> getAllAddons() {
+        List<Product> addons = new ArrayList<>();
         Arrays.stream(values()).forEach(record -> addons.add(record.addon));
         return addons;
     }
 
-    public Item getCopy() {
-        return new Item.Builder(addon.getType())
+    public Product getCopy() {
+        return new Product.Builder(addon.getType())
                 .setId(addon.getId())
                 .setQuantity(addon.getQuantity())
                 .setName(addon.getName())
@@ -44,7 +44,7 @@ public enum AddonsData {
                 .build();
     }
 
-    public static Item getCopyById(int id) {
+    public static Product getCopyById(int id) {
         for (AddonsData rec : values()) {
             if (rec.addon.getId() == id) {
                 return rec.getCopy();

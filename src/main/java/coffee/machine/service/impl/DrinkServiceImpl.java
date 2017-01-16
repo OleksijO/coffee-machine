@@ -4,7 +4,7 @@ import coffee.machine.dao.AbstractConnection;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.DrinkDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
-import coffee.machine.model.entity.item.Drink;
+import coffee.machine.model.entity.product.Drink;
 import coffee.machine.service.DrinkService;
 
 import java.util.ArrayList;

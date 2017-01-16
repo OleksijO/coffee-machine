@@ -4,7 +4,7 @@ import coffee.machine.dao.AbstractConnection;
 import coffee.machine.dao.AddonDao;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
-import coffee.machine.model.entity.item.Item;
+import coffee.machine.model.entity.product.Product;
 import data.test.entity.AddonsData;
 import org.junit.After;
 import org.junit.Before;
@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
  */
 public class AddonDaoTest {
     private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
-    private List<Item> testAddons = new ArrayList<>();
+    private List<Product> testAddons = new ArrayList<>();
     private AbstractConnection connection;
     private AddonDao addonDao;
 
@@ -58,7 +58,7 @@ public class AddonDaoTest {
     @Test
     public void testGetAll() {
 
-        List<Item> addons = addonDao.getAll();
+        List<Product> addons = addonDao.getAll();
         System.out.println(testAddons);
         System.out.println(addons);
         assertEquals(testAddons, addons);
@@ -83,8 +83,8 @@ public class AddonDaoTest {
 
     @Test
     public void testGetById() {
-        Item testAddon = AddonsData.SUGAR.getCopy();
-        Item addon = addonDao.getById(testAddon.getId()).get();
+        Product testAddon = AddonsData.SUGAR.getCopy();
+        Product addon = addonDao.getById(testAddon.getId()).get();
         assertEquals(testAddon, addon);
 
     }
@@ -96,7 +96,7 @@ public class AddonDaoTest {
 
     @Test
     public void testUpdate() {
-        Item testAddon = AddonsData.SUGAR.getCopy();
+        Product testAddon = AddonsData.SUGAR.getCopy();
         long amount = testAddon.getPrice();
         testAddon.setPrice(0);
 
@@ -113,7 +113,7 @@ public class AddonDaoTest {
 
     @Test
     public void testInsertDelete() {
-        Item testAddon = AddonsData.SUGAR.getCopy();
+        Product testAddon = AddonsData.SUGAR.getCopy();
         int size = testAddons.size();
         int addonId = testAddon.getId();
         testAddon.setId(0);
@@ -131,8 +131,8 @@ public class AddonDaoTest {
     @Test
     public void testUpdateQuantity() {
 
-        Item testAddon = AddonsData.SUGAR.getCopy();
-        Item addon = new Item();
+        Product testAddon = AddonsData.SUGAR.getCopy();
+        Product addon = new Product();
         int newQuantity = testAddon.getQuantity() + 1;
         addon.setId(testAddon.getId());
         addon.setQuantity(newQuantity);
@@ -150,22 +150,22 @@ public class AddonDaoTest {
 
     @Test
     public void testGetAllFromList() throws Exception {
-        List<Item> itemsToRetrieve = new ArrayList<>();
-        Item addon = AddonsData.CREAM.getCopy();
-        itemsToRetrieve.add(addon);
+        List<Product> productsToRetrieve = new ArrayList<>();
+        Product addon = AddonsData.CREAM.getCopy();
+        productsToRetrieve.add(addon);
         addon = AddonsData.CINNAMON.getCopy();
-        itemsToRetrieve.add(addon);
-        assertEquals(itemsToRetrieve, addonDao.getAllFromList(itemsToRetrieve));
+        productsToRetrieve.add(addon);
+        assertEquals(productsToRetrieve, addonDao.getAllFromList(productsToRetrieve));
     }
 
     @Test
     public void testGetAllByIds() throws Exception {
-        List<Item> itemsToRetrieve = new ArrayList<Item>() {{
+        List<Product> productsToRetrieve = new ArrayList<Product>() {{
             add(AddonsData.CREAM.getCopy());
             add(AddonsData.CINNAMON.getCopy());
         }};
         Set<Integer> ids = new TreeSet<Integer>(){{add(9);add(13);}};
-        assertEquals(itemsToRetrieve, addonDao.getAllByIds(ids));
+        assertEquals(productsToRetrieve, addonDao.getAllByIds(ids));
     }
 
 }

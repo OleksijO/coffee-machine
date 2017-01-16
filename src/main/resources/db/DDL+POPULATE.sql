@@ -3,9 +3,9 @@ DROP SCHEMA IF EXISTS coffee_machine;
 CREATE DATABASE IF NOT EXISTS coffee_machine ;
 USE coffee_machine;
 
-DROP TABLE IF EXISTS item;
+DROP TABLE IF EXISTS product;
 
-CREATE TABLE item (
+CREATE TABLE product (
   id       INT(11)     NOT NULL AUTO_INCREMENT,
   name     VARCHAR(45) NOT NULL,
   price    BIGINT(20)  NOT NULL DEFAULT '0',
@@ -46,9 +46,9 @@ CREATE TABLE drink_addons (
   drink_id INT(11) NOT NULL,
   addon_id INT(11) NOT NULL,
   KEY drink_fk1_idx (drink_id),
-  CONSTRAINT drink_fk1 FOREIGN KEY (drink_id) REFERENCES item (id)
+  CONSTRAINT drink_fk1 FOREIGN KEY (drink_id) REFERENCES product (id)
     ON DELETE CASCADE,
-  CONSTRAINT addon_fk1 FOREIGN KEY (addon_id) REFERENCES item (id)
+  CONSTRAINT addon_fk1 FOREIGN KEY (addon_id) REFERENCES product (id)
     ON DELETE CASCADE
 )
   ENGINE = InnoDB
@@ -75,7 +75,7 @@ CREATE TABLE orders_drink (
   drink_id  INT(11) NOT NULL,
   quantity  INT(11) NOT NULL,
   PRIMARY KEY orders_drink_pk (id),
-  CONSTRAINT drink_id_fk FOREIGN KEY (drink_id) REFERENCES item (id),
+  CONSTRAINT drink_id_fk FOREIGN KEY (drink_id) REFERENCES product (id),
   CONSTRAINT orders_fk FOREIGN KEY (orders_id) REFERENCES orders (id)
     ON DELETE CASCADE
 )
@@ -86,7 +86,7 @@ CREATE TABLE orders_addon (
   orders_drink_id INT(11) NOT NULL,
   addon_id  INT(11) NOT NULL,
   quantity  INT(11) NOT NULL,
-  CONSTRAINT addon_id_fk FOREIGN KEY (addon_id) REFERENCES item (id),
+  CONSTRAINT addon_id_fk FOREIGN KEY (addon_id) REFERENCES product (id),
   PRIMARY KEY orders_addon_pk (orders_drink_id, addon_id),
   CONSTRAINT orders_addon_orders_drink_id_fk FOREIGN KEY (orders_drink_id) REFERENCES orders_drink (id)
     ON DELETE CASCADE
@@ -104,7 +104,7 @@ INSERT INTO users (id, email, password, full_name, account_id, is_admin) VALUES
   (5, 'user3@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий користувач 4', 5, FALSE);  
   
 
-INSERT INTO item (id, name, price, quantity, type) VALUES
+INSERT INTO product (id, name, price, quantity, type) VALUES
   (1, 'Вода', 100, 10, 'DRINK'),
   (2, 'Минеральная вода', 500, 10, 'DRINK'),
   (3, 'Чай без сахара', 500, 10, 'DRINK'),

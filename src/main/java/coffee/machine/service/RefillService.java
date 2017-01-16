@@ -1,6 +1,6 @@
 package coffee.machine.service;
 
-import coffee.machine.model.value.object.ItemReceipt;
+import coffee.machine.model.value.object.ProductsReceipt;
 
 /**
  * This class represents service for main project logic
@@ -10,10 +10,10 @@ import coffee.machine.model.value.object.ItemReceipt;
 public interface RefillService {
 
     /**
-     * Refills coffee machine with quantity of drinks and items specified in receipt
+     * Refills coffee machine with quantity of drinks and addons specified in receipt
      *
      * @param receipt Contains lists of drinks and addons to refill
      */
-    void refill(ItemReceipt receipt);
+    void refill(ProductsReceipt receipt);
 
 }

@@ -1,7 +1,7 @@
 package coffee.machine.service;
 
 
-import coffee.machine.model.entity.item.Drink;
+import coffee.machine.model.entity.product.Drink;
 
 import java.util.List;
 

@@ -1,8 +1,8 @@
 package coffee.machine.controller.command.admin.refill;
 
-import coffee.machine.model.entity.item.Drink;
-import coffee.machine.model.entity.item.Item;
-import coffee.machine.model.value.object.ItemReceipt;
+import coffee.machine.model.entity.product.Drink;
+import coffee.machine.model.entity.product.Product;
+import coffee.machine.model.value.object.ProductsReceipt;
 import coffee.machine.view.Parameters;
 
 import java.util.ArrayList;
@@ -12,10 +12,10 @@ import java.util.Map;
 /**
  * @author oleksij.onysymchuk@gmail.com
  */
-enum ItemRefillTestData {
+enum ProductRefillTestData {
     EMPTY_DATA(
             new HashMap<>(),
-            new ItemReceipt(new ArrayList<Drink>(), new ArrayList<Item>())),
+            new ProductsReceipt(new ArrayList<Drink>(), new ArrayList<Product>())),
 
     REFILL_FULL_DATA(
             new HashMap<String, String>() {{
@@ -33,28 +33,28 @@ enum ItemRefillTestData {
                 put(addon + 5, "8");
 
             }},
-            new ItemReceipt(
+            new ProductsReceipt(
                     new ArrayList<Drink>() {{
                         add(new Drink.Builder().setId(1).setQuantity(0).build());
                         add(new Drink.Builder().setId(2).setQuantity(1).build());
                         add(new Drink.Builder().setId(3).setQuantity(-1).build());
                         add(new Drink.Builder().setId(4).setQuantity(2).build());
                     }},
-                    new ArrayList<Item>() {{
-                        add(new Item.Builder().setId(1).setQuantity(0).build());
-                        add(new Item.Builder().setId(2).setQuantity(2).build());
-                        add(new Item.Builder().setId(3).setQuantity(-1).build());
-                        add(new Item.Builder().setId(4).setQuantity(6).build());
-                        add(new Item.Builder().setId(5).setQuantity(8).build());
+                    new ArrayList<Product>() {{
+                        add(new Product.Builder().setId(1).setQuantity(0).build());
+                        add(new Product.Builder().setId(2).setQuantity(2).build());
+                        add(new Product.Builder().setId(3).setQuantity(-1).build());
+                        add(new Product.Builder().setId(4).setQuantity(6).build());
+                        add(new Product.Builder().setId(5).setQuantity(8).build());
                     }})
     );
 
 
     Map<String, String> requestParams;
-    ItemReceipt itemReceipt;
+    ProductsReceipt productsReceipt;
 
-    ItemRefillTestData(Map<String, String> requestParams, ItemReceipt itemReceipt) {
+    ProductRefillTestData(Map<String, String> requestParams, ProductsReceipt productsReceipt) {
         this.requestParams = requestParams;
-        this.itemReceipt = itemReceipt;
+        this.productsReceipt = productsReceipt;
     }
 }

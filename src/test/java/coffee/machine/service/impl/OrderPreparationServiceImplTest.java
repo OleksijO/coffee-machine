@@ -4,8 +4,8 @@ import coffee.machine.dao.*;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.User;
-import coffee.machine.model.entity.item.Drink;
-import coffee.machine.model.entity.item.Item;
+import coffee.machine.model.entity.product.Drink;
+import coffee.machine.model.entity.product.Product;
 import coffee.machine.service.OrderPreparationService;
 import coffee.machine.service.exception.ServiceException;
 import data.test.entity.AccountsData;
@@ -119,7 +119,7 @@ public class OrderPreparationServiceImplTest {
     }
 
     @Test
-    public void testPrepareOrderUpdatesOrderDataIfOrderHasItemsWithPositiveQuantity() {
+    public void testPrepareOrderUpdatesOrderDataIfOrderHasProductsWithPositiveQuantity() {
         Order order = getFilledOrder();
         // order = getEmptyOrder();
         Order testOrder = getPreparedForStoreOrder();
@@ -130,7 +130,7 @@ public class OrderPreparationServiceImplTest {
     }
 
     @Test
-    public void testPrepareOrderUpdatesQuantitiesOfDrinksInDatabaseIfOrderHasItemsWithPositiveQuantity() {
+    public void testPrepareOrderUpdatesQuantitiesOfDrinksInDatabaseIfOrderHasProductsWithPositiveQuantity() {
         Order order = getFilledOrder();
         // order = getEmptyOrder();
         List<Drink> drinks = getDrinksReadyForUpdateQuantity();
@@ -139,16 +139,16 @@ public class OrderPreparationServiceImplTest {
     }
 
     @Test
-    public void testPrepareOrderUpdatesQuantitesOfAddonsInDatabaseIfOrderHasItemsWithPositiveQuantity() {
+    public void testPrepareOrderUpdatesQuantitesOfAddonsInDatabaseIfOrderHasProductsWithPositiveQuantity() {
         Order order = getFilledOrder();
         // order = getEmptyOrder();
-        List<Item> addons = getAddonsReadyForUpdateQuantity();
+        List<Product> addons = getAddonsReadyForUpdateQuantity();
         service.prepareOrder(order);
         verify(addonDao).updateQuantityAllInList(addons);
     }
 
     @Test
-    public void testPrepareOrderWithdrawsCreditsFromUserAccountIfOrderHasItemsWithPositiveQuantity() {
+    public void testPrepareOrderWithdrawsCreditsFromUserAccountIfOrderHasProductsWithPositiveQuantity() {
         Order order = getFilledOrder();
         // order = getEmptyOrder();
         Order testOrder = getPreparedForStoreOrder();
@@ -163,7 +163,7 @@ public class OrderPreparationServiceImplTest {
     }
 
     @Test
-    public void testPrepareAddsCreditsToCoffeeMachineAccountIfOrderHasItemsWithPositiveQuantity() {
+    public void testPrepareAddsCreditsToCoffeeMachineAccountIfOrderHasProductsWithPositiveQuantity() {
         Order order = getFilledOrder();
         // order = getEmptyOrder();
         Order testOrder = getPreparedForStoreOrder();
@@ -251,9 +251,9 @@ public class OrderPreparationServiceImplTest {
                 .build();
     }
 
-    private ArrayList<Item> getAddonsForEveryDrinkInOrderToStore() {
-        return new ArrayList<Item>() {{
-            Item addon = SUGAR.getCopy();
+    private ArrayList<Product> getAddonsForEveryDrinkInOrderToStore() {
+        return new ArrayList<Product>() {{
+            Product addon = SUGAR.getCopy();
             addon.setQuantity(1);
             add(addon);
             addon = CREAM.getCopy();
@@ -272,7 +272,7 @@ public class OrderPreparationServiceImplTest {
                 add(drink);
 
                 drink = ESPRESSO.getCopy();
-                drink.setAddons(new ArrayList<Item>(){{
+                drink.setAddons(new ArrayList<Product>(){{
                     add(SUGAR.getCopy());
                     add(MILK.getCopy());
                     add(CREAM.getCopy());
@@ -284,7 +284,7 @@ public class OrderPreparationServiceImplTest {
 
 
                 drink = MOCACCINO.getCopy();
-                drink.setAddons(new ArrayList<Item>(){{
+                drink.setAddons(new ArrayList<Product>(){{
                     add(SUGAR.getCopy());
                     add(MILK.getCopy());
                     add(CREAM.getCopy());
@@ -297,9 +297,9 @@ public class OrderPreparationServiceImplTest {
         };
     }
 
-    private List<Item> getAddonsReadyForUpdateQuantity() {
-        return new ArrayList<Item>() {{
-            Item addon = SUGAR.getCopy();
+    private List<Product> getAddonsReadyForUpdateQuantity() {
+        return new ArrayList<Product>() {{
+            Product addon = SUGAR.getCopy();
             addon.setQuantity(SUGAR.addon.getQuantity() - 1 * (0 + 2 + 3));
             add(addon);
             addon = CREAM.getCopy();
@@ -352,17 +352,17 @@ public class OrderPreparationServiceImplTest {
         return drinks;
     }
 
-    private List<Item> getTestAddons() {
-        return new ArrayList<Item>() {{
-            add(new Item.Builder().setId(7).setQuantity(1).build());
-            add(new Item.Builder().setId(8).setQuantity(0).build());
-            add(new Item.Builder().setId(9).setQuantity(2).build());
-            add(new Item.Builder().setId(13).setQuantity(0).build());
+    private List<Product> getTestAddons() {
+        return new ArrayList<Product>() {{
+            add(new Product.Builder().setId(7).setQuantity(1).build());
+            add(new Product.Builder().setId(8).setQuantity(0).build());
+            add(new Product.Builder().setId(9).setQuantity(2).build());
+            add(new Product.Builder().setId(13).setQuantity(0).build());
         }};
     }
 
-    private List<Item> getAddonsFromDatabaseByIds() {
-        return new ArrayList<Item>() {{
+    private List<Product> getAddonsFromDatabaseByIds() {
+        return new ArrayList<Product>() {{
             add(SUGAR.getCopy());
             add(CREAM.getCopy());
         }};

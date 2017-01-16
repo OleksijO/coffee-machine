@@ -4,8 +4,8 @@ import coffee.machine.dao.AbstractConnection;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.DrinkDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
-import coffee.machine.model.entity.item.Drink;
-import coffee.machine.model.entity.item.Item;
+import coffee.machine.model.entity.product.Drink;
+import coffee.machine.model.entity.product.Product;
 import data.test.entity.DrinksData;
 import org.junit.After;
 import org.junit.Before;
@@ -76,7 +76,7 @@ public class DrinkDaoTest {
 
         List<Integer> drinkIds = testDrinks
                 .stream()
-                .map(Item::getId)
+                .map(Product::getId)
                 .collect(Collectors.toList());
         assertEquals(testDrinks, drinkDao.getAllByIds(new HashSet<>(drinkIds)));
 
@@ -155,22 +155,22 @@ public class DrinkDaoTest {
 
     @Test
     public void testGetAllFromList() throws Exception {
-        List<Drink> itemsToRetrieve = new ArrayList<>();
+        List<Drink> productsToRetrieve = new ArrayList<>();
         Drink addon = DrinksData.BORJOMI.getCopy();
-        itemsToRetrieve.add(addon);
+        productsToRetrieve.add(addon);
         addon = DrinksData.MOCACCINO.getCopy();
-        itemsToRetrieve.add(addon);
-        assertEquals(itemsToRetrieve, drinkDao.getAllFromList(itemsToRetrieve));
+        productsToRetrieve.add(addon);
+        assertEquals(productsToRetrieve, drinkDao.getAllFromList(productsToRetrieve));
     }
 
     @Test
     public void testGetAllByIds() throws Exception {
-        List<Drink> itemsToRetrieve = new ArrayList<Drink>() {{
+        List<Drink> productsToRetrieve = new ArrayList<Drink>() {{
             add(DrinksData.BORJOMI.getCopy());
             add(DrinksData.MOCACCINO.getCopy());
         }};
         Set<Integer> ids = new TreeSet<Integer>(){{add(2);add(11);}};
-        assertEquals(itemsToRetrieve, drinkDao.getAllByIds(ids));
+        assertEquals(productsToRetrieve, drinkDao.getAllByIds(ids));
     }
 
 }

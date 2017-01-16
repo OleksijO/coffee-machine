@@ -1,6 +1,6 @@
 package coffee.machine.dao;
 
-import coffee.machine.model.entity.item.Drink;
+import coffee.machine.model.entity.product.Drink;
 
 import java.util.List;
 import java.util.Set;
