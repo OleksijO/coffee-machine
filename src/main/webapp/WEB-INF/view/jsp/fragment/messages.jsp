@@ -7,6 +7,7 @@
 <c:set var="usual_additional_message" value="${requestScope[Attributes.USUAL_ADDITIONAL_MESSAGE]}"/>
 <c:set var="err_message" value="${requestScope[Attributes.ERROR_MESSAGE]}"/>
 <c:set var="error_additional_message" value="${requestScope[Attributes.ERROR_ADDITIONAL_MESSAGE]}"/>
+<c:set var="validation_errors" value="${requestScope[Attributes.VALIDATION_ERRORS]}"/>
 
 <c:if test='${not empty err_message}'>
     <div align="center" style="width: 90%; padding: 2px; margin: 2px; background: lightpink; border: 3px red">
@@ -17,6 +18,16 @@
             </c:if>
         </p>
     </div>
+</c:if>
+
+<c:if test='${not empty validation_errors}'>
+    <c:forEach var="validation_error_key" items="${validation_errors}">
+    <div align="center" style="width: 90%; padding: 2px; margin: 2px; background: lightpink; border: 3px red;">
+        <p>
+            <fmt:message key="${validation_error_key}"/>
+        </p>
+    </div>
+    </c:forEach>
 </c:if>
 
 <c:if test='${not empty usual_message}'>

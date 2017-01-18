@@ -1,7 +1,6 @@
 package coffee.machine.view.tag;
 
 import coffee.machine.config.CoffeeMachineConfig;
-import coffee.machine.service.RegExp;
 import org.apache.log4j.Logger;
 
 import javax.servlet.jsp.JspException;
@@ -79,7 +78,7 @@ public class LoginFormTag implements Tag {
                                                                     + "</label>&nbsp;<br><br></td>\n" +
                     "                <td><br><input id=\"login\" type=\"text\" name=\"" + parameterLogin + "\"\n" +
                     "                               value=\"" + loginPreviousValue + "\"" +
-                    "                  required     pattern=\"" + RegExp.REGEXP_EMAIL + "\""+
+                    "                  required     pattern=\"" + coffee.machine.controller.RegExp.REGEXP_EMAIL + "\""+
                     "  title=\""+bundle.getString("error.login.email.do.not.match.pattern")+ "\"/><br><br></td>\n" +
                     "            </tr>\n" +
                     "            <tr>\n" +
@@ -87,7 +86,7 @@ public class LoginFormTag implements Tag {
                                                                     + "</label>&nbsp;<br><br></td>\n" +
                     "                <td><br><input id=\"pswd\" type=\"password\" name=\"" + parameterPassword
                                                                                             + "\""+
-                    "                       required min=4 max=12 pattern=\"" + RegExp.REGEXP_PASSWORD + "\""+
+                    "                       required min=4 max=12 pattern=\"" + coffee.machine.controller.RegExp.REGEXP_PASSWORD + "\""+
                     "  title=\""+bundle.getString("error.login.password.do.not.match.pattern")+ "\"/><br><br></td>\n" +
                     "            </tr>\n" +
                     "            <tr>\n" +

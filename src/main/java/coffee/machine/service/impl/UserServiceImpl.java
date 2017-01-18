@@ -10,17 +10,15 @@ import coffee.machine.model.entity.User;
 import coffee.machine.model.security.PasswordEncryptor;
 import coffee.machine.model.value.object.user.LoginData;
 import coffee.machine.model.value.object.user.RegisterData;
-import coffee.machine.service.RegExp;
 import coffee.machine.service.UserService;
 import coffee.machine.service.exception.ServiceException;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_REGISTER_FULL_NAME_DO_NOT_MATCH_PATTERN;
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.*;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_LOGIN_NO_SUCH_COMBINATION;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.USER_WITH_SPECIFIED_EMAIL_ALREADY_REGISTERED;
 
 /**
  * This class is an implementation of UserService
@@ -32,10 +30,6 @@ public class UserServiceImpl implements UserService {
             "Try to register user with already used email: ";
     private static final String Login_TRY_FAILED_WRONG_EMAIL_OR_PASSWORD =
             "LOGIN TRY FAILED: no such combination of email and password. Entered e-mail: ";
-
-    private static final Pattern PATTERN_EMAIL = Pattern.compile(RegExp.REGEXP_EMAIL);
-    private static final Pattern PATTERN_PASSWORD = Pattern.compile(RegExp.REGEXP_PASSWORD);
-    private static final Pattern PATTERN_FULL_NAME = Pattern.compile(RegExp.REGEXP_FULL_NAME);
 
     private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
@@ -63,7 +57,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByLoginData(LoginData loginData) {
 
-        checkLoginData(loginData);
+        Objects.requireNonNull(loginData);
         loginData.encryptPassword();
 
         try (AbstractConnection connection = daoFactory.getConnection()) {
@@ -79,29 +73,9 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void checkLoginData(LoginData loginData) {
-        Objects.requireNonNull(loginData);
-        if (!isLoginValid(loginData.getEmail())) {
-            throw new ServiceException()
-                    .addMessageKey(ERROR_LOGIN_EMAIL_DO_NOT_MATCH_PATTERN);
-        }
-        if (!isPasswordValid(loginData.getPassword())) {
-            throw new ServiceException()
-                    .addMessageKey(ERROR_LOGIN_PASSWORD_DO_NOT_MATCH_PATTERN);
-        }
-    }
 
-    private boolean isPasswordValid(String password) {
-        return checkToPattern(PATTERN_PASSWORD, password);
-    }
 
-    private boolean isLoginValid(String email) {
-        return checkToPattern(PATTERN_EMAIL, email);
-    }
 
-    private boolean checkToPattern(Pattern pattern, String stringToCheck) {
-        return (stringToCheck != null) && (pattern.matcher(stringToCheck).matches());
-    }
 
     @Override
     public List<User> getAllNonAdminUsers() {
@@ -114,7 +88,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createNewUser(RegisterData registerData) {
-        checkRegisterData(registerData);
+        Objects.requireNonNull(registerData);
         registerData.encryptPassword();
         User user = getUserFromRegisterData(registerData);
 
@@ -128,18 +102,6 @@ public class UserServiceImpl implements UserService {
             connection.commitTransaction();
         }
         return user;
-    }
-
-    private void checkRegisterData(RegisterData registerData) {
-        checkLoginData(registerData);
-        if (!isFullNameValid(registerData.getFullName())) {
-            throw new ServiceException()
-                    .addMessageKey(ERROR_REGISTER_FULL_NAME_DO_NOT_MATCH_PATTERN);
-        }
-    }
-
-    private boolean isFullNameValid(String fullName) {
-        return checkToPattern(PATTERN_FULL_NAME, fullName);
     }
 
     private User getUserFromRegisterData(RegisterData formData) {

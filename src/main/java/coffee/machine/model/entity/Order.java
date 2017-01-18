@@ -29,7 +29,7 @@ public class Order implements Identified{
         return CoffeeMachineConfig.DB_MONEY_COEFF * totalCost;
     }
 
-    public void clearZeroProducts() {
+    public void clearProductsWithZeroQuantity() {
         drinks = drinks.stream()
                 .filter(drink -> drink.getQuantity() != 0)
                 .collect(Collectors.toList());

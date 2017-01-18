@@ -4,17 +4,20 @@ import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.RegExp;
 import coffee.machine.controller.command.CommandWrapperTemplate;
 import coffee.machine.controller.command.helper.RequestDataExtractor;
+import coffee.machine.controller.validation.Notification;
+import coffee.machine.controller.validation.ProductsReceiptValidator;
+import coffee.machine.controller.validation.Validator;
 import coffee.machine.model.entity.product.Drink;
 import coffee.machine.model.entity.product.Product;
 import coffee.machine.model.value.object.ProductsReceipt;
 import coffee.machine.service.AccountService;
 import coffee.machine.service.AddonService;
-import coffee.machine.service.RefillService;
 import coffee.machine.service.DrinkService;
+import coffee.machine.service.RefillService;
 import coffee.machine.service.impl.AccountServiceImpl;
 import coffee.machine.service.impl.AddonServiceImpl;
-import coffee.machine.service.impl.RefillServiceImpl;
 import coffee.machine.service.impl.DrinkServiceImpl;
+import coffee.machine.service.impl.RefillServiceImpl;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,8 +31,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.ADMIN_REFILL_SUCCESSFUL;
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.QUANTITY_SHOULD_BE_NON_NEGATIVE;
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.TITLE_ADMIN_REFILL;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.QUANTITY_SHOULD_BE_NON_NEGATIVE;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.ADMIN_REFILL_PAGE;
 
@@ -41,8 +44,7 @@ import static coffee.machine.view.PagesPaths.ADMIN_REFILL_PAGE;
 public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
     private static final Logger logger = Logger.getLogger(AdminRefillSubmitCommand.class);
 
-    private static final String PRODUCTS_ADDED = "Coffe" +
-            "e-machine was refilled by admin id=%s. %s";
+    private static final String PRODUCTS_ADDED = "Coffee-machine was refilled by admin id=%s. %s";
 
     private final DrinkService drinkService = DrinkServiceImpl.getInstance();
     private final AddonService addonService = AddonServiceImpl.getInstance();
@@ -53,6 +55,7 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
     private final Pattern patternAddon = Pattern.compile(RegExp.REGEXP_ADDON_PARAM);
 
     private RequestDataExtractor dataExtractorHelper = new RequestDataExtractor();
+    private Validator<ProductsReceipt> productsReceiptValidator = new ProductsReceiptValidator();
 
     private RefillService coffeeMachine = RefillServiceImpl.getInstance();
 
@@ -78,6 +81,13 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
         saveFormData(request);
 
         ProductsReceipt receipt = getReceiptFromRequest(request);
+        receipt.clearProductsWithZeroQuantity();
+
+        Notification notification = productsReceiptValidator.validate(receipt);
+        if (notification.hasMessages()) {
+            processValidationErrors(notification, request);
+            return ADMIN_REFILL_PAGE;
+        }
 
         coffeeMachine.refill(receipt);
         placeMessageToRequest(request);
@@ -104,7 +114,7 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
     }
 
     private Map<Integer, Integer> getProductQuantityByIdFromRequest(HttpServletRequest request,
-                                                                 Pattern productParameterPattern) {
+                                                                    Pattern productParameterPattern) {
         Enumeration<String> params = request.getParameterNames();
         Map<Integer, Integer> productQuantityByIds = new HashMap<>();
         while (params.hasMoreElements()) {
@@ -122,10 +132,11 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
 
     private List<Drink> getDrinksByIdsAndQuantities(Map<Integer, Integer> drinkQuantityByIds) {
         return drinkQuantityByIds.entrySet().stream()
-                .map(entry -> new Drink.Builder()
-                        .setId(entry.getKey())
-                        .setQuantity(entry.getValue())
-                        .build())
+                .map(entry ->
+                        new Drink.Builder()
+                                .setId(entry.getKey())
+                                .setQuantity(entry.getValue())
+                                .build())
                 .collect(Collectors.toList());
     }
 
@@ -158,5 +169,9 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
 
     public void setCoffeeMachineRefillService(RefillService coffeeMachine) {
         this.coffeeMachine = coffeeMachine;
+    }
+
+    public void setProductsReceiptValidator(Validator<ProductsReceipt> productsReceiptValidator) {
+        this.productsReceiptValidator = productsReceiptValidator;
     }
 }

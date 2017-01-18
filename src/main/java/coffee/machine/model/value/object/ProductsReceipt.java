@@ -23,10 +23,17 @@ public class ProductsReceipt {
     }
 
     public boolean isEmpty() {
-        return addons.size() + drinks.size() == 0;
+        return isEmpty(drinks) && isEmpty(addons);
     }
 
-    public ProductsReceipt clearZeroProducts() {
+    private boolean isEmpty(List<? extends Product> products) {
+        return !products.stream()
+                .filter(product -> product.getQuantity() != 0)
+                .findAny()
+                .isPresent();
+    }
+
+    public ProductsReceipt clearProductsWithZeroQuantity() {
         addons = addons
                 .stream()
                 .filter(addon -> addon.getQuantity() != 0)

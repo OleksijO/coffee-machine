@@ -22,10 +22,10 @@ import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageK
  * @author oleksij.onysymchuk@gmail.com
  */
 public class OrderPreparationServiceImpl implements OrderPreparationService {
-    private static final String LOG_MESSAGE_NOT_ENOUGH_FORMAT = "There is not enough product id=%d (%s). Ordered = %d, available = %d";
-    private static final String LOG_MESSAGE_NOT_ENOUGH_MONEY_FORMAT = "User has insufficient funds. Available amount = %.2f, order cost = %s";
-    private static final String LOG_MESSAGE_QUANTITY_SHOULD_BE_NON_NEGATIVE = "Product quantity is negative. Order details: ";
-    private static final String LOG_MESSAGE_YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY = "Order is empty. Order details: ";
+    private static final String LOG_MESSAGE_NOT_ENOUGH_FORMAT =
+            "There is not enough product id=%d (%s). Ordered = %d, available = %d";
+    private static final String LOG_MESSAGE_NOT_ENOUGH_MONEY_FORMAT =
+            "User has insufficient funds. Available amount = %.2f, order cost = %s";
 
     private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private final int COFFEE_MACHINE_ACCOUNT_ID = CoffeeMachineConfig.ACCOUNT_ID;
@@ -44,8 +44,6 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
     @Override
     public Order prepareOrder(Order preOrder) {
         Objects.requireNonNull(preOrder);
-        preOrder.clearZeroProducts();
-        checkOrder(preOrder);
 
         try (AbstractConnection connection = daoFactory.getConnection()) {
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
@@ -74,20 +72,6 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
         }
 
     }
-
-    private void checkOrder(Order order) {
-        if (order.isEmpty()) {
-            throw new ServiceException()
-                    .addMessageKey(YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY)
-                    .addLogMessage(LOG_MESSAGE_YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY +order);
-        }
-        if (order.hasNegativeQuantity()) {
-            throw new ServiceException()
-                    .addMessageKey(QUANTITY_SHOULD_BE_NON_NEGATIVE)
-                    .addLogMessage(LOG_MESSAGE_QUANTITY_SHOULD_BE_NON_NEGATIVE + order);
-        }
-    }
-
 
     private Order fillOrderWithAbsentData(Order preOrder, List<Drink> actualDrinks, List<Product> actualAddons) {
         return preOrder

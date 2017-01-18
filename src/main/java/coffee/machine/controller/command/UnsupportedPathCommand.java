@@ -25,7 +25,7 @@ public class UnsupportedPathCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        logger.error(REQUESTED_UNSUPPORTED_URI + loggingHelper.buildLogMessage(request));
+        logger.warn(REQUESTED_UNSUPPORTED_URI + loggingHelper.buildLogMessage(request));
         response.sendRedirect(HOME_PATH);
         return REDIRECTED;
     }

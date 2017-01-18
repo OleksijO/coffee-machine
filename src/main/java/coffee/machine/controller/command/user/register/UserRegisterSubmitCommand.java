@@ -2,8 +2,11 @@ package coffee.machine.controller.command.user.register;
 
 import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.command.CommandWrapperTemplate;
-import coffee.machine.model.value.object.user.RegisterData;
+import coffee.machine.controller.validation.Notification;
+import coffee.machine.controller.validation.RegisterDataValidator;
+import coffee.machine.controller.validation.Validator;
 import coffee.machine.model.entity.User;
+import coffee.machine.model.value.object.user.RegisterData;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.UserServiceImpl;
 import coffee.machine.view.Parameters;
@@ -31,6 +34,8 @@ public class UserRegisterSubmitCommand extends CommandWrapperTemplate {
 
     private UserService userService = UserServiceImpl.getInstance();
 
+    private Validator<RegisterData> registerDataValidator = new RegisterDataValidator();
+
     public UserRegisterSubmitCommand() {
         super(USER_REGISTER_PAGE);
     }
@@ -40,6 +45,13 @@ public class UserRegisterSubmitCommand extends CommandWrapperTemplate {
 
         RegisterData registerData = getRegisterDataFromRequest(request);
         saveFormData(request, registerData);
+
+        Notification notification = registerDataValidator.validate(registerData);
+        if (notification.hasMessages()){
+            processValidationErrors(notification, request);
+            return USER_REGISTER_PAGE;
+        }
+
         User user = userService.createNewUser(registerData);
         processSuccessfulRegistration(request, user);
         removeFormData(request);
@@ -75,4 +87,5 @@ public class UserRegisterSubmitCommand extends CommandWrapperTemplate {
         request.setAttribute(REGISTER_FORM_TITLE, REGISTER_USER_FORM_TITLE);
         request.setAttribute(REGISTER_FORM_ACTION, USER_REGISTER_PATH);
     }
+
 }

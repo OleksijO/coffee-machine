@@ -2,7 +2,6 @@
 <%@ taglib uri="/WEB-INF/view/taglib/loginForm.tld" prefix="custom" %>
 <%@ page import="coffee.machine.view.PagesPaths" %>
 <%@ page import="coffee.machine.controller.RegExp" %>
-<%@ page import="coffee.machine.i18n.message.key.GeneralKey" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%@ include file="/WEB-INF/view/jsp/fragment/header.jsp" %>
@@ -23,7 +22,6 @@
                 <td><br><label for="login"><fmt:message key="login.email"/></label>&nbsp;<br><br></td>
                 <td><br><input id="login" minlength="6" type="text" name="${Parameters.LOGIN_PARAM}"
                                value="${requestScope[Attributes.PREVIOUS_ENTERED_EMAIL]}"
-                               pattern="${RegExp.REGEXP_EMAIL}" required
                                title="${titleLoginInput}"
                                 /><br><br></td>
             </tr>

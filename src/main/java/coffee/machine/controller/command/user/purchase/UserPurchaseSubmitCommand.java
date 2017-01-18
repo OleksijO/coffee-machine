@@ -4,16 +4,19 @@ import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.RegExp;
 import coffee.machine.controller.command.CommandWrapperTemplate;
 import coffee.machine.controller.command.helper.RequestDataExtractor;
+import coffee.machine.controller.validation.Notification;
+import coffee.machine.controller.validation.OrderValidator;
+import coffee.machine.controller.validation.Validator;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.product.Drink;
 import coffee.machine.model.entity.product.Product;
 import coffee.machine.service.AccountService;
-import coffee.machine.service.OrderPreparationService;
 import coffee.machine.service.DrinkService;
+import coffee.machine.service.OrderPreparationService;
 import coffee.machine.service.impl.AccountServiceImpl;
-import coffee.machine.service.impl.OrderPreparationServiceImpl;
 import coffee.machine.service.impl.DrinkServiceImpl;
+import coffee.machine.service.impl.OrderPreparationServiceImpl;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,8 +29,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.PURCHASE_THANKS_MESSAGE;
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.QUANTITY_SHOULD_BE_NON_NEGATIVE;
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.TITLE_USER_PURCHASE;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.QUANTITY_SHOULD_BE_NON_NEGATIVE;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.USER_PURCHASE_PAGE;
 
@@ -44,6 +47,7 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
     private OrderPreparationService coffeeMachine = OrderPreparationServiceImpl.getInstance();
 
     private RequestDataExtractor dataExtractorHelper = new RequestDataExtractor();
+    private Validator<Order> orderValidator = new OrderValidator();
 
 
     public UserPurchaseSubmitCommand() {
@@ -67,6 +71,14 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
 
         saveFormData(request);
         Order preOrder = getOrderFromRequest(request);
+        preOrder.clearProductsWithZeroQuantity();
+
+        Notification notification = orderValidator.validate(preOrder);
+        if (notification.hasMessages()){
+            processValidationErrors(notification, request);
+            return USER_PURCHASE_PAGE;
+        }
+
         Order order = coffeeMachine.prepareOrder(preOrder);
         logDetailsAndPlaceMessageToRequest(request, order);
         clearFormData(request);

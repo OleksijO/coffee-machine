@@ -18,10 +18,12 @@ public final class Attributes {
 
     public final static String USUAL_MESSAGE = "usual_message";
     public final static String ERROR_MESSAGE = "error_message";
-    public final static String USER_BALANCE = "user_balance";
+    public final static String VALIDATION_ERRORS = "validation_errors";
 
     public final static String USUAL_ADDITIONAL_MESSAGE = "usual_additional_message";
     public final static String ERROR_ADDITIONAL_MESSAGE = "error_additional_message";
+
+    public final static String USER_BALANCE = "user_balance";
 
     public static final String ORDER = "order";
 

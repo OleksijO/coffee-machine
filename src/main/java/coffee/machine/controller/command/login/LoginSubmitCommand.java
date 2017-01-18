@@ -3,6 +3,9 @@ package coffee.machine.controller.command.login;
 import coffee.machine.controller.command.CommandWrapperTemplate;
 import coffee.machine.controller.command.helper.LoggingHelper;
 import coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey;
+import coffee.machine.controller.validation.LoginDataValidator;
+import coffee.machine.controller.validation.Notification;
+import coffee.machine.controller.validation.Validator;
 import coffee.machine.model.entity.User;
 import coffee.machine.model.value.object.user.LoginData;
 import coffee.machine.service.UserService;
@@ -36,6 +39,8 @@ public class LoginSubmitCommand extends CommandWrapperTemplate {
 
     private UserService userService = UserServiceImpl.getInstance();
 
+    private Validator<LoginData> loginDataValidator = new LoginDataValidator();
+
     public LoginSubmitCommand() {
         super(LOGIN_PAGE);
     }
@@ -43,7 +48,13 @@ public class LoginSubmitCommand extends CommandWrapperTemplate {
     protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         LoginData loginData = getLoginDataFromRequest(request);
-        saveFormDataToRequest(request, loginData);
+        saveFormData(loginData, request);
+
+        Notification notification = loginDataValidator.validate(loginData);
+        if (notification.hasMessages()){
+            processValidationErrors(notification, request);
+            return LOGIN_PAGE;
+        }
 
         if (isDoubleLoginAttempt(request.getSession())) {
             logDetails(request, loginData);
@@ -62,7 +73,7 @@ public class LoginSubmitCommand extends CommandWrapperTemplate {
         return new LoginData(email, password);
     }
 
-    private void saveFormDataToRequest(HttpServletRequest request, LoginData loginData) {
+    private void saveFormData(LoginData loginData, HttpServletRequest request) {
 
         request.setAttribute(PREVIOUS_ENTERED_EMAIL, loginData.getEmail());
     }
