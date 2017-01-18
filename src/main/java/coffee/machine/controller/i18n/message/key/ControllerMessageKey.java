@@ -15,4 +15,12 @@ public interface ControllerMessageKey {
     String CREDITS_AMOUNT_IS_NOT_DOUBLE = "error.add.credits.amount.is.not.double";
 
 
+    String TITLE_HOME = "title.home";
+    String TITLE_ADMIN_REFILL = "title.admin.refill";
+    String TITLE_ADMIN_ADD_CREDIT = "title.admin.add.credit";
+    String TITLE_USER_ORDER_HISTORY = "title.user.orders.history";
+    String TITLE_USER_PURCHASE = "title.user.purchase";
+    String TITLE_LOGIN = "title.login";
+    String TITLE_FOR_LOGIN_FORM = "login.form.title";
+    String TITLE_USER_REGISTER = "title.user.register";
 }

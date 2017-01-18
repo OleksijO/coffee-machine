@@ -21,8 +21,8 @@ import java.util.List;
 
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.ADD_CREDITS_YOU_ADDED_CREDITS_SUCCESSFULLY_ON_ACCOUNT_OF_USER;
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.CREDITS_AMOUNT_IS_NOT_DOUBLE;
-import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_UNKNOWN;
-import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.TITLE_ADMIN_ADD_CREDIT;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.QUANTITY_SHOULD_BE_INT;
+import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_ADMIN_ADD_CREDIT;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.ADMIN_ADD_CREDITS_PAGE;
 import static coffee.machine.view.Parameters.CREDITS_TO_ADD;
@@ -65,7 +65,7 @@ public class AdminAddCreditSubmitCommand extends CommandWrapperTemplate {
 
         CreditsReceipt receipt = getReceiptDataFromRequest(request);
         Notification notification = creditsReceiptValidator.validate(receipt);
-        if (notification.hasMessages()) {
+        if (notification.hasErrorMessages()) {
             processValidationErrors(notification, request);
         } else {
             accountService.addCredits(receipt);
@@ -74,7 +74,7 @@ public class AdminAddCreditSubmitCommand extends CommandWrapperTemplate {
         List<User> users = userService.getAllNonAdminUsers();
         placeUserDataToRequest(request, users);
 
-        if (!notification.hasMessages()) {
+        if (!notification.hasErrorMessages()) {
             placeSuccessfulMessageToRequest(request, receipt, users);
             logDetails(receipt);
         }
@@ -85,7 +85,7 @@ public class AdminAddCreditSubmitCommand extends CommandWrapperTemplate {
 
         return new CreditsReceipt.Builder()
                 .setUserId(dataExtractorHelper
-                        .getIntFromRequestByParameter(request, Parameters.USER_ID, ERROR_UNKNOWN))
+                        .getIntFromRequestByParameter(request, Parameters.USER_ID, QUANTITY_SHOULD_BE_INT))
                 .setAmount(dataExtractorHelper
                         .getDoubleFromRequestByParameter(
                                 request, CREDITS_TO_ADD, CREDITS_AMOUNT_IS_NOT_DOUBLE))

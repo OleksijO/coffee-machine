@@ -31,8 +31,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.ADMIN_REFILL_SUCCESSFUL;
-import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.TITLE_ADMIN_REFILL;
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.QUANTITY_SHOULD_BE_NON_NEGATIVE;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.QUANTITY_SHOULD_BE_INT;
+import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_ADMIN_REFILL;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.ADMIN_REFILL_PAGE;
 
@@ -84,7 +84,7 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
         receipt.clearProductsWithZeroQuantity();
 
         Notification notification = productsReceiptValidator.validate(receipt);
-        if (notification.hasMessages()) {
+        if (notification.hasErrorMessages()) {
             processValidationErrors(notification, request);
             return ADMIN_REFILL_PAGE;
         }
@@ -122,7 +122,7 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
             Matcher matcher = productParameterPattern.matcher(param);
             if (matcher.matches()) {
                 int productQuantity = dataExtractorHelper
-                        .getIntFromRequestByParameter(request, param, QUANTITY_SHOULD_BE_NON_NEGATIVE);
+                        .getIntFromRequestByParameter(request, param, QUANTITY_SHOULD_BE_INT);
                 int productId = dataExtractorHelper.getFirstNumberFromParameterName(param);
                 productQuantityByIds.put(productId, productQuantity);
             }

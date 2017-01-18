@@ -8,19 +8,19 @@ import java.util.List;
  */
 public class Notification {
     private Class validationObjectClass;
-    private List<String> messageKeys = new ArrayList<>();
+    private List<String> errorMessageKeys = new ArrayList<>();
     private List<String> logMessages = new ArrayList<>();
 
     public Notification(Class validationObjectClass) {
         this.validationObjectClass = validationObjectClass;
     }
 
-    public boolean hasMessages() {
-        return (messageKeys.size() != 0);
+    public boolean hasErrorMessages() {
+        return (errorMessageKeys.size() != 0);
     }
 
-    public List<String> getMessageKeys() {
-        return messageKeys;
+    public List<String> getErrorMessageKeys() {
+        return errorMessageKeys;
     }
 
     public List<String> getLogMessages() {
@@ -32,7 +32,7 @@ public class Notification {
     }
 
     public Notification addMessageKey(String errorMessageKey) {
-        messageKeys.add(errorMessageKey);
+        errorMessageKeys.add(errorMessageKey);
         return this;
     }
 

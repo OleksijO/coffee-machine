@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.REGISTER_USER_FORM_TITLE;
-import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.TITLE_USER_REGISTER;
+import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_USER_REGISTER;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.*;
 import static coffee.machine.view.Parameters.FULL_NAME_PARAM;
@@ -47,7 +47,7 @@ public class UserRegisterSubmitCommand extends CommandWrapperTemplate {
         saveFormData(request, registerData);
 
         Notification notification = registerDataValidator.validate(registerData);
-        if (notification.hasMessages()){
+        if (notification.hasErrorMessages()){
             processValidationErrors(notification, request);
             return USER_REGISTER_PAGE;
         }

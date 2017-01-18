@@ -7,8 +7,8 @@ import java.util.regex.Pattern;
 
 import static coffee.machine.controller.RegExp.REGEXP_EMAIL;
 import static coffee.machine.controller.RegExp.REGEXP_PASSWORD;
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_LOGIN_EMAIL_DO_NOT_MATCH_PATTERN;
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_LOGIN_PASSWORD_DO_NOT_MATCH_PATTERN;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_LOGIN_EMAIL_DO_NOT_MATCH_PATTERN;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_LOGIN_PASSWORD_DO_NOT_MATCH_PATTERN;
 
 /**
  * Created by oleksij.onysymchuk@gmail on 16.01.2017.

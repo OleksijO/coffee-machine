@@ -2,8 +2,8 @@ package coffee.machine.controller.validation;
 
 import coffee.machine.model.value.object.ProductsReceipt;
 
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ADMIN_REFILL_NOTHING_TO_ADD;
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.QUANTITY_SHOULD_BE_NON_NEGATIVE;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ADMIN_REFILL_NOTHING_TO_ADD;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.QUANTITY_SHOULD_BE_NON_NEGATIVE;
 
 /**
  * Created by oleksij.onysymchuk@gmail on 16.01.2017.
@@ -18,7 +18,6 @@ public class ProductsReceiptValidator implements Validator<ProductsReceipt> {
             notification
                     .addMessageKey(ADMIN_REFILL_NOTHING_TO_ADD)
                     .addLogMessage(LOG_MESSAGE_ADMIN_REFILL_NOTHING_TO_ADD + receipt);
-
         }
         if (receipt.hasNegativeQuantity()) {
             notification

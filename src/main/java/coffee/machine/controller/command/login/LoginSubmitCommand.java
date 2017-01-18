@@ -2,7 +2,7 @@ package coffee.machine.controller.command.login;
 
 import coffee.machine.controller.command.CommandWrapperTemplate;
 import coffee.machine.controller.command.helper.LoggingHelper;
-import coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey;
+import coffee.machine.controller.i18n.message.key.ControllerMessageKey;
 import coffee.machine.controller.validation.LoginDataValidator;
 import coffee.machine.controller.validation.Notification;
 import coffee.machine.controller.validation.Validator;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_LOGIN_YOU_ARE_ALREADY_LOGGED_IN;
-import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.TITLE_LOGIN;
+import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_LOGIN;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.*;
 import static coffee.machine.view.Parameters.PASSWORD_PARAM;
@@ -51,7 +51,7 @@ public class LoginSubmitCommand extends CommandWrapperTemplate {
         saveFormData(loginData, request);
 
         Notification notification = loginDataValidator.validate(loginData);
-        if (notification.hasMessages()){
+        if (notification.hasErrorMessages()){
             processValidationErrors(notification, request);
             return LOGIN_PAGE;
         }
@@ -113,7 +113,7 @@ public class LoginSubmitCommand extends CommandWrapperTemplate {
     @Override
     protected void placeNecessaryDataToRequest(HttpServletRequest request) {
         request.setAttribute(PAGE_TITLE, TITLE_LOGIN);
-        request.setAttribute(LOGIN_FORM_TITLE, ControllerErrorMessageKey.LOGIN_FORM_TITLE);
+        request.setAttribute(LOGIN_FORM_TITLE, ControllerMessageKey.TITLE_FOR_LOGIN_FORM);
         request.setAttribute(LOGIN_FORM_ACTION, LOGIN_PATH);
     }
 }

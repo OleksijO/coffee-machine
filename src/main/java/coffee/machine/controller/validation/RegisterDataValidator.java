@@ -5,7 +5,7 @@ import coffee.machine.model.value.object.user.RegisterData;
 
 import java.util.regex.Pattern;
 
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_REGISTER_FULL_NAME_DO_NOT_MATCH_PATTERN;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_REGISTER_FULL_NAME_DO_NOT_MATCH_PATTERN;
 
 /**
  * Created by oleksij.onysymchuk@gmail on 16.01.2017.

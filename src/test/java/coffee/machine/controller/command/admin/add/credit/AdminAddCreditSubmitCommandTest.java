@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_ADD_CREDITS_AMOUNT_IS_NEGATIVE;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_ADD_CREDITS_AMOUNT_IS_NOT_POSITIVE;
 import static coffee.machine.view.Attributes.ERROR_MESSAGE;
 import static coffee.machine.view.Attributes.USUAL_MESSAGE;
 import static org.junit.Assert.assertEquals;
@@ -67,7 +67,7 @@ public class AdminAddCreditSubmitCommandTest {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("2");
         when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
-        doThrow(new ServiceException().addMessageKey(ERROR_ADD_CREDITS_AMOUNT_IS_NEGATIVE))
+        doThrow(new ServiceException().addMessageKey(ERROR_ADD_CREDITS_AMOUNT_IS_NOT_POSITIVE))
                 .when(accountService).addCredits(any());
 
         assertEquals(PagesPaths.ADMIN_ADD_CREDITS_PAGE, command.execute(request,response));
@@ -78,7 +78,7 @@ public class AdminAddCreditSubmitCommandTest {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("2");
         when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
-        doThrow(new ServiceException().addMessageKey(ERROR_ADD_CREDITS_AMOUNT_IS_NEGATIVE))
+        doThrow(new ServiceException().addMessageKey(ERROR_ADD_CREDITS_AMOUNT_IS_NOT_POSITIVE))
                 .when(accountService).addCredits(any());
         command.execute(request,response);
         verify(request).setAttribute(eq(ERROR_MESSAGE), any());
@@ -99,7 +99,7 @@ public class AdminAddCreditSubmitCommandTest {
         when(request.getParameter(Parameters.USER_ID)).thenReturn("1");
         when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
         when(accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)).thenReturn(Optional.of(new Account()));
-        doThrow(new ServiceException().addMessageKey(ERROR_ADD_CREDITS_AMOUNT_IS_NEGATIVE))
+        doThrow(new ServiceException().addMessageKey(ERROR_ADD_CREDITS_AMOUNT_IS_NOT_POSITIVE))
                 .when(accountService).addCredits(any());
         command.execute(request,response);
         CreditsReceipt testReceipt = new CreditsReceipt.Builder()

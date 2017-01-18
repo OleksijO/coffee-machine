@@ -17,8 +17,8 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.*;
 
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.QUANTITY_SHOULD_BE_NON_NEGATIVE;
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.QUANTITY_SHOULD_BE_NON_NEGATIVE;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_PREPARE_ORDER_NOTHING_TO_BUY;
 import static data.test.entity.AddonsData.*;
 import static data.test.entity.DrinksData.*;
 import static org.junit.Assert.assertEquals;
@@ -80,7 +80,7 @@ public class OrderPreparationServiceImplTest {
         try {
             service.prepareOrder(emptyOrder);
         } catch (ServiceException e) {
-            assertEquals(YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY, e.getMessageKey());
+            assertEquals(ERROR_PREPARE_ORDER_NOTHING_TO_BUY, e.getMessageKey());
             return;
         }
         fail(NO_SERVICE_EXCEPTION_HAD_BEEN_THROWN);

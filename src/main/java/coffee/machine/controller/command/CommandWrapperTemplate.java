@@ -102,7 +102,7 @@ public abstract class CommandWrapperTemplate implements Command {
     }
 
     private void placeValidationErrorsToRequest(Notification notification, HttpServletRequest request) {
-        request.setAttribute(Attributes.VALIDATION_ERRORS, notification.getMessageKeys());
+        request.setAttribute(Attributes.VALIDATION_ERRORS, notification.getErrorMessageKeys());
     }
 
     private void logValidationErrors(Notification notification, HttpServletRequest request) {

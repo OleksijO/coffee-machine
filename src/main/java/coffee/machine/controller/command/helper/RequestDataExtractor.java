@@ -59,7 +59,7 @@ public class RequestDataExtractor {
 
             return Integer.parseInt(request.getParameter(param));
 
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             throw new ControllerException()
                     .addMessageKey(ErrorMessageKey)
                     .addLogMessage(String.format(LOG_MESSAGE_PROBLEMS_WITH_PARSING_INT_FROM_PARAMETER_FORMAT,
@@ -77,7 +77,7 @@ public class RequestDataExtractor {
 
             return Double.parseDouble(request.getParameter(param));
 
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             throw new ControllerException()
                     .addMessageKey(ErrorMessageKey)
                     .addLogMessage(String.format(LOG_MESSAGE_PROBLEMS_WITH_PARSING_DOUBLE_FROM_PARAMETER_FORMAT,

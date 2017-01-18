@@ -20,7 +20,7 @@ import java.util.Iterator;
 
 import static coffee.machine.controller.command.admin.refill.ProductRefillTestData.EMPTY_DATA;
 import static coffee.machine.controller.command.admin.refill.ProductRefillTestData.REFILL_FULL_DATA;
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ADMIN_REFILL_NOTHING_TO_ADD;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ADMIN_REFILL_NOTHING_TO_ADD;
 import static coffee.machine.view.Attributes.ADMIN_ID;
 import static coffee.machine.view.Attributes.ERROR_MESSAGE;
 import static coffee.machine.view.Attributes.USUAL_MESSAGE;

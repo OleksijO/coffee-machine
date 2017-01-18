@@ -21,7 +21,7 @@ import java.util.Iterator;
 
 import static coffee.machine.controller.command.user.purchase.PurchaseDrinksTestData.EMPTY_DATA;
 import static coffee.machine.controller.command.user.purchase.PurchaseDrinksTestData.PURCHASE_FULL_DATA;
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_PREPARE_ORDER_NOTHING_TO_BUY;
 import static coffee.machine.view.Attributes.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -69,7 +69,7 @@ public class UserPurchaseSubmitCommandTest {
         setupRequestParams(EMPTY_DATA);
         when(session.getAttribute(USER_ID)).thenReturn(1);
         doThrow(new ServiceException()
-                .addMessageKey(YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY)
+                .addMessageKey(ERROR_PREPARE_ORDER_NOTHING_TO_BUY)
                 .addLogMessage(""))
                 .when(orderService).prepareOrder(any());
         assertEquals(
@@ -82,7 +82,7 @@ public class UserPurchaseSubmitCommandTest {
         setupRequestParams(EMPTY_DATA);
         when(session.getAttribute(USER_ID)).thenReturn(1);
         doThrow(new ServiceException()
-                .addMessageKey(YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY)
+                .addMessageKey(ERROR_PREPARE_ORDER_NOTHING_TO_BUY)
                 .addLogMessage(""))
                 .when(orderService).prepareOrder(any());
         command.execute(request, response);
@@ -104,7 +104,7 @@ public class UserPurchaseSubmitCommandTest {
         setupRequestParams(EMPTY_DATA);
         when(session.getAttribute(USER_ID)).thenReturn(1);
         doThrow(new ServiceException()
-                .addMessageKey(YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY)
+                .addMessageKey(ERROR_PREPARE_ORDER_NOTHING_TO_BUY)
                 .addLogMessage(""))
                 .when(orderService).prepareOrder(any());
         command.execute(request, response);
