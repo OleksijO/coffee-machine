@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_LOGIN_NO_SUCH_COMBINATION;
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.USER_WITH_SPECIFIED_EMAIL_ALREADY_REGISTERED;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_REGISTER_USER_WITH_SPECIFIED_EMAIL_ALREADY_REGISTERED;
 
 /**
  * This class is an implementation of UserService
@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
     private void checkIfUserAlreadyExists(String email, UserDao userDao) {
         if (userDao.getUserByLogin(email).isPresent()) {
             throw new ServiceException()
-                    .addMessageKey(USER_WITH_SPECIFIED_EMAIL_ALREADY_REGISTERED)
+                    .addMessageKey(ERROR_REGISTER_USER_WITH_SPECIFIED_EMAIL_ALREADY_REGISTERED)
                     .addLogMessage(TRY_TO_REGISTER_USER_WITH_ALREADY_USED_EMAIL + email);
         }
     }

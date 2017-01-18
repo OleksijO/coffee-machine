@@ -17,14 +17,14 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.*;
 
-import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.QUANTITY_SHOULD_BE_NON_NEGATIVE;
-import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_PREPARE_ORDER_NOTHING_TO_BUY;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_PREPARE_ORDER_PRODUCT_NO_LONGER_AVAILABLE;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_PREPARE_ORDER_USER_HAS_NOT_ENOUGH_MONEY;
 import static data.test.entity.AddonsData.*;
 import static data.test.entity.DrinksData.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by oleksij.onysymchuk@gmail on 11.01.2017.
@@ -73,55 +73,16 @@ public class OrderPreparationServiceImplTest {
     }
 
 
-    @Test
-    public void testPrepareOrderThrowsExceptionIfOrderHasEmptyDrinks() throws Exception {
-        Order emptyOrder = getEmptyOrder();
-        //emptyOrder = getFilledOrder();
-        try {
-            service.prepareOrder(emptyOrder);
-        } catch (ServiceException e) {
-            assertEquals(ERROR_PREPARE_ORDER_NOTHING_TO_BUY, e.getMessageKey());
-            return;
-        }
-        fail(NO_SERVICE_EXCEPTION_HAD_BEEN_THROWN);
+    @Test(expected = NullPointerException.class)
+    public void testPrepareOrderThrowsNullPointerIfOrderIsNull() throws Exception {
+            service.prepareOrder(null);
+
     }
 
-    @Test
-    public void testPrepareOrderDoNotStoresDataIfOrderHasEmptyDrinks() throws Exception {
-        Order emptyOrder = getEmptyOrder();
-        // emptyOrder = getFilledOrder();
-        try {
-            service.prepareOrder(emptyOrder);
-        } catch (ServiceException ignored) {
-        }
-        checkNothingWasUpdated();
-    }
-
-    private void checkNothingWasUpdated() {
-        verify(accountDao, never()).update(any());
-        verify(drinkDao, never()).updateQuantityAllInList(any());
-        verify(addonDao, never()).updateQuantityAllInList(any());
-        verify(orderDao, never()).insert(any());
-    }
-
-
-    @Test
-    public void testPrepareOrderThrowsExceptionIfOrderHasWithNegativeDrinkQuantity() throws Exception {
-        Order orderWithNegativeDrinkQuantity = getOrderWithNegativeDrinkQuantity();
-        // orderWithNegativeDrinkQuantity= getEmptyOrder();
-        try {
-            service.prepareOrder(orderWithNegativeDrinkQuantity);
-        } catch (ServiceException e) {
-            assertEquals(QUANTITY_SHOULD_BE_NON_NEGATIVE, e.getMessageKey());
-            return;
-        }
-        fail(NO_SERVICE_EXCEPTION_HAD_BEEN_THROWN);
-    }
 
     @Test
     public void testPrepareOrderUpdatesOrderDataIfOrderHasProductsWithPositiveQuantity() {
         Order order = getFilledOrder();
-        // order = getEmptyOrder();
         Order testOrder = getPreparedForStoreOrder();
         Order preparedOrder = service.prepareOrder(order);
         testOrder.setDate(preparedOrder.getDate());
@@ -132,7 +93,6 @@ public class OrderPreparationServiceImplTest {
     @Test
     public void testPrepareOrderUpdatesQuantitiesOfDrinksInDatabaseIfOrderHasProductsWithPositiveQuantity() {
         Order order = getFilledOrder();
-        // order = getEmptyOrder();
         List<Drink> drinks = getDrinksReadyForUpdateQuantity();
         service.prepareOrder(order);
         verify(drinkDao).updateQuantityAllInList(drinks);
@@ -141,7 +101,6 @@ public class OrderPreparationServiceImplTest {
     @Test
     public void testPrepareOrderUpdatesQuantitesOfAddonsInDatabaseIfOrderHasProductsWithPositiveQuantity() {
         Order order = getFilledOrder();
-        // order = getEmptyOrder();
         List<Product> addons = getAddonsReadyForUpdateQuantity();
         service.prepareOrder(order);
         verify(addonDao).updateQuantityAllInList(addons);
@@ -150,7 +109,6 @@ public class OrderPreparationServiceImplTest {
     @Test
     public void testPrepareOrderWithdrawsCreditsFromUserAccountIfOrderHasProductsWithPositiveQuantity() {
         Order order = getFilledOrder();
-        // order = getEmptyOrder();
         Order testOrder = getPreparedForStoreOrder();
         testOrder.calculateTotalCost();
         long newUserAccountAmount = userAccount.getAmount() - testOrder.getTotalCost();
@@ -165,7 +123,6 @@ public class OrderPreparationServiceImplTest {
     @Test
     public void testPrepareAddsCreditsToCoffeeMachineAccountIfOrderHasProductsWithPositiveQuantity() {
         Order order = getFilledOrder();
-        // order = getEmptyOrder();
         Order testOrder = getPreparedForStoreOrder();
         testOrder.calculateTotalCost();
         long newCofeeMachineAccountAmount = coffeeMachineAccount.getAmount() + testOrder.getTotalCost();
@@ -178,45 +135,46 @@ public class OrderPreparationServiceImplTest {
     }
 
     @Test
-    public void testPrepareOrderDoNotStoresDataIfOrderHasNegativeDrinkQuantity() throws Exception {
-        Order order = getOrderWithNegativeDrinkQuantity();
-        // order = getFilledOrder();
-        try {
-            service.prepareOrder(order);
-        } catch (ServiceException ignored) {
-        }
-        checkNothingWasUpdated();
-    }
-
-    @Test
-    public void testPrepareOrderThrowsExceptionIfOrderHasNegativeAddonQuantity() throws Exception {
-        Order order = getOrderWithNegativeAddonQuantity();
-        // order = getFilledOrder();
+    public void testPrepareOrderThrowsExceptionIfUserHasNotEnoughMoney() throws Exception {
+        Order order = getFilledOrder();
+        Account userAccountWithNoMoney = AccountsData.USER_A.getCopy();
+        userAccountWithNoMoney.withdraw(userAccountWithNoMoney.getAmount());
+        when(accountDao.getByUserId(user.getId())).thenReturn(java.util.Optional.of(userAccountWithNoMoney));
         try {
             service.prepareOrder(order);
         } catch (ServiceException e) {
-            assertEquals(QUANTITY_SHOULD_BE_NON_NEGATIVE, e.getMessageKey());
+            assertEquals(ERROR_PREPARE_ORDER_USER_HAS_NOT_ENOUGH_MONEY, e.getMessageKey());
             return;
         }
         fail(NO_SERVICE_EXCEPTION_HAD_BEEN_THROWN);
     }
 
     @Test
-    public void testPrepareOrderDoNotStoresDataIfOrderHasNegativeAddonQuantity() throws Exception {
-        Order order = getOrderWithNegativeAddonQuantity();
-        // order = getFilledOrder();
+    public void testPrepareOrderThrowsExceptionIfNotEnoughDrink() throws Exception {
+        Order order = getFilledOrder();
+        order.getDrinks().get(1).setQuantity(100500);
         try {
             service.prepareOrder(order);
-        } catch (ServiceException ignored) {
+        } catch (ServiceException e) {
+            assertEquals(ERROR_PREPARE_ORDER_PRODUCT_NO_LONGER_AVAILABLE, e.getMessageKey());
+            assertEquals(e.getAdditionalMessage(), order.getDrinks().get(1).getName());
+            return;
         }
-        checkNothingWasUpdated();
+        fail(NO_SERVICE_EXCEPTION_HAD_BEEN_THROWN);
     }
 
-
-    private Order getEmptyOrder() {
-        return new Order.Builder()
-                .setId(user.getId())
-                .build();
+    @Test
+    public void testPrepareOrderThrowsExceptionIfNotEnoughAddon() throws Exception {
+        Order order = getFilledOrder();
+        order.getDrinks().get(1).getAddons().get(0).setQuantity(100500);
+        try {
+            service.prepareOrder(order);
+        } catch (ServiceException e) {
+            assertEquals(ERROR_PREPARE_ORDER_PRODUCT_NO_LONGER_AVAILABLE, e.getMessageKey());
+            assertEquals(e.getAdditionalMessage(), order.getDrinks().get(1).getAddons().get(0).getName());
+            return;
+        }
+        fail(NO_SERVICE_EXCEPTION_HAD_BEEN_THROWN);
     }
 
     private Order getFilledOrder() {
@@ -272,27 +230,25 @@ public class OrderPreparationServiceImplTest {
                 add(drink);
 
                 drink = ESPRESSO.getCopy();
-                drink.setAddons(new ArrayList<Product>(){{
-                    add(SUGAR.getCopy());
-                    add(MILK.getCopy());
-                    add(CREAM.getCopy());
-                    add(CINNAMON.getCopy());
-                    Collections.sort(this);
-                }});
+                drink.setAddons(getAddonsForFrinkReadyForUpdateQuantity());
                 drink.setQuantity(ESPRESSO.drink.getQuantity() - 2);
                 add(drink);
 
 
                 drink = MOCACCINO.getCopy();
-                drink.setAddons(new ArrayList<Product>(){{
+                drink.setAddons(getAddonsForFrinkReadyForUpdateQuantity());
+                drink.setQuantity(MOCACCINO.drink.getQuantity() - 3);
+                add(drink);
+            }
+
+            private ArrayList<Product> getAddonsForFrinkReadyForUpdateQuantity() {
+                return new ArrayList<Product>(){{
                     add(SUGAR.getCopy());
                     add(MILK.getCopy());
                     add(CREAM.getCopy());
                     add(CINNAMON.getCopy());
                     Collections.sort(this);
-                }});
-                drink.setQuantity(MOCACCINO.drink.getQuantity() - 3);
-                add(drink);
+                }};
             }
         };
     }
@@ -308,27 +264,10 @@ public class OrderPreparationServiceImplTest {
         }};
     }
 
-    private Order getOrderWithNegativeDrinkQuantity() {
-        return new Order.Builder()
-                .setUserId(user.getId())
-                .setDrinks(getTestDrinksWithNegativeQuantity())
-                .build();
-
-    }
-
-    private Order getOrderWithNegativeAddonQuantity() {
-        return new Order.Builder()
-                .setUserId(user.getId())
-                .setDrinks(getTestDrinksWithNegativeAddonQuantity())
-                .build();
-    }
-
     private List<Drink> getTestDrinks() {
         return new ArrayList<Drink>() {{
             add(new Drink.Builder().setId(1).setQuantity(1).build());
-            add(new Drink.Builder().setId(2).setQuantity(0).build());
             add(new Drink.Builder().setId(6).setQuantity(2).addAddons(getTestAddons()).build());
-            add(new Drink.Builder().setId(10).setQuantity(0).addAddons(getTestAddons()).build());
             add(new Drink.Builder().setId(11).setQuantity(3).addAddons(getTestAddons()).build());
         }};
     }
@@ -341,23 +280,10 @@ public class OrderPreparationServiceImplTest {
         }};
     }
 
-
-    private List<Drink> getTestDrinksWithNegativeQuantity() {
-        List<Drink> drinks = getTestDrinks();
-        drinks.stream()
-                .findAny()
-                .orElseThrow(IllegalStateException::new)
-                //.setQuantity(0);
-                .setQuantity(-1);
-        return drinks;
-    }
-
     private List<Product> getTestAddons() {
         return new ArrayList<Product>() {{
             add(new Product.Builder().setId(7).setQuantity(1).build());
-            add(new Product.Builder().setId(8).setQuantity(0).build());
             add(new Product.Builder().setId(9).setQuantity(2).build());
-            add(new Product.Builder().setId(13).setQuantity(0).build());
         }};
     }
 
@@ -367,20 +293,4 @@ public class OrderPreparationServiceImplTest {
             add(CREAM.getCopy());
         }};
     }
-
-    private List<Drink> getTestDrinksWithNegativeAddonQuantity() {
-        List<Drink> drinks = getTestDrinks();
-        drinks.stream()
-                .filter((drink) -> (drink.getQuantity() > 0))
-                .filter((drink) -> (drink.getAddons().size() > 0))
-                .findAny()
-                .orElseThrow(IllegalStateException::new)
-                .getAddons().stream()
-                .findAny()
-                .orElseThrow(IllegalStateException::new)
-                //.setQuantity(0);
-                .setQuantity(-1);
-        return drinks;
-    }
-
 }

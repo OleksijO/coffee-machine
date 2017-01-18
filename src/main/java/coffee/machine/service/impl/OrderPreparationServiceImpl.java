@@ -86,7 +86,7 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
         if (userAccountAmount < orderCost) {
             String realOrderCost = String.format("%.2f", orderCost * DB_MONEY_COEFF);
             throw new ServiceException()
-                    .addMessageKey(NOT_ENOUGH_MONEY)
+                    .addMessageKey(ERROR_PREPARE_ORDER_USER_HAS_NOT_ENOUGH_MONEY)
                     .addAdditionalMessage(realOrderCost)
                     .addLogMessage(
                             String.format(LOG_MESSAGE_NOT_ENOUGH_MONEY_FORMAT,
@@ -126,7 +126,7 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
             actualDrink.setQuantity(actualQuantity - quantityToBuy);
         } else {
             throw new ServiceException()
-                    .addMessageKey(PRODUCT_NO_LONGER_AVAILABLE)
+                    .addMessageKey(ERROR_PREPARE_ORDER_PRODUCT_NO_LONGER_AVAILABLE)
                     .addAdditionalMessage(orderedProduct.getName())
                     .addLogMessage(
                             String.format(LOG_MESSAGE_NOT_ENOUGH_FORMAT,

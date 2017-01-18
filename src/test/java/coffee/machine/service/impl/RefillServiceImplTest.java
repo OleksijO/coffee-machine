@@ -9,7 +9,6 @@ import coffee.machine.model.entity.product.Drink;
 import coffee.machine.model.entity.product.Product;
 import coffee.machine.model.value.object.ProductsReceipt;
 import coffee.machine.service.RefillService;
-import coffee.machine.service.exception.ServiceException;
 import data.test.entity.AddonsData;
 import data.test.entity.DrinksData;
 import org.junit.Before;
@@ -72,37 +71,6 @@ public class RefillServiceImplTest {
     @Test(expected = NullPointerException.class)
     public void testRefillThrowsExceptionOnNullReceipt() throws Exception {
         service.refill(null);
-    }
-
-    @Test(expected = ServiceException.class)
-    public void testRefillThrowsExceptionIfReceiptIsEmpty() throws Exception {
-        service.refill(new ProductsReceipt(new ArrayList<>(), new ArrayList<>()));
-    }
-
-    @Test(expected = ServiceException.class)
-    public void testRefillThrowsExceptionIfReceiptHasProductsWithOnlyZeroQuantities() throws Exception {
-        ProductsReceipt receipt = new ProductsReceipt();
-        receipt.addDrink(new Drink.Builder().setId(1).setQuantity(0).build());
-        receipt.addAddon(new Product.Builder().setId(2).setQuantity(0).build());
-        service.refill(new ProductsReceipt(new ArrayList<>(), new ArrayList<>()));
-    }
-
-    @Test(expected = ServiceException.class)
-    public void testRefillThrowsExceptionIfReceiptHasDrinkWithNegativeQuantity() throws Exception {
-        ProductsReceipt receipt = new ProductsReceipt();
-        receipt.addDrink(new Drink.Builder().setId(1).setQuantity(1).build());
-        receipt.addDrink(new Drink.Builder().setId(2).setQuantity(-1).build());
-        receipt.addDrink(new Drink.Builder().setId(3).setQuantity(1).build());
-        service.refill(new ProductsReceipt(new ArrayList<>(), new ArrayList<>()));
-    }
-
-    @Test(expected = ServiceException.class)
-    public void testRefillThrowsExceptionIfReceiptHasAddonWithNegativeQuantity() throws Exception {
-        ProductsReceipt receipt = new ProductsReceipt();
-        receipt.addAddon(new Product.Builder().setId(1).setQuantity(1).build());
-        receipt.addAddon(new Product.Builder().setId(2).setQuantity(-1).build());
-        receipt.addAddon(new Product.Builder().setId(3).setQuantity(1).build());
-        service.refill(new ProductsReceipt(new ArrayList<>(), new ArrayList<>()));
     }
 
     @Test
