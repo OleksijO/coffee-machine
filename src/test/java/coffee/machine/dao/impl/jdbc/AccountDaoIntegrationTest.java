@@ -1,9 +1,8 @@
-package integration.dao;
+package coffee.machine.dao.impl.jdbc;
 
 import coffee.machine.dao.AbstractConnection;
 import coffee.machine.dao.AccountDao;
 import coffee.machine.dao.DaoFactory;
-import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Account;
 import data.test.entity.AccountsData;
 import org.junit.After;
@@ -24,7 +23,7 @@ import static org.junit.Assert.assertFalse;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class AccountDaoTest {
+public class AccountDaoIntegrationTest {
     private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private List<Account> testAccounts = new ArrayList<>();
     private AbstractConnection connection;

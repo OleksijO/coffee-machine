@@ -1,9 +1,8 @@
-package integration.dao;
+package coffee.machine.dao.impl.jdbc;
 
 import coffee.machine.dao.AbstractConnection;
 import coffee.machine.dao.AddonDao;
 import coffee.machine.dao.DaoFactory;
-import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.product.Product;
 import data.test.entity.AddonsData;
 import org.junit.After;
@@ -23,7 +22,7 @@ import static org.junit.Assert.*;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class AddonDaoTest {
+public class AddonDaoIntegrationTest {
     private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private List<Product> testAddons = new ArrayList<>();
     private AbstractConnection connection;

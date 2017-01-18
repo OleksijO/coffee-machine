@@ -1,4 +1,4 @@
-package integration.dao;
+package coffee.machine.dao.impl.jdbc;
 
 import org.apache.commons.io.FileUtils;
 
