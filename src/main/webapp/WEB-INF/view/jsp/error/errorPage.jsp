@@ -6,8 +6,8 @@
 <%! static final Logger logger = Logger.getLogger("JSP ERROR HANDLER PAGE"); %>
 <% logger.error(String
         .format(ErrorMessage.JSP_HANDLER_MESSAGE_FORMAT,
+                pageContext.getSession().getAttribute(Attributes.USER_ROLE),
                 pageContext.getSession().getAttribute(Attributes.USER_ID),
-                pageContext.getSession().getAttribute(Attributes.ADMIN_ID),
                 pageContext.getErrorData().getStatusCode(),
                 pageContext.getErrorData().getServletName(),
                 pageContext.getException().getMessage()), pageContext.getException()); %>

@@ -13,21 +13,21 @@
     |
     <a href="${PagesPaths.HOME_PATH}"><fmt:message key="home.page.href.name"/></a> |
 
-    <c:if test='${empty sessionScope[Attributes.ADMIN_ID] && empty sessionScope[Attributes.USER_ID]}'>
+    <c:if test='${empty sessionScope[Attributes.USER_ROLE]}'>
         <a href="${PagesPaths.LOGIN_PATH}"><fmt:message key="login.href.name"/></a> |
     </c:if>
 
-    <c:if test='${not empty sessionScope[Attributes.ADMIN_ID]}'>
+    <c:if test='${sessionScope[Attributes.USER_ROLE] == UserRole.ADMIN}'>
         <a href="${PagesPaths.ADMIN_REFILL_PATH}"><fmt:message key="admin.refill.href.name"/></a> |
         <a href="${PagesPaths.ADMIN_ADD_CREDITS_PATH}"><fmt:message key="admin.add.credit.page"/></a> |
     </c:if>
 
-    <c:if test='${not empty sessionScope[Attributes.USER_ID]}'>
+    <c:if test='${sessionScope[Attributes.USER_ROLE] == UserRole.USER}'>
         <a href="${PagesPaths.USER_PURCHASE_PATH}"><fmt:message key="user.purchase.page"/></a> |
         <a href="${PagesPaths.USER_ORDER_HISTORY_PATH}"><fmt:message key="user.orders.history.page"/></a> |
     </c:if>
 
-    <c:if test='${not empty sessionScope[Attributes.ADMIN_ID] || not empty sessionScope[Attributes.USER_ID]}'>
+    <c:if test='${not empty sessionScope[Attributes.USER_ID]}'>
         <a href="${PagesPaths.LOGOUT_PATH}"><fmt:message key="logout"/></a> |
     </c:if>
 

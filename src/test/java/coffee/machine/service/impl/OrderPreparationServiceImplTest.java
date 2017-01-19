@@ -3,7 +3,7 @@ package coffee.machine.service.impl;
 import coffee.machine.dao.*;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.Order;
-import coffee.machine.model.entity.User;
+import coffee.machine.model.entity.user.User;
 import coffee.machine.model.entity.product.Drink;
 import coffee.machine.model.entity.product.Product;
 import coffee.machine.service.OrderPreparationService;

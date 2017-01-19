@@ -2,11 +2,11 @@ package coffee.machine.controller.command.login;
 
 import coffee.machine.controller.command.CommandWrapperTemplate;
 import coffee.machine.controller.command.helper.LoggingHelper;
-import coffee.machine.controller.i18n.message.key.ControllerMessageKey;
 import coffee.machine.controller.validation.LoginDataValidator;
 import coffee.machine.controller.validation.Notification;
 import coffee.machine.controller.validation.Validator;
-import coffee.machine.model.entity.User;
+import coffee.machine.model.entity.user.User;
+import coffee.machine.model.entity.user.UserRole;
 import coffee.machine.model.value.object.user.LoginData;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.UserServiceImpl;
@@ -17,9 +17,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_LOGIN_YOU_ARE_ALREADY_LOGGED_IN;
+import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_FOR_LOGIN_FORM;
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_LOGIN;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_LOGIN_YOU_ARE_ALREADY_LOGGED_IN;
 import static coffee.machine.view.Attributes.*;
 import static coffee.machine.view.PagesPaths.*;
 import static coffee.machine.view.Parameters.PASSWORD_PARAM;
@@ -33,9 +36,13 @@ public class LoginSubmitCommand extends CommandWrapperTemplate {
     private static final Logger logger = Logger.getLogger(LoginSubmitCommand.class);
     private LoggingHelper loggingHelper = new LoggingHelper();
 
-    private static final String USER_LOGGED_IN = "USER id=%d LOGGED IN.";
-    private static final String ADMIN_LOGGED_IN = "ADMIN id=%d LOGGED IN.";
-    public static final String LOG_MESSAGE_DOUBLE_LOGIN_ATTEMPT_DETAILS = "Double login attempt. Details: ";
+    private static final String LOG_MESSAGE_FORMAT_USER_LOGGED_IN_DETAILS = "%s id=%d LOGGED IN.";
+    private static final String LOG_MESSAGE_DOUBLE_LOGIN_ATTEMPT_DETAILS = "Double login attempt. Details: ";
+
+    private Map<UserRole, String> afterLoginPathByRole = new HashMap<UserRole, String>(){{
+        put(UserRole.USER,USER_HOME_PATH);
+        put(UserRole.ADMIN, ADMIN_HOME_PATH);
+    }};
 
     private UserService userService = UserServiceImpl.getInstance();
 
@@ -45,13 +52,20 @@ public class LoginSubmitCommand extends CommandWrapperTemplate {
         super(LOGIN_PAGE);
     }
 
-    protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @Override
+    protected void placeNecessaryDataToRequest(HttpServletRequest request) {
+        request.setAttribute(PAGE_TITLE, TITLE_LOGIN);
+        request.setAttribute(LOGIN_FORM_TITLE, TITLE_FOR_LOGIN_FORM);
+        request.setAttribute(LOGIN_FORM_ACTION, LOGIN_PATH);
+    }
 
+    @Override
+    protected String performExecute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         LoginData loginData = getLoginDataFromRequest(request);
         saveFormData(loginData, request);
 
         Notification notification = loginDataValidator.validate(loginData);
-        if (notification.hasErrorMessages()){
+        if (notification.hasErrorMessages()) {
             processValidationErrors(notification, request);
             return LOGIN_PAGE;
         }
@@ -64,6 +78,8 @@ public class LoginSubmitCommand extends CommandWrapperTemplate {
 
         User user = userService.getUserByLoginData(loginData);
         performActionsToLogIn(request, response, user);
+
+        clearFormData(request);
         return REDIRECTED;
     }
 
@@ -74,17 +90,17 @@ public class LoginSubmitCommand extends CommandWrapperTemplate {
     }
 
     private void saveFormData(LoginData loginData, HttpServletRequest request) {
-
         request.setAttribute(PREVIOUS_ENTERED_EMAIL, loginData.getEmail());
     }
 
     private boolean isDoubleLoginAttempt(HttpSession session) {
-        return (session.getAttribute(USER_ID) != null)
-                || (session.getAttribute(ADMIN_ID) != null);
+        return (session.getAttribute(USER_ID) != null);
     }
 
     private void logDetails(HttpServletRequest request, LoginData loginData) {
-        logger.error(LOG_MESSAGE_DOUBLE_LOGIN_ATTEMPT_DETAILS + loginData + loggingHelper.buildLogMessage(request));
+        logger.error(LOG_MESSAGE_DOUBLE_LOGIN_ATTEMPT_DETAILS +
+                loginData +
+                loggingHelper.buildLogMessage(request));
     }
 
     private void placeErrorMessageToRequest(HttpServletRequest request) {
@@ -94,27 +110,23 @@ public class LoginSubmitCommand extends CommandWrapperTemplate {
 
     private void performActionsToLogIn(HttpServletRequest request, HttpServletResponse response, User user)
             throws IOException {
-        if (user.isAdmin()) {
-            request.getSession().setAttribute(ADMIN_ID, user.getId());
-            logUserDetails(ADMIN_LOGGED_IN, user.getId());
-            response.sendRedirect(ADMIN_HOME_PATH);
-        } else {
+
             request.getSession().setAttribute(USER_ID, user.getId());
-            logUserDetails(USER_LOGGED_IN, user.getId());
-            response.sendRedirect(USER_HOME_PATH);
-        }
+            request.getSession().setAttribute(USER_ROLE, user.getRole());
+            response.sendRedirect(afterLoginPathByRole.get(user.getRole()));
+            logUserDetails(user);
     }
 
 
-    private void logUserDetails(String logMessageFormat, int userId) {
-        logger.info(String.format(logMessageFormat, userId));
+    private void logUserDetails(User user) {
+        logger.info(
+                String.format(
+                        LOG_MESSAGE_FORMAT_USER_LOGGED_IN_DETAILS,
+                        user.getRole(), user.getId()));
     }
 
-    @Override
-    protected void placeNecessaryDataToRequest(HttpServletRequest request) {
-        request.setAttribute(PAGE_TITLE, TITLE_LOGIN);
-        request.setAttribute(LOGIN_FORM_TITLE, ControllerMessageKey.TITLE_FOR_LOGIN_FORM);
-        request.setAttribute(LOGIN_FORM_ACTION, LOGIN_PATH);
+    private void clearFormData(HttpServletRequest request) {
+        request.removeAttribute(PREVIOUS_ENTERED_EMAIL);
     }
 }
 

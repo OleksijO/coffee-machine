@@ -33,7 +33,7 @@ CREATE TABLE users (
   password   VARCHAR(32)        NOT NULL,
   full_name  VARCHAR(80)        NOT NULL,
   account_id INT(11),
-  is_admin   BIT(1)             NOT NULL DEFAULT 0,
+  role       VARCHAR(16)        NOT NULL,
   PRIMARY KEY (id),
   CONSTRAINT account_fk FOREIGN KEY (account_id) REFERENCES account (id)
 )
@@ -96,12 +96,12 @@ CREATE TABLE orders_addon (
 
 INSERT INTO account (amount) VALUES (0), (0), (10000), (10000), (100000);
 
-INSERT INTO users (id, email, password, full_name, account_id, is_admin) VALUES
-  (1, 'admin@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий адміністратор', NULL, TRUE),
-  (2, 'user@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий користувач', 2, FALSE),
-  (3, 'user1@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий користувач 2', 3, FALSE),
-  (4, 'user2@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий користувач 3', 4, FALSE),
-  (5, 'user3@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий користувач 4', 5, FALSE);  
+INSERT INTO users (id, email, password, full_name, account_id, role) VALUES
+  (1, 'admin@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий адміністратор', NULL, 'ADMIN'),
+  (2, 'user@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий користувач', 2, 'USER'),
+  (3, 'user1@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий користувач 2', 3, 'USER'),
+  (4, 'user2@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий користувач 3', 4, 'USER'),
+  (5, 'user3@test.com', '495286b908f344a71f0895d3258f5e4a', 'Тестовий користувач 4', 5, 'USER');
   
 
 INSERT INTO product (id, name, price, quantity, type) VALUES

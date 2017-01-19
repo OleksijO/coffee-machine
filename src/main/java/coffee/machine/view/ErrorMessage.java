@@ -7,5 +7,5 @@ package coffee.machine.view;
  */
 
 public interface ErrorMessage {
-    String JSP_HANDLER_MESSAGE_FORMAT = "User id=%s, admin id=%s. Status code = %d. Servlet name ='%s'.\n %s";
+    String JSP_HANDLER_MESSAGE_FORMAT = "%s id=%s. Status code = %d. Servlet name ='%s'.\n %s";
 }

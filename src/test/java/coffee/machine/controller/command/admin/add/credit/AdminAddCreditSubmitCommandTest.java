@@ -6,6 +6,7 @@ import coffee.machine.controller.command.helper.LoggingHelper;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.value.object.CreditsReceipt;
 import coffee.machine.service.AccountService;
+import coffee.machine.service.UserService;
 import coffee.machine.service.exception.ServiceException;
 import coffee.machine.view.Attributes;
 import coffee.machine.view.PagesPaths;
@@ -21,9 +22,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_ADD_CREDITS_AMOUNT_IS_NOT_POSITIVE;
-import static coffee.machine.view.Attributes.ERROR_MESSAGE;
-import static coffee.machine.view.Attributes.USUAL_MESSAGE;
-import static coffee.machine.view.Attributes.VALIDATION_ERRORS;
+import static coffee.machine.view.Attributes.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -42,6 +41,8 @@ public class AdminAddCreditSubmitCommandTest {
     private LoggingHelper loggingHelper;
     @Mock
     private AccountService accountService;
+    @Mock
+    private UserService userService;
 
     private Command command = new AdminAddCreditSubmitCommand();
 
@@ -50,15 +51,17 @@ public class AdminAddCreditSubmitCommandTest {
     public void init() {
         MockitoAnnotations.initMocks(this);
         ((AdminAddCreditSubmitCommand) command).setAccountService(accountService);
+        ((AdminAddCreditSubmitCommand) command).setUserService(userService);
         when(request.getSession()).thenReturn(session);
         when(request.getMethod()).thenReturn("post");
+        doNothing().when(accountService).addCredits(any());
     }
 
     @Test
     public void testExecuteReturnsCorrectPageIfNoError() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("2");
-        when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
+        when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
 
         assertEquals(PagesPaths.ADMIN_ADD_CREDITS_PAGE, command.execute(request,response));
     }
@@ -67,7 +70,7 @@ public class AdminAddCreditSubmitCommandTest {
     public void testExecuteReturnsCorrectPageIfErrorOccurred() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("2");
-        when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
+        when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
         doThrow(new ServiceException().addMessageKey(ERROR_ADD_CREDITS_AMOUNT_IS_NOT_POSITIVE))
                 .when(accountService).addCredits(any());
 
@@ -78,7 +81,7 @@ public class AdminAddCreditSubmitCommandTest {
     public void testExecuteReturnsCorrectPageIfValidationErrorOccurred() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("-5");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("-5");
-        when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
+        when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
         assertEquals(PagesPaths.ADMIN_ADD_CREDITS_PAGE, command.execute(request,response));
     }
 
@@ -86,7 +89,7 @@ public class AdminAddCreditSubmitCommandTest {
     public void testExecutePlacesErrorMessageToRequestIfErrorOccurred() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("2");
-        when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
+        when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
         doThrow(new ServiceException().addMessageKey(ERROR_ADD_CREDITS_AMOUNT_IS_NOT_POSITIVE))
                 .when(accountService).addCredits(any());
         command.execute(request,response);
@@ -97,7 +100,7 @@ public class AdminAddCreditSubmitCommandTest {
     public void testExecutePlacesMessageToRequestIfNoError() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("2");
-        when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
+        when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
         command.execute(request,response);
         verify(request).setAttribute(eq(USUAL_MESSAGE), any());
     }
@@ -106,7 +109,7 @@ public class AdminAddCreditSubmitCommandTest {
     public void testExecuteDoesNotCallServiceIfFormHasNonPositiveAmount() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("0");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("1");
-        when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
+        when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
         when(accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)).thenReturn(Optional.of(new Account()));
         command.execute(request,response);
         CreditsReceipt testReceipt = new CreditsReceipt.Builder()
@@ -120,7 +123,7 @@ public class AdminAddCreditSubmitCommandTest {
     public void testExecutePlacesValidationErrorMessageToRequestIfFormHasNonPositiveAmount() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("0");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("1");
-        when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
+        when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
         when(accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)).thenReturn(Optional.of(new Account()));
         command.execute(request,response);
         verify(request).setAttribute(eq(VALIDATION_ERRORS), any() );
@@ -130,7 +133,7 @@ public class AdminAddCreditSubmitCommandTest {
     public void testExecuteDoesNotCallServiceIfUserIdIsNonPositive() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2.50");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("0");
-        when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
+        when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
         command.execute(request,response);
         CreditsReceipt testReceipt = new CreditsReceipt.Builder()
                 .setAmount(2.50)
@@ -143,7 +146,7 @@ public class AdminAddCreditSubmitCommandTest {
     public void testExecutePlacesValidationErrorMessageServiceIfUserIdIsNonPositive() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2.50");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("0");
-        when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
+        when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
         command.execute(request,response);
         verify(request).setAttribute(eq(VALIDATION_ERRORS), any() );
     }
@@ -152,7 +155,7 @@ public class AdminAddCreditSubmitCommandTest {
     public void testExecuteCallsServiceWithCorrectArgsIfFormIsFilled() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2.50");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("5");
-        when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
+        when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
         when(accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)).thenReturn(Optional.of(new Account()));
         command.execute(request,response);
         CreditsReceipt testReceipt = new CreditsReceipt.Builder()

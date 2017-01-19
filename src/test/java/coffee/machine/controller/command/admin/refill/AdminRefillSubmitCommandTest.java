@@ -92,7 +92,7 @@ public class AdminRefillSubmitCommandTest {
     public void testExecuteCallsServiceWithCorrectArgsIfFormIsFilledWithData() throws Exception {
         setupRequestParams(REFILL_CORRECT_DATA);
         when(request.getMethod()).thenReturn("get");
-        when(session.getAttribute(ADMIN_ID)).thenReturn(1);
+        when(session.getAttribute(USER_ID)).thenReturn(1);
         command.execute(request, response);
         verify(refillService).refill(REFILL_CORRECT_DATA.productsReceipt);
     }
@@ -123,7 +123,7 @@ public class AdminRefillSubmitCommandTest {
     public void testExecutePlacesUsualMessageToRequestIfNoError() throws Exception {
         setupRequestParams(REFILL_CORRECT_DATA);
         when(request.getMethod()).thenReturn("get");
-        when(session.getAttribute(ADMIN_ID)).thenReturn(1);
+        when(session.getAttribute(USER_ID)).thenReturn(1);
         command.execute(request, response);
         verify(request).setAttribute(eq(USUAL_MESSAGE), any());
     }

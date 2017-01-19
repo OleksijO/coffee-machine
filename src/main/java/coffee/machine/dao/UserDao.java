@@ -1,6 +1,7 @@
 package coffee.machine.dao;
 
-import coffee.machine.model.entity.User;
+import coffee.machine.model.entity.user.User;
+import coffee.machine.model.entity.user.UserRole;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +23,7 @@ public interface UserDao extends GenericDao<User> {
 	Optional<User> getUserByLogin(String login);
 
 	/**
-	 * @return List of users, which have no admin privileges.
+	 * @return List of users, which have specified Role.
 	 */
-	List<User> getAllNonAdmin();
+	List<User> getAllByRole(UserRole role);
 }

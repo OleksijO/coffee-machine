@@ -6,7 +6,7 @@ import coffee.machine.controller.command.helper.RequestDataExtractor;
 import coffee.machine.controller.validation.CreditsReceiptValidator;
 import coffee.machine.controller.validation.Notification;
 import coffee.machine.controller.validation.Validator;
-import coffee.machine.model.entity.User;
+import coffee.machine.model.entity.user.User;
 import coffee.machine.model.value.object.CreditsReceipt;
 import coffee.machine.service.AccountService;
 import coffee.machine.service.UserService;

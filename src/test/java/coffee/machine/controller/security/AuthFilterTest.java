@@ -1,5 +1,6 @@
 package coffee.machine.controller.security;
 
+import coffee.machine.model.entity.user.UserRole;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -10,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static coffee.machine.view.Attributes.ADMIN_ID;
 import static coffee.machine.view.Attributes.USER_ID;
+import static coffee.machine.view.Attributes.USER_ROLE;
 import static coffee.machine.view.PagesPaths.*;
 import static org.mockito.Mockito.*;
 
@@ -40,26 +41,31 @@ public class AuthFilterTest {
     }
 
     @Test
-    public void testDoFilterPassesNonLoggedInUsersToRootPath() throws Exception {
+    public void testDoFilterPassesNonLoggedInUsersToRootApplicationPath() throws Exception {
         performTest("", null, null, "", 0);
         performTest("/", null, null, "/", 0);
-        performTest("/", 1, null, "/", 0);
+    }
+
+    @Test
+    public void testDoFilterPassesLoggedInUsersToRootApplicationPath() throws Exception {
+        performTest("/", UserRole.USER, 1, "/", 0);
+        performTest("/", UserRole.ADMIN, 1, "/", 0);
     }
 
     /**
      * Performs test, configured by params
      *
      * @param path                          request's URI (where request is going to)
-     * @param adminId                       Admin's id in attribute in session (admin with which id is logged in)
+     * @param role                          User's role in attribute in session
      * @param userId                        User's id in attribute in session (user with which id is logged in)
      * @param expectedPath                  URI, where filter should route request with specified id's and path
      * @param expectedDispatcherCallTimes   Number of times, when forwarding should be performed
      * @throws ServletException             In case of container problems
      * @throws IOException                  In case of container problems
      */
-    private void performTest(String path, Integer adminId, Integer userId, String expectedPath,
+    private void performTest(String path, UserRole role, Integer userId, String expectedPath,
                              int expectedDispatcherCallTimes) throws ServletException, IOException {
-        setUpMocks(path, adminId, userId);
+        setUpMocks(path, role, userId);
         filter.doFilter(request, response, chain);
         if (expectedDispatcherCallTimes > 0) {
             verify(request, times(expectedDispatcherCallTimes)).getRequestDispatcher(expectedPath);
@@ -68,9 +74,9 @@ public class AuthFilterTest {
         }
     }
 
-    private void setUpMocks(String uri, Integer adminId, Integer userId) {
+    private void setUpMocks(String uri, UserRole role, Integer userId) {
         when(request.getRequestURI()).thenReturn(uri);
-        when(session.getAttribute(ADMIN_ID)).thenReturn(adminId);
+        when(session.getAttribute(USER_ROLE)).thenReturn(role);
         when(session.getAttribute(USER_ID)).thenReturn(userId);
     }
 
@@ -97,14 +103,14 @@ public class AuthFilterTest {
 
     @Test
     public void testDoFilterPassesAuthorizedUserToUserPages() throws Exception {
-        performTest(USER_ORDER_HISTORY_PATH, null, 1, USER_ORDER_HISTORY_PATH, 0);
-        performTest("/user/any", null, 1, "/user/any", 0);
+        performTest(USER_ORDER_HISTORY_PATH, UserRole.USER, 1, USER_ORDER_HISTORY_PATH, 0);
+        performTest("/user/any", UserRole.USER, 1, "/user/any", 0);
     }
 
     @Test
     public void testDoFilterPassesAuthorizedAdminToAdminPages() throws Exception {
-        performTest(ADMIN_HOME_PATH, 1, null, ADMIN_HOME_PATH, 0);
-        performTest("/admin/any", 1, null, "/admin/any", 0);
+        performTest(ADMIN_HOME_PATH, UserRole.ADMIN, 1, ADMIN_HOME_PATH, 0);
+        performTest("/admin/any", UserRole.ADMIN, 1, "/admin/any", 0);
     }
 
     @Test
@@ -119,11 +125,11 @@ public class AuthFilterTest {
 
     @Test
     public void testDoFilterForwardsAuthorizedUserFromAdminPagesToLoginPath() throws Exception {
-        performTest(ADMIN_HOME_PATH, null, 1, LOGIN_PATH, 1);
+        performTest(ADMIN_HOME_PATH, UserRole.USER, 1, LOGIN_PATH, 1);
     }
 
     @Test
     public void testDoFilterForwardsAuthorizedAdminFromUserPagesToLoginPath() throws Exception {
-        performTest(USER_ORDER_HISTORY_PATH, 1, null, LOGIN_PATH, 1);
+        performTest(USER_ORDER_HISTORY_PATH, UserRole.USER, null, LOGIN_PATH, 1);
     }
 }

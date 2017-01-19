@@ -159,7 +159,7 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
     }
 
     private void logRefillingDetails(HttpServletRequest request, ProductsReceipt receipt) {
-        logger.info(String.format(PRODUCTS_ADDED, request.getSession().getAttribute(ADMIN_ID).toString(),
+        logger.info(String.format(PRODUCTS_ADDED, request.getSession().getAttribute(USER_ID).toString(),
                 receipt));
     }
 

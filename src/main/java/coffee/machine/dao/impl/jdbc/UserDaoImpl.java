@@ -4,12 +4,15 @@ import coffee.machine.dao.AccountDao;
 import coffee.machine.dao.UserDao;
 import coffee.machine.dao.exception.DaoException;
 import coffee.machine.model.entity.Account;
-import coffee.machine.model.entity.User;
+import coffee.machine.model.entity.user.User;
+import coffee.machine.model.entity.user.UserRole;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static coffee.machine.model.entity.user.UserRole.ADMIN;
 
 /**
  * This class is the implementation of User entity DAO
@@ -21,17 +24,17 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
     private static final String DB_ERROR_WHILE_GETTING_ALL_NON_ADMIN = DB_ERROR_WHILE_GETTING_ALL + "non admin users";
 
     private static final String SELECT_ALL_SQL =
-            "SELECT users.id, email, password, full_name, account_id, amount, is_admin FROM users " +
+            "SELECT users.id, email, password, full_name, account_id, amount, role FROM users " +
                     "LEFT JOIN account ON users.account_id = account.id ";
     private static final String UPDATE_SQL =
-            "UPDATE users SET email = ?, password = ?, full_name = ?, account_id = ?, is_admin = ? WHERE id = ? ";
+            "UPDATE users SET email = ?, password = ?, full_name = ?, account_id = ?, role = ? WHERE id = ? ";
     private static final String INSERT_SQL =
-            "INSERT INTO users (email, password, full_name, account_id, is_admin) VALUES (?, ?, ?, ?, ?) ";
+            "INSERT INTO users (email, password, full_name, account_id, role) VALUES (?, ?, ?, ?, ?) ";
     private static final String DELETE_SQL =
             "DELETE FROM users WHERE id = ? ";
     private static final String WHERE_USER_EMAIL = " WHERE users.email = ? ";
     private static final String WHERE_USER_ID = " WHERE users.id = ? ";
-    private static final String WHERE_NOT_ADMIN = " WHERE users.is_admin = FALSE ";
+    private static final String WHERE_USER_ROLE = " WHERE users.role = ? ";
     private static final String ORDER_BY_EMAIL = " ORDER BY email ";
 
 
@@ -39,7 +42,7 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
     private static final String FIELD_PASSWORD = "password";
     private static final String FIELD_FULL_NAME = "full_name";
     private static final String FIELD_ACCOUNT_ID = "account_id";
-    private static final String FIELD_IS_ADMIN = "is_admin";
+    private static final String FIELD_ROLE = "role";
     private static final String FIELD_ACCOUNT_AMOUNT = "amount";
 
     private final Connection connection;
@@ -53,7 +56,7 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
         checkForNull(user);
         checkIsUnsaved(user);
         int accountId;
-        if (user.isAdmin()) {
+        if (user.getRole() == ADMIN) {
             accountId = 0;
         } else {
             Account account = user.getAccount();
@@ -69,7 +72,7 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
             statement.setString(2, user.getPassword());
             statement.setString(3, user.getFullName());
             statement.setInt(4, accountId);
-            statement.setBoolean(5, user.isAdmin());
+            statement.setString(5, user.getRole().toString());
 
             int userId = executeInsertStatement(statement);
             user.setId(userId);
@@ -93,7 +96,7 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
             statement.setString(2, user.getPassword());
             statement.setString(3, user.getFullName());
             statement.setInt(4, (user.getAccount() == null) ? 0 : user.getAccount().getId());
-            statement.setBoolean(5, user.isAdmin());
+            statement.setString(5, user.getRole().toString());
             statement.setInt(6, user.getId());
             System.out.println(UPDATE_SQL);
             statement.executeUpdate();
@@ -126,7 +129,7 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
                     .setEmail(resultSet.getString(FIELD_LOGIN))
                     .setPassword(resultSet.getString(FIELD_PASSWORD))
                     .setFullName(resultSet.getString(FIELD_FULL_NAME))
-                    .setAdmin(resultSet.getBoolean(FIELD_IS_ADMIN))
+                    .setRole(UserRole.valueOf(resultSet.getString(FIELD_ROLE)))
                     .setAccount(new Account.Builder()
                             .setId(resultSet.getInt(FIELD_ACCOUNT_ID))
                             .setAmount(resultSet.getLong(FIELD_ACCOUNT_AMOUNT))
@@ -185,11 +188,13 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
     }
 
     @Override
-    public List<User> getAllNonAdmin() {
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(SELECT_ALL_SQL + WHERE_NOT_ADMIN + ORDER_BY_EMAIL)) {
-
-            return parseResultSet(resultSet);
+    public List<User> getAllByRole(UserRole role) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_USER_ROLE + ORDER_BY_EMAIL);
+        ) {
+            statement.setString(1, role.toString());
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return parseResultSet(resultSet);
+            }
 
         } catch (SQLException e) {
             throw new DaoException(e)

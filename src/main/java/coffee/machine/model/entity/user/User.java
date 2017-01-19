@@ -1,4 +1,7 @@
-package coffee.machine.model.entity;
+package coffee.machine.model.entity.user;
+
+import coffee.machine.model.entity.Account;
+import coffee.machine.model.entity.Identified;
 
 /**
  * This class represents User entity.
@@ -7,7 +10,7 @@ package coffee.machine.model.entity;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class User implements Identified{
+public class User implements Identified {
     private int id;
     /**
      * Email field is used as login
@@ -16,7 +19,7 @@ public class User implements Identified{
     private String password;
     private String fullName;
     private Account account;
-    private boolean admin;
+    private UserRole role;
 
     public int getId() {
         return id;
@@ -38,18 +41,18 @@ public class User implements Identified{
         return fullName;
     }
 
-
     public Account getAccount() {
         return account;
+    }
+
+    public UserRole getRole() {
+        return role;
     }
 
     public void setAccount(Account account) {
         this.account = account;
     }
 
-    public boolean isAdmin() {
-        return admin;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -59,7 +62,7 @@ public class User implements Identified{
         User user = (User) o;
 
         if (id != user.id) return false;
-        if (admin != user.admin) return false;
+        if (role != user.role) return false;
         if (email != null ? !email.equals(user.email) : user.email != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         return fullName != null ? fullName.equals(user.fullName) : user.fullName == null;
@@ -71,7 +74,7 @@ public class User implements Identified{
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (fullName != null ? fullName.hashCode() : 0);
-        result = 31 * result + (admin ? 1 : 0);
+        result = 31 * result + (role != null ? role.hashCode() : 0);
         return result;
     }
 
@@ -82,7 +85,7 @@ public class User implements Identified{
                 ", email='" + email + '\'' +
                 ", fullName='" + fullName + '\'' +
                 ", account=" + account +
-                ", admin=" + admin +
+                ", role=" + role +
                 '}';
     }
 
@@ -109,8 +112,8 @@ public class User implements Identified{
             return this;
         }
 
-        public Builder setAdmin(boolean isAdmin) {
-            user.admin = isAdmin;
+        public Builder setRole(UserRole role) {
+            user.role = role;
             return this;
         }
 

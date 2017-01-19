@@ -24,8 +24,7 @@ public class LoggingHelper {
     private static final String SEPARATOR = "\t";
     private static final String MESSAGE_SEPARATOR = " : ";
 
-    private static final String USER_ID_IS = "User_ID=";
-    private static final String ADMIN_ID_IS = "Admin_ID=";
+    private static final String USER_ID_IS = " id=";
     private static final String REQUEST_URI_IS = "Request_URI=";
     private static final String USER_LOCALE_IS = "User_locale=";
     private static final String REQUEST_QUERY_IS = "Request_query=";
@@ -45,8 +44,8 @@ public class LoggingHelper {
                 .append(LINE_SEPARATOR).append(SEPARATOR)
                 .append(STATE);
 
+        addUserRoleIfPreset(request, messageBuilder);
         addUserIdIfPresent(request, messageBuilder);
-        addAdminIdIfPreset(request, messageBuilder);
         messageBuilder.append(SEPARATOR).append(REQUEST_URI_IS).append(request.getRequestURI())
                 .append(SEPARATOR).append(REQUEST_METHOD).append(request.getMethod().toUpperCase())
                 .append(SEPARATOR).append(REQUEST_QUERY_IS).append(request.getQueryString())
@@ -56,21 +55,18 @@ public class LoggingHelper {
         return messageBuilder.toString();
     }
 
-    private void addUserIdIfPresent(HttpServletRequest request, StringBuilder messageBuilder) {
-        if (request.getSession().getAttribute(USER_ID) != null) {
-            int userId = (int) request.getSession().getAttribute(USER_ID);
-            if (userId > 0) {
-                messageBuilder.append(SEPARATOR).append(USER_ID_IS).append(userId);
-            }
+    private void addUserRoleIfPreset(HttpServletRequest request, StringBuilder messageBuilder) {
+        if (request.getSession().getAttribute(USER_ROLE) != null) {
+            messageBuilder.append(SEPARATOR)
+                    .append(request.getSession().getAttribute(USER_ROLE));
         }
     }
 
-    private void addAdminIdIfPreset(HttpServletRequest request, StringBuilder messageBuilder) {
-        if (request.getSession().getAttribute(ADMIN_ID) != null) {
-            int adminId = (int) request.getSession().getAttribute(ADMIN_ID);
-            if (adminId > 0) {
-                messageBuilder.append(SEPARATOR).append(ADMIN_ID_IS).append(adminId);
-            }
+    private void addUserIdIfPresent(HttpServletRequest request, StringBuilder messageBuilder) {
+        if (request.getSession().getAttribute(USER_ID) != null) {
+            messageBuilder
+                    .append(USER_ID_IS)
+                    .append(request.getSession().getAttribute(USER_ID));
         }
     }
 

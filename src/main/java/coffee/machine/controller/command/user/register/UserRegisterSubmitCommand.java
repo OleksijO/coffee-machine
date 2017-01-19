@@ -5,7 +5,7 @@ import coffee.machine.controller.command.CommandWrapperTemplate;
 import coffee.machine.controller.validation.Notification;
 import coffee.machine.controller.validation.RegisterDataValidator;
 import coffee.machine.controller.validation.Validator;
-import coffee.machine.model.entity.User;
+import coffee.machine.model.entity.user.User;
 import coffee.machine.model.value.object.user.RegisterData;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.UserServiceImpl;

@@ -3,7 +3,7 @@ package coffee.machine.dao.impl.jdbc;
 import coffee.machine.dao.AbstractConnection;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.UserDao;
-import coffee.machine.model.entity.User;
+import coffee.machine.model.entity.user.User;
 import data.test.entity.UsersData;
 import org.junit.After;
 import org.junit.Before;
@@ -134,7 +134,7 @@ public class UserDaoIntegrationTest {
                 .setEmail(email)
                 .setPassword(user.getPassword())
                 .setFullName(user.getFullName())
-                .setAdmin(user.isAdmin())
+                .setRole(user.getRole())
                 .setAccount(user.getAccount())
                 .build();
     }
@@ -145,7 +145,7 @@ public class UserDaoIntegrationTest {
                 .setEmail(user.getEmail())
                 .setPassword(user.getPassword())
                 .setFullName(fullName)
-                .setAdmin(user.isAdmin())
+                .setRole(user.getRole())
                 .setAccount(user.getAccount())
                 .build();
     }

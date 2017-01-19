@@ -5,6 +5,7 @@
 <%@ page import="coffee.machine.view.Attributes" %>
 <%@ page import="coffee.machine.config.CoffeeMachineConfig" %>
 <%@ page import="coffee.machine.controller.RegExp" %>
+<%@ page import="coffee.machine.model.entity.user.UserRole" %>
 <%@ page import="org.apache.log4j.Logger" %>
 <%! static final Logger logger = Logger.getLogger("JSP ERROR HANDLER PAGE"); %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
