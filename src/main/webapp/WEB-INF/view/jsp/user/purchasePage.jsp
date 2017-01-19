@@ -1,12 +1,16 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="coffee.machine.view.PagesPaths" %>
+<%@ page import="coffee.machine.view.Parameters" %>
+<%@ page import="coffee.machine.view.Attributes" %>
 
-<%@ include file="/WEB-INF/view/jsp/fragment/header.jsp" %>
-<%@ include file="/WEB-INF/view/jsp/fragment/purchaseDetails.jsp" %>
+<jsp:include page="/WEB-INF/view/jsp/fragment/header.jsp" />
+<jsp:include page="/WEB-INF/view/jsp/fragment/purchaseDetails.jsp" />
 <br>
 <fmt:message key="user.purchase.description"/> <br>
 <br>
-<form action="${PagesPaths.USER_PURCHASE_PATH}" method="post">
+<form action="${pageContext.request.contextPath}${PagesPaths.USER_PURCHASE_PATH}" method="post">
     <fmt:message key="user.purchase.your.balance.is"/>
     <fmt:formatNumber value="${requestScope[Attributes.USER_BALANCE]}" type="number"
                       minFractionDigits="2" maxFractionDigits="2"/>

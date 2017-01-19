@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static coffee.machine.view.PagesPaths.HOME_PATH;
 import static coffee.machine.view.PagesPaths.REDIRECTED;
 
 /**
@@ -21,7 +20,6 @@ public class MainController extends HttpServlet {
     private static final Logger logger = Logger.getLogger(MainController.class);
     private static final String URI_IS = " : uri = ";
 
-
     /**
      * Command holder instance
      */
@@ -31,7 +29,7 @@ public class MainController extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        commandHolder = new CommandHolderImpl();
+        commandHolder = new CommandHolderImpl(getServletContext().getContextPath());
     }
 
     /**
@@ -49,7 +47,7 @@ public class MainController extends HttpServlet {
         String view = command.execute(request, response);
 
         if (!isRedirected(view)) {
-            request.getRequestDispatcher(view).forward(request, response);
+            getServletContext().getRequestDispatcher(view).forward(request, response);
         }
     }
 

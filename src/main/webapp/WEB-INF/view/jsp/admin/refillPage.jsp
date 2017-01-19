@@ -5,7 +5,7 @@
 <%@ page import="coffee.machine.view.Parameters" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
-<%@ include file="/WEB-INF/view/jsp/fragment/header.jsp" %>
+<jsp:include page="/WEB-INF/view/jsp/fragment/header.jsp" />
 <br>
 <fmt:message key="admin.refill.description"/> <br><br>
 <fmt:message key="admin.refill.machine.balance"/> :
@@ -15,7 +15,7 @@
                   maxFractionDigits="2"/>
 <fmt:message key="currency"/><br><br>
 
-<form action="${PagesPaths.ADMIN_REFILL_PATH}" method="post">
+<form action="${pageContext.request.contextPath}${PagesPaths.ADMIN_REFILL_PATH}" method="post">
 
     <table cellpadding="10" cellspacing="2" border="1">
         <tr>
@@ -88,4 +88,4 @@
 </form>
 
 
-<%@ include file="/WEB-INF/view/jsp/fragment/footer.jsp" %>
+<jsp:include page="/WEB-INF/view/jsp/fragment/footer.jsp" />

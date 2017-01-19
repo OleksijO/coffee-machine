@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page import="coffee.machine.view.PagesPaths" %>
 <%@ page import="coffee.machine.view.Parameters" %>
 <%@ page import="coffee.machine.i18n.SupportedLocale" %>
 <%@ page import="coffee.machine.view.Attributes" %>
@@ -15,7 +16,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
-    <title><fmt:message key="${requestScope[Attributes.PAGE_TITLE]}"/></title>
+    <title>
+    <fmt:message key="${requestScope[Attributes.PAGE_TITLE]}"/></title>
 </head>
 <body style="background: gainsboro">
 
@@ -31,8 +33,8 @@
             <img src="${pageContext.request.contextPath}/img/coffee.png" height="100px" alt="Coffee Icon"><br>
             <h1><fmt:message key="title"/></h1>
 
-            <%@ include file="/WEB-INF/view/jsp/fragment/menu.jsp" %>
-            <%@ include file="/WEB-INF/view/jsp/fragment/messages.jsp" %>
+            <jsp:include page="/WEB-INF/view/jsp/fragment/menu.jsp" />
+            <jsp:include page="/WEB-INF/view/jsp/fragment/messages.jsp" />
 
 
         </div>

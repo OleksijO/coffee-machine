@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
-%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="coffee.machine.view.Attributes" %>
 <%@ page import="coffee.machine.view.ErrorMessage" %>
 <%@ page import="org.apache.log4j.Logger" %>

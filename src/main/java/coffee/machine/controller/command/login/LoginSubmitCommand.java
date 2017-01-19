@@ -39,8 +39,8 @@ public class LoginSubmitCommand extends CommandWrapperTemplate {
     private static final String LOG_MESSAGE_FORMAT_USER_LOGGED_IN_DETAILS = "%s id=%d LOGGED IN.";
     private static final String LOG_MESSAGE_DOUBLE_LOGIN_ATTEMPT_DETAILS = "Double login attempt. Details: ";
 
-    private Map<UserRole, String> afterLoginPathByRole = new HashMap<UserRole, String>(){{
-        put(UserRole.USER,USER_HOME_PATH);
+    private Map<UserRole, String> afterLoginPathByRole = new HashMap<UserRole, String>() {{
+        put(UserRole.USER, USER_HOME_PATH);
         put(UserRole.ADMIN, ADMIN_HOME_PATH);
     }};
 
@@ -111,10 +111,10 @@ public class LoginSubmitCommand extends CommandWrapperTemplate {
     private void performActionsToLogIn(HttpServletRequest request, HttpServletResponse response, User user)
             throws IOException {
 
-            request.getSession().setAttribute(USER_ID, user.getId());
-            request.getSession().setAttribute(USER_ROLE, user.getRole());
-            response.sendRedirect(afterLoginPathByRole.get(user.getRole()));
-            logUserDetails(user);
+        request.getSession().setAttribute(USER_ID, user.getId());
+        request.getSession().setAttribute(USER_ROLE, user.getRole());
+        response.sendRedirect(request.getContextPath() + afterLoginPathByRole.get(user.getRole()));
+        logUserDetails(user);
     }
 
 

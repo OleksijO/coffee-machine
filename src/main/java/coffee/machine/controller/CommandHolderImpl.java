@@ -31,37 +31,42 @@ public class CommandHolderImpl implements CommandHolder {
 
     private final Command unsupportedPathCommand = new UnsupportedPathCommand();
 
+    private final String deployPath;
+
     /**
      * Holder for GET commands
      */
-    private final Map<String, Command> getCommands = new HashMap<String, Command>() {
-        {
-            put(HOME_PATH, new HomeCommand());
-            put(LOGIN_PATH, new LoginCommand());
-
-            put(LOGOUT_PATH, new LogoutCommand());
-            put(USER_REGISTER_PATH, new UserRegisterCommand());
-            put(USER_PURCHASE_PATH, new UserPurchaseCommand());
-            put(USER_ORDER_HISTORY_PATH, new UserOrderHistoryCommand());
-
-            put(ADMIN_REFILL_PATH, new AdminRefillCommand());
-            put(ADMIN_ADD_CREDITS_PATH, new AdminAddCreditCommand());
-        }
-    };
+    private Map<String, Command> getCommands = new HashMap<>() ;
 
     /**
      * Holder for POST commands
      */
-    private final Map<String, Command> postCommands = new HashMap<String, Command>() {
-        {
-            put(LOGIN_PATH, new LoginSubmitCommand());
-            put(USER_REGISTER_PATH, new UserRegisterSubmitCommand());
-            put(USER_PURCHASE_PATH, new UserPurchaseSubmitCommand());
+    private final Map<String, Command> postCommands = new HashMap<>() ;
 
-            put(ADMIN_REFILL_PATH, new AdminRefillSubmitCommand());
-            put(ADMIN_ADD_CREDITS_PATH, new AdminAddCreditSubmitCommand());
-        }
-    };
+    public CommandHolderImpl(String deployPath) {
+        this.deployPath = deployPath;
+        init();
+    }
+
+    private void init() {
+        getCommands.put(deployPath + HOME_PATH, new HomeCommand());
+        getCommands.put(deployPath + LOGIN_PATH, new LoginCommand());
+
+        getCommands.put(deployPath + LOGOUT_PATH, new LogoutCommand());
+        getCommands.put(deployPath + USER_REGISTER_PATH, new UserRegisterCommand());
+        getCommands.put(deployPath + USER_PURCHASE_PATH, new UserPurchaseCommand());
+        getCommands.put(deployPath + USER_ORDER_HISTORY_PATH, new UserOrderHistoryCommand());
+
+        getCommands.put(deployPath + ADMIN_REFILL_PATH, new AdminRefillCommand());
+        getCommands.put(deployPath + ADMIN_ADD_CREDITS_PATH, new AdminAddCreditCommand());
+
+        postCommands.put(deployPath + LOGIN_PATH, new LoginSubmitCommand());
+        postCommands.put(deployPath + USER_REGISTER_PATH, new UserRegisterSubmitCommand());
+        postCommands.put(deployPath + USER_PURCHASE_PATH, new UserPurchaseSubmitCommand());
+
+        postCommands.put(deployPath + ADMIN_REFILL_PATH, new AdminRefillSubmitCommand());
+        postCommands.put(deployPath + ADMIN_ADD_CREDITS_PATH, new AdminAddCreditSubmitCommand());
+    }
 
     @Override
     public Command get(String path) {
@@ -71,7 +76,7 @@ public class CommandHolderImpl implements CommandHolder {
     }
 
     private Command changeForUnsupportedCommandIfNull(Command command, String path) {
-        if (command==null){
+        if (command == null) {
             command = unsupportedPathCommand;
         }
         return command;
@@ -83,7 +88,6 @@ public class CommandHolderImpl implements CommandHolder {
         command = changeForUnsupportedCommandIfNull(command, path);
         return command;
     }
-
 
 
 }

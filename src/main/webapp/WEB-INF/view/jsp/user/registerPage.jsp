@@ -1,10 +1,12 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="/WEB-INF/view/taglib/loginForm.tld" prefix="custom" %>
-<%@ page import="coffee.machine.view.PagesPaths" %>
+<%@ page import="coffee.machine.view.Parameters" %>
+<%@ page import="coffee.machine.view.Attributes" %>
 <%@ page import="coffee.machine.controller.RegExp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
-<%@ include file="/WEB-INF/view/jsp/fragment/header.jsp" %>
+<jsp:include page="/WEB-INF/view/jsp/fragment/header.jsp" />
 <br>
 
 <div class="register_form">
@@ -16,7 +18,7 @@
     <fmt:message key="error.register.full.name.do.not.match.pattern" var="titleFullNameInput"/>
     <fmt:message key="register.submit" var="message_submit"/>
     <fmt:message key="cancel" var="message_cancel"/>
-    <form action="${requestScope[Attributes.REGISTER_FORM_ACTION]}" method="post">
+    <form action="${pageContext.request.contextPath}${requestScope[Attributes.REGISTER_FORM_ACTION]}" method="post">
         <table>
             <tr>
                 <td><br><label for="login"><fmt:message key="login.email"/></label>&nbsp;<br><br></td>
@@ -51,10 +53,4 @@
     </form>
     <br>
 </div>
-
-
-
-
-
-
-<%@ include file="/WEB-INF/view/jsp/fragment/footer.jsp" %>
+<jsp:include page="/WEB-INF/view/jsp/fragment/footer.jsp" />

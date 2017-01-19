@@ -4,7 +4,7 @@
 <%@ page import="coffee.machine.view.PagesPaths" %>
 <%@ page import="coffee.machine.view.Attributes" %>
 <%@ page import="coffee.machine.view.Parameters" %>
-<%@ include file="/WEB-INF/view/jsp/fragment/header.jsp" %>
+<jsp:include page="/WEB-INF/view/jsp/fragment/header.jsp" />
 <br>
 <fmt:message key="admin.add.credit.description"/> <br><br>
 <fmt:message key="admin.refill.machine.balance"/> :
@@ -49,7 +49,7 @@
                 </td>
                 <td>
 
-                    <form action="${PagesPaths.ADMIN_ADD_CREDITS_PATH}" method="post">
+                    <form action="${pageContext.request.contextPath}${PagesPaths.ADMIN_ADD_CREDITS_PATH}" method="post">
                         <div align="center">
                             <input type="hidden" name="${Parameters.USER_ID}" value="${user.id}">
                             <input type="number" min="0.01" value="0" name="${Parameters.CREDITS_TO_ADD}"
@@ -71,4 +71,4 @@
 
 
 
-<%@ include file="/WEB-INF/view/jsp/fragment/footer.jsp" %>
+<jsp:include page="/WEB-INF/view/jsp/fragment/footer.jsp" />

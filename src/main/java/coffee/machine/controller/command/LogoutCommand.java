@@ -32,7 +32,7 @@ public class LogoutCommand implements Command {
 
         request.getSession().invalidate();
 
-        response.sendRedirect(REDIRECT_PATH_AFTER_LOGOUT);
+        response.sendRedirect(request.getContextPath() + REDIRECT_PATH_AFTER_LOGOUT);
         return REDIRECTED;
     }
 
