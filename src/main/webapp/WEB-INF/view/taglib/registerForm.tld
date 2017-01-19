@@ -6,12 +6,12 @@
     version="2.0">
     <tlib-version>2.1</tlib-version>
     <short-name>myLib</short-name>
-    
+
     <tag>
-        <name>loginForm</name>
-        <tag-class>coffee.machine.view.tag.LoginFormTag</tag-class>
+        <name>registerForm</name>
+        <tag-class>coffee.machine.view.tag.RegisterFormTag</tag-class>
         <body-content>empty</body-content>
-       	<attribute>
+        <attribute>
             <name>cssClass</name>
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
@@ -52,6 +52,21 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <name>fullNameLabelMessageKey</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>parameterFullName</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>fullNamePreviousValue</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <name>submitMessageKey</name>
             <required>true</required>
             <rtexprvalue>false</rtexprvalue>
@@ -62,5 +77,4 @@
             <rtexprvalue>false</rtexprvalue>
         </attribute>
     </tag>
-
 </taglib>

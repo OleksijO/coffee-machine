@@ -9,6 +9,8 @@ import javax.servlet.jsp.tagext.Tag;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import static coffee.machine.controller.RegExp.REGEXP_EMAIL;
+import static coffee.machine.controller.RegExp.REGEXP_PASSWORD;
 import static coffee.machine.view.Attributes.USER_LOCALE;
 
 /**
@@ -17,7 +19,7 @@ import static coffee.machine.view.Attributes.USER_LOCALE;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class LoginFormTag implements Tag {
-    private PageContext pageContext;
+    protected PageContext pageContext;
     /**
      * form action path
      */
@@ -31,11 +33,11 @@ public class LoginFormTag implements Tag {
      */
     private String formTitleMessageKey;
     /**
-     * label text for login field label
+     * label text for login field label - should be message key from resource bundle
      */
     private String loginLabelMessageKey;
     /**
-     * login input name attribute - should be message key from resource bundle
+     * login input name attribute
      */
     private String parameterLogin;
     /**
@@ -66,52 +68,72 @@ public class LoginFormTag implements Tag {
             Locale locale = (Locale) pageContext.getSession().getAttribute(USER_LOCALE);
             ResourceBundle bundle = ResourceBundle.getBundle(CoffeeMachineConfig.MESSAGES, locale);
             pageContext.getOut().println("" +
-                    "<br>" +
-                    "<div class=\"" + cssClass + "\">\n" +
-                    "    <br>\n" +
-                    "    <b>" + bundle.getString(formTitleMessageKey) + "</b><br>\n" +
-                    "    <hr>\n" +
-                    "    <form action=\"" + action + "\" method=\"post\">\n" +
-                    "        <table>\n" +
-                    "            <tr>\n" +
-                    "                <td><br><label for=\"login\">" + bundle.getString(loginLabelMessageKey)
-                                                                    + "</label>&nbsp;<br><br></td>\n" +
-                    "                <td><br><input id=\"login\" type=\"text\" name=\"" + parameterLogin + "\"\n" +
-                    "                               value=\"" + loginPreviousValue + "\"" +
-                    "                  required     pattern=\"" + coffee.machine.controller.RegExp.REGEXP_EMAIL + "\""+
-                    "  title=\""+bundle.getString("error.login.email.do.not.match.pattern")+ "\"/><br><br></td>\n" +
-                    "            </tr>\n" +
-                    "            <tr>\n" +
-                    "                <td><br><label for=\"pswd\">" + bundle.getString(passwordLabelMessageKey)
-                                                                    + "</label>&nbsp;<br><br></td>\n" +
-                    "                <td><br><input id=\"pswd\" type=\"password\" name=\"" + parameterPassword
-                                                                                            + "\""+
-                    "                       required min=4 max=12 pattern=\"" + coffee.machine.controller.RegExp.REGEXP_PASSWORD + "\""+
-                    "  title=\""+bundle.getString("error.login.password.do.not.match.pattern")+ "\"/><br><br></td>\n" +
-                    "            </tr>\n" +
-                    "            <tr>\n" +
-                    "                <td colspan=\"2\">\n" +
-                    "                   <div align=\"center\">" +
-                    "                         <input type=\"submit\" value=\""
-                                                            + bundle.getString(submitMessageKey) + "\">" +
-                    "                         &nbsp;\n" +
-                    "                        <input type=\"button\" value=\""
-                                                    + bundle.getString(cancelMessageKey)
-                                                    + "\" onclick=\"history.back()\">" +
-                    "                   </div>\n" +
-                    "                </td>\n" +
-                    "            </tr>\n" +
-                    "        </table>\n" +
-                    "    </form>\n" +
-                    "\n" +
-                    "    <br>\n" +
-                    "</div>" +
-                    "");
+                    formHeader(bundle) +
+                    emailInputField(bundle) +
+                    passwordInputField(bundle) +
+                    submitButton(bundle) +
+                    formFooter());
         } catch (Exception e) {
             Logger.getLogger(LoginFormTag.class).error(e);
             throw new JspException(e);
         }
         return Tag.SKIP_BODY;
+    }
+
+    protected String formHeader(ResourceBundle bundle) {
+        return "<br>" +
+                "<div class=\"" + cssClass + "\">\n" +
+                "    <br>\n" +
+                "    <b>" + bundle.getString(formTitleMessageKey) + "</b><br>\n" +
+                "    <hr>\n" +
+                "    <form action=\"" + action + "\" method=\"post\">\n" +
+                "        <table>\n";
+    }
+
+    protected String emailInputField(ResourceBundle bundle) {
+        return "            <tr>\n" +
+                "                <td><br><label for=\"login\">" + bundle.getString(loginLabelMessageKey)
+                + "</label>&nbsp;<br><br></td>\n" +
+                "                <td><br><input id=\"login\" type=\"text\" name=\"" + parameterLogin + "\"\n" +
+                "                               value=\"" + loginPreviousValue + "\"" +
+                "                  required     pattern=\"" + REGEXP_EMAIL + "\"" +
+                "  title=\"" + bundle.getString("error.login.email.do.not.match.pattern") + "\"/><br><br></td>\n" +
+                "            </tr>\n";
+    }
+
+    protected String passwordInputField(ResourceBundle bundle) {
+        return "            <tr>\n" +
+                "                <td><br><label for=\"pswd\">" + bundle.getString(passwordLabelMessageKey)
+                + "</label>&nbsp;<br><br></td>\n" +
+                "                <td><br><input id=\"pswd\" type=\"password\" name=\"" + parameterPassword
+                + "\"" +
+                "                       required min=4 max=12 pattern=\"" + REGEXP_PASSWORD + "\"" +
+                "  title=\"" + bundle.getString("error.login.password.do.not.match.pattern") + "\"/><br><br></td>\n" +
+                "            </tr>\n";
+    }
+
+    protected String submitButton(ResourceBundle bundle) {
+        return "            <tr>\n" +
+                "                <td colspan=\"2\">\n" +
+                "                   <div align=\"center\">" +
+                "                         <input type=\"submit\" value=\""
+                + bundle.getString(submitMessageKey) + "\">" +
+                "                         &nbsp;\n" +
+                "                        <input type=\"button\" value=\""
+                + bundle.getString(cancelMessageKey)
+                + "\" onclick=\"history.back()\">" +
+                "                   </div>\n" +
+                "                </td>\n" +
+                "            </tr>\n";
+    }
+
+    protected String formFooter() {
+        return "        </table>\n" +
+                "    </form>\n" +
+                "\n" +
+                "    <br>\n" +
+                "</div>" +
+                "";
     }
 
     @Override
