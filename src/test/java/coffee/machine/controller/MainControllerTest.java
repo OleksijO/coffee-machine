@@ -21,6 +21,8 @@ import static org.mockito.Mockito.*;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class MainControllerTest {
+    private static final String DEPLOY_PATH = "/deploy_path";
+
     @Mock
     HttpServletRequest request;
     @Mock
@@ -46,32 +48,67 @@ public class MainControllerTest {
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute(anyString())).thenReturn(1);
         when(request.getRequestDispatcher(any())).thenReturn(requestDispatcher);
+        when(request.getContextPath()).thenReturn(DEPLOY_PATH);
 
     }
 
     @Test
-    public void testProcessRequestDoNothingIfCommandReturnedRedirected() throws Exception {
+    public void testDoGetDoNothingIfCommandReturnedRedirected() throws Exception {
+        when(request.getRequestURI()).thenReturn("path");
+        when(request.getMethod()).thenReturn("get");
         when(command.execute(request, response)).thenReturn(REDIRECTED);
-        controller.processRequest(command, request, response);
+        when(commandHolder.findCommand(any())).thenReturn(command);
+        controller.doGet(request, response);
         verify(response, times(0)).sendRedirect(any());
         verify(requestDispatcher, times(0)).forward(request, response);
     }
 
     @Test
-    public void testProcessRequestRedirectsToHomePathIfUriNotSupported() throws Exception {
+    public void testDoPostDoNothingIfCommandReturnedRedirected() throws Exception {
         when(request.getRequestURI()).thenReturn("path");
         when(request.getMethod()).thenReturn("get");
-        when(commandHolder.get("path")).thenReturn(new UnsupportedPathCommand());
-        controller.doGet(request, response);
-        verify(response, times(1)).sendRedirect(HOME_PATH);
+        when(command.execute(request, response)).thenReturn(REDIRECTED);
+        when(commandHolder.findCommand(any())).thenReturn(command);
+        controller.doPost(request, response);
+        verify(response, times(0)).sendRedirect(any());
         verify(requestDispatcher, times(0)).forward(request, response);
     }
 
     @Test
-    public void testProcessRequestForwardsToReturnedByCommandPath() throws Exception {
+    public void testDoGetRedirectsToHomePathIfUriNotSupported() throws Exception {
         when(request.getRequestURI()).thenReturn("path");
         when(request.getMethod()).thenReturn("get");
-        when(commandHolder.post("path")).thenReturn(command);
+        when(commandHolder.findCommand(any())).thenReturn(new UnsupportedPathCommand());
+        controller.doGet(request, response);
+        verify(response, times(1)).sendRedirect(DEPLOY_PATH+HOME_PATH);
+        verify(requestDispatcher, times(0)).forward(request, response);
+    }
+
+    @Test
+    public void testDoPostRedirectsToHomePathIfUriNotSupported() throws Exception {
+        when(request.getRequestURI()).thenReturn("path");
+        when(request.getMethod()).thenReturn("post");
+        when(commandHolder.findCommand(any())).thenReturn(new UnsupportedPathCommand());
+        controller.doPost(request, response);
+        verify(response, times(1)).sendRedirect(DEPLOY_PATH+HOME_PATH);
+        verify(requestDispatcher, times(0)).forward(request, response);
+    }
+
+    @Test
+    public void testDoGetForwardsToReturnedByCommandPath() throws Exception {
+        when(request.getRequestURI()).thenReturn("path");
+        when(request.getMethod()).thenReturn("get");
+        when(commandHolder.findCommand("GET:path")).thenReturn(command);
+        when(command.execute(request, response)).thenReturn("pagePost");
+        controller.doGet(request, response);
+        verify(request).getRequestDispatcher("pagePost");
+    }
+
+    @Test
+    public void testDoPostForwardsToReturnedByCommandPath() throws Exception {
+        when(request.getRequestURI()).thenReturn("path");
+        when(request.getMethod()).thenReturn("post");
+        when(commandHolder.findCommand("POST:path")).thenReturn(command);
         when(command.execute(request, response)).thenReturn("pagePost");
         controller.doPost(request, response);
         verify(request).getRequestDispatcher("pagePost");
@@ -81,22 +118,22 @@ public class MainControllerTest {
     public void testDoGetRetrievesGetCommandsFromHolderIfRequestMethodIsGet() throws Exception {
         when(request.getRequestURI()).thenReturn("path");
         when(request.getMethod()).thenReturn("get");
-        when(commandHolder.post("path")).thenReturn(command);
+        when(commandHolder.findCommand("GET:path")).thenReturn(command);
         when(command.execute(request, response)).thenReturn("pageGet");
-        controller.doPost(request, response);
-        verify(commandHolder, times(0)).get("path");
-        verify(commandHolder, times(1)).post("path");
+        controller.doGet(request, response);
+        verify(commandHolder, times(1)).findCommand("GET:path");
+        verify(commandHolder, times(0)).findCommand("POST:path");
     }
 
     @Test
     public void testDoPostRetrievesPostCommandsFromHolderIfRequestMethodIsPost() throws Exception {
         when(request.getRequestURI()).thenReturn("path");
         when(request.getMethod()).thenReturn("get");
-        when(commandHolder.post("path")).thenReturn(command);
+        when(commandHolder.findCommand("POST:path")).thenReturn(command);
         when(command.execute(request, response)).thenReturn("pagePost");
         controller.doPost(request, response);
-        verify(commandHolder, times(0)).get("path");
-        verify(commandHolder, times(1)).post("path");
+        verify(commandHolder, times(0)).findCommand("GET:path");
+        verify(commandHolder, times(1)).findCommand("POST:path");
     }
 
 }
