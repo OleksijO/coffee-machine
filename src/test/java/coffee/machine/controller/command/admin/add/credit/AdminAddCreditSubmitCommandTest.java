@@ -23,6 +23,7 @@ import java.util.Optional;
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_ADD_CREDITS_AMOUNT_IS_NOT_POSITIVE;
 import static coffee.machine.view.Attributes.ERROR_MESSAGE;
 import static coffee.machine.view.Attributes.USUAL_MESSAGE;
+import static coffee.machine.view.Attributes.VALIDATION_ERRORS;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -74,6 +75,14 @@ public class AdminAddCreditSubmitCommandTest {
     }
 
     @Test
+    public void testExecuteReturnsCorrectPageIfValidationErrorOccurred() throws Exception {
+        when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("-5");
+        when(request.getParameter(Parameters.USER_ID)).thenReturn("-5");
+        when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
+        assertEquals(PagesPaths.ADMIN_ADD_CREDITS_PAGE, command.execute(request,response));
+    }
+
+    @Test
     public void testExecutePlacesErrorMessageToRequestIfErrorOccurred() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("2");
@@ -94,34 +103,49 @@ public class AdminAddCreditSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteCallsServiceIfFormHasNonPositiveAmount() throws Exception {
+    public void testExecuteDoesNotCallServiceIfFormHasNonPositiveAmount() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("0");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("1");
         when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
         when(accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)).thenReturn(Optional.of(new Account()));
-        doThrow(new ServiceException().addMessageKey(ERROR_ADD_CREDITS_AMOUNT_IS_NOT_POSITIVE))
-                .when(accountService).addCredits(any());
         command.execute(request,response);
         CreditsReceipt testReceipt = new CreditsReceipt.Builder()
                 .setAmount(0.0)
                 .setUserId(1)
                 .build();
-        verify(accountService).addCredits(testReceipt);
+        verify(accountService, never()).addCredits(testReceipt);
     }
 
     @Test
-    public void testExecuteCallsServiceIfUserIdIsNonPositive() throws Exception {
+    public void testExecutePlacesValidationErrorMessageToRequestIfFormHasNonPositiveAmount() throws Exception {
+        when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("0");
+        when(request.getParameter(Parameters.USER_ID)).thenReturn("1");
+        when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
+        when(accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)).thenReturn(Optional.of(new Account()));
+        command.execute(request,response);
+        verify(request).setAttribute(eq(VALIDATION_ERRORS), any() );
+    }
+
+    @Test
+    public void testExecuteDoesNotCallServiceIfUserIdIsNonPositive() throws Exception {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2.50");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("0");
         when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
-        when(accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)).thenReturn(Optional.of(new Account()));
-        doThrow(new IllegalStateException()).when(accountService).addCredits(any());
         command.execute(request,response);
         CreditsReceipt testReceipt = new CreditsReceipt.Builder()
                 .setAmount(2.50)
                 .setUserId(0)
                 .build();
-        verify(accountService).addCredits(testReceipt);
+        verify(accountService, never()).addCredits(testReceipt);
+    }
+
+    @Test
+    public void testExecutePlacesValidationErrorMessageServiceIfUserIdIsNonPositive() throws Exception {
+        when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2.50");
+        when(request.getParameter(Parameters.USER_ID)).thenReturn("0");
+        when(session.getAttribute(Attributes.ADMIN_ID)).thenReturn(1);
+        command.execute(request,response);
+        verify(request).setAttribute(eq(VALIDATION_ERRORS), any() );
     }
 
     @Test

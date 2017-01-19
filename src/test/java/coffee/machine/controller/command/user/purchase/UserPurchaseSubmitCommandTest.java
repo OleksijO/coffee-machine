@@ -19,9 +19,9 @@ import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
 import java.util.Iterator;
 
-import static coffee.machine.controller.command.user.purchase.PurchaseDrinksTestData.EMPTY_DATA;
-import static coffee.machine.controller.command.user.purchase.PurchaseDrinksTestData.PURCHASE_FULL_DATA;
+import static coffee.machine.controller.command.user.purchase.PurchaseDrinksTestData.*;
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_PREPARE_ORDER_NOTHING_TO_BUY;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_PREPARE_ORDER_PRODUCT_NO_LONGER_AVAILABLE;
 import static coffee.machine.view.Attributes.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -65,8 +65,17 @@ public class UserPurchaseSubmitCommandTest {
     }
 
     @Test
+    public void testExecuteReturnsCorrectPageIfReceiptHasNegativeQuantities() throws Exception {
+        setupRequestParams(PURCHASE_DATA_WITH_NEGATIVE_QUANTITIES);
+        when(orderService.prepareOrder(any())).thenReturn(new Order.Builder().build());
+        assertEquals(
+                PagesPaths.USER_PURCHASE_PAGE,
+                command.execute(request, response));
+    }
+
+    @Test
     public void testExecuteReturnsCorrectPageIfErrorOccurred() throws Exception {
-        setupRequestParams(EMPTY_DATA);
+        setupRequestParams(PURCHASE_CORRECT_DATA);
         when(session.getAttribute(USER_ID)).thenReturn(1);
         doThrow(new ServiceException()
                 .addMessageKey(ERROR_PREPARE_ORDER_NOTHING_TO_BUY)
@@ -78,33 +87,37 @@ public class UserPurchaseSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteCallsServiceWithCorrectArgsIfReceiptIsEmpty() throws Exception {
+    public void testExecuteDoesNotCallServiceIfReceiptIsEmpty() throws Exception {
         setupRequestParams(EMPTY_DATA);
         when(session.getAttribute(USER_ID)).thenReturn(1);
-        doThrow(new ServiceException()
-                .addMessageKey(ERROR_PREPARE_ORDER_NOTHING_TO_BUY)
-                .addLogMessage(""))
-                .when(orderService).prepareOrder(any());
         command.execute(request, response);
-        verify(orderService).prepareOrder(EMPTY_DATA.order);
+        verify(orderService, never()).prepareOrder(EMPTY_DATA.order);
+    }
+
+    @Test
+    public void testExecuteDoesNotCallServiceIfReceiptHasNegativeQuantities() throws Exception {
+        setupRequestParams(PURCHASE_DATA_WITH_NEGATIVE_QUANTITIES);
+        when(session.getAttribute(USER_ID)).thenReturn(1);
+        command.execute(request, response);
+        verify(orderService, never()).prepareOrder(EMPTY_DATA.order);
     }
 
     @Test
     public void testExecuteCallsServiceWithCorrectArgsIfReceiptIsFilled() throws Exception {
-        setupRequestParams(PURCHASE_FULL_DATA);
+        setupRequestParams(PURCHASE_CORRECT_DATA);
         when(request.getMethod()).thenReturn("get");
         when(session.getAttribute(USER_ID)).thenReturn(1);
         when(orderService.prepareOrder(any())).thenReturn(new Order.Builder().build());
         command.execute(request, response);
-        verify(orderService).prepareOrder(PURCHASE_FULL_DATA.order);
+        verify(orderService).prepareOrder(PURCHASE_CORRECT_DATA.order);
     }
 
     @Test
     public void testExecutePlacesErrorMessageToRequestIfErrorOccurred() throws Exception {
-        setupRequestParams(EMPTY_DATA);
+        setupRequestParams(PURCHASE_CORRECT_DATA);
         when(session.getAttribute(USER_ID)).thenReturn(1);
         doThrow(new ServiceException()
-                .addMessageKey(ERROR_PREPARE_ORDER_NOTHING_TO_BUY)
+                .addMessageKey(ERROR_PREPARE_ORDER_PRODUCT_NO_LONGER_AVAILABLE)
                 .addLogMessage(""))
                 .when(orderService).prepareOrder(any());
         command.execute(request, response);
@@ -113,7 +126,7 @@ public class UserPurchaseSubmitCommandTest {
 
     @Test
     public void testExecutePlacesUsualMessageToRequestIfNoError() throws Exception {
-        setupRequestParams(PURCHASE_FULL_DATA);
+        setupRequestParams(PURCHASE_CORRECT_DATA);
         when(request.getMethod()).thenReturn("get");
         when(session.getAttribute(USER_ID)).thenReturn(1);
         when(orderService.prepareOrder(any())).thenReturn(new Order.Builder().build());

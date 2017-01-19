@@ -19,11 +19,10 @@ import java.util.Enumeration;
 import java.util.Iterator;
 
 import static coffee.machine.controller.command.admin.refill.ProductRefillTestData.EMPTY_DATA;
-import static coffee.machine.controller.command.admin.refill.ProductRefillTestData.REFILL_FULL_DATA;
+import static coffee.machine.controller.command.admin.refill.ProductRefillTestData.REFILL_DATA_WITH_NEGATIVE_QUANTITIES;
+import static coffee.machine.controller.command.admin.refill.ProductRefillTestData.REFILL_CORRECT_DATA;
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ADMIN_REFILL_NOTHING_TO_ADD;
-import static coffee.machine.view.Attributes.ADMIN_ID;
-import static coffee.machine.view.Attributes.ERROR_MESSAGE;
-import static coffee.machine.view.Attributes.USUAL_MESSAGE;
+import static coffee.machine.view.Attributes.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -57,7 +56,7 @@ public class AdminRefillSubmitCommandTest {
 
     @Test
     public void testExecuteReturnsCorrectPageIfNoError() throws Exception {
-        setupRequestParams(EMPTY_DATA);
+        setupRequestParams(REFILL_CORRECT_DATA);
         assertEquals(
                 PagesPaths.ADMIN_REFILL_PAGE,
                 command.execute(request, response));
@@ -65,7 +64,7 @@ public class AdminRefillSubmitCommandTest {
 
     @Test
     public void testExecuteReturnsCorrectPageIfErrorOccurred() throws Exception {
-        setupRequestParams(EMPTY_DATA);
+        setupRequestParams(REFILL_CORRECT_DATA);
         doThrow(new ServiceException()
                 .addMessageKey(ADMIN_REFILL_NOTHING_TO_ADD)
                 .addLogMessage(""))
@@ -76,24 +75,31 @@ public class AdminRefillSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteCallsServiceIfFormIsEmpty() throws Exception {
+    public void testExecuteDoesNotCallServiceIfFormIsEmpty() throws Exception {
         setupRequestParams(EMPTY_DATA);
         command.execute(request, response);
-        verify(refillService).refill(EMPTY_DATA.productsReceipt);
+        verify(refillService, never()).refill(any());
+    }
+
+    @Test
+    public void testExecuteDoesNotCallServiceIfFormHasNegativeQuantities() throws Exception {
+        setupRequestParams(REFILL_DATA_WITH_NEGATIVE_QUANTITIES);
+        command.execute(request, response);
+        verify(refillService, never()).refill(any());
     }
 
     @Test
     public void testExecuteCallsServiceWithCorrectArgsIfFormIsFilledWithData() throws Exception {
-        setupRequestParams(REFILL_FULL_DATA);
+        setupRequestParams(REFILL_CORRECT_DATA);
         when(request.getMethod()).thenReturn("get");
         when(session.getAttribute(ADMIN_ID)).thenReturn(1);
         command.execute(request, response);
-        verify(refillService).refill(REFILL_FULL_DATA.productsReceipt);
+        verify(refillService).refill(REFILL_CORRECT_DATA.productsReceipt);
     }
 
     @Test
     public void testExecutePlacesErrorMessageToRequestIfErrorOccurred() throws Exception {
-        setupRequestParams(EMPTY_DATA);
+        setupRequestParams(REFILL_CORRECT_DATA);
         doThrow(new ServiceException()
                 .addMessageKey(ADMIN_REFILL_NOTHING_TO_ADD)
                 .addLogMessage(""))
@@ -103,8 +109,19 @@ public class AdminRefillSubmitCommandTest {
     }
 
     @Test
+    public void testExecutePlacesErrorMessageToRequestIfValidationErrorOccurred() throws Exception {
+        setupRequestParams(REFILL_DATA_WITH_NEGATIVE_QUANTITIES);
+        doThrow(new ServiceException()
+                .addMessageKey(ADMIN_REFILL_NOTHING_TO_ADD)
+                .addLogMessage(""))
+                .when(refillService).refill(any());
+        command.execute(request, response);
+        verify(request).setAttribute(eq(VALIDATION_ERRORS), any());
+    }
+
+    @Test
     public void testExecutePlacesUsualMessageToRequestIfNoError() throws Exception {
-        setupRequestParams(REFILL_FULL_DATA);
+        setupRequestParams(REFILL_CORRECT_DATA);
         when(request.getMethod()).thenReturn("get");
         when(session.getAttribute(ADMIN_ID)).thenReturn(1);
         command.execute(request, response);

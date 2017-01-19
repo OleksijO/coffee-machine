@@ -17,7 +17,7 @@ enum ProductRefillTestData {
             new HashMap<>(),
             new ProductsReceipt(new ArrayList<Drink>(), new ArrayList<Product>())),
 
-    REFILL_FULL_DATA(
+    REFILL_DATA_WITH_NEGATIVE_QUANTITIES(
             new HashMap<String, String>() {{
                 String drink = Parameters.DRINK_PARAMETER_STARTS_WITH;
                 String addon = Parameters.ADDON_PARAMETER_STARTS_WITH;
@@ -44,6 +44,33 @@ enum ProductRefillTestData {
                         add(new Product.Builder().setId(1).setQuantity(0).build());
                         add(new Product.Builder().setId(2).setQuantity(2).build());
                         add(new Product.Builder().setId(3).setQuantity(-1).build());
+                        add(new Product.Builder().setId(4).setQuantity(6).build());
+                        add(new Product.Builder().setId(5).setQuantity(8).build());
+                    }})
+    ),
+    REFILL_CORRECT_DATA(
+            new HashMap<String, String>() {{
+                String drink = Parameters.DRINK_PARAMETER_STARTS_WITH;
+                String addon = Parameters.ADDON_PARAMETER_STARTS_WITH;
+                put(drink + 1, "0");
+                put(drink + 2, "1");
+                put(drink + 3, "0");
+                put(drink + 4, "2");
+
+                put(addon + 1, "0");
+                put(addon + 2, "2");
+                put(addon + 3, "0");
+                put(addon + 4, "6");
+                put(addon + 5, "8");
+
+            }},
+            new ProductsReceipt(
+                    new ArrayList<Drink>() {{
+                        add(new Drink.Builder().setId(2).setQuantity(1).build());
+                        add(new Drink.Builder().setId(4).setQuantity(2).build());
+                    }},
+                    new ArrayList<Product>() {{
+                        add(new Product.Builder().setId(2).setQuantity(2).build());
                         add(new Product.Builder().setId(4).setQuantity(6).build());
                         add(new Product.Builder().setId(5).setQuantity(8).build());
                     }})
