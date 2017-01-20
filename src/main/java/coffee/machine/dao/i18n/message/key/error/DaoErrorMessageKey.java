@@ -5,7 +5,9 @@ package coffee.machine.dao.i18n.message.key.error;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public interface DaoErrorMessageKey {
-    String DAO_ERROR = "error.dao";
+public class DaoErrorMessageKey {
+    public static final String DAO_ERROR = "error.dao";
 
+    private DaoErrorMessageKey() {
+    }
 }

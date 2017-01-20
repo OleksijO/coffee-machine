@@ -15,7 +15,7 @@ import java.util.Map;
 enum ProductRefillTestData {
     EMPTY_DATA(
             new HashMap<>(),
-            new ProductsReceipt(new ArrayList<Drink>(), new ArrayList<Product>())),
+            new ProductsReceipt(new ArrayList<>(), new ArrayList<>())),
 
     REFILL_DATA_WITH_NEGATIVE_QUANTITIES(
             new HashMap<String, String>() {{

@@ -2,7 +2,7 @@
 <%@ page import="coffee.machine.view.Attributes" %>
 <%@ page import="coffee.machine.view.ErrorMessage" %>
 <%@ page import="org.apache.log4j.Logger" %>
-<%! static final Logger logger = Logger.getLogger("JSP ERROR HANDLER PAGE"); %>
+<%! private static final Logger logger = Logger.getLogger("JSP ERROR HANDLER PAGE"); %>
 <% logger.error(String
         .format(ErrorMessage.JSP_HANDLER_MESSAGE_FORMAT,
                 pageContext.getSession().getAttribute(Attributes.USER_ROLE),

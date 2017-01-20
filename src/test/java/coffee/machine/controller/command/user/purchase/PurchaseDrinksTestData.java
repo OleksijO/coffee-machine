@@ -123,7 +123,7 @@ enum PurchaseDrinksTestData {
                     })
                     .setUserId(1)
                     .build()
-    );;
+    );
 
     Map<String, String> requestParams;
     Order order;

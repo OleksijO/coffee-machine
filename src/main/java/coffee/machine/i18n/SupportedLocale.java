@@ -13,9 +13,9 @@ public enum SupportedLocale {
     UA(new Locale("uk", "UA"), "ua"),
     EN(new Locale("en", "EN"), "en");
 
-    final private Locale locale;
-    final private String param;
-    final static private SupportedLocale defaultLocale = EN;
+    private static final SupportedLocale defaultLocale = EN;
+    private final Locale locale;
+    private final String param;
 
     SupportedLocale(Locale locale, String param) {
         this.locale = locale;
@@ -41,14 +41,14 @@ public enum SupportedLocale {
     public static Locale getSupportedOrDefault(Locale locale) {
         return Arrays.stream(values())
                 .map(SupportedLocale::getLocale)
-                .filter(loc->loc.equals(locale))
+                .filter(loc -> loc.equals(locale))
                 .findAny()
                 .orElse(getDefault());
     }
 
-    public static Locale getSupportedOrDefault(String param){
+    public static Locale getSupportedOrDefault(String param) {
         return Arrays.stream(values())
-                .filter(holder->holder.param.equals(param))
+                .filter(holder -> holder.param.equals(param))
                 .map(SupportedLocale::getLocale)
                 .findAny()
                 .orElse(getDefault());

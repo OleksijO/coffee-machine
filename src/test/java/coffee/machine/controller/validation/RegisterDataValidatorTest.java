@@ -13,96 +13,96 @@ public class RegisterDataValidatorTest {
     private Validator<RegisterData> validator = new RegisterDataValidator();
 
     @Test(expected = NullPointerException.class)
-    public void testValidateThrowsNullPointerIfRegisterDataIsNull() throws Exception {
+    public void testValidateThrowsNullPointerIfRegisterDataIsNull()  {
         validator.validate(null);
     }
 
     @Test
-    public void testValidateReturnsNotificationWithoutMessagesIfRegisterDataIsCorrect() throws Exception {
+    public void testValidateReturnsNotificationWithoutMessagesIfRegisterDataIsCorrect()  {
         RegisterData loginData = new RegisterData("email@mail.com","password","My Full Name");
         Notification notification = validator.validate(loginData);
         assertFalse(notification.hasErrorMessages());
     }
 
     @Test
-    public void testValidateReturnsNotificationWithMessagesIfRegisterDataIsIncorrect() throws Exception {
+    public void testValidateReturnsNotificationWithMessagesIfRegisterDataIsIncorrect()  {
         RegisterData loginData = new RegisterData("emailmail.com","","12312321");
         Notification notification = validator.validate(loginData);
         assertTrue(notification.hasErrorMessages());
     }
 
     @Test
-    public void testValidateReturnsNotificationWithSpecifiedObjectClassIfRegisterDataIsCorrect() throws Exception {
+    public void testValidateReturnsNotificationWithSpecifiedObjectClassIfRegisterDataIsCorrect()  {
         RegisterData loginData = new RegisterData("email@mail.com","password","My Full Name");
         Notification notification = validator.validate(loginData);
         assertEquals(RegisterData.class, notification.getValidationObjectClass());
     }
 
     @Test
-    public void testValidateReturnsNotificationWithSpecifiedObjectClassIfRegisterDataIsIncorrect() throws Exception {
+    public void testValidateReturnsNotificationWithSpecifiedObjectClassIfRegisterDataIsIncorrect()  {
         RegisterData loginData = new RegisterData("","","");
         Notification notification = validator.validate(loginData);
         assertEquals(RegisterData.class, notification.getValidationObjectClass());
     }
 
     @Test
-    public void testValidateReturnsNotificationWithOneMessageKeyIfRegisterDataHasIncorrectEmail() throws Exception {
+    public void testValidateReturnsNotificationWithOneMessageKeyIfRegisterDataHasIncorrectEmail()  {
         RegisterData loginData = new RegisterData("email@mail","password","My Full Name");
         Notification notification = validator.validate(loginData);
         assertEquals(1, notification.getErrorMessageKeys().size());
     }
 
     @Test
-    public void testValidateReturnsNotificationWithCorrectMessageKeyIfRegisterDataHasIncorrectEmail() throws Exception {
+    public void testValidateReturnsNotificationWithCorrectMessageKeyIfRegisterDataHasIncorrectEmail()  {
         RegisterData loginData = new RegisterData("email@mail","password","My Full Name");
         Notification notification = validator.validate(loginData);
         assertEquals(ERROR_LOGIN_EMAIL_DO_NOT_MATCH_PATTERN, notification.getErrorMessageKeys().get(0));
     }
 
     @Test
-    public void testValidateReturnsNotificationWithOneMessageKeyIfRegisterDataHasIncorrectPassword() throws Exception {
+    public void testValidateReturnsNotificationWithOneMessageKeyIfRegisterDataHasIncorrectPassword()  {
         RegisterData loginData = new RegisterData("email@mail.com","&*&^%%^%","My Full Name");
         Notification notification = validator.validate(loginData);
         assertEquals(1, notification.getErrorMessageKeys().size());
     }
 
     @Test
-    public void testValidateReturnsNotificationWithCorrectMessageKeyIfRegisterDataHasIncorrectPassword() throws Exception {
+    public void testValidateReturnsNotificationWithCorrectMessageKeyIfRegisterDataHasIncorrectPassword()  {
         RegisterData loginData = new RegisterData("email@mail.com","&*&^%%^%","My Full Name");
         Notification notification = validator.validate(loginData);
         assertEquals(ERROR_LOGIN_PASSWORD_DO_NOT_MATCH_PATTERN, notification.getErrorMessageKeys().get(0));
     }
 
     @Test
-    public void testValidateReturnsNotificationWithOneMessageKeyIfRegisterDataHasIncorrectFullName() throws Exception {
+    public void testValidateReturnsNotificationWithOneMessageKeyIfRegisterDataHasIncorrectFullName()  {
         RegisterData loginData = new RegisterData("email@mail.com","password","");
         Notification notification = validator.validate(loginData);
         assertEquals(1, notification.getErrorMessageKeys().size());
     }
 
     @Test
-    public void testValidateReturnsNotificationWithCorrectMessageKeyIfRegisterDataHasIncorrectFullName() throws Exception {
+    public void testValidateReturnsNotificationWithCorrectMessageKeyIfRegisterDataHasIncorrectFullName()  {
         RegisterData loginData = new RegisterData("email@mail.com","password","");
         Notification notification = validator.validate(loginData);
         assertEquals(ERROR_REGISTER_FULL_NAME_DO_NOT_MATCH_PATTERN, notification.getErrorMessageKeys().get(0));
     }
 
     @Test
-    public void testValidateReturnsNotificationWithTwoMessageKeysIfRegisterDataHasIncorrectEmailAndPassword() throws Exception {
+    public void testValidateReturnsNotificationWithTwoMessageKeysIfRegisterDataHasIncorrectEmailAndPassword()  {
         RegisterData loginData = new RegisterData("email","","My Full Name");
         Notification notification = validator.validate(loginData);
         assertEquals(2, notification.getErrorMessageKeys().size());
     }
 
     @Test
-    public void testValidateReturnsNotificationWithTwoMessageKeysIfRegisterDataHasAllIncorrectData() throws Exception {
+    public void testValidateReturnsNotificationWithTwoMessageKeysIfRegisterDataHasAllIncorrectData()  {
         RegisterData loginData = new RegisterData("","","");
         Notification notification = validator.validate(loginData);
         assertEquals(3, notification.getErrorMessageKeys().size());
     }
 
     @Test
-    public void testValidateReturnsNotificationWithNoLogMessageIfRegisterDataIsIncorrect() throws Exception {
+    public void testValidateReturnsNotificationWithNoLogMessageIfRegisterDataIsIncorrect()  {
         RegisterData loginData = new RegisterData("email@","pas swo rd","");
         Notification notification = validator.validate(loginData);
         assertEquals(0, notification.getLogMessages().size());

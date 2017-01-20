@@ -16,4 +16,7 @@ public final class Parameters {
 	public static final String USER_LOCALE = "language";
     public static final String USER_ID = "user_id";
 	public static final String CREDITS_TO_ADD = "credits_to_add";
+
+	private Parameters() {
+	}
 }

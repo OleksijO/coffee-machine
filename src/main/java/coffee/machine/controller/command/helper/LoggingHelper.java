@@ -94,8 +94,8 @@ public class LoggingHelper {
     }
 
     private String getLocalizedMessageByKeyAndLocale(String messageKey, Locale locale) {
-        locale = SupportedLocale.getSupportedOrDefault(locale);
-        return ResourceBundle.getBundle(MESSAGES, locale).getString(messageKey);
+        Locale supportedLocale = SupportedLocale.getSupportedOrDefault(locale);
+        return ResourceBundle.getBundle(MESSAGES, supportedLocale).getString(messageKey);
     }
 
     private void addAdditionalMessage(ApplicationException e, StringBuilder messageBuilder) {

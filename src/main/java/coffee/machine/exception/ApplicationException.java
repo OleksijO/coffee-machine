@@ -31,7 +31,7 @@ public class ApplicationException extends RuntimeException {
      * @param messageKey resource bundle message key
      * @param cause   cause exception instance
      */
-    public ApplicationException(String messageKey, Throwable cause) {
+    protected ApplicationException(String messageKey, Throwable cause) {
         super(cause);
         this.messageKey = messageKey;
     }
@@ -39,48 +39,21 @@ public class ApplicationException extends RuntimeException {
     /**
      * @param messageKey resource bundle message key
      */
-    public ApplicationException(String messageKey) {
+    protected ApplicationException(String messageKey) {
         this.messageKey = messageKey;
     }
 
-    /**
-     * @param messageKey           resource bundle message key
-     * @param additionalMessage usual text message to be shown on view
-     */
-    public ApplicationException(String messageKey, String additionalMessage) {
-        this.messageKey = messageKey;
-        this.additionalMessage = additionalMessage;
-    }
-
-    /**
-     * @param messageKey           resource bundle message key
-     * @param additionalMessage usual text message to be shown on view
-     * @param cause             cause exception instance
-     */
-    public ApplicationException(String messageKey, String additionalMessage, Throwable cause) {
-        super(cause);
-        this.messageKey = messageKey;
-        this.additionalMessage = additionalMessage;
-    }
-
-    /**
-     * @param cause cause exception instance
-     */
-    public ApplicationException(Throwable cause) {
-        super(cause);
-    }
-
-    public ApplicationException addLogMessage(String logMessage) {
+    protected ApplicationException addLogMessage(String logMessage) {
         this.logMessage = logMessage;
         return this;
     }
 
-    public ApplicationException addMessageKey(String messageKey) {
+    protected ApplicationException addMessageKey(String messageKey) {
         this.messageKey = messageKey;
         return this;
     }
 
-    public ApplicationException addAdditionalMessage(String additionalMessage) {
+    protected ApplicationException addAdditionalMessage(String additionalMessage) {
         this.additionalMessage = additionalMessage;
         return this;
     }

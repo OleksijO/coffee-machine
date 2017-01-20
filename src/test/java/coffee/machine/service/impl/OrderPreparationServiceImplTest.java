@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
  * Created by oleksij.onysymchuk@gmail on 11.01.2017.
  */
 public class OrderPreparationServiceImplTest {
-    public static final String NO_SERVICE_EXCEPTION_HAD_BEEN_THROWN = "No service exception had been thrown.";
+    private static final String NO_SERVICE_EXCEPTION_HAD_BEEN_THROWN = "No service exception had been thrown.";
     @Mock
     private DaoFactory daoFactory;
     @Mock
@@ -42,7 +42,7 @@ public class OrderPreparationServiceImplTest {
     @Mock
     private OrderDao orderDao;
     @Mock
-    private AbstractConnection connection;
+    private DaoConnection connection;
 
     private OrderPreparationService service = OrderPreparationServiceImpl.getInstance();
 
@@ -74,7 +74,7 @@ public class OrderPreparationServiceImplTest {
 
 
     @Test(expected = NullPointerException.class)
-    public void testPrepareOrderThrowsNullPointerIfOrderIsNull() throws Exception {
+    public void testPrepareOrderThrowsNullPointerIfOrderIsNull()  {
             service.prepareOrder(null);
 
     }
@@ -135,7 +135,7 @@ public class OrderPreparationServiceImplTest {
     }
 
     @Test
-    public void testPrepareOrderThrowsExceptionIfUserHasNotEnoughMoney() throws Exception {
+    public void testPrepareOrderThrowsExceptionIfUserHasNotEnoughMoney()  {
         Order order = getFilledOrder();
         Account userAccountWithNoMoney = AccountsData.USER_A.getCopy();
         userAccountWithNoMoney.withdraw(userAccountWithNoMoney.getAmount());
@@ -150,7 +150,7 @@ public class OrderPreparationServiceImplTest {
     }
 
     @Test
-    public void testPrepareOrderThrowsExceptionIfNotEnoughDrink() throws Exception {
+    public void testPrepareOrderThrowsExceptionIfNotEnoughDrink()  {
         Order order = getFilledOrder();
         order.getDrinks().get(1).setQuantity(100500);
         try {
@@ -164,7 +164,7 @@ public class OrderPreparationServiceImplTest {
     }
 
     @Test
-    public void testPrepareOrderThrowsExceptionIfNotEnoughAddon() throws Exception {
+    public void testPrepareOrderThrowsExceptionIfNotEnoughAddon()  {
         Order order = getFilledOrder();
         order.getDrinks().get(1).getAddons().get(0).setQuantity(100500);
         try {

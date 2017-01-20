@@ -4,6 +4,7 @@ import coffee.machine.dao.GenericDao;
 import coffee.machine.dao.exception.DaoException;
 import coffee.machine.model.entity.Identified;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,7 +20,6 @@ abstract class AbstractDao<T> implements GenericDao<T> {
 
     static final String DB_ERROR_UNEXPECTED_MULTIPLE_RESULT_WHILE_GETTING_BY_ID =
             "Unexpected multiple result while getting by id ";
-    static final String CAN_NOT_CREATE_EMPTY = "Can not insert null entity.";
     static final String CAN_NOT_CREATE_ALREADY_SAVED = "Can not insert already saved entity (id!=0): ";
     static final String DB_ERROR_WHILE_INSERTING = "Database error while inserting entity ";
     static final String CAN_NOT_UPDATE_EMPTY = "Can not update null entity ";
@@ -28,10 +28,19 @@ abstract class AbstractDao<T> implements GenericDao<T> {
     static final String DB_ERROR_WHILE_GETTING_ALL = "Database error while getting all ";
     static final String DB_ERROR_WHILE_GETTING_BY_ID = "Database error while getting by id ";
     static final String DB_ERROR_WHILE_DELETING_BY_ID = "Database error while deleting entity with id = ";
+    static final String DB_ERROR_WHILE_DELETING_ENTITY_BY_ID_FORMAT =
+            "Database error while deleting entity from table '%s' with id = %d";
 
     static final String FIELD_ID = "id";
     static final String ORDER_BY_ID = " ORDER BY id ";
 
+    private static final String DELETE_SQL_FORMAT = "DELETE FROM %s WHERE id=?";
+
+    protected final Connection connection;
+
+    protected AbstractDao(Connection connection) {
+        this.connection = connection;
+    }
 
     /**
      * Provides check if the list has only one element
@@ -76,6 +85,21 @@ abstract class AbstractDao<T> implements GenericDao<T> {
         if (entity.getId() != 0) {
             throw new DaoException()
                     .addLogMessage(CAN_NOT_CREATE_ALREADY_SAVED + entity);
+        }
+    }
+
+    public void deleteById(String table, int id) {
+
+        try (PreparedStatement statement =
+                     connection.prepareStatement(
+                             String.format(DELETE_SQL_FORMAT, table))) {
+
+            statement.setInt(1, id);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DaoException(e)
+                    .addLogMessage(String.format(DB_ERROR_WHILE_DELETING_ENTITY_BY_ID_FORMAT, table, id));
         }
     }
 }

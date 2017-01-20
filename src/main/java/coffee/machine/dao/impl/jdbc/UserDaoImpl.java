@@ -1,6 +1,5 @@
 package coffee.machine.dao.impl.jdbc;
 
-import coffee.machine.dao.AccountDao;
 import coffee.machine.dao.UserDao;
 import coffee.machine.dao.exception.DaoException;
 import coffee.machine.model.entity.Account;
@@ -30,13 +29,11 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
             "UPDATE users SET email = ?, password = ?, full_name = ?, account_id = ?, role = ? WHERE id = ? ";
     private static final String INSERT_SQL =
             "INSERT INTO users (email, password, full_name, account_id, role) VALUES (?, ?, ?, ?, ?) ";
-    private static final String DELETE_SQL =
-            "DELETE FROM users WHERE id = ? ";
+    private static final String TABLE = "users";
     private static final String WHERE_USER_EMAIL = " WHERE users.email = ? ";
     private static final String WHERE_USER_ID = " WHERE users.id = ? ";
     private static final String WHERE_USER_ROLE = " WHERE users.role = ? ";
     private static final String ORDER_BY_EMAIL = " ORDER BY email ";
-
 
     private static final String FIELD_LOGIN = "email";
     private static final String FIELD_PASSWORD = "password";
@@ -45,10 +42,8 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
     private static final String FIELD_ROLE = "role";
     private static final String FIELD_ACCOUNT_AMOUNT = "amount";
 
-    private final Connection connection;
-
-    UserDaoImpl(Connection connection, AccountDao accountDao) {
-        this.connection = connection;
+    UserDaoImpl(Connection connection) {
+        super(connection);
     }
 
     @Override
@@ -98,7 +93,6 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
             statement.setInt(4, (user.getAccount() == null) ? 0 : user.getAccount().getId());
             statement.setString(5, user.getRole().toString());
             statement.setInt(6, user.getId());
-            System.out.println(UPDATE_SQL);
             statement.executeUpdate();
 
         } catch (SQLException e) {
@@ -159,15 +153,7 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
     @Override
     public void deleteById(int id) {
 
-        try (PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
-
-            statement.setInt(1, id);
-            statement.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_DELETING_BY_ID + id);
-        }
+        super.deleteById(TABLE, id);
     }
 
     @Override
@@ -189,8 +175,8 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public List<User> getAllByRole(UserRole role) {
-        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_USER_ROLE + ORDER_BY_EMAIL);
-        ) {
+        try (PreparedStatement statement =
+                     connection.prepareStatement(SELECT_ALL_SQL + WHERE_USER_ROLE + ORDER_BY_EMAIL)) {
             statement.setString(1, role.toString());
             try (ResultSet resultSet = statement.executeQuery()) {
                 return parseResultSet(resultSet);

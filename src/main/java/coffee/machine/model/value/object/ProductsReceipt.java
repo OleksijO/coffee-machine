@@ -28,9 +28,7 @@ public class ProductsReceipt {
 
     private boolean isEmpty(List<? extends Product> products) {
         return !products.stream()
-                .filter(product -> product.getQuantity() != 0)
-                .findAny()
-                .isPresent();
+                .anyMatch(product -> product.getQuantity() != 0);
     }
 
     public ProductsReceipt clearProductsWithZeroQuantity() {
@@ -50,16 +48,18 @@ public class ProductsReceipt {
                 || drinks.stream().filter(drink -> drink.getQuantity() < 0).findAny().isPresent();
     }
 
-    public void addDrink(Drink drink) {
+    public ProductsReceipt addDrink(Drink drink) {
         drinks.add(drink);
+        return this;
     }
 
     public void addDrinks(List<Drink> drinks) {
         this.drinks.addAll(drinks);
     }
 
-    public void addAddon(Product addon) {
+    public ProductsReceipt addAddon(Product addon) {
         addons.add(addon);
+        return this;
     }
 
     public void addAddons(List<Product> addons) {

@@ -33,7 +33,7 @@ import static coffee.machine.view.Parameters.CREDITS_TO_ADD;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class AdminAddCreditSubmitCommand extends CommandWrapperTemplate {
-    private static Logger logger = Logger.getLogger(AdminAddCreditSubmitCommand.class);
+    private static final Logger logger = Logger.getLogger(AdminAddCreditSubmitCommand.class);
 
 
     private static final String TO_USER_ID_ACCOUNT_ADDED_N_CREDITS_FORMAT =

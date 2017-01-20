@@ -1,6 +1,6 @@
 package coffee.machine.service.impl;
 
-import coffee.machine.dao.AbstractConnection;
+import coffee.machine.dao.DaoConnection;
 import coffee.machine.dao.AddonDao;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.DrinkDao;
@@ -38,7 +38,7 @@ public class RefillServiceImplTest {
     private AddonDao addonDao;
 
     @Mock
-    private AbstractConnection connection;
+    private DaoConnection connection;
     @Captor
     private ArgumentCaptor<Account> accountCaptor;
     @Captor
@@ -69,7 +69,7 @@ public class RefillServiceImplTest {
 
 
     @Test(expected = NullPointerException.class)
-    public void testRefillThrowsExceptionOnNullReceipt() throws Exception {
+    public void testRefillThrowsExceptionOnNullReceipt()  {
         service.refill(null);
     }
 
@@ -115,7 +115,7 @@ public class RefillServiceImplTest {
 
 
     @Test
-    public void testRefillUpdatesDrinksAndAddonsIfReceiptHasSeveralDrinksAndAddons() throws Exception {
+    public void testRefillUpdatesDrinksAndAddonsIfReceiptHasSeveralDrinksAndAddons()  {
         drinksToUpdate.add(DrinksData.AMERICANO.getCopy());
         drinksToUpdate.add(DrinksData.TEA_WITH_SUGAR.getCopy());
         drinksToUpdate.add(DrinksData.LATTE.getCopy());

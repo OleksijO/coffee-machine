@@ -1,11 +1,14 @@
 package coffee.machine.dao.impl.jdbc;
 
-import coffee.machine.dao.AbstractConnection;
+import coffee.machine.dao.DaoConnection;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.OrderDao;
 import coffee.machine.model.entity.Order;
 import data.test.entity.OrdersData;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +24,7 @@ import static org.junit.Assert.*;
 public class OrderDaoIntegrationTest {
     private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private List<Order> testOrders = new ArrayList<>();
-    private AbstractConnection connection;
+    private DaoConnection connection;
     private OrderDao orderDao;
 
     {

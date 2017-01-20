@@ -12,10 +12,11 @@ import java.util.Objects;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class Drink extends Product {
-    public static final String CAN_NOT_ADD_NOT_ADDON_TO_DRINKS_ADDONS_TRIED_TO_ADD_ENTITY = "Can not add not addon to drink's addons. Tried to add entity:";
+    private static final String CAN_NOT_ADD_NOT_ADDON_TO_DRINKS_ADDONS_TRIED_TO_ADD_ENTITY =
+            "Can not add not addon to drink's addons. Tried to add entity:";
     private List<Product> addons = new ArrayList<>();
 
-    public Drink() {
+    Drink() {
     }
 
     /**
@@ -25,7 +26,7 @@ public class Drink extends Product {
         return quantity * (
                 price +
                         addons.stream()
-                                .mapToLong(addon -> addon.getTotalPrice())
+                                .mapToLong(Product::getTotalPrice)
                                 .sum()
         );
     }

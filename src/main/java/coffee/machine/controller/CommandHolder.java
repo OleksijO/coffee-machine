@@ -14,7 +14,6 @@ import coffee.machine.controller.command.user.purchase.UserPurchaseCommand;
 import coffee.machine.controller.command.user.purchase.UserPurchaseSubmitCommand;
 import coffee.machine.controller.command.user.register.UserRegisterCommand;
 import coffee.machine.controller.command.user.register.UserRegisterSubmitCommand;
-import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,14 +25,13 @@ import static coffee.machine.view.PagesPaths.*;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class CommandHolder {
-    public static final Logger logger = Logger.getLogger(CommandHolder.class);
-    public final static String DELIMITER = ":";
-    public final static String GET = "GET" + DELIMITER;
-    public final static String POST = "POST" + DELIMITER;
+class CommandHolder {
+
+    static final String DELIMITER = ":";
+    private static final String GET = "GET" + DELIMITER;
+    private static final String POST = "POST" + DELIMITER;
 
     private final Command unsupportedPathCommand = new UnsupportedPathCommand();
-
 
     private final String deployPath;
 
@@ -42,7 +40,7 @@ public class CommandHolder {
      */
     private Map<String, Command> commands = new HashMap<>();
 
-    public CommandHolder(String deployPath) {
+    CommandHolder(String deployPath) {
         this.deployPath = deployPath;
         init();
     }
@@ -70,7 +68,7 @@ public class CommandHolder {
 
     }
 
-    public Command findCommand(String commandKey) {
+    Command findCommand(String commandKey) {
         return commands.getOrDefault(commandKey, unsupportedPathCommand);
     }
 

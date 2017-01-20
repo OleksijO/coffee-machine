@@ -21,15 +21,13 @@ class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
     private static final String WHERE_ID = " WHERE id = ?";
     private static final String INSERT_SQL = "INSERT INTO account (amount) VALUES (?);";
     private static final String UPDATE_SQL = "UPDATE account SET amount=? WHERE id=?;";
-    private static final String DELETE_SQL = "DELETE FROM account" + WHERE_ID + ";";
+    private static final String TABLE = "account";
 
     private static final String FIELD_ID = "id";
     private static final String FIELD_AMOUNT = "amount";
 
-    private final Connection connection;
-
     AccountDaoImpl(Connection connection) {
-        this.connection = connection;
+        super(connection);
     }
 
     @Override
@@ -107,7 +105,7 @@ class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
                 List<Account> accountList = parseResultSet(resultSet);
                 checkSingleResult(accountList);
 
-                return accountList == null || accountList.isEmpty() ? null : accountList.get(0);
+                return accountList.isEmpty() ? null : accountList.get(0);
             }
         } catch (SQLException e) {
             throw new DaoException(e)
@@ -124,15 +122,7 @@ class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
     @Override
     public void deleteById(int id) {
 
-        try (PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
-
-            statement.setInt(1, id);
-            statement.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_DELETING_BY_ID + id);
-        }
+        super.deleteById(TABLE, id);
     }
 
 }

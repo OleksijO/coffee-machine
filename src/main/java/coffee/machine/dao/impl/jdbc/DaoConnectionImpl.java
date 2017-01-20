@@ -1,18 +1,18 @@
 package coffee.machine.dao.impl.jdbc;
 
-import coffee.machine.dao.AbstractConnection;
+import coffee.machine.dao.DaoConnection;
 import coffee.machine.dao.exception.DaoException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * This class represents JDBC implementation of AbstractConnection.
+ * This class represents JDBC implementation of DaoConnection.
  * It performs rollback if transaction began but was not committed before close method was called.
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-class AbstractConnectionImpl implements AbstractConnection {
+class DaoConnectionImpl implements DaoConnection {
     private static final String CAN_NOT_BEGIN_TRANSACTION = "Can not begin transaction.";
     private static final String CAN_NOT_COMMIT_TRANSACTION = "Can not commit transaction";
     private static final String CAN_NOT_ROLLBACK_TRANSACTION = "Can not rollback transaction";
@@ -21,12 +21,12 @@ class AbstractConnectionImpl implements AbstractConnection {
     private static final int DEFAULT_TRANSACTION_ISOLATION_LEVEL = Connection.TRANSACTION_READ_COMMITTED;
     private static final int SERIALIZABLE_TRANSACTION_ISOLATION_LEVEL = Connection.TRANSACTION_SERIALIZABLE;
 
-    private Connection connection;
+    private Connection sqlConnection;
 
     private boolean transactionActive = false;
 
-    AbstractConnectionImpl(Connection connection) {
-        this.connection = connection;
+    DaoConnectionImpl(Connection sqlConnection) {
+        this.sqlConnection = sqlConnection;
     }
 
     @Override
@@ -36,8 +36,8 @@ class AbstractConnectionImpl implements AbstractConnection {
 
     private void beginTransactionWithIsolationLevel(int transactionIsolationLevel) {
         try {
-            connection.setTransactionIsolation(transactionIsolationLevel);
-            connection.setAutoCommit(false);
+            sqlConnection.setTransactionIsolation(transactionIsolationLevel);
+            sqlConnection.setAutoCommit(false);
             transactionActive = true;
         } catch (SQLException e) {
             throw new DaoException(e)
@@ -54,8 +54,8 @@ class AbstractConnectionImpl implements AbstractConnection {
     @Override
     public void commitTransaction() {
         try {
-            connection.commit();
-            connection.setAutoCommit(true);
+            sqlConnection.commit();
+            sqlConnection.setAutoCommit(true);
             transactionActive = false;
         } catch (SQLException e) {
             throw new DaoException(e)
@@ -67,8 +67,8 @@ class AbstractConnectionImpl implements AbstractConnection {
     @Override
     public void rollbackTransaction() {
         try {
-            connection.rollback();
-            connection.setAutoCommit(true);
+            sqlConnection.rollback();
+            sqlConnection.setAutoCommit(true);
             transactionActive = false;
         } catch (SQLException e) {
             throw new DaoException(e)
@@ -82,19 +82,15 @@ class AbstractConnectionImpl implements AbstractConnection {
             if (transactionActive) {
                 rollbackTransaction();
             }
-            connection.close();
+            sqlConnection.close();
         } catch (SQLException e) {
             throw new DaoException(e)
                     .addLogMessage(CAN_NOT_CLOSE_CONNECTION);
         }
     }
 
-    Connection getConnection() {
-        return connection;
-    }
-
-    void setConnection(Connection connection) {
-        this.connection = connection;
+    Connection getSqlConnection() {
+        return sqlConnection;
     }
 
 }

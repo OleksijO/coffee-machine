@@ -6,6 +6,9 @@ package coffee.machine.view;
  * @author oleksij.onysymchuk@gmail.com
  */
 
-public interface ErrorMessage {
-    String JSP_HANDLER_MESSAGE_FORMAT = "%s id=%s. Status code = %d. Servlet name ='%s'.\n %s";
+public class ErrorMessage {
+    public static final String JSP_HANDLER_MESSAGE_FORMAT = "%s id=%s. Status code = %d. Servlet name ='%s'.\n %s";
+
+    private ErrorMessage() {
+    }
 }

@@ -37,10 +37,8 @@ class ProductDaoHelper extends AbstractDao<Product> {
     static final String FIELD_QUANTITY = "quantity";
     static final String FIELD_TYPE = "type";
 
-    private final Connection connection;
-
     ProductDaoHelper(Connection connection) {
-        this.connection = connection;
+        super(connection);
     }
 
 

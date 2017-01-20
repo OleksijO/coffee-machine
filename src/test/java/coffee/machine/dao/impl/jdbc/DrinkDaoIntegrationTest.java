@@ -1,6 +1,6 @@
 package coffee.machine.dao.impl.jdbc;
 
-import coffee.machine.dao.AbstractConnection;
+import coffee.machine.dao.DaoConnection;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.DrinkDao;
 import coffee.machine.model.entity.product.Drink;
@@ -25,7 +25,7 @@ import static org.junit.Assert.assertFalse;
 public class DrinkDaoIntegrationTest {
     private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private List<Drink> testDrinks = new ArrayList<>();
-    private AbstractConnection connection;
+    private DaoConnection connection;
     private DrinkDao drinkDao;
 
     {
@@ -41,7 +41,6 @@ public class DrinkDaoIntegrationTest {
 
     @Before
     public void init() {
-        System.out.println(testDrinks);
         connection = daoFactory.getConnection();
         drinkDao = daoFactory.getDrinkDao(connection);
         connection.beginTransaction();
@@ -57,8 +56,6 @@ public class DrinkDaoIntegrationTest {
     public void testGetAll() {
 
         List<Drink> drinks = drinkDao.getAll();
-        System.out.println(testDrinks);
-        System.out.println(drinks);
         assertEquals(testDrinks, drinks);
 
     }
@@ -98,7 +95,7 @@ public class DrinkDaoIntegrationTest {
     public void testUpdate() {
         Drink testDrink = DrinksData.ESPRESSO.getCopy();
         int drinkId = testDrink.getId();
-        
+
         long amount = testDrink.getPrice();
         testDrink.setPrice(0);
 
@@ -108,7 +105,7 @@ public class DrinkDaoIntegrationTest {
 
         testDrink.setPrice(amount);
         drinkDao.update(testDrink);
-        assertEquals("Check state after test",testDrink.getPrice(), drinkDao.getById(drinkId).get().getPrice());
+        assertEquals("Check state after test", testDrink.getPrice(), drinkDao.getById(drinkId).get().getPrice());
 
     }
 
@@ -122,7 +119,7 @@ public class DrinkDaoIntegrationTest {
         int newDrinkId = drinkDao.insert(testDrink).getId();
 
         Drink drinkToTest = drinkDao.getById(newDrinkId).get();
-        assertEquals("New addon should be placed to DB and be the same",testDrink, drinkToTest);
+        assertEquals("New addon should be placed to DB and be the same", testDrink, drinkToTest);
         testDrink.setId(drinkId);
         assertEquals("Total size of drinks should increase by 1", size + 1, drinkDao.getAll().size());
         drinkDao.deleteById(newDrinkId);
@@ -135,12 +132,13 @@ public class DrinkDaoIntegrationTest {
     public void testUpdateQuantity() {
         int drinkTestListId = 4;
         Drink testDrink = testDrinks.get(drinkTestListId);
-        Drink drink = new Drink();
         int newQuantity = testDrink.getQuantity() + 1;
-        drink.setId(testDrink.getId());
-        drink.setQuantity(newQuantity);
-        drink.setPrice(0);
-        drink.setName("");
+        Drink drink = new Drink.Builder()
+                .setId(testDrink.getId())
+                .setQuantity(newQuantity)
+                .setPrice(0)
+                .setName("")
+                .build();
 
         drinkDao.updateQuantity(drink);
 
@@ -153,7 +151,7 @@ public class DrinkDaoIntegrationTest {
 
 
     @Test
-    public void testGetAllFromList() throws Exception {
+    public void testGetAllFromList() {
         List<Drink> productsToRetrieve = new ArrayList<>();
         Drink addon = DrinksData.BORJOMI.getCopy();
         productsToRetrieve.add(addon);
@@ -163,12 +161,15 @@ public class DrinkDaoIntegrationTest {
     }
 
     @Test
-    public void testGetAllByIds() throws Exception {
+    public void testGetAllByIds() {
         List<Drink> productsToRetrieve = new ArrayList<Drink>() {{
             add(DrinksData.BORJOMI.getCopy());
             add(DrinksData.MOCACCINO.getCopy());
         }};
-        Set<Integer> ids = new TreeSet<Integer>(){{add(2);add(11);}};
+        Set<Integer> ids = new TreeSet<Integer>() {{
+            add(2);
+            add(11);
+        }};
         assertEquals(productsToRetrieve, drinkDao.getAllByIds(ids));
     }
 

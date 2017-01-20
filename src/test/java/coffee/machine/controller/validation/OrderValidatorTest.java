@@ -16,47 +16,47 @@ public class OrderValidatorTest {
     private Validator<Order> validator = new OrderValidator();
 
     @Test(expected = NullPointerException.class)
-    public void testValidateThrowsNullPointerIfLoginDataIsNull() throws Exception {
+    public void testValidateThrowsNullPointerIfLoginDataIsNull()  {
         validator.validate(null);
     }
 
     @Test
-    public void testValidateReturnsNotificationWithSpecifiedObjectClassIfLoginDataIsCorrect() throws Exception {
+    public void testValidateReturnsNotificationWithSpecifiedObjectClassIfLoginDataIsCorrect()  {
         Order order = getCorrectOrder();
         Notification notification = validator.validate(order);
         assertEquals(Order.class, notification.getValidationObjectClass());
     }
 
     @Test
-    public void testValidateReturnsNotificationWithSpecifiedObjectClassIfLoginDataIsIncorrect() throws Exception {
+    public void testValidateReturnsNotificationWithSpecifiedObjectClassIfLoginDataIsIncorrect()  {
         Order order = getEmptyOrder();
         Notification notification = validator.validate(order);
         assertEquals(Order.class, notification.getValidationObjectClass());
     }
 
     @Test
-    public void testValidateReturnsNotificationHasOneMessageKeyIfReceiptIsEmpty() throws Exception {
+    public void testValidateReturnsNotificationHasOneMessageKeyIfReceiptIsEmpty()  {
         Order order = getEmptyOrder();
         Notification notification = validator.validate(order);
         assertEquals(1, notification.getErrorMessageKeys().size());
     }
 
     @Test
-    public void testValidateReturnsNotificationHasCorrectMessageKeyIfReceiptIsEmpty() throws Exception {
+    public void testValidateReturnsNotificationHasCorrectMessageKeyIfReceiptIsEmpty()  {
         Order order = getEmptyOrder();
         Notification notification = validator.validate(order);
         assertEquals(ERROR_PREPARE_ORDER_NOTHING_TO_BUY, notification.getErrorMessageKeys().get(0));
     }
 
     @Test
-    public void testValidateReturnsNotificationHasLogMessageIfReceiptIsEmpty() throws Exception {
+    public void testValidateReturnsNotificationHasLogMessageIfReceiptIsEmpty()  {
         Order order = getEmptyOrder();
         Notification notification = validator.validate(order);
         assertEquals(1, notification.getLogMessages().size());
     }
 
     @Test
-    public void testValidateReturnsNotificationHasOneMessageKeyIfReceiptHasDrinkNegativeQuantity() throws Exception {
+    public void testValidateReturnsNotificationHasOneMessageKeyIfReceiptHasDrinkNegativeQuantity()  {
         Order order = getCorrectOrder();
         order.getDrinks().get(1).setQuantity(-5);
         Notification notification = validator.validate(order);
@@ -64,7 +64,7 @@ public class OrderValidatorTest {
     }
 
     @Test
-    public void testValidateReturnsNotificationHasOneMessageKeyIfReceiptHasSeveralDrinkNegativeQuantity() throws Exception {
+    public void testValidateReturnsNotificationHasOneMessageKeyIfReceiptHasSeveralDrinkNegativeQuantity()  {
         Order order = getCorrectOrder();
         order.getDrinks().get(1).setQuantity(-5);
         order.getDrinks().get(0).setQuantity(-5);
@@ -73,7 +73,7 @@ public class OrderValidatorTest {
     }
 
     @Test
-    public void testValidateReturnsNotificationHasCorrectMessageKeyIfReceiptHasDrinkNegativeQuantity() throws Exception {
+    public void testValidateReturnsNotificationHasCorrectMessageKeyIfReceiptHasDrinkNegativeQuantity()  {
         Order order = getCorrectOrder();
         order.getDrinks().get(1).setQuantity(-5);
         Notification notification = validator.validate(order);
@@ -81,7 +81,7 @@ public class OrderValidatorTest {
     }
 
     @Test
-    public void testValidateReturnsNotificationHasLogMessageIfReceiptHasDrinkNegativeQuantity() throws Exception {
+    public void testValidateReturnsNotificationHasLogMessageIfReceiptHasDrinkNegativeQuantity()  {
         Order order = getCorrectOrder();
         order.getDrinks().get(1).setQuantity(-5);
         Notification notification = validator.validate(order);
@@ -89,14 +89,14 @@ public class OrderValidatorTest {
     }
 
     @Test
-    public void testValidateReturnsNotificationHasOneMessageKeyIfReceiptHasAddonNegativeQuantity() throws Exception {
+    public void testValidateReturnsNotificationHasOneMessageKeyIfReceiptHasAddonNegativeQuantity()  {
         Order order = getCorrectOrder();
         order.getDrinks().get(1).getAddons().get(1).setQuantity(-5);
         Notification notification = validator.validate(order);
         assertEquals(1, notification.getErrorMessageKeys().size());
     }
     @Test
-    public void testValidateReturnsNotificationHasOneMessageKeyIfReceiptHasSeveralAddonNegativeQuantity() throws Exception {
+    public void testValidateReturnsNotificationHasOneMessageKeyIfReceiptHasSeveralAddonNegativeQuantity()  {
         Order order = getCorrectOrder();
         order.getDrinks().get(1).getAddons().get(1).setQuantity(-5);
         order.getDrinks().get(0).getAddons().get(0).setQuantity(-5);
@@ -105,7 +105,7 @@ public class OrderValidatorTest {
     }
 
     @Test
-    public void testValidateReturnsNotificationHasCorrectMessageKeyIfReceiptHasAddonNegativeQuantity() throws Exception {
+    public void testValidateReturnsNotificationHasCorrectMessageKeyIfReceiptHasAddonNegativeQuantity()  {
         Order order = getCorrectOrder();
         order.getDrinks().get(1).getAddons().get(1).setQuantity(-5);
         Notification notification = validator.validate(order);
@@ -113,7 +113,7 @@ public class OrderValidatorTest {
     }
 
     @Test
-    public void testValidateReturnsNotificationHasLogMessageIfReceiptHasAddonNegativeQuantity() throws Exception {
+    public void testValidateReturnsNotificationHasLogMessageIfReceiptHasAddonNegativeQuantity()  {
         Order order = getCorrectOrder();
         order.getDrinks().get(1).getAddons().get(1).setQuantity(-5);
         Notification notification = validator.validate(order);
@@ -121,7 +121,7 @@ public class OrderValidatorTest {
     }
 
     @Test
-    public void testValidateReturnsNotificationWithOneMessageKeyIfReceiptHasIncorrectUserId() throws Exception {
+    public void testValidateReturnsNotificationWithOneMessageKeyIfReceiptHasIncorrectUserId()  {
         Order order = new Order.Builder().setUserId(0).build();
         order.addDrink(new Drink.Builder().setId(1).setQuantity(1).build());
         Notification notification = validator.validate(order);
@@ -129,7 +129,7 @@ public class OrderValidatorTest {
     }
 
     @Test
-    public void testValidateReturnsNotificationWithCorrectMessageKeyIfReceiptHasIncorrectUserId() throws Exception {
+    public void testValidateReturnsNotificationWithCorrectMessageKeyIfReceiptHasIncorrectUserId()  {
         Order order = new Order.Builder().setUserId(-1).build();
         order.addDrink(new Drink.Builder().setId(1).setQuantity(1).build());
         Notification notification = validator.validate(order);

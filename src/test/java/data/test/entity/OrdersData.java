@@ -44,21 +44,27 @@ public enum OrdersData {
                 break;
             case 2:
                 order.addDrink(getDrinkForOrderByDataAndQuantity(WATER, 2));
-                Product lemon = getAddonForOrderByDataAndQuantity(LEMON,1);
-                Drink drink2 = getDrinkForOrderByDataAndQuantity(TEA_WITH_SUGAR, 1);
-                drink2.getAddons().add(lemon);
-                order.addDrink(drink2);
-                drink2 = getDrinkForOrderByDataAndQuantity(ESPRESSO, 3);
-                Product sugar = getAddonForOrderByDataAndQuantity(SUGAR,2);
-                Product milk = getAddonForOrderByDataAndQuantity(MILK, 1);
-                drink2.getAddons().add(sugar);
-                drink2.getAddons().add(milk);
-                order.addDrink(drink2);
+                order.addDrink(getDrinkWithOneAddonForOrder());
+                order.addDrink(getDrinkWithTwoAddonsForOrder());
                 break;
             default: throw new IllegalArgumentException("Specified id is not supported yet");
         }
+    }
 
+    private Drink getDrinkWithOneAddonForOrder() {
+        Product lemon = getAddonForOrderByDataAndQuantity(LEMON,1);
+        Drink drink2 = getDrinkForOrderByDataAndQuantity(TEA_WITH_SUGAR, 1);
+        drink2.getAddons().add(lemon);
+        return drink2;
+    }
 
+    private Drink getDrinkWithTwoAddonsForOrder() {
+        Drink drink2 = getDrinkForOrderByDataAndQuantity(ESPRESSO, 3);
+        Product sugar = getAddonForOrderByDataAndQuantity(SUGAR,2);
+        Product milk = getAddonForOrderByDataAndQuantity(MILK, 1);
+        drink2.getAddons().add(sugar);
+        drink2.getAddons().add(milk);
+        return drink2;
     }
 
     private Product getAddonForOrderByDataAndQuantity(AddonsData addonData, int quantity) {

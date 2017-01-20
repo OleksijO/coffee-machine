@@ -21,7 +21,7 @@ public class MainController extends HttpServlet {
     private static final Logger logger = Logger.getLogger(MainController.class);
     private static final String URI_IS = " : uri = ";
 
-    private final static String DELIMITER = CommandHolder.DELIMITER;
+    private static final String DELIMITER = CommandHolder.DELIMITER;
 
     /**
      * Command's holder instance

@@ -25,17 +25,20 @@ public class AuthFilter implements Filter {
     private static final String ACCESS_DENIED_LOG_MESSAGE_FORMAT =
             "Access denied. Requested URI='%s', userId='%s', adminId='%s'";
 
-    private Map<UserRole, Authorizer> authorizeByRole = new HashMap<UserRole, Authorizer>() {{
-        put(UserRole.USER, new UserAuthorizer());
-        put(UserRole.ADMIN, new AdminAuthorizer());
-    }};
+    private Authorizer guestAuthorizer = (uri, userId) -> checkUriForGuest(uri);
+    private Authorizer userAuthorizer = (uri, userId) -> (userId != null) && checkUriForUser(uri);
+    private Authorizer adminAuthorizer = (uri, userId) -> (userId != null) && checkUriForAdmin(uri);
 
-    private Authorizer guestAuthorizer = new GuestAuthorizer();
+    private Map<UserRole, Authorizer> authorizeByRole = new HashMap<>() ;
+    {
+        authorizeByRole.put(UserRole.USER, userAuthorizer);
+        authorizeByRole.put(UserRole.ADMIN, adminAuthorizer);
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        HttpServletRequest req = ((HttpServletRequest) request);
+        HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession();
         String uri = req.getRequestURI();
         UserRole role = (UserRole) session.getAttribute(USER_ROLE);
@@ -55,30 +58,21 @@ public class AuthFilter implements Filter {
         return authorizer.check(uri, userId);
     }
 
+    @FunctionalInterface
     private interface Authorizer {
         boolean check(String uri, Object userId);
     }
 
-    private class UserAuthorizer implements Authorizer {
-        public boolean check(String uri, Object userId) {
-            return  (userId != null)
-                    && (!uri.startsWith(ADMIN));
-
-        }
+    private boolean checkUriForGuest(String uri) {
+        return (!uri.startsWith(ADMIN)) && (uri.startsWith(USER_REGISTER_PATH) || !uri.startsWith(USER));
     }
 
-    private class AdminAuthorizer implements Authorizer {
-        public boolean check(String uri, Object userId) {
-            return  (userId != null)
-                    && (!uri.startsWith(USER));
-        }
+    private boolean checkUriForUser(String uri) {
+        return !uri.startsWith(ADMIN);
     }
 
-    private class GuestAuthorizer implements Authorizer {
-        public boolean check(String uri, Object userId) {
-            return (!uri.startsWith(ADMIN)) &&
-                    ((uri.startsWith(USER_REGISTER_PATH)||!uri.startsWith(USER)));
-        }
+    private boolean checkUriForAdmin(String uri) {
+        return !uri.startsWith(USER);
     }
 
     @Override

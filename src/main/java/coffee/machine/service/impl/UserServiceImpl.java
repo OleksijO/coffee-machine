@@ -1,13 +1,12 @@
 package coffee.machine.service.impl;
 
-import coffee.machine.dao.AbstractConnection;
 import coffee.machine.dao.AccountDao;
+import coffee.machine.dao.DaoConnection;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.UserDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.user.User;
-import coffee.machine.model.security.PasswordEncryptor;
 import coffee.machine.model.value.object.user.LoginData;
 import coffee.machine.model.value.object.user.RegisterData;
 import coffee.machine.service.UserService;
@@ -47,7 +46,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getById(int id) {
-        try (AbstractConnection connection = daoFactory.getConnection()) {
+        try (DaoConnection connection = daoFactory.getConnection()) {
 
             UserDao userDao = daoFactory.getUserDao(connection);
             return userDao.getById(id);
@@ -61,7 +60,7 @@ public class UserServiceImpl implements UserService {
         Objects.requireNonNull(loginData);
         loginData.encryptPassword();
 
-        try (AbstractConnection connection = daoFactory.getConnection()) {
+        try (DaoConnection connection = daoFactory.getConnection()) {
 
             UserDao userDao = daoFactory.getUserDao(connection);
             return userDao.getUserByLogin(loginData.getEmail())
@@ -77,7 +76,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllNonAdminUsers() {
-        try (AbstractConnection connection = daoFactory.getConnection()) {
+        try (DaoConnection connection = daoFactory.getConnection()) {
 
             UserDao userDao = daoFactory.getUserDao(connection);
             return userDao.getAllByRole(USER);
@@ -90,7 +89,7 @@ public class UserServiceImpl implements UserService {
         registerData.encryptPassword();
         User user = getUserFromRegisterData(registerData);
 
-        try (AbstractConnection connection = daoFactory.getConnection()) {
+        try (DaoConnection connection = daoFactory.getConnection()) {
             AccountDao accountDao = daoFactory.getAccountDao(connection);
             UserDao userDao = daoFactory.getUserDao(connection);
 
@@ -108,7 +107,7 @@ public class UserServiceImpl implements UserService {
                 .setRole(USER)
                 .setFullName(formData.getFullName())
                 .setEmail(formData.getEmail())
-                .setPassword(PasswordEncryptor.encryptPassword(formData.getPassword()))
+                .setPassword(formData.getPassword())
                 .build();
     }
 

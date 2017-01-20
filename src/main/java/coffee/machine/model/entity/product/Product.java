@@ -17,18 +17,7 @@ public class Product implements Comparable<Product>, Identified {
     protected int quantity;
     protected ProductType type;
 
-    public Product() {
-    }
-
-    protected Product(Product product) {
-        id = product.getId();
-        name = product.getName();
-        price = product.getPrice();
-        quantity = product.getQuantity();
-    }
-
-    public Product getCopy() {
-        return new Product(this);
+    Product() {
     }
 
     public void incrementQuantityBy(int quantityToAdd) {
@@ -147,6 +136,7 @@ public class Product implements Comparable<Product>, Identified {
 
     public static class Builder {
         private Product product;
+        private ProductFactory productFactory = ProductFactory.getInstance();
 
         public Builder() {
             this.product = new Product();
@@ -154,7 +144,7 @@ public class Product implements Comparable<Product>, Identified {
         }
 
         public Builder(ProductType productType) {
-            this.product = ProductFactory.getInstance().getNewInstanceOfType(productType);
+            this.product = productFactory.getNewInstanceOfType(productType);
             this.product.type = productType;
         }
 

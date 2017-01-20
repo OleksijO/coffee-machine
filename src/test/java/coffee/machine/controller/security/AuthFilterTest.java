@@ -41,13 +41,13 @@ public class AuthFilterTest {
     }
 
     @Test
-    public void testDoFilterPassesNonLoggedInUsersToRootApplicationPath() throws Exception {
+    public void testDoFilterPassesNonLoggedInUsersToRootApplicationPath() throws ServletException, IOException {
         performTest("", null, null, "", 0);
         performTest("/", null, null, "/", 0);
     }
 
     @Test
-    public void testDoFilterPassesLoggedInUsersToRootApplicationPath() throws Exception {
+    public void testDoFilterPassesLoggedInUsersToRootApplicationPath()throws ServletException, IOException  {
         performTest("/", UserRole.USER, 1, "/", 0);
         performTest("/", UserRole.ADMIN, 1, "/", 0);
     }
@@ -81,55 +81,56 @@ public class AuthFilterTest {
     }
 
     @Test
-    public void testDoFilterPassesNonAuthorizedToHomePath() throws Exception {
+    public void testDoFilterPassesNonAuthorizedToHomePath() throws ServletException, IOException  {
         performTest(HOME_PATH, null, null, HOME_PATH, 0);
     }
 
     @Test
-    public void testDoFilterForwardsNonAuthorizedToHomePathFromAnyUnRestrictedPath() throws Exception {
+    public void testDoFilterForwardsNonAuthorizedToHomePathFromAnyUnRestrictedPath()
+            throws ServletException, IOException  {
         performTest("/kdfvblkjsdfbjkv", null, null, HOME_PATH, 0);
     }
 
 
     @Test
-    public void testDoFilterPassesNonAuthorizedToLoginPath() throws Exception {
+    public void testDoFilterPassesNonAuthorizedToLoginPath() throws ServletException, IOException  {
         performTest("/login", null, null, "/login", 0);
     }
 
     @Test
-    public void testDoFilterPassesNonAuthorizedToRegisterPath() throws Exception {
+    public void testDoFilterPassesNonAuthorizedToRegisterPath() throws ServletException, IOException {
         performTest("/user/register", null, null, "/user/register", 0);
     }
 
     @Test
-    public void testDoFilterPassesAuthorizedUserToUserPages() throws Exception {
+    public void testDoFilterPassesAuthorizedUserToUserPages() throws ServletException, IOException {
         performTest(USER_ORDER_HISTORY_PATH, UserRole.USER, 1, USER_ORDER_HISTORY_PATH, 0);
         performTest("/user/any", UserRole.USER, 1, "/user/any", 0);
     }
 
     @Test
-    public void testDoFilterPassesAuthorizedAdminToAdminPages() throws Exception {
+    public void testDoFilterPassesAuthorizedAdminToAdminPages() throws ServletException, IOException {
         performTest(ADMIN_HOME_PATH, UserRole.ADMIN, 1, ADMIN_HOME_PATH, 0);
         performTest("/admin/any", UserRole.ADMIN, 1, "/admin/any", 0);
     }
 
     @Test
-    public void testDoFilterForwardsAllNonAuthorizedFromUserPagesToLoginPath() throws Exception {
+    public void testDoFilterForwardsAllNonAuthorizedFromUserPagesToLoginPath() throws ServletException, IOException {
         performTest("/user/any", null, null, LOGIN_PATH, 1);
     }
 
     @Test
-    public void testDoFilterForwardsAllNonAuthorizedFromAdminPagesToLoginPath() throws Exception {
+    public void testDoFilterForwardsAllNonAuthorizedFromAdminPagesToLoginPath() throws ServletException, IOException {
         performTest("/admin/any", null, null, LOGIN_PATH, 1);
     }
 
     @Test
-    public void testDoFilterForwardsAuthorizedUserFromAdminPagesToLoginPath() throws Exception {
+    public void testDoFilterForwardsAuthorizedUserFromAdminPagesToLoginPath() throws ServletException, IOException {
         performTest(ADMIN_HOME_PATH, UserRole.USER, 1, LOGIN_PATH, 1);
     }
 
     @Test
-    public void testDoFilterForwardsAuthorizedAdminFromUserPagesToLoginPath() throws Exception {
-        performTest(USER_ORDER_HISTORY_PATH, UserRole.USER, null, LOGIN_PATH, 1);
+    public void testDoFilterForwardsAuthorizedAdminFromUserPagesToLoginPath() throws ServletException, IOException {
+        performTest(USER_ORDER_HISTORY_PATH, UserRole.ADMIN, 1, LOGIN_PATH, 1);
     }
 }

@@ -31,6 +31,9 @@ class JdbcPooledDataSource {
     private static final String JDBC_MIN_POOL_SIZE = "jdbc.min.pool.size";
     private static final String JDBC_ACQUIRE_INCREMENT = "jdbc.acquire.increment";
 
+    private JdbcPooledDataSource() {
+    }
+
     private static class InstanceHolder {
         private static final DataSource instance = initDataSource();
     }

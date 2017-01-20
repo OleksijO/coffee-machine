@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.Statement;
 import java.util.ResourceBundle;
 
 /**
@@ -16,24 +17,24 @@ import java.util.ResourceBundle;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class TestDatabaseInitializer {
-    public static final String DDL_POPULATE_SQL = "DDL+POPULATE.sql";
-    public static final String JDBC_DRIVER = "jdbc.driver";
-    public static final String JDBC_URL = "jdbc.url";
-    public static final String JDBC_USER = "jdbc.user";
-    public static final String JDBC_PASSWORD = "jdbc.password";
+class TestDatabaseInitializer {
+    private static final String DDL_POPULATE_SQL = "DDL+POPULATE.sql";
+    private static final String JDBC_DRIVER = "jdbc.driver";
+    private static final String JDBC_URL = "jdbc.url";
+    private static final String JDBC_USER = "jdbc.user";
+    private static final String JDBC_PASSWORD = "jdbc.password";
 
     private String ddlPopulate;
 
-    public TestDatabaseInitializer() {
+    TestDatabaseInitializer() {
         this(DDL_POPULATE_SQL);
     }
 
-    public TestDatabaseInitializer(String ddlPopulateSql) {
+    private TestDatabaseInitializer(String ddlPopulateSql) {
         this.ddlPopulate = ddlPopulateSql;
     }
 
-    public void initTestJdbcDB() throws Exception {
+    void initTestJdbcDB() throws Exception {
         ResourceBundle jdbcProperties = ResourceBundle.getBundle("database");
 
         File script = new File(
@@ -41,27 +42,18 @@ public class TestDatabaseInitializer {
                         .getClassLoader()
                         .getResource(ddlPopulate)
                         .getFile());
-        if (script==null) {
-            throw new IllegalStateException();
-        }
-        String multiQuery = FileUtils.readFileToString(script, "utf-8");
 
-        System.out.println("=============================================");
-        System.out.println("            Running SQL scripts...");
-        System.out.println("=============================================");
+        String multiQuery = FileUtils.readFileToString(script, "utf-8");
 
         Class.forName(jdbcProperties.getString(JDBC_DRIVER));
         try (Connection con = DriverManager.getConnection(
                 jdbcProperties.getString(JDBC_URL),
                 jdbcProperties.getString(JDBC_USER),
-                jdbcProperties.getString(JDBC_PASSWORD))) {
+                jdbcProperties.getString(JDBC_PASSWORD));
+             Statement st = con.createStatement()) {
 
-            con.createStatement().execute(multiQuery);
+            st.execute(multiQuery);
         }
-
-        System.out.println("=============================================");
-        System.out.println("            Running SQL scripts...DONE");
-        System.out.println("=============================================");
     }
 }
 

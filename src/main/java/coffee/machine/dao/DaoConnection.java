@@ -9,7 +9,7 @@ package coffee.machine.dao;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public interface AbstractConnection extends AutoCloseable {
+public interface DaoConnection extends AutoCloseable {
 
 	/**
 	 * Defines begin of transaction

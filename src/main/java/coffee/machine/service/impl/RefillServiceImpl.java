@@ -1,6 +1,6 @@
 package coffee.machine.service.impl;
 
-import coffee.machine.dao.AbstractConnection;
+import coffee.machine.dao.DaoConnection;
 import coffee.machine.dao.AddonDao;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.DrinkDao;
@@ -37,7 +37,7 @@ public class RefillServiceImpl implements RefillService {
 
         Objects.requireNonNull(receipt);
 
-        try (AbstractConnection connection = daoFactory.getConnection()) {
+        try (DaoConnection connection = daoFactory.getConnection()) {
 
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
             AddonDao addonDao = daoFactory.getAddonDao(connection);

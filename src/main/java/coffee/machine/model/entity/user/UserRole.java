@@ -5,6 +5,5 @@ package coffee.machine.model.entity.user;
  */
 public enum UserRole {
     ADMIN,
-    USER,
-    UNDEFINED
+    USER
 }

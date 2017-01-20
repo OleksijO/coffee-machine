@@ -19,12 +19,12 @@ import org.mockito.MockitoAnnotations;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.Optional;
 
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_ADD_CREDITS_AMOUNT_IS_NOT_POSITIVE;
 import static coffee.machine.view.Attributes.*;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 /**
@@ -58,7 +58,7 @@ public class AdminAddCreditSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteReturnsCorrectPageIfNoError() throws Exception {
+    public void testExecuteReturnsCorrectPageIfNoError() throws IOException {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("2");
         when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
@@ -67,7 +67,7 @@ public class AdminAddCreditSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteReturnsCorrectPageIfErrorOccurred() throws Exception {
+    public void testExecuteReturnsCorrectPageIfErrorOccurred() throws IOException {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("2");
         when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
@@ -78,7 +78,7 @@ public class AdminAddCreditSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteReturnsCorrectPageIfValidationErrorOccurred() throws Exception {
+    public void testExecuteReturnsCorrectPageIfValidationErrorOccurred() throws IOException {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("-5");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("-5");
         when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
@@ -86,7 +86,7 @@ public class AdminAddCreditSubmitCommandTest {
     }
 
     @Test
-    public void testExecutePlacesErrorMessageToRequestIfErrorOccurred() throws Exception {
+    public void testExecutePlacesErrorMessageToRequestIfErrorOccurred() throws IOException {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("2");
         when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
@@ -97,7 +97,7 @@ public class AdminAddCreditSubmitCommandTest {
     }
 
     @Test
-    public void testExecutePlacesMessageToRequestIfNoError() throws Exception {
+    public void testExecutePlacesMessageToRequestIfNoError() throws IOException  {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("2");
         when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
@@ -106,7 +106,7 @@ public class AdminAddCreditSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteDoesNotCallServiceIfFormHasNonPositiveAmount() throws Exception {
+    public void testExecuteDoesNotCallServiceIfFormHasNonPositiveAmount() throws IOException {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("0");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("1");
         when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
@@ -120,7 +120,7 @@ public class AdminAddCreditSubmitCommandTest {
     }
 
     @Test
-    public void testExecutePlacesValidationErrorMessageToRequestIfFormHasNonPositiveAmount() throws Exception {
+    public void testExecutePlacesValidationErrorMessageToRequestIfFormHasNonPositiveAmount() throws IOException {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("0");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("1");
         when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
@@ -130,7 +130,7 @@ public class AdminAddCreditSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteDoesNotCallServiceIfUserIdIsNonPositive() throws Exception {
+    public void testExecuteDoesNotCallServiceIfUserIdIsNonPositive() throws IOException {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2.50");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("0");
         when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
@@ -143,7 +143,7 @@ public class AdminAddCreditSubmitCommandTest {
     }
 
     @Test
-    public void testExecutePlacesValidationErrorMessageServiceIfUserIdIsNonPositive() throws Exception {
+    public void testExecutePlacesValidationErrorMessageServiceIfUserIdIsNonPositive() throws IOException {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2.50");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("0");
         when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
@@ -152,7 +152,7 @@ public class AdminAddCreditSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteCallsServiceWithCorrectArgsIfFormIsFilled() throws Exception {
+    public void testExecuteCallsServiceWithCorrectArgsIfFormIsFilled() throws IOException {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("2.50");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("5");
         when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);

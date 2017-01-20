@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class Order implements Identified{
+public class Order implements Identified {
     private int id;
     private int userId;
     private Date date;
@@ -83,7 +83,10 @@ public class Order implements Identified{
     }
 
     public Order calculateTotalCost() {
-        totalCost = drinks.stream().mapToLong(drink -> drink.getTotalPrice()).sum();
+        totalCost =
+                drinks.stream()
+                        .mapToLong(Drink::getTotalPrice)
+                        .sum();
         return this;
     }
 

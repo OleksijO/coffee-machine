@@ -16,6 +16,7 @@ import org.mockito.stubbing.Answer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Iterator;
 
@@ -24,9 +25,6 @@ import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMe
 import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_PREPARE_ORDER_PRODUCT_NO_LONGER_AVAILABLE;
 import static coffee.machine.view.Attributes.*;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 /**
@@ -56,7 +54,7 @@ public class UserPurchaseSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteReturnsCorrectPageIfReceiptIsEmpty() throws Exception {
+    public void testExecuteReturnsCorrectPageIfReceiptIsEmpty() throws IOException {
         setupRequestParams(EMPTY_DATA);
         when(orderService.prepareOrder(any())).thenReturn(new Order.Builder().build());
         assertEquals(
@@ -65,7 +63,7 @@ public class UserPurchaseSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteReturnsCorrectPageIfReceiptHasNegativeQuantities() throws Exception {
+    public void testExecuteReturnsCorrectPageIfReceiptHasNegativeQuantities() throws IOException {
         setupRequestParams(PURCHASE_DATA_WITH_NEGATIVE_QUANTITIES);
         when(orderService.prepareOrder(any())).thenReturn(new Order.Builder().build());
         assertEquals(
@@ -74,7 +72,7 @@ public class UserPurchaseSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteReturnsCorrectPageIfErrorOccurred() throws Exception {
+    public void testExecuteReturnsCorrectPageIfErrorOccurred() throws IOException {
         setupRequestParams(PURCHASE_CORRECT_DATA);
         when(session.getAttribute(USER_ID)).thenReturn(1);
         doThrow(new ServiceException()
@@ -87,7 +85,7 @@ public class UserPurchaseSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteDoesNotCallServiceIfReceiptIsEmpty() throws Exception {
+    public void testExecuteDoesNotCallServiceIfReceiptIsEmpty() throws IOException  {
         setupRequestParams(EMPTY_DATA);
         when(session.getAttribute(USER_ID)).thenReturn(1);
         command.execute(request, response);
@@ -95,7 +93,7 @@ public class UserPurchaseSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteDoesNotCallServiceIfReceiptHasNegativeQuantities() throws Exception {
+    public void testExecuteDoesNotCallServiceIfReceiptHasNegativeQuantities() throws IOException {
         setupRequestParams(PURCHASE_DATA_WITH_NEGATIVE_QUANTITIES);
         when(session.getAttribute(USER_ID)).thenReturn(1);
         command.execute(request, response);
@@ -103,7 +101,7 @@ public class UserPurchaseSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteCallsServiceWithCorrectArgsIfReceiptIsFilled() throws Exception {
+    public void testExecuteCallsServiceWithCorrectArgsIfReceiptIsFilled() throws IOException {
         setupRequestParams(PURCHASE_CORRECT_DATA);
         when(request.getMethod()).thenReturn("get");
         when(session.getAttribute(USER_ID)).thenReturn(1);
@@ -113,7 +111,7 @@ public class UserPurchaseSubmitCommandTest {
     }
 
     @Test
-    public void testExecutePlacesErrorMessageToRequestIfErrorOccurred() throws Exception {
+    public void testExecutePlacesErrorMessageToRequestIfErrorOccurred() throws IOException {
         setupRequestParams(PURCHASE_CORRECT_DATA);
         when(session.getAttribute(USER_ID)).thenReturn(1);
         doThrow(new ServiceException()
@@ -125,7 +123,7 @@ public class UserPurchaseSubmitCommandTest {
     }
 
     @Test
-    public void testExecutePlacesUsualMessageToRequestIfNoError() throws Exception {
+    public void testExecutePlacesUsualMessageToRequestIfNoError() throws IOException {
         setupRequestParams(PURCHASE_CORRECT_DATA);
         when(request.getMethod()).thenReturn("get");
         when(session.getAttribute(USER_ID)).thenReturn(1);

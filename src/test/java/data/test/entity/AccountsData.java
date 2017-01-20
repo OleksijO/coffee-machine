@@ -13,7 +13,7 @@ public enum AccountsData {
     USER_B(3, 999999);
 
 
-    public final Account account;
+    private final Account account;
 
     AccountsData(int id, long amount) {
         account = new Account.Builder()

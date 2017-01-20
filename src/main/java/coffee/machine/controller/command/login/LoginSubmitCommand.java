@@ -39,10 +39,11 @@ public class LoginSubmitCommand extends CommandWrapperTemplate {
     private static final String LOG_MESSAGE_FORMAT_USER_LOGGED_IN_DETAILS = "%s id=%d LOGGED IN.";
     private static final String LOG_MESSAGE_DOUBLE_LOGIN_ATTEMPT_DETAILS = "Double login attempt. Details: ";
 
-    private Map<UserRole, String> afterLoginPathByRole = new HashMap<UserRole, String>() {{
-        put(UserRole.USER, USER_HOME_PATH);
-        put(UserRole.ADMIN, ADMIN_HOME_PATH);
-    }};
+    private Map<UserRole, String> afterLoginPathByRole = new HashMap<>() ;
+    {
+        afterLoginPathByRole.put(UserRole.USER, USER_HOME_PATH);
+        afterLoginPathByRole.put(UserRole.ADMIN, ADMIN_HOME_PATH);
+    }
 
     private UserService userService = UserServiceImpl.getInstance();
 
@@ -94,7 +95,7 @@ public class LoginSubmitCommand extends CommandWrapperTemplate {
     }
 
     private boolean isDoubleLoginAttempt(HttpSession session) {
-        return (session.getAttribute(USER_ID) != null);
+        return session.getAttribute(USER_ID) != null;
     }
 
     private void logDetails(HttpServletRequest request, LoginData loginData) {

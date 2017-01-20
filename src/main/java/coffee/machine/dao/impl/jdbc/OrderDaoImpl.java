@@ -47,7 +47,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
             "INSERT INTO orders_drink (orders_id, drink_id, quantity ) VALUES (?,?,?)";
     private static final String INSERT_ORDER_DRINK_ADDON_SQL =
             "INSERT INTO orders_addon (orders_drink_id, addon_id, quantity) VALUES (?,?,?)";
-    private static final String DELETE_SQL = "DELETE FROM orders WHERE id=? ";
+    private static final String TABLE = "orders";
 
     private static final String WHERE_USER_ID = " WHERE user_id = ?";
     private static final String ORDER_BY_DATE_TIME = " ORDER BY date_time DESC ";
@@ -60,12 +60,12 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     private static final String FIELD_ADDON_ID = "addon_id";
     private static final String FIELD_PRODUCT_QUANTITY = "product_quantity";
     private static final String FIELD_PRODUCT_NAME = "product_name";
-    public static final String DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID = "Database error while getting all by user id = ";
+    private static final String DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID =
+            "Database error while getting all orders by user id = ";
 
-    private final Connection connection;
 
     OrderDaoImpl(Connection connection) {
-        this.connection = connection;
+        super(connection);
     }
 
     @Override
@@ -103,14 +103,19 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
                 statementDrink.setInt(2, drink.getId());
                 statementDrink.setInt(3, drink.getQuantity());
                 int ordersDrinkId = executeInsertStatement(statementDrink);
-                for (Product addon : drink.getAddons()) {
-                    if (addon.getQuantity() > 0) {
-                        statementAddon.setInt(1, ordersDrinkId);
-                        statementAddon.setInt(2, addon.getId());
-                        statementAddon.setInt(3, addon.getQuantity());
-                        statementAddon.executeUpdate();
-                    }
-                }
+                insertOrderDrinkAddons(ordersDrinkId, drink, statementAddon);
+            }
+        }
+    }
+
+    private void insertOrderDrinkAddons(int ordersDrinkId, Drink drink, PreparedStatement statementAddon)
+            throws SQLException {
+        for (Product addon : drink.getAddons()) {
+            if (addon.getQuantity() > 0) {
+                statementAddon.setInt(1, ordersDrinkId);
+                statementAddon.setInt(2, addon.getId());
+                statementAddon.setInt(3, addon.getQuantity());
+                statementAddon.executeUpdate();
             }
         }
     }
@@ -240,16 +245,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
 
     @Override
     public void deleteById(int id) {
-
-        try (PreparedStatement statement = connection.prepareStatement(DELETE_SQL)) {
-
-            statement.setInt(1, id);
-            statement.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_DELETING_BY_ID + id);
-        }
+        super.deleteById(TABLE, id);
     }
 
     @Override

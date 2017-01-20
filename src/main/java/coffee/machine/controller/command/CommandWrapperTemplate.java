@@ -26,12 +26,12 @@ public abstract class CommandWrapperTemplate implements Command {
             "Error while validating object of class %s. Details: \n\t";
     private static final String LOG_MESSAGES_DELIMITER = "\n\t";
 
-    private static Logger logger = Logger.getLogger(CommandWrapperTemplate.class);
+    private static final Logger logger = Logger.getLogger(CommandWrapperTemplate.class);
     private static LoggingHelper loggingHelper = new LoggingHelper();
 
     private final String pageAfterErrors;
 
-    public CommandWrapperTemplate(String pageAfterErrors) {
+    protected CommandWrapperTemplate(String pageAfterErrors) {
         this.pageAfterErrors = pageAfterErrors;
     }
 

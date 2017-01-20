@@ -10,41 +10,41 @@ public interface DaoFactory {
 	/**
 	 * @return Abstract Connection for getting DAO from Factory
 	 */
-	AbstractConnection getConnection();
+	DaoConnection getConnection();
 
 	/**
 	 * @param connection
 	 *            Abstract connection instance
 	 * @return user entity DAO
 	 */
-	UserDao getUserDao(AbstractConnection connection);
+	UserDao getUserDao(DaoConnection connection);
 
 	/**
 	 * @param connection
 	 *            Abstract connection instance
 	 * @return drink entity DAO
 	 */
-	DrinkDao getDrinkDao(AbstractConnection connection);
+	DrinkDao getDrinkDao(DaoConnection connection);
 
 	/**
 	 * @param connection
 	 *            Abstract connection instance
 	 * @return addon entity DAO
 	 */
-	AddonDao getAddonDao(AbstractConnection connection);
+	AddonDao getAddonDao(DaoConnection connection);
 
 	/**
 	 * @param connection
 	 *            Abstract connection instance
 	 * @return account entity DAO
 	 */
-	AccountDao getAccountDao(AbstractConnection connection);
+	AccountDao getAccountDao(DaoConnection connection);
 
 	/**
 	 * @param connection
 	 *            Abstract connection instance
 	 * @return order entity DAO
 	 */
-	OrderDao getOrderDao(AbstractConnection connection);
+	OrderDao getOrderDao(DaoConnection connection);
 
 }

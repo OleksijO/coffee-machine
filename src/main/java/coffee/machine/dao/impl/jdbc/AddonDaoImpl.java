@@ -22,6 +22,7 @@ class AddonDaoImpl extends AbstractDao<Product> implements AddonDao {
     private ProductDaoHelper productDaoHelper;
 
     AddonDaoImpl(Connection connection) {
+        super(connection);
         productDaoHelper = new ProductDaoHelper(connection);
     }
 

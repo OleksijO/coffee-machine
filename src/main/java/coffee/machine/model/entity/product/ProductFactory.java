@@ -10,10 +10,14 @@ import java.util.Objects;
  * @author oleksij.onysymchuk@gmail.com
  */
 class ProductFactory {
-    private Map<ProductType, Class> supportedClasses = new HashMap<ProductType, Class>() {{
-        put(ProductType.ADDON, Product.class);
-        put(ProductType.DRINK, Drink.class);
-    }};
+    private Map<ProductType, Class> supportedClasses = new HashMap<>();
+    {
+        supportedClasses.put(ProductType.ADDON, Product.class);
+        supportedClasses.put(ProductType.DRINK, Drink.class);
+    }
+
+    private ProductFactory() {
+    }
 
     private static class InstanceHolder {
         private static final ProductFactory instance = new ProductFactory();

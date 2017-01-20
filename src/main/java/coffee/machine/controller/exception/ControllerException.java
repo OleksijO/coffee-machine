@@ -12,10 +12,6 @@ public class ControllerException extends ApplicationException {
     public ControllerException() {
     }
 
-    public ControllerException(Throwable cause) {
-        super(cause);
-    }
-
     @Override
     public ControllerException addLogMessage(String logMessage) {
         super.addLogMessage(logMessage);

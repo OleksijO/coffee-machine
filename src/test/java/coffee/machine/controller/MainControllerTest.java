@@ -9,9 +9,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import java.io.IOException;
 
 import static coffee.machine.view.PagesPaths.HOME_PATH;
 import static coffee.machine.view.PagesPaths.REDIRECTED;
@@ -53,7 +56,7 @@ public class MainControllerTest {
     }
 
     @Test
-    public void testDoGetDoNothingIfCommandReturnedRedirected() throws Exception {
+    public void testDoGetDoNothingIfCommandReturnedRedirected() throws IOException, ServletException {
         when(request.getRequestURI()).thenReturn("path");
         when(request.getMethod()).thenReturn("get");
         when(command.execute(request, response)).thenReturn(REDIRECTED);
@@ -64,7 +67,7 @@ public class MainControllerTest {
     }
 
     @Test
-    public void testDoPostDoNothingIfCommandReturnedRedirected() throws Exception {
+    public void testDoPostDoNothingIfCommandReturnedRedirected() throws IOException, ServletException {
         when(request.getRequestURI()).thenReturn("path");
         when(request.getMethod()).thenReturn("get");
         when(command.execute(request, response)).thenReturn(REDIRECTED);
@@ -75,7 +78,7 @@ public class MainControllerTest {
     }
 
     @Test
-    public void testDoGetRedirectsToHomePathIfUriNotSupported() throws Exception {
+    public void testDoGetRedirectsToHomePathIfUriNotSupported() throws IOException, ServletException {
         when(request.getRequestURI()).thenReturn("path");
         when(request.getMethod()).thenReturn("get");
         when(commandHolder.findCommand(any())).thenReturn(new UnsupportedPathCommand());
@@ -85,7 +88,7 @@ public class MainControllerTest {
     }
 
     @Test
-    public void testDoPostRedirectsToHomePathIfUriNotSupported() throws Exception {
+    public void testDoPostRedirectsToHomePathIfUriNotSupported() throws IOException, ServletException {
         when(request.getRequestURI()).thenReturn("path");
         when(request.getMethod()).thenReturn("post");
         when(commandHolder.findCommand(any())).thenReturn(new UnsupportedPathCommand());
@@ -95,7 +98,7 @@ public class MainControllerTest {
     }
 
     @Test
-    public void testDoGetForwardsToReturnedByCommandPath() throws Exception {
+    public void testDoGetForwardsToReturnedByCommandPath() throws IOException, ServletException {
         when(request.getRequestURI()).thenReturn("path");
         when(request.getMethod()).thenReturn("get");
         when(commandHolder.findCommand("GET:path")).thenReturn(command);
@@ -105,7 +108,7 @@ public class MainControllerTest {
     }
 
     @Test
-    public void testDoPostForwardsToReturnedByCommandPath() throws Exception {
+    public void testDoPostForwardsToReturnedByCommandPath()throws IOException, ServletException  {
         when(request.getRequestURI()).thenReturn("path");
         when(request.getMethod()).thenReturn("post");
         when(commandHolder.findCommand("POST:path")).thenReturn(command);
@@ -115,7 +118,7 @@ public class MainControllerTest {
     }
 
     @Test
-    public void testDoGetRetrievesGetCommandsFromHolderIfRequestMethodIsGet() throws Exception {
+    public void testDoGetRetrievesGetCommandsFromHolderIfRequestMethodIsGet() throws IOException, ServletException {
         when(request.getRequestURI()).thenReturn("path");
         when(request.getMethod()).thenReturn("get");
         when(commandHolder.findCommand("GET:path")).thenReturn(command);
@@ -126,9 +129,9 @@ public class MainControllerTest {
     }
 
     @Test
-    public void testDoPostRetrievesPostCommandsFromHolderIfRequestMethodIsPost() throws Exception {
+    public void testDoPostRetrievesPostCommandsFromHolderIfRequestMethodIsPost() throws IOException, ServletException {
         when(request.getRequestURI()).thenReturn("path");
-        when(request.getMethod()).thenReturn("get");
+        when(request.getMethod()).thenReturn("post");
         when(commandHolder.findCommand("POST:path")).thenReturn(command);
         when(command.execute(request, response)).thenReturn("pagePost");
         controller.doPost(request, response);

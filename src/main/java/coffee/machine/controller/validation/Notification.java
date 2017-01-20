@@ -16,7 +16,7 @@ public class Notification {
     }
 
     public boolean hasErrorMessages() {
-        return (errorMessageKeys.size() != 0);
+        return !errorMessageKeys.isEmpty();
     }
 
     public List<String> getErrorMessageKeys() {

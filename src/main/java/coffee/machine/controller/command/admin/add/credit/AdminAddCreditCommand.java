@@ -20,8 +20,8 @@ import static coffee.machine.view.PagesPaths.ADMIN_ADD_CREDITS_PAGE;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class AdminAddCreditCommand extends CommandWrapperTemplate {
-    UserService userService = UserServiceImpl.getInstance();
-    AccountService accountService = AccountServiceImpl.getInstance();
+    private UserService userService = UserServiceImpl.getInstance();
+    private AccountService accountService = AccountServiceImpl.getInstance();
 
 
     public AdminAddCreditCommand() {
@@ -41,5 +41,13 @@ public class AdminAddCreditCommand extends CommandWrapperTemplate {
                 accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)
                         .orElseThrow(IllegalStateException::new)
                         .getRealAmount());
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    public void setAccountService(AccountService accountService) {
+        this.accountService = accountService;
     }
 }

@@ -1,6 +1,6 @@
 package coffee.machine.service.impl;
 
-import coffee.machine.dao.AbstractConnection;
+import coffee.machine.dao.DaoConnection;
 import coffee.machine.dao.AddonDao;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
@@ -31,7 +31,7 @@ public class AddonServiceImpl implements AddonService {
 
     @Override
     public List<Product> getAll() {
-        try (AbstractConnection connection = daoFactory.getConnection()) {
+        try (DaoConnection connection = daoFactory.getConnection()) {
 
             AddonDao addonDao = daoFactory.getAddonDao(connection);
             List<Product> addons = addonDao.getAll();

@@ -1,6 +1,6 @@
 package coffee.machine.dao.impl.jdbc;
 
-import coffee.machine.dao.AbstractConnection;
+import coffee.machine.dao.DaoConnection;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.UserDao;
 import coffee.machine.model.entity.user.User;
@@ -24,7 +24,7 @@ import static org.junit.Assert.assertFalse;
 public class UserDaoIntegrationTest {
     private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private List<User> testUsers = new ArrayList<>();
-    private AbstractConnection connection;
+    private DaoConnection connection;
     private UserDao userDao;
 
     {
@@ -40,7 +40,6 @@ public class UserDaoIntegrationTest {
 
     @Before
     public void init() {
-        System.out.println(testUsers);
         connection = daoFactory.getConnection();
         userDao = daoFactory.getUserDao(connection);
         connection.beginTransaction();
@@ -59,8 +58,6 @@ public class UserDaoIntegrationTest {
         testUsersOrderedByFullName.add(testUsers.get(0));
         testUsersOrderedByFullName.add(testUsers.get(1));
         List<User> users = userDao.getAll();
-        System.out.println(testUsers);
-        System.out.println(users);
         assertEquals(testUsersOrderedByFullName, users);
 
     }
@@ -104,7 +101,7 @@ public class UserDaoIntegrationTest {
         userDao.update(user);
 
         assertEquals("Property should be updated", newFullName, userDao.getById(updatedUserId).get().getFullName());
-        user = getUserCopyWithChangedFullName(user, savedFullName);;
+        user = getUserCopyWithChangedFullName(user, savedFullName);
         userDao.update(user);
         assertEquals("DB state should be the same as before test ",
                 user.getFullName(), userDao.getById(updatedUserId).get().getFullName());

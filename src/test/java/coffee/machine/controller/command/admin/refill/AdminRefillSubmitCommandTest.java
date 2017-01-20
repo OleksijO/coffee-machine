@@ -15,6 +15,7 @@ import org.mockito.stubbing.Answer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Iterator;
 
@@ -24,8 +25,6 @@ import static coffee.machine.controller.command.admin.refill.ProductRefillTestDa
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ADMIN_REFILL_NOTHING_TO_ADD;
 import static coffee.machine.view.Attributes.*;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 /**
@@ -55,7 +54,7 @@ public class AdminRefillSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteReturnsCorrectPageIfNoError() throws Exception {
+    public void testExecuteReturnsCorrectPageIfNoError() throws IOException {
         setupRequestParams(REFILL_CORRECT_DATA);
         assertEquals(
                 PagesPaths.ADMIN_REFILL_PAGE,
@@ -63,7 +62,7 @@ public class AdminRefillSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteReturnsCorrectPageIfErrorOccurred() throws Exception {
+    public void testExecuteReturnsCorrectPageIfErrorOccurred() throws IOException {
         setupRequestParams(REFILL_CORRECT_DATA);
         doThrow(new ServiceException()
                 .addMessageKey(ADMIN_REFILL_NOTHING_TO_ADD)
@@ -75,21 +74,21 @@ public class AdminRefillSubmitCommandTest {
     }
 
     @Test
-    public void testExecuteDoesNotCallServiceIfFormIsEmpty() throws Exception {
+    public void testExecuteDoesNotCallServiceIfFormIsEmpty() throws IOException {
         setupRequestParams(EMPTY_DATA);
         command.execute(request, response);
         verify(refillService, never()).refill(any());
     }
 
     @Test
-    public void testExecuteDoesNotCallServiceIfFormHasNegativeQuantities() throws Exception {
+    public void testExecuteDoesNotCallServiceIfFormHasNegativeQuantities() throws IOException {
         setupRequestParams(REFILL_DATA_WITH_NEGATIVE_QUANTITIES);
         command.execute(request, response);
         verify(refillService, never()).refill(any());
     }
 
     @Test
-    public void testExecuteCallsServiceWithCorrectArgsIfFormIsFilledWithData() throws Exception {
+    public void testExecuteCallsServiceWithCorrectArgsIfFormIsFilledWithData() throws IOException {
         setupRequestParams(REFILL_CORRECT_DATA);
         when(request.getMethod()).thenReturn("get");
         when(session.getAttribute(USER_ID)).thenReturn(1);
@@ -98,7 +97,7 @@ public class AdminRefillSubmitCommandTest {
     }
 
     @Test
-    public void testExecutePlacesErrorMessageToRequestIfErrorOccurred() throws Exception {
+    public void testExecutePlacesErrorMessageToRequestIfErrorOccurred() throws IOException {
         setupRequestParams(REFILL_CORRECT_DATA);
         doThrow(new ServiceException()
                 .addMessageKey(ADMIN_REFILL_NOTHING_TO_ADD)
@@ -109,7 +108,7 @@ public class AdminRefillSubmitCommandTest {
     }
 
     @Test
-    public void testExecutePlacesErrorMessageToRequestIfValidationErrorOccurred() throws Exception {
+    public void testExecutePlacesErrorMessageToRequestIfValidationErrorOccurred() throws IOException {
         setupRequestParams(REFILL_DATA_WITH_NEGATIVE_QUANTITIES);
         doThrow(new ServiceException()
                 .addMessageKey(ADMIN_REFILL_NOTHING_TO_ADD)
@@ -120,7 +119,7 @@ public class AdminRefillSubmitCommandTest {
     }
 
     @Test
-    public void testExecutePlacesUsualMessageToRequestIfNoError() throws Exception {
+    public void testExecutePlacesUsualMessageToRequestIfNoError() throws IOException {
         setupRequestParams(REFILL_CORRECT_DATA);
         when(request.getMethod()).thenReturn("get");
         when(session.getAttribute(USER_ID)).thenReturn(1);

@@ -6,8 +6,7 @@ package coffee.machine.view;
  * @author oleksij.onysymchuk@gmail.com
  */
 public final class PagesPaths {
-    public static final String JSP = ".jsp";
-    public static final String VIEW_JSP_CLASSPATH = "/WEB-INF/view/jsp";
+
     public static final String USER = "/user";
     public static final String ADMIN = "/admin";
     public static final String LOGIN = "/login";
@@ -18,8 +17,12 @@ public final class PagesPaths {
     public static final String PURCHASE = "/purchase";
     public static final String REFILL = "/refill";
     public static final String ADD_CREDIT = "/add_credits";
+
     public static final String REDIRECTED = "REDIRECTED";
-    public static final String PAGE = "Page" + JSP;
+
+    private static final String JSP = ".jsp";
+    private static final String VIEW_JSP_CLASSPATH = "/WEB-INF/view/jsp";
+    private static final String PAGE = "Page" + JSP;
 
     public static final String HOME_PAGE = VIEW_JSP_CLASSPATH + HOME_PATH + PAGE;
     public static final String LOGIN_PAGE = VIEW_JSP_CLASSPATH + LOGIN + PAGE;
@@ -46,4 +49,6 @@ public final class PagesPaths {
     public static final String ADMIN_REFILL_PAGE = VIEW_JSP_CLASSPATH + ADMIN_REFILL_PATH + PAGE;
     public static final String ADMIN_ADD_CREDITS_PAGE = VIEW_JSP_CLASSPATH + ADMIN + "/addCredits" + PAGE;
 
+    private PagesPaths() {
+    }
 }

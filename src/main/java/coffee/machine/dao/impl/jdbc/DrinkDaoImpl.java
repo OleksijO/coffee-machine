@@ -30,7 +30,7 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
     private static final String WHERE_ID_OR_DRINK_ID = " WHERE drink_addons.drink_id = ? OR product.id = ? ";
     private static final String WHERE_ID_IN_LIST_OR_DRINK_ID_IN_LIST =
             " WHERE FIND_IN_SET(drink_addons.drink_id,?)>0 OR FIND_IN_SET(product.id,?)>0 ";
-    static final String DB_ERROR_WHILE_INSERTING_ADDONS = "Database error while inserting addons of drink: ";
+    private static final String DB_ERROR_WHILE_INSERTING_ADDONS = "Database error while inserting addons of drink: ";
     private static final String INSERT_ADDON_SQL = "INSERT INTO drink_addons (drink_id, addon_id) VALUES (?,?); ";
     private static final String DELETE_ADDON_FROM_SET_SQL = "DELETE FROM drink_addons WHERE drink_id = ?; ";
 
@@ -38,11 +38,10 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
     private static final String DATABASE_ERROR_WHILE_DELETING_DRINK_ADDONS = "Database error wile deleting drink addons: ";
     private static final String DATABASE_ERROR_WHILE_GETTING_ALL_BY_ID = "Database error while getting all drinks by id ";
 
-    private final Connection connection;
     private ProductDaoHelper productDaoHelper;
 
     DrinkDaoImpl(Connection connection) {
-        this.connection = connection;
+        super(connection);
         productDaoHelper = new ProductDaoHelper(connection);
     }
 

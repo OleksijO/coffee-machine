@@ -12,24 +12,24 @@ import static coffee.machine.view.Parameters.DRINK_PARAMETER_STARTS_WITH;
  */
 public class RegExp {
     private static ResourceBundle regexpBundle = ResourceBundle.getBundle("controller.regexp");
-    public final static String REGEXP_NUMBER = regexpBundle.getString("number");
-    public final static String REGEXP_EMAIL = regexpBundle.getString("email");
-    public final static String REGEXP_PASSWORD = regexpBundle.getString("password");
-    public final static String REGEXP_FULL_NAME = regexpBundle.getString("full.name");
+    public static final String REGEXP_NUMBER = regexpBundle.getString("number");
+    public static final String REGEXP_EMAIL = regexpBundle.getString("email");
+    public static final String REGEXP_PASSWORD = regexpBundle.getString("password");
+    public static final String REGEXP_FULL_NAME = regexpBundle.getString("full.name");
 
-    public final static String REGEXP_DRINK_PARAM = "^" +
+    public static final String REGEXP_DRINK_PARAM = "^" +
             DRINK_PARAMETER_STARTS_WITH + REGEXP_NUMBER + "$";
-    public final static String REGEXP_ADDON_PARAM = "^" +
+    public static final String REGEXP_ADDON_PARAM = "^" +
             ADDON_PARAMETER_STARTS_WITH + REGEXP_NUMBER + "$";
-    public final static String REGEXP_ADDON_IN_DRINK_PARAM = "^" +
+    public static final String REGEXP_ADDON_IN_DRINK_PARAM = "^" +
             DRINK_PARAMETER_STARTS_WITH + REGEXP_NUMBER +
             ADDON_PARAMETER_STARTS_WITH + REGEXP_NUMBER + "$";
-    public final static String REGEXP_ANY_PRODUCT = "^("+
-            DRINK_PARAMETER_STARTS_WITH + REGEXP_NUMBER + ")|("+
-            ADDON_PARAMETER_STARTS_WITH + REGEXP_NUMBER + ")|("+
+    public static final String REGEXP_ANY_PRODUCT = "^(" +
+            DRINK_PARAMETER_STARTS_WITH + REGEXP_NUMBER + ")|(" +
+            ADDON_PARAMETER_STARTS_WITH + REGEXP_NUMBER + ")|(" +
             DRINK_PARAMETER_STARTS_WITH + REGEXP_NUMBER +
             ADDON_PARAMETER_STARTS_WITH + REGEXP_NUMBER + ")$";
 
-
-
+    private RegExp() {
+    }
 }

@@ -1,7 +1,7 @@
 package coffee.machine.dao.impl.jdbc;
 
-import coffee.machine.dao.AbstractConnection;
 import coffee.machine.dao.AddonDao;
+import coffee.machine.dao.DaoConnection;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.model.entity.product.Product;
 import data.test.entity.AddonsData;
@@ -15,7 +15,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Performs tests of corresponding DAO on real test database (it should be already created)
@@ -23,9 +24,9 @@ import static org.junit.Assert.*;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class AddonDaoIntegrationTest {
-    private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
-    private List<Product> testAddons = new ArrayList<>();
-    private AbstractConnection connection;
+    private final DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+    private final List<Product> testAddons = new ArrayList<>();
+    private DaoConnection connection;
     private AddonDao addonDao;
 
     {
@@ -42,7 +43,6 @@ public class AddonDaoIntegrationTest {
 
     @Before
     public void init() {
-        System.out.println(testAddons);
         connection = daoFactory.getConnection();
         addonDao = daoFactory.getAddonDao(connection);
         connection.beginTransaction();
@@ -58,8 +58,6 @@ public class AddonDaoIntegrationTest {
     public void testGetAll() {
 
         List<Product> addons = addonDao.getAll();
-        System.out.println(testAddons);
-        System.out.println(addons);
         assertEquals(testAddons, addons);
 
     }
@@ -131,12 +129,14 @@ public class AddonDaoIntegrationTest {
     public void testUpdateQuantity() {
 
         Product testAddon = AddonsData.SUGAR.getCopy();
-        Product addon = new Product();
+
         int newQuantity = testAddon.getQuantity() + 1;
-        addon.setId(testAddon.getId());
-        addon.setQuantity(newQuantity);
-        addon.setPrice(0);
-        addon.setName("");
+        Product addon = new Product.Builder()
+                .setId(testAddon.getId())
+                .setQuantity(newQuantity)
+                .setPrice(0)
+                .setName("")
+                .build();
 
         addonDao.updateQuantity(addon);
 
@@ -148,7 +148,7 @@ public class AddonDaoIntegrationTest {
     }
 
     @Test
-    public void testGetAllFromList() throws Exception {
+    public void testGetAllFromList() {
         List<Product> productsToRetrieve = new ArrayList<>();
         Product addon = AddonsData.CREAM.getCopy();
         productsToRetrieve.add(addon);
@@ -158,12 +158,15 @@ public class AddonDaoIntegrationTest {
     }
 
     @Test
-    public void testGetAllByIds() throws Exception {
+    public void testGetAllByIds() {
         List<Product> productsToRetrieve = new ArrayList<Product>() {{
             add(AddonsData.CREAM.getCopy());
             add(AddonsData.CINNAMON.getCopy());
         }};
-        Set<Integer> ids = new TreeSet<Integer>(){{add(9);add(13);}};
+        Set<Integer> ids = new TreeSet<Integer>() {{
+            add(9);
+            add(13);
+        }};
         assertEquals(productsToRetrieve, addonDao.getAllByIds(ids));
     }
 

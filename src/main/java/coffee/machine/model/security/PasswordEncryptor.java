@@ -13,6 +13,9 @@ public class PasswordEncryptor {
      */
     private static final String SALT = "The Salt";
 
+    private PasswordEncryptor() {
+    }
+
     /**
      * @param unencryptedPassword password to be encrypted
      * @return MD5 hash of input parameter

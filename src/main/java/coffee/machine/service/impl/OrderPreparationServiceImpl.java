@@ -27,8 +27,9 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
     private static final String LOG_MESSAGE_NOT_ENOUGH_MONEY_FORMAT =
             "User has insufficient funds. Available amount = %.2f, order cost = %s";
 
+    private static final int COFFEE_MACHINE_ACCOUNT_ID = CoffeeMachineConfig.ACCOUNT_ID;
+
     private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
-    private final int COFFEE_MACHINE_ACCOUNT_ID = CoffeeMachineConfig.ACCOUNT_ID;
 
     private OrderPreparationServiceImpl() {
     }
@@ -45,7 +46,7 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
     public Order prepareOrder(Order preOrder) {
         Objects.requireNonNull(preOrder);
 
-        try (AbstractConnection connection = daoFactory.getConnection()) {
+        try (DaoConnection connection = daoFactory.getConnection()) {
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
             AddonDao addonDao = daoFactory.getAddonDao(connection);
             AccountDao accountDao = daoFactory.getAccountDao(connection);
@@ -99,21 +100,22 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
                                                            List<Product> actualAddons,
                                                            Order order) {
         for (Drink orderedDrink : order.getDrinks()) {
-            deductActualQuantityByProductQuantity(actualDrinks, orderedDrink);
+            decreaseActualQuantityByProductQuantity(actualDrinks, orderedDrink);
             for (Product orderedAddon : orderedDrink.getAddons()) {
-                deductActualQuantityByProductQuantity(actualAddons, orderedAddon, orderedDrink.getQuantity());
+                decreaseActualQuantityByProductQuantity(actualAddons, orderedAddon, orderedDrink.getQuantity());
             }
         }
     }
 
-    private void deductActualQuantityByProductQuantity(List<? extends Product> actualProducts, Product orderedProduct) {
+    private void decreaseActualQuantityByProductQuantity(
+            List<? extends Product> actualProducts, Product orderedProduct) {
         int quantityWithoutParent = 1;
-        deductActualQuantityByProductQuantity(actualProducts, orderedProduct, quantityWithoutParent);
+        decreaseActualQuantityByProductQuantity(actualProducts, orderedProduct, quantityWithoutParent);
     }
 
-    private void deductActualQuantityByProductQuantity(List<? extends Product> actualProducts,
-                                                    Product orderedProduct,
-                                                    int parentQuantity) {
+    private void decreaseActualQuantityByProductQuantity(List<? extends Product> actualProducts,
+                                                         Product orderedProduct,
+                                                         int parentQuantity) {
         Product actualDrink = actualProducts.stream()
                 .filter(product -> product.getId() == orderedProduct.getId())
                 .findFirst()

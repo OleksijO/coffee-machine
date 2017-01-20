@@ -66,7 +66,7 @@ public class Account implements Identified{
     }
 
     public static class Builder {
-        private Account account = new Account();
+        private final Account account = new Account();
 
         public Builder setId(int id) {
             account.id = id;
