@@ -109,20 +109,29 @@ public class UserDaoIntegrationTest {
     }
 
     @Test
-    public void testInsertDelete() {
+    public void testInsert() {
+        User user = UsersData.A.user;
+        user = getUserCopyWithChangedEmailAndId(user, user.getEmail() + ".ua", 0);
+        int newUserId = userDao.insert(user).getId();
+
+        User userToTest = userDao.getById(newUserId).get();
+        assertEquals("New entity should be placed to DB and be the same to test one", user, userToTest);
+        userDao.deleteById(newUserId);
+        assertFalse("DB state should be the same as before test", userDao.getById(newUserId).isPresent());
+
+    }
+
+    @Test
+    public void testDelete() {
         User user = UsersData.A.user;
         int initialNumberOfUsers = UsersData.values().length;
         user = getUserCopyWithChangedEmailAndId(user, user.getEmail() + ".ua", 0);
-
         int newUserId = userDao.insert(user).getId();
-        User userToTest = userDao.getById(newUserId).get();
+        assertEquals("Total count of entities should increase by 1. It is necessary test condition ",
+                initialNumberOfUsers + 1, userDao.getAll().size());
 
-        assertEquals("New entity should be placed to DB and be the same to test one", user, userToTest);
-        assertEquals("Total count of entities should increase by 1", initialNumberOfUsers + 1, userDao.getAll().size());
         userDao.deleteById(newUserId);
         assertFalse("Inserted entity should be deleted", userDao.getById(newUserId).isPresent());
-        assertEquals("Total count of entities should decrease by 1", initialNumberOfUsers, userDao.getAll().size());
-
     }
 
     private User getUserCopyWithChangedEmailAndId(User user, String email, int id) {

@@ -62,9 +62,10 @@ public class AccountDaoIntegrationTest {
     }
 
     @Test
-    public void testGetById() {
+    public void testGetByIdReturnsOptionalWithCorrectAccountIfAccoutIsPresent() {
         Account testAccount = AccountsData.USER_A.getCopy();
-        Account account = accountDao.getById(testAccount.getId())
+        Account account = accountDao
+                .getById(testAccount.getId())
                 .orElse(null);
         assertEquals(testAccount, account);
     }
@@ -76,35 +77,44 @@ public class AccountDaoIntegrationTest {
 
     @Test
     public void testUpdate() {
-        Account account = testAccounts.get(1);
-        long amount = account.getAmount();
-        account.withdraw(amount);
+        Account account = AccountsData.USER_A.getCopy();
+        long savedAmount = account.getAmount();
+        account.withdraw(savedAmount);
 
         accountDao.update(account);
 
-        assertEquals("account amount must be updated", 0, accountDao.getById(2).get().getAmount());
-        account.add(amount);
+        assertEquals("account amount must be updated",
+                0, accountDao.getById(account.getId()).get().getAmount());
+        account.add(savedAmount);
         accountDao.update(account);
-        assertEquals("check state after test",
-                testAccounts.get(1).getAmount(), accountDao.getById(2).get().getAmount());
+        assertEquals("Check DB state after test",
+                account.getAmount(), accountDao.getById(account.getId()).get().getAmount());
 
     }
 
     @Test
-    public void testInsertDelete() {
-        Account account = testAccounts.get(1);
+    public void testDelete() {
+        Account account = AccountsData.USER_A.getCopy();
+        account.setId(0);
+        int newAccountId = accountDao.insert(account).getId();
+        assertEquals("Quantity of account should increase by 1. It is necessary test condition ",
+                testAccounts.size() + 1, accountDao.getAll().size());
+
+        accountDao.deleteById(newAccountId);
+        assertFalse("Inserted account should be deleted.", accountDao.getById(newAccountId).isPresent());
+
+    }
+
+    @Test
+    public void testInsert() {
+        Account account = AccountsData.USER_A.getCopy();
         account.setId(0);
         int newAccountId = accountDao.insert(account).getId();
 
-        account.setId(newAccountId);
-
         assertEquals("New entity should be placed to DB and be the same to test one",
                 account, accountDao.getById(newAccountId).get());
-        account.setId(2);
-        assertEquals("Total count of entities should increase by 1", 4, accountDao.getAll().size());
         accountDao.deleteById(newAccountId);
-        assertFalse("Inserted entity should be deleted", accountDao.getById(newAccountId).isPresent());
-        assertEquals("Total count of entities should decrease by 1", 3, accountDao.getAll().size());
+        assertFalse("Check DB state after test", accountDao.getById(newAccountId).isPresent());
 
     }
 

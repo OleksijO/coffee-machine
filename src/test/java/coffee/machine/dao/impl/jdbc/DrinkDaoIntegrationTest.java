@@ -110,21 +110,29 @@ public class DrinkDaoIntegrationTest {
     }
 
     @Test
-    public void testInsertDelete() {
+    public void testInsert() {
         Drink testDrink = DrinksData.ESPRESSO.getCopy();
-        int size = testDrinks.size();
-        int drinkId = testDrink.getId();
-
         testDrink.setId(0);
+
         int newDrinkId = drinkDao.insert(testDrink).getId();
 
-        Drink drinkToTest = drinkDao.getById(newDrinkId).get();
-        assertEquals("New addon should be placed to DB and be the same", testDrink, drinkToTest);
-        testDrink.setId(drinkId);
-        assertEquals("Total size of drinks should increase by 1", size + 1, drinkDao.getAll().size());
+        assertEquals("New addon should be placed to DB and be the same",
+                testDrink, drinkDao.getById(newDrinkId).get());
+        drinkDao.deleteById(newDrinkId);
+        assertFalse("Check state DB after test", drinkDao.getById(newDrinkId).isPresent());
+
+    }
+
+    @Test
+    public void testDelete() {
+        Drink testDrink = DrinksData.ESPRESSO.getCopy();
+        testDrink.setId(0);
+        int newDrinkId = drinkDao.insert(testDrink).getId();
+        assertEquals("Total size of drinks should increase by 1. It is necessary test condition ",
+                testDrinks.size() + 1, drinkDao.getAll().size());
+
         drinkDao.deleteById(newDrinkId);
         assertFalse("Inserted drink should be deleted", drinkDao.getById(newDrinkId).isPresent());
-        assertEquals("Total size of drinks should decrease by 1", size, drinkDao.getAll().size());
 
     }
 

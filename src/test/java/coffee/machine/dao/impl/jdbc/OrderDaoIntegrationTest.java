@@ -77,7 +77,7 @@ public class OrderDaoIntegrationTest {
 
 
     @Test
-    public void testInsertDelete() {
+    public void testInsert() {
         Order order = OrdersData.A1.order;
         int savedId = order.getId();
         order.setId(0);
@@ -85,22 +85,30 @@ public class OrderDaoIntegrationTest {
 
         assertEquals("New entity should be placed to DB and be the same to test one",
                 order, orderDao.getById(newOrderId).get());
+        orderDao.deleteById(newOrderId);
         order.setId(savedId);
-        assertEquals("Total count of entities should increase by 1", testOrders.size() + 1, orderDao.getAll().size());
+        assertFalse("Check state DB after test", orderDao.getById(newOrderId).isPresent());
+    }
+
+    @Test
+    public void testDelete() {
+        Order order = OrdersData.A1.order;
+        int savedId = order.getId();
+        order.setId(0);
+        int newOrderId = orderDao.insert(order).getId();
+        order.setId(savedId);
+        assertEquals("Total count of entities should increase by 1. It is necessary test condition ",
+                testOrders.size() + 1, orderDao.getAll().size());
+
         orderDao.deleteById(newOrderId);
         assertFalse("Inserted entity should be deleted", orderDao.getById(newOrderId).isPresent());
-        assertEquals("Total count of entities should decrease by 1", testOrders.size(), orderDao.getAll().size());
-
     }
 
     @Test
     public void testGetAllByUserId() {
         List<Order> resultList = new ArrayList<>();
         resultList.addAll(orderDao.getAllByUserId(2));
-        assertEquals("Total entity count should be the same to test one",
-                testOrders.size(), resultList.size());
-        assertEquals("List of retrieved entities should be the same to test one ",
-                testOrders, resultList);
+        assertEquals(testOrders, resultList);
     }
 
     @Test

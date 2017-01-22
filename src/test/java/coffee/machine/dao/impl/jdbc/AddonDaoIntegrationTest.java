@@ -100,7 +100,6 @@ public class AddonDaoIntegrationTest {
         addonDao.update(testAddon);
 
         assertEquals("Addon price should be updated", 0, addonDao.getById(testAddon.getId()).get().getPrice());
-
         testAddon.setPrice(amount);
         addonDao.update(testAddon);
         assertEquals("State after test should be as before test",
@@ -109,20 +108,30 @@ public class AddonDaoIntegrationTest {
     }
 
     @Test
-    public void testInsertDelete() {
+    public void testInsert() {
         Product testAddon = AddonsData.SUGAR.getCopy();
-        int size = testAddons.size();
-        int addonId = testAddon.getId();
         testAddon.setId(0);
+
         int newAddonId = addonDao.insert(testAddon).getId();
 
-        assertEquals("New addon should be placed to DB and be the same", testAddon, addonDao.getById(newAddonId).get());
-        testAddon.setId(addonId);
-        assertEquals("Total size of addons should increase by 1", size + 1, addonDao.getAll().size());
+        assertEquals("New addon should be placed to DB and be the same",
+                testAddon, addonDao.getById(newAddonId).get());
         addonDao.deleteById(newAddonId);
-        assertFalse("Inserted addon should be deleted", addonDao.getById(newAddonId).isPresent());
-        assertEquals("Total size of addons should decrease by 1", size, addonDao.getAll().size());
+        assertFalse("Check DB state after test", addonDao.getById(newAddonId).isPresent());
 
+    }
+
+    @Test
+    public void testDelete() {
+        Product testAddon = AddonsData.SUGAR.getCopy();
+        testAddon.setId(0);
+        int newAddonId = addonDao.insert(testAddon).getId();
+        assertEquals("Quantity of account should increase by 1. It is necessary test condition ",
+                testAddons.size() + 1, addonDao.getAll().size());
+
+        addonDao.deleteById(newAddonId);
+
+        assertFalse("Inserted addon should be deleted.", addonDao.getById(newAddonId).isPresent());
     }
 
     @Test
