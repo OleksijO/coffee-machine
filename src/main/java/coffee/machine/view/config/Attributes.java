@@ -1,4 +1,4 @@
-package coffee.machine.view;
+package coffee.machine.view.config;
 
 /**
  * This class is a constant holder for attribute names, used in java classes and jsp view pages.

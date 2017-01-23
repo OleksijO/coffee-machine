@@ -4,7 +4,7 @@ import coffee.machine.controller.Command;
 import coffee.machine.controller.command.helper.LoggingHelper;
 import coffee.machine.controller.validation.Notification;
 import coffee.machine.exception.ApplicationException;
-import coffee.machine.view.Attributes;
+import coffee.machine.view.config.Attributes;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_UNKNOWN;
-import static coffee.machine.view.Attributes.ERROR_ADDITIONAL_MESSAGE;
-import static coffee.machine.view.Attributes.ERROR_MESSAGE;
+import static coffee.machine.view.config.Attributes.ERROR_ADDITIONAL_MESSAGE;
+import static coffee.machine.view.config.Attributes.ERROR_MESSAGE;
 
 /**
  * This class represents template for specific commands, which use services and could throw exception .

@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_ADMIN_ADD_CREDIT;
-import static coffee.machine.view.Attributes.*;
-import static coffee.machine.view.PagesPaths.ADMIN_ADD_CREDITS_PAGE;
+import static coffee.machine.view.config.Attributes.*;
+import static coffee.machine.view.config.Pages.ADMIN_ADD_CREDITS_PAGE;
 
 /**
  * This class represents admin's add credits get method request handler command.

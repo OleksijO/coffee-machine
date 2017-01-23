@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static coffee.machine.view.Attributes.USER_ID;
-import static coffee.machine.view.Attributes.USER_ROLE;
-import static coffee.machine.view.PagesPaths.HOME_PATH;
-import static coffee.machine.view.PagesPaths.REDIRECTED;
+import static coffee.machine.view.config.Attributes.USER_ID;
+import static coffee.machine.view.config.Attributes.USER_ROLE;
+import static coffee.machine.view.config.Paths.HOME_PATH;
+import static coffee.machine.view.config.Paths.REDIRECTED;
 
 /**
  * This class represents user logout request handler command.

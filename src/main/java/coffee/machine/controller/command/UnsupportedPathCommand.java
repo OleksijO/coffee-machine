@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static coffee.machine.view.PagesPaths.HOME_PATH;
-import static coffee.machine.view.PagesPaths.REDIRECTED;
+import static coffee.machine.view.config.Paths.HOME_PATH;
+import static coffee.machine.view.config.Paths.REDIRECTED;
 
 /**
  * This class represents behaviour in case of handler for requested path is not found.

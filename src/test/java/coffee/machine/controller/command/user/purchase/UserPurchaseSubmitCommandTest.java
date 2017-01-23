@@ -5,7 +5,6 @@ import coffee.machine.controller.command.helper.LoggingHelper;
 import coffee.machine.model.entity.Order;
 import coffee.machine.service.OrderPreparationService;
 import coffee.machine.service.exception.ServiceException;
-import coffee.machine.view.PagesPaths;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -23,7 +22,8 @@ import java.util.Iterator;
 import static coffee.machine.controller.command.user.purchase.PurchaseDrinksTestData.*;
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_PREPARE_ORDER_NOTHING_TO_BUY;
 import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_PREPARE_ORDER_PRODUCT_NO_LONGER_AVAILABLE;
-import static coffee.machine.view.Attributes.*;
+import static coffee.machine.view.config.Attributes.*;
+import static coffee.machine.view.config.Pages.USER_PURCHASE_PAGE;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -58,7 +58,7 @@ public class UserPurchaseSubmitCommandTest {
         setupRequestParams(EMPTY_DATA);
         when(orderService.prepareOrder(any())).thenReturn(new Order.Builder().build());
         assertEquals(
-                PagesPaths.USER_PURCHASE_PAGE,
+                USER_PURCHASE_PAGE,
                 command.execute(request, response));
     }
 
@@ -67,7 +67,7 @@ public class UserPurchaseSubmitCommandTest {
         setupRequestParams(PURCHASE_DATA_WITH_NEGATIVE_QUANTITIES);
         when(orderService.prepareOrder(any())).thenReturn(new Order.Builder().build());
         assertEquals(
-                PagesPaths.USER_PURCHASE_PAGE,
+                USER_PURCHASE_PAGE,
                 command.execute(request, response));
     }
 
@@ -80,7 +80,7 @@ public class UserPurchaseSubmitCommandTest {
                 .addLogMessage(""))
                 .when(orderService).prepareOrder(any());
         assertEquals(
-                PagesPaths.USER_PURCHASE_PAGE,
+                USER_PURCHASE_PAGE,
                 command.execute(request, response));
     }
 

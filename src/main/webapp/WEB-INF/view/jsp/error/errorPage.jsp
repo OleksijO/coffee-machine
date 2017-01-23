@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="coffee.machine.view.Attributes" %>
-<%@ page import="coffee.machine.view.ErrorMessage" %>
+<%@ page import="coffee.machine.view.config.Attributes" %>
+<%@ page import="coffee.machine.view.config.ErrorMessage" %>
 <%@ page import="org.apache.log4j.Logger" %>
 <%! private static final Logger logger = Logger.getLogger("JSP ERROR HANDLER PAGE"); %>
 <% logger.error(String

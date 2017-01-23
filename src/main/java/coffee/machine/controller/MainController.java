@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static coffee.machine.view.PagesPaths.REDIRECTED;
+import static coffee.machine.view.config.Paths.REDIRECTED;
 
 /**
  * This class represents request dispatcher. It calls commands for correspondent request uri

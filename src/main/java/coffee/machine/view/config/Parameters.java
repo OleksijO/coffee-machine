@@ -1,4 +1,4 @@
-package coffee.machine.view;
+package coffee.machine.view.config;
 
 
 /**

@@ -1,15 +1,15 @@
 package coffee.machine.controller.command.login;
 
 import coffee.machine.controller.Command;
-import coffee.machine.view.PagesPaths;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_FOR_LOGIN_FORM;
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_LOGIN;
-import static coffee.machine.view.Attributes.*;
-import static coffee.machine.view.PagesPaths.LOGIN_PATH;
+import static coffee.machine.view.config.Attributes.*;
+import static coffee.machine.view.config.Pages.LOGIN_PAGE;
+import static coffee.machine.view.config.Paths.LOGIN_PATH;
 
 /**
  * This class represents user login get request page handler command.
@@ -23,7 +23,7 @@ public class LoginCommand implements Command {
 		request.setAttribute(PAGE_TITLE, TITLE_LOGIN);
 		request.setAttribute(LOGIN_FORM_TITLE, TITLE_FOR_LOGIN_FORM);
 		request.setAttribute(LOGIN_FORM_ACTION, LOGIN_PATH);
-		return PagesPaths.LOGIN_PAGE;
+		return LOGIN_PAGE;
 	}
 
 }

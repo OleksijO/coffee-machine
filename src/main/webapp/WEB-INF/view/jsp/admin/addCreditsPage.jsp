@@ -1,10 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="coffee.machine.view.PagesPaths" %>
-<%@ page import="coffee.machine.view.Attributes" %>
-<%@ page import="coffee.machine.view.Parameters" %>
-<jsp:include page="/WEB-INF/view/jsp/fragment/header.jsp" />
+<%@ page import="coffee.machine.view.config.Paths" %>
+<%@ page import="coffee.machine.view.config.Pages" %>
+<%@ page import="coffee.machine.view.config.Attributes" %>
+<%@ page import="coffee.machine.view.config.Parameters" %>
+<jsp:include page="${Pages.VIEW_JSP_CLASSPATH}/fragment/header.jsp" />
 <br>
 <fmt:message key="admin.add.credit.description"/> <br><br>
 <fmt:message key="admin.refill.machine.balance"/> :
@@ -49,7 +50,7 @@
                 </td>
                 <td>
 
-                    <form action="${pageContext.request.contextPath}${PagesPaths.ADMIN_ADD_CREDITS_PATH}" method="post">
+                    <form action="${pageContext.request.contextPath}${Paths.ADMIN_ADD_CREDITS_PATH}" method="post">
                         <div align="center">
                             <input type="hidden" name="${Parameters.USER_ID}" value="${user.id}">
                             <input type="number" min="0.01" value="0" name="${Parameters.CREDITS_TO_ADD}"
@@ -71,4 +72,4 @@
 
 
 
-<jsp:include page="/WEB-INF/view/jsp/fragment/footer.jsp" />
+<jsp:include page="${Pages.VIEW_JSP_CLASSPATH}/fragment/footer.jsp" />

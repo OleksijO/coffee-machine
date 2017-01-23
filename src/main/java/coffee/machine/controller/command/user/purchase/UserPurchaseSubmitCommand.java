@@ -31,8 +31,8 @@ import java.util.regex.Pattern;
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.PURCHASE_THANKS_MESSAGE;
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.QUANTITY_SHOULD_BE_INT;
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_USER_PURCHASE;
-import static coffee.machine.view.Attributes.*;
-import static coffee.machine.view.PagesPaths.USER_PURCHASE_PAGE;
+import static coffee.machine.view.config.Attributes.*;
+import static coffee.machine.view.config.Pages.USER_PURCHASE_PAGE;
 
 public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
     private static final Logger logger = Logger.getLogger(UserPurchaseSubmitCommand.class);

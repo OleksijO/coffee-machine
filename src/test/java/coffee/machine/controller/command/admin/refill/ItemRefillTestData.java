@@ -3,7 +3,7 @@ package coffee.machine.controller.command.admin.refill;
 import coffee.machine.model.entity.product.Drink;
 import coffee.machine.model.entity.product.Product;
 import coffee.machine.model.value.object.ProductsReceipt;
-import coffee.machine.view.Parameters;
+import coffee.machine.view.config.Parameters;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -10,7 +10,7 @@ import coffee.machine.model.entity.user.UserRole;
 import coffee.machine.model.value.object.user.LoginData;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.UserServiceImpl;
-import coffee.machine.view.Parameters;
+import coffee.machine.view.config.Parameters;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,9 +23,10 @@ import java.util.Map;
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_FOR_LOGIN_FORM;
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_LOGIN;
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_LOGIN_YOU_ARE_ALREADY_LOGGED_IN;
-import static coffee.machine.view.Attributes.*;
-import static coffee.machine.view.PagesPaths.*;
-import static coffee.machine.view.Parameters.PASSWORD_PARAM;
+import static coffee.machine.view.config.Attributes.*;
+import static coffee.machine.view.config.Pages.*;
+import static coffee.machine.view.config.Paths.*;
+import static coffee.machine.view.config.Parameters.PASSWORD_PARAM;
 
 /**
  * This class represents user login post request page handler command.

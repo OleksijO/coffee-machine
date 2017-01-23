@@ -2,7 +2,7 @@ package coffee.machine.controller.i18n;
 
 import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.i18n.SupportedLocale;
-import coffee.machine.view.Parameters;
+import coffee.machine.view.config.Parameters;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -10,8 +10,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Locale;
 
-import static coffee.machine.view.Attributes.BUNDLE_FILE;
-import static coffee.machine.view.Attributes.USER_LOCALE;
+import static coffee.machine.view.config.Attributes.BUNDLE_FILE;
+import static coffee.machine.view.config.Attributes.USER_LOCALE;
 
 /**
  * This class represents locale filter.

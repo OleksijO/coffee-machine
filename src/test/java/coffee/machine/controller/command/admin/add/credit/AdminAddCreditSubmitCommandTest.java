@@ -8,9 +8,8 @@ import coffee.machine.model.value.object.CreditsReceipt;
 import coffee.machine.service.AccountService;
 import coffee.machine.service.UserService;
 import coffee.machine.service.exception.ServiceException;
-import coffee.machine.view.Attributes;
-import coffee.machine.view.PagesPaths;
-import coffee.machine.view.Parameters;
+import coffee.machine.view.config.Attributes;
+import coffee.machine.view.config.Parameters;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -23,7 +22,8 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_ADD_CREDITS_AMOUNT_IS_NOT_POSITIVE;
-import static coffee.machine.view.Attributes.*;
+import static coffee.machine.view.config.Attributes.*;
+import static coffee.machine.view.config.Pages.ADMIN_ADD_CREDITS_PAGE;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -63,7 +63,7 @@ public class AdminAddCreditSubmitCommandTest {
         when(request.getParameter(Parameters.USER_ID)).thenReturn("2");
         when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
 
-        assertEquals(PagesPaths.ADMIN_ADD_CREDITS_PAGE, command.execute(request,response));
+        assertEquals(ADMIN_ADD_CREDITS_PAGE, command.execute(request,response));
     }
 
     @Test
@@ -74,7 +74,7 @@ public class AdminAddCreditSubmitCommandTest {
         doThrow(new ServiceException().addMessageKey(ERROR_ADD_CREDITS_AMOUNT_IS_NOT_POSITIVE))
                 .when(accountService).addCredits(any());
 
-        assertEquals(PagesPaths.ADMIN_ADD_CREDITS_PAGE, command.execute(request,response));
+        assertEquals(ADMIN_ADD_CREDITS_PAGE, command.execute(request,response));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class AdminAddCreditSubmitCommandTest {
         when(request.getParameter(Parameters.CREDITS_TO_ADD)).thenReturn("-5");
         when(request.getParameter(Parameters.USER_ID)).thenReturn("-5");
         when(session.getAttribute(Attributes.USER_ID)).thenReturn(1);
-        assertEquals(PagesPaths.ADMIN_ADD_CREDITS_PAGE, command.execute(request,response));
+        assertEquals(ADMIN_ADD_CREDITS_PAGE, command.execute(request,response));
     }
 
     @Test

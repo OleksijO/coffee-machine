@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_ADMIN_REFILL;
-import static coffee.machine.view.Attributes.*;
-import static coffee.machine.view.PagesPaths.ADMIN_REFILL_PAGE;
+import static coffee.machine.view.config.Attributes.*;
+import static coffee.machine.view.config.Pages.ADMIN_REFILL_PAGE;
 
 /**
  * This class represents admin refill page get method request handler command.

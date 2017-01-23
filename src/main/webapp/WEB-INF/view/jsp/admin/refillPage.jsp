@@ -1,11 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page import="coffee.machine.view.PagesPaths" %>
-<%@ page import="coffee.machine.view.Attributes" %>
-<%@ page import="coffee.machine.view.Parameters" %>
+<%@ page import="coffee.machine.view.config.Paths" %>
+<%@ page import="coffee.machine.view.config.Pages" %>
+<%@ page import="coffee.machine.view.config.Attributes" %>
+<%@ page import="coffee.machine.view.config.Parameters" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
-<jsp:include page="/WEB-INF/view/jsp/fragment/header.jsp" />
+<jsp:include page="${Pages.VIEW_JSP_CLASSPATH}/fragment/header.jsp" />
 <br>
 <fmt:message key="admin.refill.description"/> <br><br>
 <fmt:message key="admin.refill.machine.balance"/> :
@@ -15,7 +16,7 @@
                   maxFractionDigits="2"/>
 <fmt:message key="currency"/><br><br>
 
-<form action="${pageContext.request.contextPath}${PagesPaths.ADMIN_REFILL_PATH}" method="post">
+<form action="${pageContext.request.contextPath}${Paths.ADMIN_REFILL_PATH}" method="post">
 
     <table cellpadding="10" cellspacing="2" border="1">
         <tr>
@@ -88,4 +89,4 @@
 </form>
 
 
-<jsp:include page="/WEB-INF/view/jsp/fragment/footer.jsp" />
+<jsp:include page="${Pages.VIEW_JSP_CLASSPATH}/fragment/footer.jsp" />

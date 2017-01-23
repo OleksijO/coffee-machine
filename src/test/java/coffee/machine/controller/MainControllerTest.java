@@ -16,8 +16,8 @@ import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-import static coffee.machine.view.PagesPaths.HOME_PATH;
-import static coffee.machine.view.PagesPaths.REDIRECTED;
+import static coffee.machine.view.config.Paths.HOME_PATH;
+import static coffee.machine.view.config.Paths.REDIRECTED;
 import static org.mockito.Mockito.*;
 
 /**

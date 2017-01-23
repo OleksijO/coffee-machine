@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_HOME;
-import static coffee.machine.view.Attributes.PAGE_TITLE;
-import static coffee.machine.view.PagesPaths.HOME_PAGE;
+import static coffee.machine.view.config.Attributes.PAGE_TITLE;
+import static coffee.machine.view.config.Pages.HOME_PAGE;
 
 /**
  * This class represents home page handler command.

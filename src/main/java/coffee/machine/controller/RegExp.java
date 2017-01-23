@@ -2,8 +2,8 @@ package coffee.machine.controller;
 
 import java.util.ResourceBundle;
 
-import static coffee.machine.view.Parameters.ADDON_PARAMETER_STARTS_WITH;
-import static coffee.machine.view.Parameters.DRINK_PARAMETER_STARTS_WITH;
+import static coffee.machine.view.config.Parameters.ADDON_PARAMETER_STARTS_WITH;
+import static coffee.machine.view.config.Parameters.DRINK_PARAMETER_STARTS_WITH;
 
 /**
  * This class is a constant holder for regexp, used in request processing.

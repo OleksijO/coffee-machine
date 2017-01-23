@@ -1,7 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page errorPage="/WEB-INF/view/jsp/error/errorPage.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page import="coffee.machine.view.Attributes" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="coffee.machine.view.config.Attributes" %>
 
 <c:set var="usual_message" value="${requestScope[Attributes.USUAL_MESSAGE]}"/>
 <c:set var="usual_additional_message" value="${requestScope[Attributes.USUAL_ADDITIONAL_MESSAGE]}"/>

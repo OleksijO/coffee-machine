@@ -8,7 +8,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import static coffee.machine.config.CoffeeMachineConfig.MESSAGES;
-import static coffee.machine.view.Attributes.*;
+import static coffee.machine.view.config.Attributes.*;
 
 /**
  * This class represents functionality for build logging message

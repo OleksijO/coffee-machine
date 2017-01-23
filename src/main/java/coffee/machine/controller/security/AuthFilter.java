@@ -10,9 +10,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static coffee.machine.view.Attributes.USER_ID;
-import static coffee.machine.view.Attributes.USER_ROLE;
-import static coffee.machine.view.PagesPaths.*;
+import static coffee.machine.view.config.Attributes.USER_ID;
+import static coffee.machine.view.config.Attributes.USER_ROLE;
+import static coffee.machine.view.config.Paths.*;
 
 /**
  * This class represents security filter to restrict access of unauthorized users and admins to pages,

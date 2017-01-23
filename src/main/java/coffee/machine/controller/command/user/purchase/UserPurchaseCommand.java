@@ -14,8 +14,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_USER_PURCHASE;
-import static coffee.machine.view.Attributes.*;
-import static coffee.machine.view.PagesPaths.USER_PURCHASE_PAGE;
+import static coffee.machine.view.config.Attributes.*;
+import static coffee.machine.view.config.Pages.USER_PURCHASE_PAGE;
 
 public class UserPurchaseCommand extends CommandWrapperTemplate {
     private DrinkService drinkService = DrinkServiceImpl.getInstance();

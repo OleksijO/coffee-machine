@@ -33,8 +33,8 @@ import java.util.stream.Collectors;
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.ADMIN_REFILL_SUCCESSFUL;
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.QUANTITY_SHOULD_BE_INT;
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_ADMIN_REFILL;
-import static coffee.machine.view.Attributes.*;
-import static coffee.machine.view.PagesPaths.ADMIN_REFILL_PAGE;
+import static coffee.machine.view.config.Attributes.*;
+import static coffee.machine.view.config.Pages.ADMIN_REFILL_PAGE;
 
 /**
  * This class represents admin refill page post method request handler command.

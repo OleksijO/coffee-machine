@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static coffee.machine.view.Attributes.USER_ID;
-import static coffee.machine.view.Attributes.USER_ROLE;
-import static coffee.machine.view.PagesPaths.*;
+import static coffee.machine.view.config.Attributes.USER_ID;
+import static coffee.machine.view.config.Attributes.USER_ROLE;
+import static coffee.machine.view.config.Paths.*;
 import static org.mockito.Mockito.*;
 
 /**

@@ -12,7 +12,7 @@ import coffee.machine.service.AccountService;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.AccountServiceImpl;
 import coffee.machine.service.impl.UserServiceImpl;
-import coffee.machine.view.Parameters;
+import coffee.machine.view.config.Parameters;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,9 +23,9 @@ import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.AD
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.CREDITS_AMOUNT_IS_NOT_DOUBLE;
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.QUANTITY_SHOULD_BE_INT;
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_ADMIN_ADD_CREDIT;
-import static coffee.machine.view.Attributes.*;
-import static coffee.machine.view.PagesPaths.ADMIN_ADD_CREDITS_PAGE;
-import static coffee.machine.view.Parameters.CREDITS_TO_ADD;
+import static coffee.machine.view.config.Attributes.*;
+import static coffee.machine.view.config.Pages.ADMIN_ADD_CREDITS_PAGE;
+import static coffee.machine.view.config.Parameters.CREDITS_TO_ADD;
 
 /**
  * This class represents admin's add credits post method request handler command.

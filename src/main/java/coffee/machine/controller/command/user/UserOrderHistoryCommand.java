@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_USER_ORDER_HISTORY;
-import static coffee.machine.view.Attributes.*;
-import static coffee.machine.view.PagesPaths.USER_ORDER_HISTORY_PAGE;
+import static coffee.machine.view.config.Attributes.*;
+import static coffee.machine.view.config.Pages.USER_ORDER_HISTORY_PAGE;
 
 /**
  * This class represents user purchase history page handler command.

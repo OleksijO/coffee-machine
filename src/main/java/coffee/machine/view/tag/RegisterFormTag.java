@@ -10,7 +10,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import static coffee.machine.controller.RegExp.REGEXP_FULL_NAME;
-import static coffee.machine.view.Attributes.USER_LOCALE;
+import static coffee.machine.view.config.Attributes.USER_LOCALE;
 
 /**
  * This class represent custom tag handler, which transforms tag to register form in HTML in user current locale.

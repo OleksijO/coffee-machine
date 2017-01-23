@@ -9,7 +9,7 @@ import coffee.machine.model.entity.user.User;
 import coffee.machine.model.value.object.user.RegisterData;
 import coffee.machine.service.UserService;
 import coffee.machine.service.impl.UserServiceImpl;
-import coffee.machine.view.Parameters;
+import coffee.machine.view.config.Parameters;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,10 +18,11 @@ import java.io.IOException;
 
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.REGISTER_USER_FORM_TITLE;
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_USER_REGISTER;
-import static coffee.machine.view.Attributes.*;
-import static coffee.machine.view.PagesPaths.*;
-import static coffee.machine.view.Parameters.FULL_NAME_PARAM;
-import static coffee.machine.view.Parameters.PASSWORD_PARAM;
+import static coffee.machine.view.config.Attributes.*;
+import static coffee.machine.view.config.Pages.*;
+import static coffee.machine.view.config.Parameters.FULL_NAME_PARAM;
+import static coffee.machine.view.config.Parameters.PASSWORD_PARAM;
+import static coffee.machine.view.config.Paths.USER_REGISTER_PATH;
 
 /**
  * Created by oleksij.onysymchuk@gmail

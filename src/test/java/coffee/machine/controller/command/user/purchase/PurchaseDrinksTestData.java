@@ -3,7 +3,7 @@ package coffee.machine.controller.command.user.purchase;
 import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.product.Drink;
 import coffee.machine.model.entity.product.Product;
-import coffee.machine.view.Parameters;
+import coffee.machine.view.config.Parameters;
 
 import java.util.*;
 

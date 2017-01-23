@@ -4,7 +4,6 @@ import coffee.machine.controller.Command;
 import coffee.machine.controller.command.helper.LoggingHelper;
 import coffee.machine.service.RefillService;
 import coffee.machine.service.exception.ServiceException;
-import coffee.machine.view.PagesPaths;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -19,11 +18,10 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Iterator;
 
-import static coffee.machine.controller.command.admin.refill.ProductRefillTestData.EMPTY_DATA;
-import static coffee.machine.controller.command.admin.refill.ProductRefillTestData.REFILL_DATA_WITH_NEGATIVE_QUANTITIES;
-import static coffee.machine.controller.command.admin.refill.ProductRefillTestData.REFILL_CORRECT_DATA;
+import static coffee.machine.controller.command.admin.refill.ProductRefillTestData.*;
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ADMIN_REFILL_NOTHING_TO_ADD;
-import static coffee.machine.view.Attributes.*;
+import static coffee.machine.view.config.Attributes.*;
+import static coffee.machine.view.config.Pages.ADMIN_REFILL_PAGE;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -57,7 +55,7 @@ public class AdminRefillSubmitCommandTest {
     public void testExecuteReturnsCorrectPageIfNoError() throws IOException {
         setupRequestParams(REFILL_CORRECT_DATA);
         assertEquals(
-                PagesPaths.ADMIN_REFILL_PAGE,
+                ADMIN_REFILL_PAGE,
                 command.execute(request, response));
     }
 
@@ -69,7 +67,7 @@ public class AdminRefillSubmitCommandTest {
                 .addLogMessage(""))
                 .when(refillService).refill(any());
         assertEquals(
-                PagesPaths.ADMIN_REFILL_PAGE,
+                ADMIN_REFILL_PAGE,
                 command.execute(request, response));
     }
 

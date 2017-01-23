@@ -8,9 +8,9 @@ import java.io.IOException;
 
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.REGISTER_USER_FORM_TITLE;
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_USER_REGISTER;
-import static coffee.machine.view.Attributes.*;
-import static coffee.machine.view.PagesPaths.USER_REGISTER_PAGE;
-import static coffee.machine.view.PagesPaths.USER_REGISTER_PATH;
+import static coffee.machine.view.config.Attributes.*;
+import static coffee.machine.view.config.Pages.USER_REGISTER_PAGE;
+import static coffee.machine.view.config.Paths.USER_REGISTER_PATH;
 
 /**
  * Created by oleksij.onysymchuk@gmail

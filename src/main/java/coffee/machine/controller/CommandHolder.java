@@ -18,7 +18,7 @@ import coffee.machine.controller.command.user.register.UserRegisterSubmitCommand
 import java.util.HashMap;
 import java.util.Map;
 
-import static coffee.machine.view.PagesPaths.*;
+import static coffee.machine.view.config.Paths.*;
 
 /**
  * This class is implementation of CommandHolder. It defines command for every supported request uri.
