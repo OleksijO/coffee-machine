@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 /**
  * This class represents JDBC implementation of DaoConnection.
- * It performs rollback if transaction began but was not committed before close method was called.
+ * It performs rollback if transaction began but was not committed or rolled back before close method was called.
  *
  * @author oleksij.onysymchuk@gmail.com
  */
@@ -78,10 +78,10 @@ class DaoConnectionImpl implements DaoConnection {
 
     @Override
     public void close() {
+        if (transactionActive) {
+            rollbackTransaction();
+        }
         try {
-            if (transactionActive) {
-                rollbackTransaction();
-            }
             sqlConnection.close();
         } catch (SQLException e) {
             throw new DaoException(e)
