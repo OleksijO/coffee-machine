@@ -6,7 +6,6 @@ import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.product.Drink;
 import coffee.machine.model.entity.product.Product;
 import coffee.machine.model.entity.product.ProductType;
-import coffee.machine.model.value.object.Orders;
 
 import java.sql.*;
 import java.util.ArrayList;
