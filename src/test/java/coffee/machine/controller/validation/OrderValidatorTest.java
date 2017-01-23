@@ -10,7 +10,7 @@ import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMe
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 18.01.2017.
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class OrderValidatorTest {
     private Validator<Order> validator = new OrderValidator();

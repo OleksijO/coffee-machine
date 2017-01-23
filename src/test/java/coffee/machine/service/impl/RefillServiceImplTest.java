@@ -26,7 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 06.01.2017.
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class RefillServiceImplTest {
 

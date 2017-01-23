@@ -1,8 +1,15 @@
 package coffee.machine.controller.validation;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 18.01.2017.
+ * This interface defines general behaviour for validators.
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public interface Validator<T> {
+
+    /**
+     * @param object Object inctance to be validated
+     * @return A notification object, which contains information about validation results
+     */
     Notification validate(T object);
 }

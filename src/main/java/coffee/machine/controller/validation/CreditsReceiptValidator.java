@@ -8,14 +8,16 @@ import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMe
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_INCORRECT_USER_ID;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 16.01.2017.
+ * This class represents validator for value object CreditsReceipt.
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class CreditsReceiptValidator implements Validator<CreditsReceipt> {
     private static final String LOG_MESSAGE_FORMAT_AMOUNT_FOR_ADD_SHOULD_BE_GREATER_THAN_ZERO =
             "Amount to add should be greater than zero. UserId=%d, amount=%d.";
     private static final String LOG_MESSAGE_USER_ID_SHOULD_BE_GREATER_ZERO = "User's id=%d and should be greater zero";
 
-
+    @Override
     public Notification validate(CreditsReceipt receipt) {
         Objects.requireNonNull(receipt);
         Notification notification = new Notification(receipt.getClass());

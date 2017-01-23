@@ -28,7 +28,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 10.01.2017.
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class AdminAddCreditSubmitCommandTest {
     @Mock

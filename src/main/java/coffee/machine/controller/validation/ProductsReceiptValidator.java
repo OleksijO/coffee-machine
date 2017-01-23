@@ -6,12 +6,15 @@ import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMe
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.QUANTITY_SHOULD_BE_NON_NEGATIVE;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 16.01.2017.
+ * This class represents validator for value object ProductsReceipt.
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class ProductsReceiptValidator implements Validator<ProductsReceipt> {
-    private String LOG_MESSAGE_ADMIN_REFILL_NOTHING_TO_ADD = "Nothing to add. Details: ";
-    private String LOG_MESSAGE_QUANTITY_SHOULD_BE_NON_NEGATIVE = "Product quantity is negative. Details: ";
+    private static final String LOG_MESSAGE_ADMIN_REFILL_NOTHING_TO_ADD = "Nothing to add. Details: ";
+    private static final String LOG_MESSAGE_QUANTITY_SHOULD_BE_NON_NEGATIVE = "Product quantity is negative. Details: ";
 
+    @Override
     public Notification validate(ProductsReceipt receipt) {
         Notification notification = new Notification(receipt.getClass());
         if (receipt.isEmpty()) {

@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 16.01.2017.
+ * This class is a part of a notification pattern for validation.
+ * It represents a notification object, which contains information about validation errors.
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class Notification {
     private Class validationObjectClass;

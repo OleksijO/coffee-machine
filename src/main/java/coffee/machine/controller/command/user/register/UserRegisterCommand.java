@@ -13,7 +13,7 @@ import static coffee.machine.view.config.Pages.USER_REGISTER_PAGE;
 import static coffee.machine.view.config.Paths.USER_REGISTER_PATH;
 
 /**
- * Created by oleksij.onysymchuk@gmail
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class UserRegisterCommand implements Command {
 

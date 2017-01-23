@@ -11,10 +11,13 @@ import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMe
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_LOGIN_PASSWORD_DO_NOT_MATCH_PATTERN;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 16.01.2017.
+ * This class represents validator for value object LoginData.
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class LoginDataValidator implements Validator<LoginData> {
 
+    @Override
     public Notification validate(LoginData loginData) {
         Objects.requireNonNull(loginData);
         Notification notification = new Notification(loginData.getClass());

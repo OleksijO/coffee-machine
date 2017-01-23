@@ -8,11 +8,14 @@ import java.util.regex.Pattern;
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_REGISTER_FULL_NAME_DO_NOT_MATCH_PATTERN;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 16.01.2017.
+ * This class represents validator for value object RegisterData.
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class RegisterDataValidator implements Validator<RegisterData> {
     private Validator<LoginData> loginDataValidator = new LoginDataValidator();
 
+    @Override
     public Notification validate(RegisterData registerData) {
 
         Notification notification = loginDataValidator.validate(registerData);

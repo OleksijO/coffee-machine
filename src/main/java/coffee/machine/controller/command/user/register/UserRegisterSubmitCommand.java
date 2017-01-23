@@ -25,7 +25,7 @@ import static coffee.machine.view.config.Parameters.PASSWORD_PARAM;
 import static coffee.machine.view.config.Paths.USER_REGISTER_PATH;
 
 /**
- * Created by oleksij.onysymchuk@gmail
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class UserRegisterSubmitCommand extends CommandWrapperTemplate {
     private static final Logger logger = Logger.getLogger(UserRegisterSubmitCommand.class);

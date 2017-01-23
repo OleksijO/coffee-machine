@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 05.01.2017.
+ * This class represents value object, which contains lists of drinks and addons to refill coffee-machine.
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class ProductsReceipt {
     private List<Product> addons = new ArrayList<>();

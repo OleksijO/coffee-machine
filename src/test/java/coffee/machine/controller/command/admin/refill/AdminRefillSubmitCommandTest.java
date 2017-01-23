@@ -26,7 +26,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 10.01.2017.
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class AdminRefillSubmitCommandTest {
     @Mock
@@ -127,7 +127,7 @@ public class AdminRefillSubmitCommandTest {
 
     private void setupRequestParams(ProductRefillTestData testData) {
 
-        when(request.getParameterNames()).thenReturn(getEnumeration(testData));
+        when(request.getParameterNames()).thenReturn(prepareParameterNames(testData));
 
         when(request.getParameter(anyString())).thenAnswer(new Answer<String>() {
             @Override
@@ -138,7 +138,7 @@ public class AdminRefillSubmitCommandTest {
         });
     }
 
-    private Enumeration<String> getEnumeration(final ProductRefillTestData testData) {
+    private Enumeration<String> prepareParameterNames(final ProductRefillTestData testData) {
         return new Enumeration<String>() {
             Iterator<String> iterator = testData.requestParams.keySet().iterator();
 
@@ -149,7 +149,7 @@ public class AdminRefillSubmitCommandTest {
                     iterator = testData.requestParams.keySet().iterator();
                     return false;
                 }
-                return hasMoreElements;
+                return true;
             }
 
             @Override

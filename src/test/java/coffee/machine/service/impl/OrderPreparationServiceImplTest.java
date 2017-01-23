@@ -27,7 +27,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 11.01.2017.
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class OrderPreparationServiceImplTest {
     private static final String NO_SERVICE_EXCEPTION_HAD_BEEN_THROWN = "No service exception had been thrown.";

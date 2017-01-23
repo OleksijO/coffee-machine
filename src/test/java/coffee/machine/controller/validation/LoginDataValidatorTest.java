@@ -8,7 +8,7 @@ import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMe
 import static org.junit.Assert.*;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 18.01.2017.
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class LoginDataValidatorTest {
     private Validator<LoginData> validator = new LoginDataValidator();

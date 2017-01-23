@@ -5,13 +5,16 @@ import coffee.machine.model.entity.Order;
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.*;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 16.01.2017.
+ * This class represents validator for entity Order.
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class OrderValidator implements Validator<Order> {
     private static final String LOG_MESSAGE_QUANTITY_SHOULD_BE_NON_NEGATIVE = "Product quantity is negative. Order details: ";
     private static final String LOG_MESSAGE_YOU_DID_NOT_SPECIFIED_DRINKS_TO_BUY = "Order is empty. Order details: ";
     private static final String LOG_MESSAGE_USER_ID_SHOULD_BE_GREATER_ZERO = "User's id=%d and should be greater zero";
 
+    @Override
     public Notification validate(Order order) {
         Notification notification = new Notification(order.getClass());
         if (order.isEmpty()) {
