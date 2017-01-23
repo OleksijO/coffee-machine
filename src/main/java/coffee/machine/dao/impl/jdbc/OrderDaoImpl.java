@@ -20,27 +20,30 @@ import java.util.Optional;
  */
 class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     private static final String SELECT_ALL_ORDERS_SQL =
-            " SELECT orders.id, user_id, date_time, amount " +
-                    " FROM orders ";
-    private static final String SELECT_ALL_ORDER_DRINKS_SQL =
-            " SELECT orders.id, " +
-                    " orders_drink.drink_id, product.name AS product_name, orders_drink.quantity AS product_quantity " +
-                    " FROM orders " +
-                    " LEFT JOIN orders_drink " +
-                    " ON orders.id=orders_drink.orders_id " +
-                    " LEFT JOIN product " +
-                    " ON orders_drink.drink_id = product.id ";
-    private static final String SELECT_ALL_ORDER_DRINK_ADDONS_SQL =
-            " SELECT orders.id, " +
-                    " orders_drink.drink_id, " +
-                    " addon_id, product.name AS product_name, orders_addon.quantity AS product_quantity " +
-                    " FROM orders " +
-                    " LEFT JOIN orders_drink " +
-                    " ON orders.id=orders_drink.orders_id " +
-                    " INNER JOIN orders_addon " +
-                    " ON orders_drink.id=orders_addon.orders_drink_id " +
-                    " LEFT JOIN product " +
-                    " ON orders_addon.addon_id = product.id";
+            " SELECT orders.id, user_id, date_time, amount, " +
+                    "  orders_drink.drink_id, product.name AS drink_name, orders_drink.quantity AS drink_quantity, " +
+                    "   addon_id, addon_name, addon_quantity " +
+                    "  FROM orders  " +
+                    "  LEFT JOIN orders_drink  " +
+                    "  ON orders.id=orders_drink.orders_id  " +
+                    "  LEFT JOIN product  " +
+                    "  ON orders_drink.drink_id = product.id " +
+                    "  LEFT JOIN ( " +
+                    "    SELECT " +
+                    "     orders.id, " +
+                    "     orders_drink.drink_id, " +
+                    "     addon_id, " +
+                    "     product.name          AS addon_name, " +
+                    "     orders_addon.quantity AS addon_quantity " +
+                    "    FROM orders " +
+                    "     LEFT JOIN orders_drink " +
+                    "      ON orders.id = orders_drink.orders_id " +
+                    "     INNER JOIN orders_addon " +
+                    "      ON orders_drink.id = orders_addon.orders_drink_id " +
+                    "     LEFT JOIN product " +
+                    "      ON orders_addon.addon_id = product.id " +
+                    "    ) AS addons " +
+                    " ON addons.drink_id = orders_drink.drink_id AND addons.id = orders_drink.orders_id ";
     private static final String INSERT_SQL =
             "INSERT INTO orders (user_id, date_time, amount) VALUES (?,?,?)";
     private static final String INSERT_ORDER_DRINK_SQL =
@@ -50,19 +53,29 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     private static final String TABLE = "orders";
 
     private static final String WHERE_USER_ID = " WHERE user_id = ?";
-    private static final String ORDER_BY_DATE_TIME = " ORDER BY date_time DESC ";
+    private static final String ORDER_BY_DATE_TIME_DESC = " ORDER BY date_time DESC, drink_id ASC, addon_id ASC";
+    private static final String SELECT_ALL_BY_USER_ID = SELECT_ALL_ORDERS_SQL + WHERE_USER_ID + ORDER_BY_DATE_TIME_DESC;
     private static final String WHERE_ID = " WHERE orders.id = ?";
+    private static final String SELECT_BY_ID = SELECT_ALL_ORDERS_SQL + WHERE_ID;
 
     private static final String FIELD_USER_ID = "user_id";
     private static final String FIELD_DATE_TIME = "date_time";
     private static final String FIELD_AMOUNT = "amount";
     private static final String FIELD_DRINK_ID = "drink_id";
     private static final String FIELD_ADDON_ID = "addon_id";
-    private static final String FIELD_PRODUCT_QUANTITY = "product_quantity";
-    private static final String FIELD_PRODUCT_NAME = "product_name";
+    private static final String FIELD_ADDON_QUANTITY = "addon_quantity";
+    private static final String FIELD_ADDON_NAME = "addon_name";
+    private static final String FIELD_DRINK_QUANTITY = "drink_quantity";
+    private static final String FIELD_DRINK_NAME = "drink_name";
+
     private static final String DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID =
             "Database error while getting all orders by user id = ";
 
+    // state saving for method parseResultSet(ResultSet)
+    private ResultSet resultSet;
+    private boolean resultSetHasNext = true;
+    private int currentOrderId;
+    private int currentDrinkId;
 
     OrderDaoImpl(Connection connection) {
         super(connection);
@@ -132,17 +145,11 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     @Override
     public List<Order> getAll() {
         try (PreparedStatement statementOrder =
-                     connection.prepareStatement(SELECT_ALL_ORDERS_SQL + ORDER_BY_DATE_TIME);
-             PreparedStatement statementDrink =
-                     connection.prepareStatement(SELECT_ALL_ORDER_DRINKS_SQL);
-             PreparedStatement statementAddon =
-                     connection.prepareStatement(SELECT_ALL_ORDER_DRINK_ADDONS_SQL)) {
+                     connection.prepareStatement(SELECT_ALL_ORDERS_SQL + ORDER_BY_DATE_TIME_DESC)) {
 
-            try (ResultSet resultSetOrder = statementOrder.executeQuery();
-                 ResultSet resultSetDrink = statementDrink.executeQuery();
-                 ResultSet resultSetAddon = statementAddon.executeQuery()) {
+            try (ResultSet resultSetOrder = statementOrder.executeQuery()) {
 
-                return parseResultSets(resultSetOrder, resultSetDrink, resultSetAddon);
+                return parseResultSets(resultSetOrder);
 
             }
         } catch (SQLException e) {
@@ -151,65 +158,81 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
         }
     }
 
-    private List<Order> parseResultSets(ResultSet rsOrder, ResultSet rsDrink, ResultSet rsAddon) throws SQLException {
+    private List<Order> parseResultSets(ResultSet resultSet) throws SQLException {
+        this.resultSet = resultSet;
         List<Order> orderList = new ArrayList<>();
-        while (rsOrder.next()) {
-            Order order = getOrderFromResultSet(rsOrder);
+        resultSetHasNext = resultSet.next();
+
+        while (resultSetHasNext) {
+            Order order = getOrderFromResultSet();
+            currentOrderId = order.getId();
+            getDrinksForCurrentOrderFromResultSet(resultSet)
+                    .forEach(order::addDrink);
             orderList.add(order);
         }
-        while (rsDrink.next()) {
-            Order order = getOrderFromListById(orderList, rsDrink.getInt(FIELD_ID));
-            Drink drink = getDrinkFromResultSet(rsDrink);
-            order.addDrink(drink);
-        }
-        while (rsAddon.next()) {
-            Order order = getOrderFromListById(orderList, rsAddon.getInt(FIELD_ID));
-            Drink drink = getDrinkFromListById(order.getDrinks(), rsAddon.getInt(FIELD_DRINK_ID));
-            Product addon = getProductFromResultSet(rsAddon);
-            drink.getAddons().add(addon);
-        }
-
         return orderList;
     }
 
-    private Order getOrderFromResultSet(ResultSet rsOrder) throws SQLException {
+    private Order getOrderFromResultSet() throws SQLException {
         return new Order.Builder()
-                .setId(rsOrder.getInt(FIELD_ID))
-                .setUserId(rsOrder.getInt(FIELD_USER_ID))
-                .setDate(toDate(rsOrder.getTimestamp(FIELD_DATE_TIME)))
-                .setTotalCost(rsOrder.getLong(FIELD_AMOUNT))
+                .setId(resultSet.getInt(FIELD_ID))
+                .setUserId(resultSet.getInt(FIELD_USER_ID))
+                .setDate(toDate(resultSet.getTimestamp(FIELD_DATE_TIME)))
+                .setTotalCost(resultSet.getLong(FIELD_AMOUNT))
                 .build();
     }
 
-    private Drink getDrinkFromResultSet(ResultSet rsDrink) throws SQLException {
+    private List<Drink> getDrinksForCurrentOrderFromResultSet(ResultSet resultSet) throws SQLException {
+        List<Drink> drinks = new ArrayList<>();
+        while (resultSetHasNext &&
+                !isCurrentOrderIdChanged()) {
+            Drink drink = getDrinkFromResultSet();
+            currentDrinkId = drink.getId();
+            List<Product> addons = getAddonsForCurrentDrinkFromResultSet(resultSet);
+            drink.addAddons(addons);
+            drinks.add(drink);
+        }
+        return drinks;
+    }
+
+    private boolean isCurrentOrderIdChanged() throws SQLException {
+        return currentOrderId != resultSet.getInt(FIELD_ID);
+    }
+
+    private Drink getDrinkFromResultSet() throws SQLException {
         return new Drink.Builder()
-                .setId(rsDrink.getInt(FIELD_DRINK_ID))
-                .setQuantity(rsDrink.getInt(FIELD_PRODUCT_QUANTITY))
-                .setName(rsDrink.getString(FIELD_PRODUCT_NAME))
+                .setId(resultSet.getInt(FIELD_DRINK_ID))
+                .setQuantity(resultSet.getInt(FIELD_DRINK_QUANTITY))
+                .setName(resultSet.getString(FIELD_DRINK_NAME))
                 .build();
     }
 
-    private Product getProductFromResultSet(ResultSet rsAddon) throws SQLException {
+    private List<Product> getAddonsForCurrentDrinkFromResultSet(ResultSet resultSet) throws SQLException {
+        List<Product> addons = new ArrayList<>();
+        while (resultSetHasNext &&
+                !isCurrentOrderIdChanged() &&
+                !isCurrentDrinkIdChanged()) {
+
+            int addonId = resultSet.getInt(FIELD_ADDON_ID);
+            if (addonId != 0) {
+                Product addon = getProductFromResultSet();
+                addons.add(addon);
+            }
+            resultSetHasNext = resultSet.next();
+        }
+        return addons;
+    }
+
+    private boolean isCurrentDrinkIdChanged() throws SQLException {
+        return currentDrinkId != resultSet.getInt(FIELD_DRINK_ID);
+    }
+
+    private Product getProductFromResultSet() throws SQLException {
         return new Product.Builder(ProductType.ADDON)
-                .setId(rsAddon.getInt(FIELD_ADDON_ID))
-                .setQuantity(rsAddon.getInt(FIELD_PRODUCT_QUANTITY))
-                .setName(rsAddon.getString(FIELD_PRODUCT_NAME))
+                .setId(resultSet.getInt(FIELD_ADDON_ID))
+                .setQuantity(resultSet.getInt(FIELD_ADDON_QUANTITY))
+                .setName(resultSet.getString(FIELD_ADDON_NAME))
                 .build();
-    }
-
-    private Order getOrderFromListById(List<Order> orderList, int orderId) {
-        return orderList.stream()
-                .filter(o -> o.getId() == orderId)
-                .findFirst()
-                .orElseThrow(IllegalStateException::new);
-    }
-
-    private Drink getDrinkFromListById(List<Drink> drinks, int drinkId) {
-        return drinks.stream()
-                .filter(d -> d.getId() == drinkId)
-                .findFirst()
-                .orElseThrow(IllegalStateException::new);
-
     }
 
     private Date toDate(Timestamp timestamp) {
@@ -218,21 +241,13 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
 
     @Override
     public Optional<Order> getById(int id) {
-        try (PreparedStatement statementOrder =
-                     connection.prepareStatement(SELECT_ALL_ORDERS_SQL + WHERE_ID);
-             PreparedStatement statementDrink =
-                     connection.prepareStatement(SELECT_ALL_ORDER_DRINKS_SQL + WHERE_ID);
-             PreparedStatement statementAddon =
-                     connection.prepareStatement(SELECT_ALL_ORDER_DRINK_ADDONS_SQL + WHERE_ID)) {
+        try (PreparedStatement statement =
+                     connection.prepareStatement(SELECT_BY_ID)) {
 
-            statementOrder.setInt(1, id);
-            statementDrink.setInt(1, id);
-            statementAddon.setInt(1, id);
-            try (ResultSet resultSetOrder = statementOrder.executeQuery();
-                 ResultSet resultSetDrink = statementDrink.executeQuery();
-                 ResultSet resultSetAddon = statementAddon.executeQuery()) {
+            statement.setInt(1, id);
+            try (ResultSet resultSetOrder = statement.executeQuery()) {
 
-                List<Order> orderList = parseResultSets(resultSetOrder, resultSetDrink, resultSetAddon);
+                List<Order> orderList = parseResultSets(resultSetOrder);
                 checkSingleResult(orderList);
 
                 return Optional.ofNullable(orderList.isEmpty() ? null : orderList.get(0));
@@ -251,23 +266,16 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     @Override
     public List<Order> getAllByUserId(int userId) {
         try (PreparedStatement statementOrder =
-                     connection.prepareStatement(SELECT_ALL_ORDERS_SQL + WHERE_USER_ID + ORDER_BY_DATE_TIME);
-             PreparedStatement statementDrink =
-                     connection.prepareStatement(SELECT_ALL_ORDER_DRINKS_SQL + WHERE_USER_ID);
-             PreparedStatement statementAddon =
-                     connection.prepareStatement(SELECT_ALL_ORDER_DRINK_ADDONS_SQL + WHERE_USER_ID)) {
+                     connection.prepareStatement(SELECT_ALL_BY_USER_ID)) {
 
             statementOrder.setInt(1, userId);
-            statementDrink.setInt(1, userId);
-            statementAddon.setInt(1, userId);
-            try (ResultSet resultSetOrder = statementOrder.executeQuery();
-                 ResultSet resultSetDrink = statementDrink.executeQuery();
-                 ResultSet resultSetAddon = statementAddon.executeQuery()) {
-                return parseResultSets(resultSetOrder, resultSetDrink, resultSetAddon);
+            try (ResultSet resultSet = statementOrder.executeQuery()) {
+                return parseResultSets(resultSet);
             }
         } catch (SQLException e) {
             throw new DaoException(e)
                     .addLogMessage(DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID + userId);
         }
     }
+
 }
