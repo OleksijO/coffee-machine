@@ -21,29 +21,29 @@ import java.util.Optional;
  */
 class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     private static final String SELECT_ALL_ORDERS_SQL =
-            " SELECT orders.id, user_id, date_time, amount,\n" +
-                    "  orders_drink.drink_id, product.name AS drink_name, orders_drink.quantity AS drink_quantity,\n" +
-                    "   addon_id, addon_name, addon_quantity\n" +
-                    "  FROM orders \n" +
-                    "  LEFT JOIN orders_drink \n" +
-                    "  ON orders.id=orders_drink.orders_id \n" +
-                    "  LEFT JOIN product \n" +
-                    "  ON orders_drink.drink_id = product.id\n" +
-                    "  LEFT JOIN (\n" +
-                    "    SELECT\n" +
-                    "     orders.id,\n" +
-                    "     orders_drink.drink_id,\n" +
-                    "     addon_id,\n" +
-                    "     product.name          AS addon_name,\n" +
-                    "     orders_addon.quantity AS addon_quantity\n" +
-                    "    FROM orders\n" +
-                    "     LEFT JOIN orders_drink\n" +
-                    "      ON orders.id = orders_drink.orders_id\n" +
-                    "     INNER JOIN orders_addon\n" +
-                    "      ON orders_drink.id = orders_addon.orders_drink_id\n" +
-                    "     LEFT JOIN product\n" +
-                    "      ON orders_addon.addon_id = product.id\n" +
-                    "    ) AS addons\n" +
+            " SELECT orders.id, user_id, date_time, amount, " +
+                    "  orders_drink.drink_id, product.name AS drink_name, orders_drink.quantity AS drink_quantity, " +
+                    "   addon_id, addon_name, addon_quantity " +
+                    "  FROM orders  " +
+                    "  LEFT JOIN orders_drink  " +
+                    "  ON orders.id=orders_drink.orders_id  " +
+                    "  LEFT JOIN product  " +
+                    "  ON orders_drink.drink_id = product.id " +
+                    "  LEFT JOIN ( " +
+                    "    SELECT " +
+                    "     orders.id, " +
+                    "     orders_drink.drink_id, " +
+                    "     addon_id, " +
+                    "     product.name          AS addon_name, " +
+                    "     orders_addon.quantity AS addon_quantity " +
+                    "    FROM orders " +
+                    "     LEFT JOIN orders_drink " +
+                    "      ON orders.id = orders_drink.orders_id " +
+                    "     INNER JOIN orders_addon " +
+                    "      ON orders_drink.id = orders_addon.orders_drink_id " +
+                    "     LEFT JOIN product " +
+                    "      ON orders_addon.addon_id = product.id " +
+                    "    ) AS addons " +
                     " ON addons.drink_id = orders_drink.drink_id AND addons.id = orders_drink.orders_id ";
     private static final String INSERT_SQL =
             "INSERT INTO orders (user_id, date_time, amount) VALUES (?,?,?)";
@@ -58,6 +58,11 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     private static final String SELECT_ALL_BY_USER_ID = SELECT_ALL_ORDERS_SQL + WHERE_USER_ID + ORDER_BY_DATE_TIME_DESC;
     private static final String WHERE_ID = " WHERE orders.id = ?";
     private static final String SELECT_BY_ID = SELECT_ALL_ORDERS_SQL + WHERE_ID;
+    private static final String LIMIT_OFFSET_QUANTITY =
+            "INNER JOIN (SELECT id FROM orders LIMIT ?,?) AS limitedOrders ON limitedOrders.id = orders.id ";
+    private static final String SELECT_ALL_BY_USER_ID_WITH_LIMIT =
+            SELECT_ALL_ORDERS_SQL + LIMIT_OFFSET_QUANTITY + WHERE_USER_ID + ORDER_BY_DATE_TIME_DESC;
+    private static final String SELECT_COUNT_ORDERS = "SELECT COUNT(id) AS total_count FROM orders";
 
     private static final String FIELD_USER_ID = "user_id";
     private static final String FIELD_DATE_TIME = "date_time";
@@ -68,6 +73,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     private static final String FIELD_ADDON_NAME = "addon_name";
     private static final String FIELD_DRINK_QUANTITY = "drink_quantity";
     private static final String FIELD_DRINK_NAME = "drink_name";
+    private static final String FIELD_TOTAL_COUNT = "total_count";
     private static final String DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID =
             "Database error while getting all orders by user id = ";
 
@@ -173,8 +179,17 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
         return orderList;
     }
 
+    private Order getOrderFromResultSet() throws SQLException {
+        return new Order.Builder()
+                .setId(resultSet.getInt(FIELD_ID))
+                .setUserId(resultSet.getInt(FIELD_USER_ID))
+                .setDate(toDate(resultSet.getTimestamp(FIELD_DATE_TIME)))
+                .setTotalCost(resultSet.getLong(FIELD_AMOUNT))
+                .build();
+    }
+
     private List<Drink> getDrinksForCurrentOrderFromResultSet(ResultSet resultSet) throws SQLException {
-        List<Drink> drinks=new ArrayList<>();
+        List<Drink> drinks = new ArrayList<>();
         while (resultSetHasNext &&
                 !isCurrentOrderIdChanged()) {
             Drink drink = getDrinkFromResultSet();
@@ -184,6 +199,18 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
             drinks.add(drink);
         }
         return drinks;
+    }
+
+    private boolean isCurrentOrderIdChanged() throws SQLException {
+        return currentOrderId != resultSet.getInt(FIELD_ID);
+    }
+
+    private Drink getDrinkFromResultSet() throws SQLException {
+        return new Drink.Builder()
+                .setId(resultSet.getInt(FIELD_DRINK_ID))
+                .setQuantity(resultSet.getInt(FIELD_DRINK_QUANTITY))
+                .setName(resultSet.getString(FIELD_DRINK_NAME))
+                .build();
     }
 
     private List<Product> getAddonsForCurrentDrinkFromResultSet(ResultSet resultSet) throws SQLException {
@@ -204,28 +231,6 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
 
     private boolean isCurrentDrinkIdChanged() throws SQLException {
         return currentDrinkId != resultSet.getInt(FIELD_DRINK_ID);
-    }
-
-    private boolean isCurrentOrderIdChanged() throws SQLException {
-        return currentOrderId != resultSet.getInt(FIELD_ID);
-    }
-
-
-    private Order getOrderFromResultSet() throws SQLException {
-        return new Order.Builder()
-                .setId(resultSet.getInt(FIELD_ID))
-                .setUserId(resultSet.getInt(FIELD_USER_ID))
-                .setDate(toDate(resultSet.getTimestamp(FIELD_DATE_TIME)))
-                .setTotalCost(resultSet.getLong(FIELD_AMOUNT))
-                .build();
-    }
-
-    private Drink getDrinkFromResultSet() throws SQLException {
-        return new Drink.Builder()
-                .setId(resultSet.getInt(FIELD_DRINK_ID))
-                .setQuantity(resultSet.getInt(FIELD_DRINK_QUANTITY))
-                .setName(resultSet.getString(FIELD_DRINK_NAME))
-                .build();
     }
 
     private Product getProductFromResultSet() throws SQLException {
@@ -279,5 +284,37 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
         }
     }
 
+    @Override
+    public Orders getAllByUserId(int userId, int startFrom, int quantity) {
+        Orders ordersResult = new Orders();
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_COUNT_ORDERS);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                int count = resultSet.getInt(FIELD_TOTAL_COUNT);
+                ordersResult.setTotalCount(count);
+            }
+
+        } catch (SQLException e) {
+            throw new DaoException(e)
+                    .addLogMessage(DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID + userId);
+        }
+        try (PreparedStatement statementOrder =
+                     connection.prepareStatement(SELECT_ALL_BY_USER_ID_WITH_LIMIT)) {
+
+            statementOrder.setInt(1, startFrom);
+            statementOrder.setInt(2, quantity);
+            statementOrder.setInt(3, userId);
+            try (ResultSet resultSet = statementOrder.executeQuery()) {
+                List<Order> orders = parseResultSets(resultSet);
+                ordersResult.setOrders(orders);
+            }
+
+        } catch (SQLException e) {
+            throw new DaoException(e)
+                    .addLogMessage(DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID + userId);
+        }
+        return ordersResult;
+    }
 
 }

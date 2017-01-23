@@ -54,14 +54,14 @@ public class RequestDataExtractor {
      * @param param   Request parameter name
      * @return Parsed value of specified parameter name
      */
-    public int getIntFromRequestByParameter(HttpServletRequest request, String param, String ErrorMessageKey) {
+    public int getIntFromRequestByParameter(HttpServletRequest request, String param, String errorMessageKey) {
         try {
 
             return Integer.parseInt(request.getParameter(param));
 
         } catch (NumberFormatException e) {
             throw new ControllerException()
-                    .addMessageKey(ErrorMessageKey)
+                    .addMessageKey(errorMessageKey)
                     .addLogMessage(String.format(LOG_MESSAGE_PROBLEMS_WITH_PARSING_INT_FROM_PARAMETER_FORMAT,
                             param, request.getParameter(param)));
         }

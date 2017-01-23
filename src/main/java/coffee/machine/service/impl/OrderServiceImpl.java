@@ -5,6 +5,7 @@ import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.OrderDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Order;
+import coffee.machine.model.value.object.Orders;
 import coffee.machine.service.OrderService;
 
 import java.util.List;
@@ -34,6 +35,16 @@ public class OrderServiceImpl implements OrderService {
 
             OrderDao orderDao = daoFactory.getOrderDao(connection);
             return orderDao.getAllByUserId(userId);
+
+        }
+    }
+
+    @Override
+    public Orders getAllOrdersByUser(int userId, int startFrom, int quantity) {
+        try (DaoConnection connection = daoFactory.getConnection()) {
+
+            OrderDao orderDao = daoFactory.getOrderDao(connection);
+            return orderDao.getAllByUserId(userId, startFrom, quantity);
 
         }
     }
