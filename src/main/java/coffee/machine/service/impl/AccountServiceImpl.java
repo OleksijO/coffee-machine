@@ -1,7 +1,7 @@
 package coffee.machine.service.impl;
 
-import coffee.machine.dao.DaoConnection;
 import coffee.machine.dao.AccountDao;
+import coffee.machine.dao.DaoConnection;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Account;
@@ -61,9 +61,10 @@ public class AccountServiceImpl implements AccountService {
             AccountDao accountDao = daoFactory.getAccountDao(connection);
             connection.beginSerializableTransaction();
 
-            accountDao.update(accountDao.getByUserId(userId)
-                    .orElseThrow(() -> new IllegalArgumentException(CANT_FIND_ACCOUNT_OF_USER_WITH_ID + userId))
-                    .add(amountToAdd));
+            accountDao.update(
+                    accountDao.getByUserId(userId)
+                            .orElseThrow(() -> new IllegalArgumentException(CANT_FIND_ACCOUNT_OF_USER_WITH_ID + userId))
+                            .add(amountToAdd));
 
             connection.commitTransaction();
         }

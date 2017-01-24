@@ -47,6 +47,7 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
         Objects.requireNonNull(preOrder);
 
         try (DaoConnection connection = daoFactory.getConnection()) {
+
             DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
             AddonDao addonDao = daoFactory.getAddonDao(connection);
             AccountDao accountDao = daoFactory.getAccountDao(connection);
@@ -54,15 +55,18 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
 
             connection.beginSerializableTransaction();
 
+            // load actual data
             List<Drink> actualDrinks = drinkDao.getAllByIds(preOrder.getDrinkIds());
             List<Product> actualAddons = addonDao.getAllByIds(preOrder.getAddonIds());
             Order order = fillOrderWithAbsentData(preOrder, actualDrinks, actualAddons);
             Account userAccount = accountDao.getByUserId(order.getUserId())
                     .orElseThrow(IllegalStateException::new);
 
+            // perform check operations
             checkUserHaveEnoughMoney(order.getTotalCost(), userAccount.getAmount());
             decreaseActualQuantitiesByOrderQuantities(actualDrinks, actualAddons, order);
 
+            // save operation results if there is no error
             saveUpdatedDrinkQuantities(drinkDao, actualDrinks);
             saveUpdatedAddonQuantities(addonDao, actualAddons);
             performMoneyExchange(accountDao, userAccount, order.getTotalCost());
