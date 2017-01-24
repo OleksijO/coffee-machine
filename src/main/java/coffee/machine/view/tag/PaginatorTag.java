@@ -9,7 +9,7 @@ import javax.servlet.jsp.tagext.Tag;
 import java.io.IOException;
 
 /**
- * This class represent custom tag handler, which transforms tag to login form in HTML in user current locale.
+ * This class represent custom tag handler, which transforms tag to list page navigation.
  *
  * @author oleksij.onysymchuk@gmail.com
  */
