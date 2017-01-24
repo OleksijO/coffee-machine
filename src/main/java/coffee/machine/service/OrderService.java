@@ -23,5 +23,5 @@ public interface OrderService {
      * @param quantity Number of orders to be placed in result, starting form specified
      * @return Value object with list of orders of user with specified id and total count number
      */
-    Orders getAllOrdersByUser(int userId, int startFrom, int quantity);
+    Orders getOrdersByUserWithLimits(int userId, int startFrom, int quantity);
 }

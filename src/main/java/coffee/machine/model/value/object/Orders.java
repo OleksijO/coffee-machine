@@ -29,4 +29,8 @@ public class Orders {
         this.totalCount = totalCount;
         return this;
     }
+
+    public boolean isEmpty(){
+        return orders.isEmpty();
+    }
 }

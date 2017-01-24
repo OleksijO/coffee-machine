@@ -3,9 +3,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="coffee.machine.view.config.Attributes" %>
+<%@ page import="coffee.machine.view.config.Parameters" %>
 <%@ page import="coffee.machine.view.config.Pages" %>
 
-<jsp:include page="${Pages.VIEW_JSP_CLASSPATH}/fragment/header.jsp" />
+<jsp:include page="${Pages.VIEW_JSP_CLASSPATH}/fragment/header.jsp"/>
 <br>
 <fmt:message key="user.orders.history.description"/><br>
 <br>
@@ -51,8 +52,42 @@
             </td>
         </tr>
     </c:forEach>
-
 </table>
+<br><br>
 
+<c:if test="${requestScope[Attributes.CURRENT_PAGE] > 1 ||
+            requestScope[Attributes.CURRENT_PAGE] < requestScope[Attributes.LAST_PAGE]}">
 
-<jsp:include page="${Pages.VIEW_JSP_CLASSPATH}/fragment/footer.jsp" />
+        <c:choose>
+        <c:when test="${requestScope[Attributes.CURRENT_PAGE] > 1}">
+            <a href="?${Parameters.PAGE}=1">
+                <fmt:message key="paginator.first"/>
+            </a>&nbsp;
+            <a href="?${Parameters.PAGE}=${requestScope[Attributes.CURRENT_PAGE] - 1}">
+                <fmt:message key="paginator.previous"/>
+            </a>&nbsp;
+        </c:when>
+    <c:otherwise>
+        <fmt:message key="paginator.first"/>&nbsp;
+        <fmt:message key="paginator.previous"/>
+
+    </c:otherwise>
+        </c:choose>
+    <c:choose>
+        <c:when test="${requestScope[Attributes.CURRENT_PAGE] < requestScope[Attributes.LAST_PAGE]}">
+            <a href="?${Parameters.PAGE}=${requestScope[Attributes.CURRENT_PAGE] + 1}">
+                <fmt:message key="paginator.next"/>
+            </a>&nbsp;
+            <a href="?${Parameters.PAGE}=${requestScope[Attributes.LAST_PAGE]}">
+                <fmt:message key="paginator.last"/>
+            </a>
+        </c:when>
+        <c:otherwise>
+            <fmt:message key="paginator.next"/>&nbsp;
+            <fmt:message key="paginator.last"/>
+        </c:otherwise>
+    </c:choose>
+
+</c:if>
+
+<jsp:include page="${Pages.VIEW_JSP_CLASSPATH}/fragment/footer.jsp"/>

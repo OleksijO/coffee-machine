@@ -44,6 +44,8 @@ public final class Attributes {
     public static final String ADMIN_CONTACTS = "admin_contacts";
 
     public static final String BALANCE_LOW_WARN_LIMIT = "balance_warn_limit";
+    public static final String CURRENT_PAGE = "current_page";
+    public static final String LAST_PAGE = "last_page";
 
     private Attributes() {
     }

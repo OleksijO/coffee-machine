@@ -6,6 +6,7 @@ import coffee.machine.model.entity.Order;
 import coffee.machine.model.entity.product.Drink;
 import coffee.machine.model.entity.product.Product;
 import coffee.machine.model.entity.product.ProductType;
+import coffee.machine.model.value.object.Orders;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -58,7 +59,8 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     private static final String WHERE_ID = " WHERE orders.id = ?";
     private static final String SELECT_BY_ID = SELECT_ALL_ORDERS_SQL + WHERE_ID;
     private static final String LIMIT_OFFSET_QUANTITY =
-            "INNER JOIN (SELECT id FROM orders LIMIT ?,?) AS limitedOrders ON limitedOrders.id = orders.id ";
+            "INNER JOIN (SELECT id FROM orders ORDER BY date_time DESC LIMIT ?,?) AS limitedOrders " +
+                    " ON limitedOrders.id = orders.id ";
     private static final String SELECT_ALL_BY_USER_ID_WITH_LIMIT =
             SELECT_ALL_ORDERS_SQL + LIMIT_OFFSET_QUANTITY + WHERE_USER_ID + ORDER_BY_DATE_TIME_DESC;
     private static final String SELECT_COUNT_ORDERS = "SELECT COUNT(id) AS total_count FROM orders";

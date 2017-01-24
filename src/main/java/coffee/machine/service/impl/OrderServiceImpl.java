@@ -40,7 +40,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Orders getAllOrdersByUser(int userId, int startFrom, int quantity) {
+    public Orders getOrdersByUserWithLimits(int userId, int startFrom, int quantity) {
         try (DaoConnection connection = daoFactory.getConnection()) {
 
             OrderDao orderDao = daoFactory.getOrderDao(connection);
