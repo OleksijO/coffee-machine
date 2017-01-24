@@ -66,11 +66,12 @@ public class UserOrderHistoryCommand extends CommandWrapperTemplate {
     }
 
     private int calculateLastPageNumber(int totalCount) {
-        return (int) Math.ceil(1.0 * totalCount / itemsPerPage);
+        int lastPageNumber = (int) Math.ceil(1.0 * totalCount / itemsPerPage);
+        return (lastPageNumber == 0) ? FIRST : lastPageNumber;
     }
 
     private int getPageNumberFromRequest(HttpServletRequest request) {
-        if (request.getParameter(PAGE)==null){
+        if (request.getParameter(PAGE) == null) {
             return FIRST;
         }
         int requestedPageNumber = helper.getIntFromRequestByParameter(request, PAGE, ERROR_UNKNOWN);

@@ -59,11 +59,11 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     private static final String WHERE_ID = " WHERE orders.id = ?";
     private static final String SELECT_BY_ID = SELECT_ALL_ORDERS_SQL + WHERE_ID;
     private static final String LIMIT_OFFSET_QUANTITY =
-            "INNER JOIN (SELECT id FROM orders ORDER BY date_time DESC LIMIT ?,?) AS limitedOrders " +
+            "INNER JOIN (SELECT id FROM orders  WHERE user_id = ? ORDER BY date_time DESC LIMIT ?,?) AS limitedOrders " +
                     " ON limitedOrders.id = orders.id ";
     private static final String SELECT_ALL_BY_USER_ID_WITH_LIMIT =
             SELECT_ALL_ORDERS_SQL + LIMIT_OFFSET_QUANTITY + WHERE_USER_ID + ORDER_BY_DATE_TIME_DESC;
-    private static final String SELECT_COUNT_ORDERS = "SELECT COUNT(id) AS total_count FROM orders";
+    private static final String SELECT_COUNT_ORDERS = "SELECT COUNT(id) AS total_count FROM orders " + WHERE_USER_ID;
 
     private static final String FIELD_USER_ID = "user_id";
     private static final String FIELD_DATE_TIME = "date_time";
@@ -288,12 +288,15 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     @Override
     public Orders getAllByUserId(int userId, int startFrom, int quantity) {
         Orders ordersResult = new Orders();
-        try (PreparedStatement statement = connection.prepareStatement(SELECT_COUNT_ORDERS);
-             ResultSet resultSet = statement.executeQuery()) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_COUNT_ORDERS)) {
 
-            if (resultSet.next()) {
-                int count = resultSet.getInt(FIELD_TOTAL_COUNT);
-                ordersResult.setTotalCount(count);
+            statement.setInt(1, userId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int count = resultSet.getInt(FIELD_TOTAL_COUNT);
+                    ordersResult.setTotalCount(count);
+                }
             }
 
         } catch (SQLException e) {
@@ -302,10 +305,10 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
         }
         try (PreparedStatement statementOrder =
                      connection.prepareStatement(SELECT_ALL_BY_USER_ID_WITH_LIMIT)) {
-
-            statementOrder.setInt(1, startFrom);
-            statementOrder.setInt(2, quantity);
-            statementOrder.setInt(3, userId);
+            statementOrder.setInt(1, userId);
+            statementOrder.setInt(2, startFrom);
+            statementOrder.setInt(3, quantity);
+            statementOrder.setInt(4, userId);
             try (ResultSet resultSet = statementOrder.executeQuery()) {
                 List<Order> orders = parseResultSets(resultSet);
                 ordersResult.setOrders(orders);
