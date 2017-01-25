@@ -21,13 +21,13 @@
     <table cellpadding="10" cellspacing="2" border="1">
         <tr>
             <td>
-                <div align="center"><b><fmt:message key="refill.goods.name"/></b></div>
+                <div align="center"><strong><fmt:message key="refill.goods.name"/></strong></div>
             </td>
             <td>
-                <div align="center"><b><fmt:message key="refill.goods.available"/></b></div>
+                <div align="center"><strong><fmt:message key="refill.goods.available"/></strong></div>
             </td>
             <td>
-                <div align="center"><b><fmt:message key="refill.goods.add.quantity"/></b></div>
+                <div align="center"><strong><fmt:message key="refill.goods.add.quantity"/></strong></div>
             </td>
 
         </tr>
@@ -35,7 +35,7 @@
 
         <tr>
             <td colspan="3">
-                <div align="center"><b><fmt:message key="refill.base.drinks.title"/></b></div>
+                <div align="center"><strong><fmt:message key="refill.base.drinks.title"/></strong></div>
             </td>
         </tr>
         <c:forEach items="${requestScope[Attributes.DRINKS]}" var="drink">
@@ -56,7 +56,7 @@
 
         <tr>
             <td colspan="3">
-                <div align="center"><b><fmt:message key="refill.addons.title"/></b></div>
+                <div align="center"><strong><fmt:message key="refill.addons.title"/></strong></div>
             </td>
         </tr>
         <c:forEach items="${requestScope[Attributes.ADDONS]}" var="addon">

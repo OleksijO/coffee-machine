@@ -1,13 +1,11 @@
 package coffee.machine.service.impl;
 
-import coffee.machine.dao.DaoConnection;
-import coffee.machine.dao.DaoFactory;
-import coffee.machine.dao.DrinkDao;
+import coffee.machine.dao.DaoManagerFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.product.Drink;
 import coffee.machine.service.DrinkService;
+import coffee.machine.service.impl.wrapper.GenericService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,14 +13,15 @@ import java.util.List;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class DrinkServiceImpl implements DrinkService {
-    private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+public class DrinkServiceImpl extends GenericService implements DrinkService {
 
-    private DrinkServiceImpl() {
+    private DrinkServiceImpl(DaoManagerFactory daoFactory) {
+        super(daoFactory);
     }
 
     private static class InstanceHolder {
-        private static final DrinkService instance = new DrinkServiceImpl();
+        private static final DrinkService instance =
+                new DrinkServiceImpl(DaoFactoryImpl.getInstance());
     }
 
     public static DrinkService getInstance() {
@@ -31,16 +30,11 @@ public class DrinkServiceImpl implements DrinkService {
 
     @Override
     public List<Drink> getAll() {
-        try (DaoConnection connection = daoFactory.getConnection()) {
+        return executeInNonTransactionalWrapper(daoManager ->
+                daoManager
+                        .getDrinkDao()
+                        .getAll()
 
-            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-            List<Drink> drinks = drinkDao.getAll();
-            return (drinks == null) ? new ArrayList<>() : drinks;
-
-        }
-    }
-
-    public void setDaoFactory(DaoFactory daoFactory) {
-        this.daoFactory = daoFactory;
+        );
     }
 }

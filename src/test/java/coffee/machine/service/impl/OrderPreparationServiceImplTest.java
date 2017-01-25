@@ -8,6 +8,7 @@ import coffee.machine.model.entity.product.Drink;
 import coffee.machine.model.entity.product.Product;
 import coffee.machine.service.OrderPreparationService;
 import coffee.machine.service.exception.ServiceException;
+import coffee.machine.service.impl.wrapper.GenericService;
 import data.test.entity.AccountsData;
 import data.test.entity.UsersData;
 import org.junit.Before;
@@ -32,7 +33,7 @@ import static org.mockito.Mockito.when;
 public class OrderPreparationServiceImplTest {
     private static final String NO_SERVICE_EXCEPTION_HAD_BEEN_THROWN = "No service exception had been thrown.";
     @Mock
-    private DaoFactory daoFactory;
+    private DaoManagerFactory daoFactory;
     @Mock
     private DrinkDao drinkDao;
     @Mock
@@ -42,7 +43,7 @@ public class OrderPreparationServiceImplTest {
     @Mock
     private OrderDao orderDao;
     @Mock
-    private DaoConnection connection;
+    private DaoManager daoManager;
 
     private OrderPreparationService service = OrderPreparationServiceImpl.getInstance();
 
@@ -53,12 +54,12 @@ public class OrderPreparationServiceImplTest {
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        ((OrderPreparationServiceImpl) service).setDaoFactory(daoFactory);
-        when(daoFactory.getAccountDao(connection)).thenReturn(accountDao);
-        when(daoFactory.getOrderDao(connection)).thenReturn(orderDao);
-        when(daoFactory.getAddonDao(connection)).thenReturn(addonDao);
-        when(daoFactory.getDrinkDao(connection)).thenReturn(drinkDao);
-        when(daoFactory.getConnection()).thenReturn(connection);
+        ((GenericService)service).setDaoFactory(daoFactory);
+        when(daoFactory.createDaoManager()).thenReturn(daoManager);
+        when(daoManager.getAccountDao()).thenReturn(accountDao);
+        when(daoManager.getOrderDao()).thenReturn(orderDao);
+        when(daoManager.getAddonDao()).thenReturn(addonDao);
+        when(daoManager.getDrinkDao()).thenReturn(drinkDao);
         when(accountDao.getByUserId(user.getId())).thenReturn(java.util.Optional.ofNullable(userAccount));
         when(accountDao.getById(1)).thenReturn(Optional.of(coffeeMachineAccount));
         when(drinkDao.getAllByIds(getDrinkIdsSet())).thenReturn(getDrinksFromDatabaseByIds());

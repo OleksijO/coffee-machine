@@ -79,7 +79,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
             "Database error while getting all orders by user id = ";
 
     // state saving for method parseResultSet(ResultSet)
-    private ResultSet resultSet;
+    private ResultSet processingResultSet;
     private boolean resultSetHasNext = true;
     private int currentOrderId;
     private int currentDrinkId;
@@ -166,7 +166,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     }
 
     private List<Order> parseResultSets(ResultSet resultSet) throws SQLException {
-        this.resultSet = resultSet;
+        this.processingResultSet = resultSet;
         List<Order> orderList = new ArrayList<>();
         resultSetHasNext = resultSet.next();
 
@@ -182,10 +182,10 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
 
     private Order getOrderFromResultSet() throws SQLException {
         return new Order.Builder()
-                .setId(resultSet.getInt(FIELD_ID))
-                .setUserId(resultSet.getInt(FIELD_USER_ID))
-                .setDate(toDate(resultSet.getTimestamp(FIELD_DATE_TIME)))
-                .setTotalCost(resultSet.getLong(FIELD_AMOUNT))
+                .setId(processingResultSet.getInt(FIELD_ID))
+                .setUserId(processingResultSet.getInt(FIELD_USER_ID))
+                .setDate(toDate(processingResultSet.getTimestamp(FIELD_DATE_TIME)))
+                .setTotalCost(processingResultSet.getLong(FIELD_AMOUNT))
                 .build();
     }
 
@@ -203,14 +203,14 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     }
 
     private boolean isCurrentOrderIdChanged() throws SQLException {
-        return currentOrderId != resultSet.getInt(FIELD_ID);
+        return currentOrderId != processingResultSet.getInt(FIELD_ID);
     }
 
     private Drink getDrinkFromResultSet() throws SQLException {
         return new Drink.Builder()
-                .setId(resultSet.getInt(FIELD_DRINK_ID))
-                .setQuantity(resultSet.getInt(FIELD_DRINK_QUANTITY))
-                .setName(resultSet.getString(FIELD_DRINK_NAME))
+                .setId(processingResultSet.getInt(FIELD_DRINK_ID))
+                .setQuantity(processingResultSet.getInt(FIELD_DRINK_QUANTITY))
+                .setName(processingResultSet.getString(FIELD_DRINK_NAME))
                 .build();
     }
 
@@ -231,14 +231,14 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     }
 
     private boolean isCurrentDrinkIdChanged() throws SQLException {
-        return currentDrinkId != resultSet.getInt(FIELD_DRINK_ID);
+        return currentDrinkId != processingResultSet.getInt(FIELD_DRINK_ID);
     }
 
     private Product getProductFromResultSet() throws SQLException {
         return new Product.Builder(ProductType.ADDON)
-                .setId(resultSet.getInt(FIELD_ADDON_ID))
-                .setQuantity(resultSet.getInt(FIELD_ADDON_QUANTITY))
-                .setName(resultSet.getString(FIELD_ADDON_NAME))
+                .setId(processingResultSet.getInt(FIELD_ADDON_ID))
+                .setQuantity(processingResultSet.getInt(FIELD_ADDON_QUANTITY))
+                .setName(processingResultSet.getString(FIELD_ADDON_NAME))
                 .build();
     }
 
@@ -311,7 +311,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
             statementOrder.setInt(4, userId);
             try (ResultSet resultSet = statementOrder.executeQuery()) {
                 List<Order> orders = parseResultSets(resultSet);
-                ordersResult.setOrders(orders);
+                ordersResult.setOrderList(orders);
             }
 
         } catch (SQLException e) {

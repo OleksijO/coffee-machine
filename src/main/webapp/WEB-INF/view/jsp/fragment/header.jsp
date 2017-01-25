@@ -11,8 +11,10 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/favicon.ico">
     <title>
-    <fmt:message key="${requestScope[Attributes.PAGE_TITLE]}"/></title>
+    <fmt:message key="${requestScope[Attributes.PAGE_TITLE]}"/>
+    </title>
 </head>
 <body style="background: gainsboro">
 

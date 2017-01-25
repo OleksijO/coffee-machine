@@ -1,13 +1,11 @@
 package coffee.machine.service.impl;
 
-import coffee.machine.dao.DaoConnection;
-import coffee.machine.dao.AddonDao;
-import coffee.machine.dao.DaoFactory;
+import coffee.machine.dao.DaoManagerFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.product.Product;
 import coffee.machine.service.AddonService;
+import coffee.machine.service.impl.wrapper.GenericService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,14 +13,14 @@ import java.util.List;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class AddonServiceImpl implements AddonService {
-    private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+public class AddonServiceImpl extends GenericService implements AddonService {
 
-    private AddonServiceImpl() {
+    private AddonServiceImpl(DaoManagerFactory daoFactory) {
+        super(daoFactory);
     }
 
     private static class InstanceHolder {
-        private static final AddonService instance = new AddonServiceImpl();
+        private static final AddonService instance = new AddonServiceImpl(DaoFactoryImpl.getInstance());
     }
 
     public static AddonService getInstance() {
@@ -31,16 +29,15 @@ public class AddonServiceImpl implements AddonService {
 
     @Override
     public List<Product> getAll() {
-        try (DaoConnection connection = daoFactory.getConnection()) {
 
-            AddonDao addonDao = daoFactory.getAddonDao(connection);
-            List<Product> addons = addonDao.getAll();
-            return (addons == null) ? new ArrayList<>() : addons;
-
-        }
+        return executeInNonTransactionalWrapper(daoManager ->
+                daoManager
+                        .getAddonDao()
+                        .getAll()
+        );
     }
 
-    public void setDaoFactory(DaoFactory daoFactory) {
+    public void setDaoFactory(DaoManagerFactory daoFactory) {
         this.daoFactory = daoFactory;
     }
 }

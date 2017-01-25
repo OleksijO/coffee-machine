@@ -20,18 +20,18 @@
     <table cellpadding="10" cellspacing="2" border="1">
         <tr>
             <td>
-                <div align="center"><b><fmt:message key="admin.add.credit.user.full.name"/></b></div>
+                <div align="center"><strong><fmt:message key="admin.add.credit.user.full.name"/></strong></div>
             </td>
             <td>
-                <div align="center"><b><fmt:message key="login.email"/></b></div>
+                <div align="center"><strong><fmt:message key="login.email"/></strong></div>
             </td>
             <td>
-                <div align="center"><b><fmt:message key="admin.add.credit.user.balance"/>,
-                    <fmt:message key="currency"/></b></div>
+                <div align="center"><strong><fmt:message key="admin.add.credit.user.balance"/>,
+                    <fmt:message key="currency"/></strong></div>
             </td>
             <td>
-                <div align="center"><b><fmt:message key="admin.add.credit.amount.to.add"/>,
-                    <fmt:message key="currency"/></b></div>
+                <div align="center"><strong><fmt:message key="admin.add.credit.amount.to.add"/>,
+                    <fmt:message key="currency"/></strong></div>
             </td>
         </tr>
 

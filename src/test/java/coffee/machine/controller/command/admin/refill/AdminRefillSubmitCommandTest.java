@@ -1,7 +1,12 @@
 package coffee.machine.controller.command.admin.refill;
 
+import coffee.machine.config.CoffeeMachineConfig;
 import coffee.machine.controller.Command;
 import coffee.machine.controller.command.helper.LoggingHelper;
+import coffee.machine.model.entity.Account;
+import coffee.machine.service.AccountService;
+import coffee.machine.service.AddonService;
+import coffee.machine.service.DrinkService;
 import coffee.machine.service.RefillService;
 import coffee.machine.service.exception.ServiceException;
 import org.junit.Before;
@@ -17,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Optional;
 
 import static coffee.machine.controller.command.admin.refill.ProductRefillTestData.*;
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ADMIN_REFILL_NOTHING_TO_ADD;
@@ -39,6 +45,13 @@ public class AdminRefillSubmitCommandTest {
     private LoggingHelper loggingHelper;
     @Mock
     private RefillService refillService;
+    @Mock
+    private DrinkService drinkService;
+    @Mock
+    private AddonService addonService;
+    @Mock
+    private AccountService accountService;
+
 
     private Command command = new AdminRefillSubmitCommand();
 
@@ -46,9 +59,13 @@ public class AdminRefillSubmitCommandTest {
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        ((AdminRefillSubmitCommand) command).setCoffeeMachineRefillService(refillService);
+        ((AdminRefillSubmitCommand) command).setRefillService(refillService);
+        ((AdminRefillSubmitCommand) command).setAddonService(addonService);
+        ((AdminRefillSubmitCommand) command).setAccountService(accountService);
+        ((AdminRefillSubmitCommand) command).setDrinkService(drinkService);
         when(request.getSession()).thenReturn(session);
         when(request.getMethod()).thenReturn("post");
+        when(accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)).thenReturn(Optional.of(new Account()));
     }
 
     @Test

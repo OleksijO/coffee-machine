@@ -9,7 +9,7 @@
     <div align="center" style="width: 90%; padding: 2px; margin: 2px; background: lightgreen; border: 3px darkgreen">
         <table>
             <tr>
-                <td><b><fmt:message key="user.purchase.details"/>:</b></td>
+                <td><strong><fmt:message key="user.purchase.details"/>:</strong></td>
                 <td></td>
             </tr>
             <tr>
@@ -22,10 +22,10 @@
                 <td>
                     <c:forEach items="${order.drinks}" var="drink">
                         <c:if test="${drink.quantity gt 0}">
-                            <b>${drink.name}</b> [${drink.quantity}]<br>
+                            <strong>${drink.name}</strong> [${drink.quantity}]<br>
                             <c:forEach items="${drink.addons}" var="addon">
                                 <c:if test="${addon.quantity gt 0}">
-                                    <b>+</b>
+                                    <strong>+</strong>
                                     ${addon.name} [${addon.quantity}] <br>
                                 </c:if>
                             </c:forEach>

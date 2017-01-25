@@ -2,7 +2,10 @@ package coffee.machine.controller.command.user.purchase;
 
 import coffee.machine.controller.Command;
 import coffee.machine.controller.command.helper.LoggingHelper;
+import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.Order;
+import coffee.machine.service.AccountService;
+import coffee.machine.service.DrinkService;
 import coffee.machine.service.OrderPreparationService;
 import coffee.machine.service.exception.ServiceException;
 import org.junit.Before;
@@ -18,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Optional;
 
 import static coffee.machine.controller.command.user.purchase.PurchaseDrinksTestData.*;
 import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.ERROR_PREPARE_ORDER_NOTHING_TO_BUY;
@@ -41,6 +45,10 @@ public class UserPurchaseSubmitCommandTest {
     private LoggingHelper loggingHelper;
     @Mock
     private OrderPreparationService orderService;
+    @Mock
+    private DrinkService drinkService;
+    @Mock
+    private AccountService accountService;
 
     private Command command = new UserPurchaseSubmitCommand();
 
@@ -49,8 +57,13 @@ public class UserPurchaseSubmitCommandTest {
     public void init() {
         MockitoAnnotations.initMocks(this);
         ((UserPurchaseSubmitCommand) command).setCoffeeMachineOrderService(orderService);
+        ((UserPurchaseSubmitCommand) command).setDrinkService(drinkService);
+        ((UserPurchaseSubmitCommand) command).setAccountService(accountService);
         when(request.getSession()).thenReturn(session);
         when(request.getMethod()).thenReturn("post");
+        Account account = new Account();
+        account.setId(1);
+        when(accountService.getByUserId(anyInt())).thenReturn(Optional.of(account));
     }
 
     @Test

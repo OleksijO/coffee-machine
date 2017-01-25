@@ -14,53 +14,54 @@ import java.io.IOException;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class PaginatorTag implements Tag {
-    private static final int FIRST = 1;
+    private static final int FIRST_PAGE_NUMBER = 1;
 
     protected PageContext pageContext;
     /**
      * Text of first page href
      */
-    private String first;
+    private String labelFirst;
     /**
      * Text of previous page href
      */
-    private String previous;
+    private String labelPrevious;
     /**
      * Text of next page href
      */
-    private String next;
+    private String labelNext;
     /**
      * Text of last page href
      */
-    private String last;
+    private String labelLast;
     /**
      * Current page number value
      */
-    private int currentPage;
+    private int currentPageNumber;
     /**
      * Last page number value
      */
-    private int lastPage;
+    private int lastPageNumber;
 
     /**
      * Value of 'page' parameter
      */
-    private String pageParameter;
+    private String parameterPage;
 
     @Override
     public int doStartTag() throws JspException {
-        if ((currentPage == lastPage) && (currentPage == FIRST)) {
+        if ((currentPageNumber == lastPageNumber) && (currentPageNumber == FIRST_PAGE_NUMBER)) {
             return Tag.SKIP_BODY;
         }
         try {
             JspWriter out = pageContext.getOut();
             printDelimiter(out);
-            if (currentPage > FIRST) {
+            if (currentPageNumber > FIRST_PAGE_NUMBER) {
                 printReferencesForFirstAndPrevious(out);
             } else {
                 printNonReferencesFirstAndPrevious(out);
             }
-            if (currentPage < lastPage) {
+            printCurrentPage(out);
+            if (currentPageNumber < lastPageNumber) {
                 printReferencesForNextAndLast(out);
             } else {
                 printNonReferencesNextAndLast(out);
@@ -73,43 +74,49 @@ public class PaginatorTag implements Tag {
         return Tag.SKIP_BODY;
     }
 
+
+
     private void printDelimiter(JspWriter out) throws IOException {
         out.println("<hr width=\"50%\">\n");
     }
 
     private void printReferencesForFirstAndPrevious(JspWriter out) throws IOException {
         out.println("" +
-                "            <a href=\"?" + pageParameter + "=" + FIRST + "\">\n" +
-                "                " + first + "\n" +
+                "            <a href=\"?" + parameterPage + "=" + FIRST_PAGE_NUMBER + "\">\n" +
+                "                " + labelFirst + "\n" +
                 "            </a>&nbsp;\n" +
-                "            <a href=\"?" + pageParameter + "=" + (currentPage - 1) + "\">\n" +
-                "                " + previous + "\n" +
+                "            <a href=\"?" + parameterPage + "=" + (currentPageNumber - 1) + "\">\n" +
+                "                " + labelPrevious + "\n" +
                 "            </a>&nbsp;" +
                 "");
     }
 
     private void printNonReferencesFirstAndPrevious(JspWriter out) throws IOException {
         out.println("" +
-                "        " + first + "&nbsp;\n" +
-                "        " + previous + "&nbsp;\n"+
+                "        " + labelFirst + "&nbsp;\n" +
+                "        " + labelPrevious + "&nbsp;\n"+
                 "");
+    }
+
+    private void printCurrentPage(JspWriter out) throws IOException {
+        out.println("[ " + currentPageNumber + " ]&nbsp;" );
     }
 
     private void printReferencesForNextAndLast(JspWriter out) throws IOException {
         out.println("" +
-                " <a href=\"?" + pageParameter + "=" + (currentPage + 1) + "\">\n" +
-                "                " + next + "\n" +
+                " <a href=\"?" + parameterPage + "=" + (currentPageNumber + 1) + "\">\n" +
+                "                " + labelNext + "\n" +
                 "            </a>&nbsp;\n" +
-                "            <a href=\"?" + pageParameter + "=" + lastPage + "\">\n" +
-                "                " + last + "\n" +
+                "            <a href=\"?" + parameterPage + "=" + lastPageNumber + "\">\n" +
+                "                " + labelLast + "\n" +
                 "            </a>" +
                 "");
     }
 
     private void printNonReferencesNextAndLast(JspWriter out) throws IOException {
         out.println("" +
-                "        " + next + "&nbsp;\n" +
-                "        " + last +
+                "        " + labelNext + "&nbsp;\n" +
+                "        " + labelLast +
                 "");
     }
 
@@ -136,41 +143,41 @@ public class PaginatorTag implements Tag {
         return null;
     }
 
-    public void setFirst(String first) {
-        this.first = first;
+    public void setLabelFirst(String labelFirst) {
+        this.labelFirst = labelFirst;
     }
 
-    public void setPrevious(String previous) {
-        this.previous = previous;
+    public void setLabelPrevious(String labelPrevious) {
+        this.labelPrevious = labelPrevious;
     }
 
-    public void setNext(String next) {
-        this.next = next;
+    public void setLabelNext(String labelNext) {
+        this.labelNext = labelNext;
     }
 
-    public void setLast(String last) {
-        this.last = last;
+    public void setLabelLast(String labelLast) {
+        this.labelLast = labelLast;
     }
 
-    public void setCurrentPage(String currentPage) throws JspException {
+    public void setCurrentPageNumber(String currentPageNumber) throws JspException {
         try {
-            this.currentPage = Integer.parseInt(currentPage);
+            this.currentPageNumber = Integer.parseInt(currentPageNumber);
         } catch (NumberFormatException e) {
             Logger.getLogger(PaginatorTag.class).error(e);
             throw new JspException(e);
         }
     }
 
-    public void setLastPage(String lastPage) throws JspException {
+    public void setLastPageNumber(String lastPageNumber) throws JspException {
         try {
-            this.lastPage = Integer.parseInt(lastPage);
+            this.lastPageNumber = Integer.parseInt(lastPageNumber);
         } catch (NumberFormatException e) {
             Logger.getLogger(PaginatorTag.class).error(e);
             throw new JspException(e);
         }
     }
 
-    public void setPageParameter(String pageParameter) {
-        this.pageParameter = pageParameter;
+    public void setParameterPage(String parameterPage) {
+        this.parameterPage = parameterPage;
     }
 }

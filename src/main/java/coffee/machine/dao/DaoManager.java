@@ -1,7 +1,8 @@
 package coffee.machine.dao;
 
 /**
- * This class represents abstract connection.
+ * This class represents DaoManager pattern.
+ * It encapsulates native connection and DAO factory.
  *
  * It should consider transaction's rollback necessary in close method.
  * It MUST call ROLLBACK IF TRANSACTION has been begun
@@ -9,7 +10,7 @@ package coffee.machine.dao;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public interface DaoConnection extends AutoCloseable {
+public interface DaoManager extends AutoCloseable {
 
 	/**
 	 * Defines begin of transaction
@@ -40,5 +41,31 @@ public interface DaoConnection extends AutoCloseable {
 	 */
 	@Override
 	void close();
+
+	/**
+	 * @return user entity DAO
+	 */
+	UserDao getUserDao();
+
+	/**
+	 * @return drink entity DAO
+	 */
+	DrinkDao getDrinkDao();
+
+	/**
+	 * @return addon entity DAO
+	 */
+	AddonDao getAddonDao();
+
+	/**
+	 * @return account entity DAO
+	 */
+	AccountDao getAccountDao();
+
+	/**
+	 * @return order entity DAO
+	 */
+	OrderDao getOrderDao();
+
 
 }

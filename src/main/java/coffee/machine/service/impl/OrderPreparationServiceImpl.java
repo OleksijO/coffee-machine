@@ -9,19 +9,21 @@ import coffee.machine.model.entity.product.Drink;
 import coffee.machine.model.entity.product.Product;
 import coffee.machine.service.OrderPreparationService;
 import coffee.machine.service.exception.ServiceException;
+import coffee.machine.service.impl.wrapper.GenericService;
 
 import java.util.List;
 import java.util.Objects;
 
 import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFF;
-import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.*;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_PREPARE_ORDER_PRODUCT_NO_LONGER_AVAILABLE;
+import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_PREPARE_ORDER_USER_HAS_NOT_ENOUGH_MONEY;
 
 /**
  * This class is an implementation of OrderPreparationService
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class OrderPreparationServiceImpl implements OrderPreparationService {
+public class OrderPreparationServiceImpl extends GenericService implements OrderPreparationService {
     private static final String LOG_MESSAGE_NOT_ENOUGH_FORMAT =
             "There is not enough product id=%d (%s). Ordered = %d, available = %d";
     private static final String LOG_MESSAGE_NOT_ENOUGH_MONEY_FORMAT =
@@ -29,13 +31,14 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
 
     private static final int COFFEE_MACHINE_ACCOUNT_ID = CoffeeMachineConfig.ACCOUNT_ID;
 
-    private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
 
-    private OrderPreparationServiceImpl() {
+    private OrderPreparationServiceImpl(DaoManagerFactory daoFactory) {
+        super(daoFactory);
     }
 
     private static class InstanceHolder {
-        private static final OrderPreparationService instance = new OrderPreparationServiceImpl();
+        private static final OrderPreparationService instance =
+                new OrderPreparationServiceImpl(DaoFactoryImpl.getInstance());
     }
 
     public static OrderPreparationService getInstance() {
@@ -46,14 +49,12 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
     public Order prepareOrder(Order preOrder) {
         Objects.requireNonNull(preOrder);
 
-        try (DaoConnection connection = daoFactory.getConnection()) {
+        return executeInSerializableTransactionalWrapper(daoManager -> {
 
-            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-            AddonDao addonDao = daoFactory.getAddonDao(connection);
-            AccountDao accountDao = daoFactory.getAccountDao(connection);
-            OrderDao orderDao = daoFactory.getOrderDao(connection);
-
-            connection.beginSerializableTransaction();
+            DrinkDao drinkDao = daoManager.getDrinkDao();
+            AddonDao addonDao = daoManager.getAddonDao();
+            AccountDao accountDao = daoManager.getAccountDao();
+            OrderDao orderDao = daoManager.getOrderDao();
 
             // load actual data
             List<Drink> actualDrinks = drinkDao.getAllByIds(preOrder.getDrinkIds());
@@ -67,14 +68,13 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
             decreaseActualQuantitiesByOrderQuantities(actualDrinks, actualAddons, order);
 
             // save operation results if there is no error
-            saveUpdatedDrinkQuantities(drinkDao, actualDrinks);
-            saveUpdatedAddonQuantities(addonDao, actualAddons);
+            updateDrinkQuantities(drinkDao, actualDrinks);
+            updateAddonQuantities(addonDao, actualAddons);
             performMoneyExchange(accountDao, userAccount, order.getTotalCost());
             saveOrder(orderDao, order);
 
-            connection.commitTransaction();
             return order;
-        }
+        });
 
     }
 
@@ -95,7 +95,7 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
                     .addAdditionalMessage(realOrderCost)
                     .addLogMessage(
                             String.format(LOG_MESSAGE_NOT_ENOUGH_MONEY_FORMAT,
-                                    userAccountAmount*DB_MONEY_COEFF,
+                                    userAccountAmount * DB_MONEY_COEFF,
                                     realOrderCost));
         }
     }
@@ -143,11 +143,11 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
         }
     }
 
-    private void saveUpdatedDrinkQuantities(DrinkDao drinkDao, List<Drink> actualDrinks) {
+    private void updateDrinkQuantities(DrinkDao drinkDao, List<Drink> actualDrinks) {
         drinkDao.updateQuantityAllInList(actualDrinks);
     }
 
-    private void saveUpdatedAddonQuantities(AddonDao addonDao, List<Product> actualAddons) {
+    private void updateAddonQuantities(AddonDao addonDao, List<Product> actualAddons) {
         addonDao.updateQuantityAllInList(actualAddons);
     }
 
@@ -164,7 +164,7 @@ public class OrderPreparationServiceImpl implements OrderPreparationService {
         orderDao.insert(order);
     }
 
-    public void setDaoFactory(DaoFactory daoFactory) {
+    public void setDaoFactory(DaoManagerFactory daoFactory) {
         this.daoFactory = daoFactory;
     }
 }
