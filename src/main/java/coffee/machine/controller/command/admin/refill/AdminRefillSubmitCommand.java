@@ -46,10 +46,6 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
 
     private static final String PRODUCTS_ADDED = "Coffee-machine was refilled by admin id=%s. %s";
 
-    private final DrinkService drinkService = DrinkServiceImpl.getInstance();
-    private final AddonService addonService = AddonServiceImpl.getInstance();
-    private final AccountService accountService = AccountServiceImpl.getInstance();
-
     private final Pattern PATTERN_PRODUCT = Pattern.compile(RegExp.REGEXP_ANY_PRODUCT);
     private final Pattern patternDrink = Pattern.compile(RegExp.REGEXP_DRINK_PARAM);
     private final Pattern patternAddon = Pattern.compile(RegExp.REGEXP_ADDON_PARAM);
@@ -57,7 +53,10 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
     private RequestDataExtractor dataExtractorHelper = new RequestDataExtractor();
     private Validator<ProductsReceipt> productsReceiptValidator = new ProductsReceiptValidator();
 
-    private RefillService coffeeMachine = RefillServiceImpl.getInstance();
+    private RefillService refillService = RefillServiceImpl.getInstance();
+    private DrinkService drinkService = DrinkServiceImpl.getInstance();
+    private AddonService addonService = AddonServiceImpl.getInstance();
+    private AccountService accountService = AccountServiceImpl.getInstance();
 
     public AdminRefillSubmitCommand() {
         super(ADMIN_REFILL_PAGE);
@@ -89,7 +88,7 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
             return ADMIN_REFILL_PAGE;
         }
 
-        coffeeMachine.refill(receipt);
+        refillService.refill(receipt);
         placeMessageToRequest(request);
         logRefillingDetails(request, receipt);
         clearFormData(request);
@@ -167,11 +166,24 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
         request.removeAttribute(PREVIOUS_VALUES_TABLE);
     }
 
-    public void setCoffeeMachineRefillService(RefillService coffeeMachine) {
-        this.coffeeMachine = coffeeMachine;
+    void setRefillService(RefillService coffeeMachine) {
+        this.refillService = coffeeMachine;
+    }
+
+    void setDrinkService(DrinkService drinkService) {
+        this.drinkService = drinkService;
+    }
+
+    void setAddonService(AddonService addonService) {
+        this.addonService = addonService;
+    }
+
+    void setAccountService(AccountService accountService) {
+        this.accountService = accountService;
     }
 
     public void setProductsReceiptValidator(Validator<ProductsReceipt> productsReceiptValidator) {
         this.productsReceiptValidator = productsReceiptValidator;
     }
+
 }

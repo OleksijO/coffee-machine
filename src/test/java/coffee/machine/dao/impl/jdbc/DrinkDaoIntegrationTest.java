@@ -1,6 +1,6 @@
 package coffee.machine.dao.impl.jdbc;
 
-import coffee.machine.dao.DaoConnection;
+import coffee.machine.dao.DaoManager;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.DrinkDao;
 import coffee.machine.model.entity.product.Drink;
@@ -25,7 +25,7 @@ import static org.junit.Assert.assertFalse;
 public class DrinkDaoIntegrationTest {
     private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private List<Drink> testDrinks = new ArrayList<>();
-    private DaoConnection connection;
+    private DaoManager daoManager;
     private DrinkDao drinkDao;
 
     {
@@ -41,15 +41,15 @@ public class DrinkDaoIntegrationTest {
 
     @Before
     public void init() {
-        connection = daoFactory.getConnection();
-        drinkDao = daoFactory.getDrinkDao(connection);
-        connection.beginTransaction();
+        daoManager = daoFactory.createDaoManager();
+        drinkDao = daoManager.getDrinkDao();
+        daoManager.beginTransaction();
     }
 
     @After
     public void tearDown() {
-        connection.commitTransaction();
-        connection.close();
+        daoManager.commitTransaction();
+        daoManager.close();
     }
 
     @Test

@@ -1,6 +1,6 @@
 package coffee.machine.service.impl;
 
-import coffee.machine.dao.DaoConnection;
+import coffee.machine.dao.DaoManager;
 import coffee.machine.dao.AddonDao;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.DrinkDao;
@@ -38,7 +38,7 @@ public class RefillServiceImplTest {
     private AddonDao addonDao;
 
     @Mock
-    private DaoConnection connection;
+    private DaoManager daoManager;
     @Captor
     private ArgumentCaptor<Account> accountCaptor;
     @Captor
@@ -54,17 +54,15 @@ public class RefillServiceImplTest {
     public void init() {
         MockitoAnnotations.initMocks(this);
 
-        when(daoFactory.getDrinkDao(connection)).thenReturn(drinkDao);
-        when(daoFactory.getAddonDao(connection)).thenReturn(addonDao);
-        when(daoFactory.getConnection()).thenReturn(connection);
-
+        when(daoFactory.createDaoManager()).thenReturn(daoManager);
+        when(daoManager.getDrinkDao()).thenReturn(drinkDao);
+        when(daoManager.getAddonDao()).thenReturn(addonDao);
 
         service = RefillServiceImpl.getInstance();
         ((RefillServiceImpl) service).setDaoFactory(daoFactory);
 
         drinksToUpdate = new ArrayList<>();
         addonsToUpdate = new ArrayList<>();
-
     }
 
 

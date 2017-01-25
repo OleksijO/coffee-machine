@@ -1,4 +1,4 @@
-package coffee.machine.service.impl.lambda.based.wrapper;
+package coffee.machine.service.impl.wrapper;
 
 import coffee.machine.dao.DaoFactory;
 

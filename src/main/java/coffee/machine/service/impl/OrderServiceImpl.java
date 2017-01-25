@@ -1,12 +1,11 @@
 package coffee.machine.service.impl;
 
-import coffee.machine.dao.DaoConnection;
 import coffee.machine.dao.DaoFactory;
-import coffee.machine.dao.OrderDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Order;
 import coffee.machine.model.value.object.Orders;
 import coffee.machine.service.OrderService;
+import coffee.machine.service.impl.wrapper.GenericService;
 
 import java.util.List;
 
@@ -15,14 +14,14 @@ import java.util.List;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class OrderServiceImpl implements OrderService {
-    private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+public class OrderServiceImpl extends GenericService implements OrderService {
 
-    private OrderServiceImpl() {
+    private OrderServiceImpl(DaoFactory daoFactory) {
+        super(daoFactory);
     }
 
     private static class InstanceHolder {
-        private static final OrderService instance = new OrderServiceImpl();
+        private static final OrderService instance = new OrderServiceImpl(DaoFactoryImpl.getInstance());
     }
 
     public static OrderService getInstance() {
@@ -31,25 +30,22 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllByUserId(int userId) {
-        try (DaoConnection connection = daoFactory.getConnection()) {
 
-            OrderDao orderDao = daoFactory.getOrderDao(connection);
-            return orderDao.getAllByUserId(userId);
-
-        }
+        return executeInNonTransactionalWrapper(daoManager ->
+                daoManager
+                        .getOrderDao()
+                        .getAllByUserId(userId)
+        );
     }
 
     @Override
     public Orders getOrdersByUserWithLimits(int userId, int startFrom, int quantity) {
-        try (DaoConnection connection = daoFactory.getConnection()) {
 
-            OrderDao orderDao = daoFactory.getOrderDao(connection);
-            return orderDao.getAllByUserId(userId, startFrom, quantity);
-
-        }
+        return executeInNonTransactionalWrapper(daoManager ->
+                daoManager
+                        .getOrderDao()
+                        .getAllByUserId(userId, startFrom, quantity)
+        );
     }
 
-    public void setDaoFactory(DaoFactory daoFactory) {
-        this.daoFactory = daoFactory;
-    }
 }

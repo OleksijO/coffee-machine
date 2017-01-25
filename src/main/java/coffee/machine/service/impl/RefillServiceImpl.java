@@ -1,7 +1,7 @@
 package coffee.machine.service.impl;
 
-import coffee.machine.dao.DaoConnection;
 import coffee.machine.dao.AddonDao;
+import coffee.machine.dao.DaoManager;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.DrinkDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
@@ -9,6 +9,7 @@ import coffee.machine.model.entity.product.Drink;
 import coffee.machine.model.entity.product.Product;
 import coffee.machine.model.value.object.ProductsReceipt;
 import coffee.machine.service.RefillService;
+import coffee.machine.service.impl.wrapper.GenericService;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,14 +19,14 @@ import java.util.Objects;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class RefillServiceImpl implements RefillService {
-    private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+public class RefillServiceImpl extends GenericService implements RefillService {
 
-    private RefillServiceImpl() {
+    private RefillServiceImpl(DaoFactory daoFactory) {
+        super(daoFactory);
     }
 
     private static class InstanceHolder {
-        private static final RefillService instance = new RefillServiceImpl();
+        private static final RefillService instance = new RefillServiceImpl(DaoFactoryImpl.getInstance());
     }
 
     public static RefillService getInstance() {
@@ -37,24 +38,19 @@ public class RefillServiceImpl implements RefillService {
 
         Objects.requireNonNull(receipt);
 
-        try (DaoConnection connection = daoFactory.getConnection()) {
+        executeInSerializableTransactionalVoidWrapper(daoManager -> {
 
-            DrinkDao drinkDao = daoFactory.getDrinkDao(connection);
-            AddonDao addonDao = daoFactory.getAddonDao(connection);
+            refillDrinks(receipt, daoManager);
+            refillAddons(receipt, daoManager);
 
-            connection.beginSerializableTransaction();
-
-            refillDrinks(receipt, drinkDao);
-            refillAddons(receipt, addonDao);
-
-            connection.commitTransaction();
-        }
+        });
     }
 
-    private void refillDrinks(ProductsReceipt receipt, DrinkDao drinkDao) {
-        if (receipt.getDrinks().isEmpty()){
+    private void refillDrinks(ProductsReceipt receipt, DaoManager daoManager) {
+        if (receipt.getDrinks().isEmpty()) {
             return;
         }
+        DrinkDao drinkDao = daoManager.getDrinkDao();
         List<Drink> actualDrinks = drinkDao.getAllFromList(receipt.getDrinks());
         incrementQuantitiesInListByAnotherProductList(actualDrinks, receipt.getDrinks());
         drinkDao.updateQuantityAllInList(actualDrinks);
@@ -71,10 +67,11 @@ public class RefillServiceImpl implements RefillService {
         }
     }
 
-    private void refillAddons(ProductsReceipt receipt, AddonDao addonDao) {
-        if (receipt.getAddons().isEmpty()){
+    private void refillAddons(ProductsReceipt receipt, DaoManager daoManager) {
+        if (receipt.getAddons().isEmpty()) {
             return;
         }
+        AddonDao addonDao = daoManager.getAddonDao();
         List<Product> actualAddons = addonDao.getAllFromList(receipt.getAddons());
         incrementQuantitiesInListByAnotherProductList(actualAddons, receipt.getAddons());
         addonDao.updateQuantityAllInList(actualAddons);

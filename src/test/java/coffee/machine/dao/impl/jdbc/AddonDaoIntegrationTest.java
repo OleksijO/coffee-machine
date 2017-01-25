@@ -1,7 +1,7 @@
 package coffee.machine.dao.impl.jdbc;
 
 import coffee.machine.dao.AddonDao;
-import coffee.machine.dao.DaoConnection;
+import coffee.machine.dao.DaoManager;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.model.entity.product.Product;
 import data.test.entity.AddonsData;
@@ -26,7 +26,7 @@ import static org.junit.Assert.assertFalse;
 public class AddonDaoIntegrationTest {
     private final DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private final List<Product> testAddons = new ArrayList<>();
-    private DaoConnection connection;
+    private DaoManager daoManager;
     private AddonDao addonDao;
 
     {
@@ -43,15 +43,15 @@ public class AddonDaoIntegrationTest {
 
     @Before
     public void init() {
-        connection = daoFactory.getConnection();
-        addonDao = daoFactory.getAddonDao(connection);
-        connection.beginTransaction();
+        daoManager = daoFactory.createDaoManager();
+        addonDao = daoManager.getAddonDao();
+        daoManager.beginTransaction();
     }
 
     @After
     public void tearDown() {
-        connection.commitTransaction();
-        connection.close();
+        daoManager.commitTransaction();
+        daoManager.close();
     }
 
     @Test

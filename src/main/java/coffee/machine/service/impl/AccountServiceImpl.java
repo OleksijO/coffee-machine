@@ -1,12 +1,12 @@
 package coffee.machine.service.impl;
 
-import coffee.machine.dao.DaoConnection;
 import coffee.machine.dao.AccountDao;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.value.object.CreditsReceipt;
 import coffee.machine.service.AccountService;
+import coffee.machine.service.impl.wrapper.GenericService;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -16,16 +16,16 @@ import java.util.Optional;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class AccountServiceImpl implements AccountService {
+public class AccountServiceImpl extends GenericService implements AccountService {
     private static final String CANT_FIND_ACCOUNT_OF_USER_WITH_ID = "Can't find account of user with id = ";
 
-    private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
-
-    private AccountServiceImpl() {
+    private AccountServiceImpl(DaoFactory daoFactory) {
+        super(daoFactory);
     }
 
     private static class InstanceHolder {
-        private static final AccountService instance = new AccountServiceImpl();
+        private static final AccountService instance =
+                new AccountServiceImpl(DaoFactoryImpl.getInstance());
     }
 
     public static AccountService getInstance() {
@@ -34,20 +34,20 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Optional<Account> getById(int id) {
-        try (DaoConnection connection = daoFactory.getConnection()) {
-
-            AccountDao accountDao = daoFactory.getAccountDao(connection);
-            return accountDao.getById(id);
-        }
+        return executeInNonTransactionalWrapper(daoManager ->
+                daoManager
+                        .getAccountDao()
+                        .getById(id)
+        );
     }
 
     @Override
     public Optional<Account> getByUserId(int userId) {
-        try (DaoConnection connection = daoFactory.getConnection()) {
-
-            AccountDao accountDao = daoFactory.getAccountDao(connection);
-            return accountDao.getByUserId(userId);
-        }
+        return executeInNonTransactionalWrapper(daoManager ->
+                daoManager
+                        .getAccountDao()
+                        .getByUserId(userId)
+        );
     }
 
     @Override
@@ -56,17 +56,17 @@ public class AccountServiceImpl implements AccountService {
         long amountToAdd = receipt.getAmount();
         int userId = receipt.getUserId();
 
-        try (DaoConnection connection = daoFactory.getConnection()) {
+        executeInSerializableTransactionalVoidWrapper(daoManager -> {
 
-            AccountDao accountDao = daoFactory.getAccountDao(connection);
-            connection.beginSerializableTransaction();
+            AccountDao accountDao = daoManager.getAccountDao();
+            accountDao.update(
+                    accountDao
+                            .getByUserId(userId)
+                            .orElseThrow(() ->
+                                    new IllegalArgumentException(CANT_FIND_ACCOUNT_OF_USER_WITH_ID + userId))
+                            .add(amountToAdd));
 
-            accountDao.update(accountDao.getByUserId(userId)
-                    .orElseThrow(() -> new IllegalArgumentException(CANT_FIND_ACCOUNT_OF_USER_WITH_ID + userId))
-                    .add(amountToAdd));
-
-            connection.commitTransaction();
-        }
+        });
 
     }
 }

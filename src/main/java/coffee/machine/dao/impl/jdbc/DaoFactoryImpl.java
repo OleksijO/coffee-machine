@@ -16,7 +16,7 @@ public class DaoFactoryImpl implements DaoFactory {
     private static final String SQL_CONNECTION_CAN_NOT_BE_NULL =
             "SQL connection can not be null. Datasource returned no connection.";
     private static final String CONNECTION_CAN_NOT_BE_NULL = "Connection can not be null.";
-    private static final String CONNECTION_IS_NOT_AN_ABSTRACT_CONNECTION_IMPL_FOR_JDBC = "Connection is not an DaoConnectionImpl for JDBC.";
+    private static final String CONNECTION_IS_NOT_AN_ABSTRACT_CONNECTION_IMPL_FOR_JDBC = "Connection is not an DaoManagerImpl for JDBC.";
 
     private DataSource dataSource = JdbcPooledDataSource.getInstance();
 
@@ -32,7 +32,7 @@ public class DaoFactoryImpl implements DaoFactory {
     }
 
     @Override
-    public DaoConnection getConnection() {
+    public DaoManager createDaoManager() {
         Connection connection;
         try {
             connection = dataSource.getConnection();
@@ -45,56 +45,27 @@ public class DaoFactoryImpl implements DaoFactory {
                     .addLogMessage(SQL_CONNECTION_CAN_NOT_BE_NULL);
         }
 
-        return new DaoConnectionImpl(connection);
+        return new DaoManagerImpl(connection, this);
     }
 
-    @Override
-    public UserDao getUserDao(DaoConnection connection) {
-        checkConnection(connection);
-        Connection sqlConnection = getSqlConnection(connection);
-        return new UserDaoImpl(sqlConnection);
+    UserDao getUserDao(Connection connection) {
+        return new UserDaoImpl(connection);
     }
 
-    private Connection getSqlConnection(DaoConnection connection) {
-
-        return ((DaoConnectionImpl) connection).getSqlConnection();
+    DrinkDao getDrinkDao(Connection connection) {
+        return new DrinkDaoImpl(connection);
     }
 
-    private void checkConnection(DaoConnection connection) {
-
-        if (connection == null) {
-            throw new DaoException()
-                    .addLogMessage(CONNECTION_CAN_NOT_BE_NULL);
-        }
-        if (!(connection instanceof DaoConnectionImpl)) {
-            throw new DaoException()
-                    .addLogMessage(CONNECTION_IS_NOT_AN_ABSTRACT_CONNECTION_IMPL_FOR_JDBC);
-        }
-
+    AddonDao getAddonDao(Connection connection) {
+        return new AddonDaoImpl(connection);
     }
 
-    @Override
-    public DrinkDao getDrinkDao(DaoConnection connection) {
-        checkConnection(connection);
-        return new DrinkDaoImpl(getSqlConnection(connection));
+    AccountDao getAccountDao(Connection connection) {
+        return new AccountDaoImpl(connection);
     }
 
-    @Override
-    public AddonDao getAddonDao(DaoConnection connection) {
-        checkConnection(connection);
-        return new AddonDaoImpl(getSqlConnection(connection));
-    }
-
-    @Override
-    public AccountDao getAccountDao(DaoConnection connection) {
-        checkConnection(connection);
-        return new AccountDaoImpl(getSqlConnection(connection));
-    }
-
-    @Override
-    public OrderDao getOrderDao(DaoConnection connection) {
-        checkConnection(connection);
-        return new OrderDaoImpl(getSqlConnection(connection));
+    OrderDao getOrderDao(Connection connection) {
+        return new OrderDaoImpl(connection);
     }
 
     public void setDataSource(DataSource dataSource) {

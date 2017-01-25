@@ -1,7 +1,7 @@
 package coffee.machine.dao.impl.jdbc;
 
 import coffee.machine.dao.AccountDao;
-import coffee.machine.dao.DaoConnection;
+import coffee.machine.dao.DaoManager;
 import coffee.machine.dao.DaoFactory;
 import coffee.machine.model.entity.Account;
 import data.test.entity.AccountsData;
@@ -26,7 +26,7 @@ import static org.junit.Assert.assertFalse;
 public class AccountDaoIntegrationTest {
     private final DaoFactory daoFactory = DaoFactoryImpl.getInstance();
     private final List<Account> testAccounts = new ArrayList<>();
-    private DaoConnection connection;
+    private DaoManager daoManager;
     private AccountDao accountDao;
 
     {
@@ -42,15 +42,15 @@ public class AccountDaoIntegrationTest {
 
     @Before
     public void init() {
-        connection = daoFactory.getConnection();
-        accountDao = daoFactory.getAccountDao(connection);
-        connection.beginTransaction();
+        daoManager = daoFactory.createDaoManager();
+        accountDao = daoManager.getAccountDao();
+        daoManager.beginTransaction();
     }
 
     @After
     public void tearDown() {
-        connection.commitTransaction();
-        connection.close();
+        daoManager.commitTransaction();
+        daoManager.close();
     }
 
     @Test

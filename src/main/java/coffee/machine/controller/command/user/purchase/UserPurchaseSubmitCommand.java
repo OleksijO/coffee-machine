@@ -168,4 +168,12 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
     public void setCoffeeMachineOrderService(OrderPreparationService coffeeMachine) {
         this.coffeeMachine = coffeeMachine;
     }
+
+    public void setDrinkService(DrinkService drinkService) {
+        this.drinkService = drinkService;
+    }
+
+    public void setAccountService(AccountService accountService) {
+        this.accountService = accountService;
+    }
 }
