@@ -1,14 +1,16 @@
 package coffee.machine.service.impl.wrapper;
 
-import coffee.machine.dao.DaoFactory;
+import coffee.machine.dao.DaoManagerFactory;
 
 /**
- * Created by oleksij.onysymchuk@gmail on 24.01.2017.
+ * This class provides methods for wrapping service methods to reduce code duplication
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
-public class GenericService {
-    protected DaoFactory daoFactory;
+public abstract class GenericService {
+    protected DaoManagerFactory daoFactory;
 
-    protected GenericService(DaoFactory daoFactory) {
+    protected GenericService(DaoManagerFactory daoFactory) {
         this.daoFactory = daoFactory;
     }
 
@@ -28,7 +30,7 @@ public class GenericService {
         wrapper.execute(daoFactory);
     }
 
-    public void setDaoFactory(DaoFactory daoFactory) {
+    public void setDaoFactory(DaoManagerFactory daoFactory) {
         this.daoFactory = daoFactory;
     }
 }

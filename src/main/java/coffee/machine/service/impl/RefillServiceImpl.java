@@ -2,7 +2,7 @@ package coffee.machine.service.impl;
 
 import coffee.machine.dao.AddonDao;
 import coffee.machine.dao.DaoManager;
-import coffee.machine.dao.DaoFactory;
+import coffee.machine.dao.DaoManagerFactory;
 import coffee.machine.dao.DrinkDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.product.Drink;
@@ -21,7 +21,7 @@ import java.util.Objects;
  */
 public class RefillServiceImpl extends GenericService implements RefillService {
 
-    private RefillServiceImpl(DaoFactory daoFactory) {
+    private RefillServiceImpl(DaoManagerFactory daoFactory) {
         super(daoFactory);
     }
 
@@ -77,7 +77,7 @@ public class RefillServiceImpl extends GenericService implements RefillService {
         addonDao.updateQuantityAllInList(actualAddons);
     }
 
-    public void setDaoFactory(DaoFactory daoFactory) {
+    public void setDaoFactory(DaoManagerFactory daoFactory) {
         this.daoFactory = daoFactory;
     }
 }

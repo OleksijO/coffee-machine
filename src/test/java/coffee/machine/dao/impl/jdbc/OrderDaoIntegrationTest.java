@@ -1,7 +1,7 @@
 package coffee.machine.dao.impl.jdbc;
 
 import coffee.machine.dao.DaoManager;
-import coffee.machine.dao.DaoFactory;
+import coffee.machine.dao.DaoManagerFactory;
 import coffee.machine.dao.OrderDao;
 import coffee.machine.model.entity.Order;
 import data.test.entity.OrdersData;
@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class OrderDaoIntegrationTest {
-    private DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+    private DaoManagerFactory daoFactory = DaoFactoryImpl.getInstance();
     private List<Order> testOrders = new ArrayList<>();
     private DaoManager daoManager;
     private OrderDao orderDao;

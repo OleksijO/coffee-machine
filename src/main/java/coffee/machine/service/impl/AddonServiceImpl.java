@@ -1,6 +1,6 @@
 package coffee.machine.service.impl;
 
-import coffee.machine.dao.DaoFactory;
+import coffee.machine.dao.DaoManagerFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.product.Product;
 import coffee.machine.service.AddonService;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class AddonServiceImpl extends GenericService implements AddonService {
 
-    private AddonServiceImpl(DaoFactory daoFactory) {
+    private AddonServiceImpl(DaoManagerFactory daoFactory) {
         super(daoFactory);
     }
 
@@ -37,7 +37,7 @@ public class AddonServiceImpl extends GenericService implements AddonService {
         );
     }
 
-    public void setDaoFactory(DaoFactory daoFactory) {
+    public void setDaoFactory(DaoManagerFactory daoFactory) {
         this.daoFactory = daoFactory;
     }
 }

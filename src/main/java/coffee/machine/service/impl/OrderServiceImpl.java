@@ -1,6 +1,6 @@
 package coffee.machine.service.impl;
 
-import coffee.machine.dao.DaoFactory;
+import coffee.machine.dao.DaoManagerFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Order;
 import coffee.machine.model.value.object.Orders;
@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class OrderServiceImpl extends GenericService implements OrderService {
 
-    private OrderServiceImpl(DaoFactory daoFactory) {
+    private OrderServiceImpl(DaoManagerFactory daoFactory) {
         super(daoFactory);
     }
 

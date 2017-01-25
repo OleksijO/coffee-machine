@@ -42,10 +42,10 @@
                 <div align="left">
                     <c:forEach items="${order.drinks}" var="drink">
                         <c:if test="${drink.quantity gt 0}">
-                            <b>${drink.name}</b> [${drink.quantity}]<br>
+                            <strong>${drink.name}</strong> [${drink.quantity}]<br>
                             <c:forEach items="${drink.addons}" var="addon">
                                 <c:if test="${addon.quantity gt 0}">
-                                    <b>+</b>
+                                    <strong>+</strong>
                                     ${addon.name} [${addon.quantity}] <br>
                                 </c:if>
                             </c:forEach>

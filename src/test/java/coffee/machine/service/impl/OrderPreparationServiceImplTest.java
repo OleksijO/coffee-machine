@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 public class OrderPreparationServiceImplTest {
     private static final String NO_SERVICE_EXCEPTION_HAD_BEEN_THROWN = "No service exception had been thrown.";
     @Mock
-    private DaoFactory daoFactory;
+    private DaoManagerFactory daoFactory;
     @Mock
     private DrinkDao drinkDao;
     @Mock

@@ -2,7 +2,7 @@ package coffee.machine.service.impl;
 
 import coffee.machine.dao.DaoManager;
 import coffee.machine.dao.AddonDao;
-import coffee.machine.dao.DaoFactory;
+import coffee.machine.dao.DaoManagerFactory;
 import coffee.machine.dao.DrinkDao;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.entity.product.Drink;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 public class RefillServiceImplTest {
 
     @Mock
-    private DaoFactory daoFactory;
+    private DaoManagerFactory daoFactory;
     @Mock
     private DrinkDao drinkDao;
     @Mock

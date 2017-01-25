@@ -30,21 +30,21 @@
         <tr>
 
             <td>
-                <div align="center"><b><fmt:message key="purchase.drink.name"/></b></div>
+                <div align="center"><strong><fmt:message key="purchase.drink.name"/></strong></div>
             </td>
             <td>
-                <div align="center"><b><fmt:message key="purchase.drink.price"/>, <fmt:message key="currency"/></b>
+                <div align="center"><strong><fmt:message key="purchase.drink.price"/>, <fmt:message key="currency"/></strong>
                 </div>
             </td>
             <td>
-                <div align="center"><b><fmt:message key="purchase.drink.quantity"/></b></div>
+                <div align="center"><strong><fmt:message key="purchase.drink.quantity"/></strong></div>
             </td>
         </tr>
 
         <c:forEach items="${requestScope[Attributes.DRINKS]}" var="drink">
             <c:if test="${drink.quantity gt 0}">
                 <tr>
-                    <td><b>${drink.name}</b>
+                    <td><strong>${drink.name}</strong>
                         <table>
                             <c:set var="addons" value="${drink.addons}"/>
 
@@ -53,7 +53,7 @@
                                     <tr>
                                         <td>
                                         <td>
-                                            <b>+</b>
+                                            <strong>+</strong>
                                                 ${addon.name}</td>
                                         <td>(+<fmt:formatNumber value="${addon.realPrice}"
                                                                 type="number"

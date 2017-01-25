@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * This class represents common methods for all DAOs, defines logging methods
+ * This class represents common methods for all DAOs
  *
  * @param <T> Entity class
  * @author oleksij.onysymchuk@gmail.com

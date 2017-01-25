@@ -1,7 +1,7 @@
 package coffee.machine.service.impl;
 
 import coffee.machine.dao.AccountDao;
-import coffee.machine.dao.DaoFactory;
+import coffee.machine.dao.DaoManagerFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.value.object.CreditsReceipt;
@@ -19,7 +19,7 @@ import java.util.Optional;
 public class AccountServiceImpl extends GenericService implements AccountService {
     private static final String CANT_FIND_ACCOUNT_OF_USER_WITH_ID = "Can't find account of user with id = ";
 
-    private AccountServiceImpl(DaoFactory daoFactory) {
+    private AccountServiceImpl(DaoManagerFactory daoFactory) {
         super(daoFactory);
     }
 

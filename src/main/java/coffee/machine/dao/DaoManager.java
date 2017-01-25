@@ -1,7 +1,8 @@
 package coffee.machine.dao;
 
 /**
- * This class represents abstract connection.
+ * This class represents DaoManager pattern.
+ * It encapsulates native connection and DAO factory.
  *
  * It should consider transaction's rollback necessary in close method.
  * It MUST call ROLLBACK IF TRANSACTION has been begun

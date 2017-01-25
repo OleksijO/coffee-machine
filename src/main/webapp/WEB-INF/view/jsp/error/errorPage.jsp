@@ -14,19 +14,20 @@
 <html>
 <head>
     <title>ERROR / ОШИБКА / ПОХИБКА</title>
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/img/favicon.ico">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
 <div align="center">
     <div align="center" style="max-width: 1024px">
         <br><br><br><br><br><br>
-        <h3><b> EN: An internal error has been occurred. Please, contact your application support team. </b></h3>
+        <h3><strong> EN: An internal error has been occurred. Please, contact your application support team. </strong></h3>
         <br><br>
-        <h3><b> RU: Произошла внутренняя ошибка. Пожалуйста, обратитесь в службу поддержки вашего приложения. </b></h3>
+        <h3><strong> RU: Произошла внутренняя ошибка. Пожалуйста, обратитесь в службу поддержки вашего приложения. </strong></h3>
         <br><br>
-        <h3><b> UA: Сталася внутрішня помилка. Будь ласка, зверніться в службу підтримки вашого додатку. </b></h3>
+        <h3><strong> UA: Сталася внутрішня помилка. Будь ласка, зверніться в службу підтримки вашого додатку. </strong></h3>
         <br><br>
-        <h1><b> support@some.domain.com / 0-800-00-00 </b></h1>
+        <h1><strong> support@some.domain.com / 0-800-00-00 </strong></h1>
 
     </div>
 </div>

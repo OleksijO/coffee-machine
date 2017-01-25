@@ -32,7 +32,7 @@ public class OrderPreparationServiceImpl extends GenericService implements Order
     private static final int COFFEE_MACHINE_ACCOUNT_ID = CoffeeMachineConfig.ACCOUNT_ID;
 
 
-    private OrderPreparationServiceImpl(DaoFactory daoFactory) {
+    private OrderPreparationServiceImpl(DaoManagerFactory daoFactory) {
         super(daoFactory);
     }
 
@@ -164,7 +164,7 @@ public class OrderPreparationServiceImpl extends GenericService implements Order
         orderDao.insert(order);
     }
 
-    public void setDaoFactory(DaoFactory daoFactory) {
+    public void setDaoFactory(DaoManagerFactory daoFactory) {
         this.daoFactory = daoFactory;
     }
 }

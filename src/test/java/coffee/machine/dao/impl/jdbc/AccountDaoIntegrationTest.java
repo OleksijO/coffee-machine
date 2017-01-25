@@ -2,7 +2,7 @@ package coffee.machine.dao.impl.jdbc;
 
 import coffee.machine.dao.AccountDao;
 import coffee.machine.dao.DaoManager;
-import coffee.machine.dao.DaoFactory;
+import coffee.machine.dao.DaoManagerFactory;
 import coffee.machine.model.entity.Account;
 import data.test.entity.AccountsData;
 import org.junit.After;
@@ -24,7 +24,7 @@ import static org.junit.Assert.assertFalse;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class AccountDaoIntegrationTest {
-    private final DaoFactory daoFactory = DaoFactoryImpl.getInstance();
+    private final DaoManagerFactory daoFactory = DaoFactoryImpl.getInstance();
     private final List<Account> testAccounts = new ArrayList<>();
     private DaoManager daoManager;
     private AccountDao accountDao;

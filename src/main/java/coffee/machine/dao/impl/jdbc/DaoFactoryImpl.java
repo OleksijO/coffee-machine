@@ -12,7 +12,7 @@ import java.sql.SQLException;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class DaoFactoryImpl implements DaoFactory {
+public class DaoFactoryImpl implements DaoManagerFactory {
     private static final String SQL_CONNECTION_CAN_NOT_BE_NULL =
             "SQL connection can not be null. Datasource returned no connection.";
 
@@ -22,10 +22,10 @@ public class DaoFactoryImpl implements DaoFactory {
     }
 
     private static class InstanceHolder {
-        private static final DaoFactory instance = new DaoFactoryImpl();
+        private static final DaoManagerFactory instance = new DaoFactoryImpl();
     }
 
-    public static DaoFactory getInstance() {
+    public static DaoManagerFactory getInstance() {
         return InstanceHolder.instance;
     }
 

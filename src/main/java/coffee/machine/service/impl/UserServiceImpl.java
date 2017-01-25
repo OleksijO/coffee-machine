@@ -1,7 +1,7 @@
 package coffee.machine.service.impl;
 
 import coffee.machine.dao.AccountDao;
-import coffee.machine.dao.DaoFactory;
+import coffee.machine.dao.DaoManagerFactory;
 import coffee.machine.dao.UserDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Account;
@@ -32,7 +32,7 @@ public class UserServiceImpl extends GenericService implements UserService {
             "LOGIN TRY FAILED: no such combination of email and password. Entered e-mail: ";
 
 
-    private UserServiceImpl(DaoFactory daoFactory) {
+    private UserServiceImpl(DaoManagerFactory daoFactory) {
         super(daoFactory);
     }
 
