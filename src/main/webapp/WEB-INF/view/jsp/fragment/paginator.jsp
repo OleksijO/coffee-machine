@@ -10,11 +10,11 @@
 <fmt:message key="paginator.previous" var="previous"/>
 <fmt:message key="paginator.next" var="next"/>
 <fmt:message key="paginator.last" var="last"/>
-<custom:paginator first="${first}"
-                  previous="${previous}"
-                  next="${next}"
-                  last="${last}"
-                  currentPage="${requestScope[Attributes.CURRENT_PAGE]}"
-                  lastPage="${requestScope[Attributes.LAST_PAGE]}"
-                  pageParameter="${Parameters.PAGE}"
+<custom:paginator labelFirst="${first}"
+                  labelPrevious="${previous}"
+                  labelNext="${next}"
+                  labelLast="${last}"
+                  currentPageNumber="${requestScope[Attributes.CURRENT_PAGE]}"
+                  lastPageNumber="${requestScope[Attributes.LAST_PAGE]}"
+                  parameterPage="${Parameters.PAGE}"
 />

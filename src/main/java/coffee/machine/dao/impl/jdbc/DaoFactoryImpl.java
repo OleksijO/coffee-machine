@@ -15,8 +15,6 @@ import java.sql.SQLException;
 public class DaoFactoryImpl implements DaoFactory {
     private static final String SQL_CONNECTION_CAN_NOT_BE_NULL =
             "SQL connection can not be null. Datasource returned no connection.";
-    private static final String CONNECTION_CAN_NOT_BE_NULL = "Connection can not be null.";
-    private static final String CONNECTION_IS_NOT_AN_ABSTRACT_CONNECTION_IMPL_FOR_JDBC = "Connection is not an DaoManagerImpl for JDBC.";
 
     private DataSource dataSource = JdbcPooledDataSource.getInstance();
 

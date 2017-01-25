@@ -7,7 +7,7 @@ import coffee.machine.dao.DaoFactory;
  * Created by oleksij.onysymchuk@gmail on 24.01.2017.
  */
 @FunctionalInterface
-public interface SerializableTransactionalVoidWrapper<T> {
+public interface SerializableTransactionalVoidWrapper {
     default void execute(DaoFactory daoFactory) {
         try (DaoManager daoManager = daoFactory.createDaoManager()) {
             daoManager.beginSerializableTransaction();

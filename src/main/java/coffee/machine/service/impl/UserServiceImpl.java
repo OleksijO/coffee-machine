@@ -28,7 +28,7 @@ import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageK
 public class UserServiceImpl extends GenericService implements UserService {
     private static final String TRY_TO_REGISTER_USER_WITH_ALREADY_USED_EMAIL =
             "Try to register user with already used email: ";
-    private static final String Login_TRY_FAILED_WRONG_EMAIL_OR_PASSWORD =
+    private static final String LOGIN_TRY_FAILED_WRONG_EMAIL_OR_PASSWORD =
             "LOGIN TRY FAILED: no such combination of email and password. Entered e-mail: ";
 
 
@@ -68,7 +68,7 @@ public class UserServiceImpl extends GenericService implements UserService {
                         .orElseThrow(() ->
                                 new ServiceException()
                                         .addMessageKey(ERROR_LOGIN_NO_SUCH_COMBINATION)
-                                        .addLogMessage(Login_TRY_FAILED_WRONG_EMAIL_OR_PASSWORD + loginData.getEmail()))
+                                        .addLogMessage(LOGIN_TRY_FAILED_WRONG_EMAIL_OR_PASSWORD + loginData.getEmail()))
         );
 
     }

@@ -12,37 +12,37 @@
         <tag-class>coffee.machine.view.tag.PaginatorTag</tag-class>
         <body-content>empty</body-content>
        	<attribute>
-            <name>first</name>
+            <name>labelFirst</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>previous</name>
+            <name>labelPrevious</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>next</name>
+            <name>labelNext</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>last</name>
+            <name>labelLast</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>currentPage</name>
+            <name>currentPageNumber</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>lastPage</name>
+            <name>lastPageNumber</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>pageParameter</name>
+            <name>parameterPage</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

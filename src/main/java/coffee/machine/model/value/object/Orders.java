@@ -9,19 +9,19 @@ import java.util.List;
  * @author oleksij.onysymchuk@gmail
  */
 public class Orders {
-    private List<Order> orders = new ArrayList<>();
+    private List<Order> orderList = new ArrayList<>();
     private int totalCount;
 
     public List<Order> getOrderList() {
-        return orders;
+        return orderList;
     }
 
     public int getTotalCount() {
         return totalCount;
     }
 
-    public Orders setOrders(List<Order> orders) {
-        this.orders.addAll(orders);
+    public Orders setOrderList(List<Order> orders) {
+        this.orderList.addAll(orders);
         return this;
     }
 
@@ -31,6 +31,6 @@ public class Orders {
     }
 
     public boolean isEmpty(){
-        return orders.isEmpty();
+        return orderList.isEmpty();
     }
 }
