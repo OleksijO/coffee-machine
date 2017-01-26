@@ -16,9 +16,9 @@ import static coffee.machine.view.config.Paths.REDIRECTED;
  *
  * @author oleksij.onysymchuk@gmail.com
  */
-public class MainController extends HttpServlet {
+public class FrontController extends HttpServlet {
 
-    private static final Logger logger = Logger.getLogger(MainController.class);
+    private static final Logger logger = Logger.getLogger(FrontController.class);
     private static final String URI_IS = " : uri = ";
 
     private static final String DELIMITER = CommandHolder.DELIMITER;
@@ -63,7 +63,7 @@ public class MainController extends HttpServlet {
     private String getUri(HttpServletRequest request) {
         String uri = request.getRequestURI();
         logger.debug(request.getMethod().toUpperCase() + URI_IS + uri);
-        return uri;
+        return uri.toLowerCase();
     }
 
     private boolean isRedirected(String view) {
