@@ -191,7 +191,9 @@ class ProductDaoHelper extends AbstractDao<Product> {
     }
 
     String getStringListOf(Set<Integer> productIds) {
-        return productIds.stream().map(Object::toString).collect(Collectors.joining(","));
+        return productIds.stream()
+                .map(i -> Integer.toString(i))
+                .collect(Collectors.joining(","));
     }
 
 
