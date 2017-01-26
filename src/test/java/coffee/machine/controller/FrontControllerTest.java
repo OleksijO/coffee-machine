@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 /**
  * @author oleksij.onysymchuk@gmail.com
  */
-public class MainControllerTest {
+public class FrontControllerTest {
     private static final String DEPLOY_PATH = "/deploy_path";
 
     @Mock
@@ -41,12 +41,12 @@ public class MainControllerTest {
     @Captor
     ArgumentCaptor<String> dispatcherArgCaptor;
 
-    private MainController controller;
+    private FrontController controller;
 
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        controller = new MainController();
+        controller = new FrontController();
         controller.commandHolder = commandHolder;
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute(anyString())).thenReturn(1);

@@ -10,7 +10,7 @@
 
     <servlet>
         <servlet-name>main</servlet-name>
-        <servlet-class>coffee.machine.controller.MainController</servlet-class>
+        <servlet-class>coffee.machine.controller.FrontController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>main</servlet-name>
