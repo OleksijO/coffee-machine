@@ -46,35 +46,40 @@ public class OrderPreparationServiceImpl extends GenericService implements Order
 
     @Override
     public Order prepareOrder(Order preOrder) {
+
         Objects.requireNonNull(preOrder);
 
-        return executeInSerializableTransactionalWrapper(daoManager -> {
+        return executeInSerializableTransactionalWrapper(
+                daoManager -> prepareOrder(preOrder, daoManager)
+        );
 
-            DrinkDao drinkDao = daoManager.getDrinkDao();
-            AddonDao addonDao = daoManager.getAddonDao();
-            AccountDao accountDao = daoManager.getAccountDao();
-            OrderDao orderDao = daoManager.getOrderDao();
+    }
 
-            // load actual data
-            List<Drink> actualDrinks = drinkDao.getAllByIds(preOrder.getDrinkIds());
-            List<Product> actualAddons = addonDao.getAllByIds(preOrder.getAddonIds());
-            Order order = fillOrderWithAbsentData(preOrder, actualDrinks, actualAddons);
-            Account userAccount = accountDao.getByUserId(order.getUserId())
-                    .orElseThrow(IllegalStateException::new);
+    private Order prepareOrder(Order preOrder, DaoManager daoManager) {
 
-            // perform check operations
-            checkUserHaveEnoughMoney(order.getTotalCost(), userAccount.getAmount());
-            decreaseActualQuantitiesByOrderQuantities(actualDrinks, actualAddons, order);
+        DrinkDao drinkDao = daoManager.getDrinkDao();
+        AddonDao addonDao = daoManager.getAddonDao();
+        AccountDao accountDao = daoManager.getAccountDao();
+        OrderDao orderDao = daoManager.getOrderDao();
 
-            // save operation results if there is no error
-            updateDrinkQuantities(drinkDao, actualDrinks);
-            updateAddonQuantities(addonDao, actualAddons);
-            performMoneyExchange(accountDao, userAccount, order.getTotalCost());
-            saveOrder(orderDao, order);
+        // load actual data
+        List<Drink> actualDrinks = drinkDao.getAllByIds(preOrder.getDrinkIds());
+        List<Product> actualAddons = addonDao.getAllByIds(preOrder.getAddonIds());
+        Order order = fillOrderWithAbsentData(preOrder, actualDrinks, actualAddons);
+        Account userAccount = accountDao.getByUserId(order.getUserId())
+                .orElseThrow(IllegalStateException::new);
 
-            return order;
-        });
+        // perform check operations
+        checkUserHaveEnoughMoney(order.getTotalCost(), userAccount.getAmount());
+        decreaseActualQuantitiesByOrderQuantities(actualDrinks, actualAddons, order);
 
+        // save operation results if there is no error
+        updateDrinkQuantities(drinkDao, actualDrinks);
+        updateAddonQuantities(addonDao, actualAddons);
+        performMoneyExchange(accountDao, userAccount, order.getTotalCost());
+        saveOrder(orderDao, order);
+
+        return order;
     }
 
     private Order fillOrderWithAbsentData(Order preOrder, List<Drink> actualDrinks, List<Product> actualAddons) {

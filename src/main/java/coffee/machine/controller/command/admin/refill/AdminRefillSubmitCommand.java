@@ -31,8 +31,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.ADMIN_REFILL_SUCCESSFUL;
-import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.QUANTITY_SHOULD_BE_INT;
 import static coffee.machine.controller.i18n.message.key.ControllerMessageKey.TITLE_ADMIN_REFILL;
+import static coffee.machine.controller.i18n.message.key.error.ControllerErrorMessageKey.QUANTITY_SHOULD_BE_INT;
 import static coffee.machine.view.config.Attributes.*;
 import static coffee.machine.view.config.Pages.ADMIN_REFILL_PAGE;
 
@@ -146,10 +146,11 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
 
     private List<Product> getAddonsByIdsAndQuantities(Map<Integer, Integer> addonsQuantityByIds) {
         return addonsQuantityByIds.entrySet().stream()
-                .map(entry -> new Product.Builder()
-                        .setId(entry.getKey())
-                        .setQuantity(entry.getValue())
-                        .build())
+                .map(entry ->
+                        new Product.Builder()
+                                .setId(entry.getKey())
+                                .setQuantity(entry.getValue())
+                                .build())
                 .collect(Collectors.toList());
     }
 

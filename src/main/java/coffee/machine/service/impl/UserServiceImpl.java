@@ -1,6 +1,7 @@
 package coffee.machine.service.impl;
 
 import coffee.machine.dao.AccountDao;
+import coffee.machine.dao.DaoManager;
 import coffee.machine.dao.DaoManagerFactory;
 import coffee.machine.dao.UserDao;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
@@ -88,23 +89,24 @@ public class UserServiceImpl extends GenericService implements UserService {
         User user = getUserFromRegisterData(registerData);
 
         return executeInTransactionalWrapper(
-                daoManager -> {
-                    AccountDao accountDao = daoManager.getAccountDao();
-                    UserDao userDao = daoManager.getUserDao();
-                    checkIfUserAlreadyExists(user.getEmail(), userDao);
-                    return createNewUser(user, accountDao, userDao);
-                }
+                daoManager -> createUser(user, daoManager)
         );
     }
 
     private User getUserFromRegisterData(RegisterData formData) {
-
         return new User.Builder()
                 .setRole(USER)
                 .setFullName(formData.getFullName())
                 .setEmail(formData.getEmail())
                 .setPassword(formData.getPassword())
                 .build();
+    }
+
+    private User createUser(User user, DaoManager daoManager) {
+        AccountDao accountDao = daoManager.getAccountDao();
+        UserDao userDao = daoManager.getUserDao();
+        checkIfUserAlreadyExists(user.getEmail(), userDao);
+        return createNewUser(user, accountDao, userDao);
     }
 
     private void checkIfUserAlreadyExists(String email, UserDao userDao) {

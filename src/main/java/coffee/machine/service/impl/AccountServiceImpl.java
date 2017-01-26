@@ -1,6 +1,7 @@
 package coffee.machine.service.impl;
 
 import coffee.machine.dao.AccountDao;
+import coffee.machine.dao.DaoManager;
 import coffee.machine.dao.DaoManagerFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Account;
@@ -52,20 +53,22 @@ public class AccountServiceImpl extends GenericService implements AccountService
     @Override
     public void addCredits(CreditsReceipt receipt) {
         Objects.requireNonNull(receipt);
-        long amountToAdd = receipt.getAmount();
-        int userId = receipt.getUserId();
 
-        executeInSerializableTransactionalVoidWrapper(daoManager -> {
 
-            AccountDao accountDao = daoManager.getAccountDao();
-            accountDao.update(
-                    accountDao
-                            .getByUserId(userId)
-                            .orElseThrow(() ->
-                                    new IllegalArgumentException(CANT_FIND_ACCOUNT_OF_USER_WITH_ID + userId))
-                            .add(amountToAdd));
+        executeInSerializableTransactionalVoidWrapper(
+                daoManager ->
+                        AddCreditsByReceiptData(receipt, daoManager)
+        );
 
-        });
+    }
 
+    private void AddCreditsByReceiptData(CreditsReceipt receipt, DaoManager daoManager) {
+        AccountDao accountDao = daoManager.getAccountDao();
+        daoManager.getAccountDao().update(
+                accountDao
+                        .getByUserId(receipt.getUserId())
+                        .orElseThrow(() ->
+                                new IllegalArgumentException(CANT_FIND_ACCOUNT_OF_USER_WITH_ID + receipt.getUserId()))
+                        .add(receipt.getAmount()));
     }
 }
