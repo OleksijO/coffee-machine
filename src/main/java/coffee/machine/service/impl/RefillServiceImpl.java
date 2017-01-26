@@ -9,7 +9,6 @@ import coffee.machine.model.entity.product.Drink;
 import coffee.machine.model.entity.product.Product;
 import coffee.machine.model.value.object.ProductsReceipt;
 import coffee.machine.service.RefillService;
-import coffee.machine.service.impl.wrapper.GenericService;
 
 import java.util.List;
 import java.util.Objects;

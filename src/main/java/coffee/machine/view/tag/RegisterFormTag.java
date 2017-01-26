@@ -18,6 +18,7 @@ import static coffee.machine.view.config.Attributes.USER_LOCALE;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class RegisterFormTag extends LoginFormTag {
+    private static final Logger logger = Logger.getLogger(RegisterFormTag.class);
     /**
      * label text for full name field label - should be message key from resource bundle
      */
@@ -44,7 +45,7 @@ public class RegisterFormTag extends LoginFormTag {
                     submitButton(bundle) +
                     formFooter());
         } catch (Exception e) {
-            Logger.getLogger(LoginFormTag.class).error(e);
+            logger.error(e);
             throw new JspException(e);
         }
         return Tag.SKIP_BODY;

@@ -1,6 +1,6 @@
 package coffee.machine.model.value.object;
 
-import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFF;
+import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFFICIENT;
 
 /**
  * This class represents value object for transfer data of adding credits and user
@@ -28,7 +28,7 @@ public class CreditsReceipt {
         }
 
         public Builder setAmount(double realAmount) {
-            receipt.amount = (long) (realAmount / DB_MONEY_COEFF);
+            receipt.amount = (long) (realAmount / DB_MONEY_COEFFICIENT);
             return this;
         }
 
@@ -47,7 +47,7 @@ public class CreditsReceipt {
     }
 
     public double getRealAmount() {
-        return amount * DB_MONEY_COEFF;
+        return amount * DB_MONEY_COEFFICIENT;
     }
 
     @Override

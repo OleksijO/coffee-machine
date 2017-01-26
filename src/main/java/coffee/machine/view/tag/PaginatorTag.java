@@ -14,9 +14,10 @@ import java.io.IOException;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class PaginatorTag implements Tag {
+    private static final Logger logger = Logger.getLogger(PaginatorTag.class);
     private static final int FIRST_PAGE_NUMBER = 1;
 
-    protected PageContext pageContext;
+    private PageContext pageContext;
     /**
      * Text of first page href
      */
@@ -68,7 +69,7 @@ public class PaginatorTag implements Tag {
             }
             printDelimiter(out);
         } catch (Exception e) {
-            Logger.getLogger(PaginatorTag.class).error(e);
+            logger.error(e);
             throw new JspException(e);
         }
         return Tag.SKIP_BODY;

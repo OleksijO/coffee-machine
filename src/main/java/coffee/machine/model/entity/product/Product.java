@@ -2,7 +2,7 @@ package coffee.machine.model.entity.product;
 
 import coffee.machine.model.entity.Identified;
 
-import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFF;
+import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFFICIENT;
 
 /**
  * This class represents Parent class for product hierarchy.
@@ -11,11 +11,11 @@ import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFF;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class Product implements Comparable<Product>, Identified {
-    protected int id;
-    protected String name;
-    protected long price;
-    protected int quantity;
-    protected ProductType type;
+    int id;
+    String name;
+    long price;
+    int quantity;
+    ProductType type;
 
     Product() {
     }
@@ -65,7 +65,7 @@ public class Product implements Comparable<Product>, Identified {
     }
 
     public double getRealPrice() {
-        return DB_MONEY_COEFF * price;
+        return DB_MONEY_COEFFICIENT * price;
     }
 
     public void setPrice(long price) {

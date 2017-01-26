@@ -35,7 +35,7 @@ public class Drink extends Product {
      * @return Real amount of price in human friendly format with fractional digits
      */
     public double getRealTotalPrice() {
-        return CoffeeMachineConfig.DB_MONEY_COEFF * getTotalPrice();
+        return CoffeeMachineConfig.DB_MONEY_COEFFICIENT * getTotalPrice();
     }
 
     public List<Product> getAddons() {

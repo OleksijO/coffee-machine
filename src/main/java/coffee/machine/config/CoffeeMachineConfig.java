@@ -31,9 +31,9 @@ public class CoffeeMachineConfig {
      * Relation coefficient of real money and the money value, stored in data base.
      * To get real amount one should multiply money value, stored in data base, on this coefficient
      * F.e.:
-     *          (double) realMoney = (double) DB_MONEY_COEFF * (long)moneyFromDatabase;
+     *          (double) realMoney = (double) DB_MONEY_COEFFICIENT * (long)moneyFromDatabase;
      */
-    public static final double DB_MONEY_COEFF =
+    public static final double DB_MONEY_COEFFICIENT =
             Double.parseDouble(config.getString(PROP_KEY_DATABASE_MONEY_COEFFICIENT));
 
     /**

@@ -4,7 +4,6 @@ import coffee.machine.dao.DaoManagerFactory;
 import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.product.Drink;
 import coffee.machine.service.DrinkService;
-import coffee.machine.service.impl.wrapper.GenericService;
 
 import java.util.List;
 

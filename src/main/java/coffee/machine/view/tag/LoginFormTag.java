@@ -19,6 +19,7 @@ import static coffee.machine.view.config.Attributes.USER_LOCALE;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class LoginFormTag implements Tag {
+    private static final Logger logger = Logger.getLogger(LoginFormTag.class);
     protected PageContext pageContext;
     /**
      * form action path
@@ -74,7 +75,7 @@ public class LoginFormTag implements Tag {
                     submitButton(bundle) +
                     formFooter());
         } catch (Exception e) {
-            Logger.getLogger(LoginFormTag.class).error(e);
+            logger.error(e);
             throw new JspException(e);
         }
         return Tag.SKIP_BODY;

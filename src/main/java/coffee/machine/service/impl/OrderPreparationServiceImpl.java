@@ -9,12 +9,11 @@ import coffee.machine.model.entity.product.Drink;
 import coffee.machine.model.entity.product.Product;
 import coffee.machine.service.OrderPreparationService;
 import coffee.machine.service.exception.ServiceException;
-import coffee.machine.service.impl.wrapper.GenericService;
 
 import java.util.List;
 import java.util.Objects;
 
-import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFF;
+import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFFICIENT;
 import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_PREPARE_ORDER_PRODUCT_NO_LONGER_AVAILABLE;
 import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageKey.ERROR_PREPARE_ORDER_USER_HAS_NOT_ENOUGH_MONEY;
 
@@ -89,13 +88,13 @@ public class OrderPreparationServiceImpl extends GenericService implements Order
 
     private void checkUserHaveEnoughMoney(long orderCost, long userAccountAmount) {
         if (userAccountAmount < orderCost) {
-            String realOrderCost = String.format("%.2f", orderCost * DB_MONEY_COEFF);
+            String realOrderCost = String.format("%.2f", orderCost * DB_MONEY_COEFFICIENT);
             throw new ServiceException()
                     .addMessageKey(ERROR_PREPARE_ORDER_USER_HAS_NOT_ENOUGH_MONEY)
                     .addAdditionalMessage(realOrderCost)
                     .addLogMessage(
                             String.format(LOG_MESSAGE_NOT_ENOUGH_MONEY_FORMAT,
-                                    userAccountAmount * DB_MONEY_COEFF,
+                                    userAccountAmount * DB_MONEY_COEFFICIENT,
                                     realOrderCost));
         }
     }

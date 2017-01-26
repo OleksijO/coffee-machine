@@ -6,7 +6,6 @@ import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Account;
 import coffee.machine.model.value.object.CreditsReceipt;
 import coffee.machine.service.AccountService;
-import coffee.machine.service.impl.wrapper.GenericService;
 
 import java.util.Objects;
 import java.util.Optional;

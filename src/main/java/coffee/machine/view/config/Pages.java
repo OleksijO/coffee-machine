@@ -9,9 +9,9 @@ import static coffee.machine.view.config.Paths.*;
  */
 public final class Pages {
 
-    private static final String JSP = ".jsp";
+    public static final String JSP = ".jsp";
     public static final String VIEW_JSP_CLASSPATH = "/WEB-INF/view/jsp";
-    private static final String PAGE = "Page" + JSP;
+    public static final String PAGE = "Page" + JSP;
 
     public static final String HOME_PAGE = VIEW_JSP_CLASSPATH + HOME_PATH + PAGE;
     public static final String LOGIN_PAGE = VIEW_JSP_CLASSPATH + LOGIN + PAGE;

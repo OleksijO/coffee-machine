@@ -10,10 +10,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -83,7 +80,6 @@ public class AddonDaoIntegrationTest {
         Product testAddon = AddonsData.SUGAR.getCopy();
         Product addon = addonDao.getById(testAddon.getId()).get();
         assertEquals(testAddon, addon);
-
     }
 
     @Test

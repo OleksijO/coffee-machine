@@ -62,7 +62,7 @@ public class AccountDaoIntegrationTest {
     }
 
     @Test
-    public void testGetByIdReturnsOptionalWithCorrectAccountIfAccoutIsPresent() {
+    public void testGetByIdReturnsOptionalWithCorrectAccountIfAccountIsPresent() {
         Account testAccount = AccountsData.USER_A.getCopy();
         Account account = accountDao
                 .getById(testAccount.getId())

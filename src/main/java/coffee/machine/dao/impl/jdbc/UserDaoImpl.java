@@ -142,7 +142,9 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
             try (ResultSet resultSet = statement.executeQuery()) {
                 List<User> userList = parseResultSet(resultSet);
                 checkSingleResult(userList);
-                return Optional.ofNullable(userList.isEmpty() ? null : userList.get(0));
+                return userList.isEmpty()
+                        ? Optional.empty()
+                        : Optional.of(userList.get(0));
             }
         } catch (SQLException e) {
             throw new DaoException(e)

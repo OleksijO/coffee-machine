@@ -5,7 +5,6 @@ import coffee.machine.dao.impl.jdbc.DaoFactoryImpl;
 import coffee.machine.model.entity.Order;
 import coffee.machine.model.value.object.Orders;
 import coffee.machine.service.OrderService;
-import coffee.machine.service.impl.wrapper.GenericService;
 
 import java.util.List;
 

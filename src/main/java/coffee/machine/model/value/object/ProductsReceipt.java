@@ -46,8 +46,8 @@ public class ProductsReceipt {
     }
 
     public boolean hasNegativeQuantity() {
-        return addons.stream().filter(addon -> addon.getQuantity() < 0).findAny().isPresent()
-                || drinks.stream().filter(drink -> drink.getQuantity() < 0).findAny().isPresent();
+        return addons.stream().anyMatch(addon -> addon.getQuantity() < 0)
+                || drinks.stream().anyMatch(drink -> drink.getQuantity() < 0);
     }
 
     public ProductsReceipt addDrink(Drink drink) {

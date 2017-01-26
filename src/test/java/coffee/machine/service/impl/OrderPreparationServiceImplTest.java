@@ -8,7 +8,6 @@ import coffee.machine.model.entity.product.Drink;
 import coffee.machine.model.entity.product.Product;
 import coffee.machine.service.OrderPreparationService;
 import coffee.machine.service.exception.ServiceException;
-import coffee.machine.service.impl.wrapper.GenericService;
 import data.test.entity.AccountsData;
 import data.test.entity.UsersData;
 import org.junit.Before;
@@ -100,7 +99,7 @@ public class OrderPreparationServiceImplTest {
     }
 
     @Test
-    public void testPrepareOrderUpdatesQuantitesOfAddonsInDatabaseIfOrderHasProductsWithPositiveQuantity() {
+    public void testPrepareOrderUpdatesQuantietesOfAddonsInDatabaseIfOrderHasProductsWithPositiveQuantity() {
         Order order = getFilledOrder();
         List<Product> addons = getAddonsReadyForUpdateQuantity();
         service.prepareOrder(order);
@@ -126,9 +125,9 @@ public class OrderPreparationServiceImplTest {
         Order order = getFilledOrder();
         Order testOrder = getPreparedForStoreOrder();
         testOrder.calculateTotalCost();
-        long newCofeeMachineAccountAmount = coffeeMachineAccount.getAmount() + testOrder.getTotalCost();
+        long newCoffeeMachineAccountAmount = coffeeMachineAccount.getAmount() + testOrder.getTotalCost();
         Account testCoffeeMachineAccount = new Account.Builder()
-                .setAmount(newCofeeMachineAccountAmount)
+                .setAmount(newCoffeeMachineAccountAmount)
                 .setId(coffeeMachineAccount.getId())
                 .build();
         service.prepareOrder(order);
@@ -231,18 +230,18 @@ public class OrderPreparationServiceImplTest {
                 add(drink);
 
                 drink = ESPRESSO.getCopy();
-                drink.setAddons(getAddonsForFrinkReadyForUpdateQuantity());
+                drink.setAddons(getAddonsForDrinkReadyForUpdateQuantity());
                 drink.setQuantity(ESPRESSO.drink.getQuantity() - 2);
                 add(drink);
 
 
                 drink = MOCACCINO.getCopy();
-                drink.setAddons(getAddonsForFrinkReadyForUpdateQuantity());
+                drink.setAddons(getAddonsForDrinkReadyForUpdateQuantity());
                 drink.setQuantity(MOCACCINO.drink.getQuantity() - 3);
                 add(drink);
             }
 
-            private ArrayList<Product> getAddonsForFrinkReadyForUpdateQuantity() {
+            private ArrayList<Product> getAddonsForDrinkReadyForUpdateQuantity() {
                 return new ArrayList<Product>(){{
                     add(SUGAR.getCopy());
                     add(MILK.getCopy());

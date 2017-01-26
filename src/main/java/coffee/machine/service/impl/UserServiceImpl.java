@@ -10,7 +10,6 @@ import coffee.machine.model.value.object.user.LoginData;
 import coffee.machine.model.value.object.user.RegisterData;
 import coffee.machine.service.UserService;
 import coffee.machine.service.exception.ServiceException;
-import coffee.machine.service.impl.wrapper.GenericService;
 
 import java.util.List;
 import java.util.Objects;
@@ -109,11 +108,14 @@ public class UserServiceImpl extends GenericService implements UserService {
     }
 
     private void checkIfUserAlreadyExists(String email, UserDao userDao) {
-        if (userDao.getUserByLogin(email).isPresent()) {
-            throw new ServiceException()
-                    .addMessageKey(ERROR_REGISTER_USER_WITH_SPECIFIED_EMAIL_ALREADY_REGISTERED)
-                    .addLogMessage(TRY_TO_REGISTER_USER_WITH_ALREADY_USED_EMAIL + email);
-        }
+        userDao.getUserByLogin(email)
+                .ifPresent(
+                        user -> {
+                            throw new ServiceException()
+                                    .addMessageKey(ERROR_REGISTER_USER_WITH_SPECIFIED_EMAIL_ALREADY_REGISTERED)
+                                    .addLogMessage(TRY_TO_REGISTER_USER_WITH_ALREADY_USED_EMAIL + email);
+                        });
+
     }
 
     private User createNewUser(User user, AccountDao accountDao, UserDao userDao) {

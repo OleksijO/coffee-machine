@@ -24,7 +24,7 @@ public class ApplicationException extends RuntimeException {
      */
     private String logMessage;
 
-    public ApplicationException() {
+    protected ApplicationException() {
     }
 
     /**

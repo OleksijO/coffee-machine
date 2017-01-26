@@ -26,16 +26,18 @@ public class Order implements Identified {
     }
 
     public double getRealTotalCost() {
-        return CoffeeMachineConfig.DB_MONEY_COEFF * totalCost;
+        return CoffeeMachineConfig.DB_MONEY_COEFFICIENT * totalCost;
     }
 
     public void clearProductsWithZeroQuantity() {
         drinks = drinks.stream()
                 .filter(drink -> drink.getQuantity() != 0)
                 .collect(Collectors.toList());
-        drinks.forEach(drink -> drink.setAddons(drink.getAddons().stream()
-                .filter(addon -> addon.getQuantity() != 0)
-                .collect(Collectors.toList())))
+        drinks.forEach(drink ->
+                drink.setAddons(
+                        drink.getAddons().stream()
+                                .filter(addon -> addon.getQuantity() != 0)
+                                .collect(Collectors.toList())))
         ;
     }
 
@@ -45,14 +47,10 @@ public class Order implements Identified {
 
     public boolean hasNegativeQuantity() {
         return drinks.stream()
-                .filter(drink ->
+                .anyMatch(drink ->
                         (drink.getQuantity() < 0) ||
                                 (drink.getAddons().stream()
-                                        .filter(addon -> addon.getQuantity() < 0)
-                                        .findAny()
-                                        .isPresent()))
-                .findAny()
-                .isPresent();
+                                        .anyMatch(addon -> addon.getQuantity() < 0)));
     }
 
     public Order fillAbsentDrinkData(List<? extends Product> actualDrinks) {

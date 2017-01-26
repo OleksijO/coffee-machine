@@ -1,6 +1,6 @@
 package coffee.machine.model.entity;
 
-import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFF;
+import static coffee.machine.config.CoffeeMachineConfig.DB_MONEY_COEFFICIENT;
 
 /**
  * This class represents Account entity.
@@ -26,7 +26,7 @@ public class Account implements Identified{
     }
 
     public double getRealAmount() {
-        return DB_MONEY_COEFF * amount;
+        return DB_MONEY_COEFFICIENT * amount;
     }
 
     public int getId() {

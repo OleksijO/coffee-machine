@@ -50,7 +50,6 @@ public class FrontController extends HttpServlet {
         Command command = commandHolder.findCommand(commandKey);
 
         String view = command.execute(request, response);
-
         if (!isRedirected(view)) {
             request.getRequestDispatcher(view).forward(request, response);
         }
