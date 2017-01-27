@@ -21,6 +21,13 @@ import static coffee.machine.dao.impl.jdbc.ProductDaoHelper.*;
  * @author oleksij.onysymchuk@gmail.com
  */
 class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
+    private static final String LOG_MESSAGE_DATABASE_ERROR_WHILE_DELETING_DRINK_ADDONS =
+            "Database error wile deleting drink addons: ";
+    private static final String LOG_MESSAGE_DATABASE_ERROR_WHILE_GETTING_ALL_BY_ID =
+            "Database error while getting all drinks by id ";
+    private static final String LOG_MESSAGE_DB_ERROR_WHILE_INSERTING_ADDONS =
+            "Database error while inserting addons of drink: ";
+
     private static final String SELECT_ALL_DRINKS_WITH_ADDONS_FORMAT = "" +
             " SELECT id, name, price, quantity, type, drink_id AS parent_id " +
             " FROM product " +
@@ -30,13 +37,10 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
     private static final String WHERE_ID_OR_DRINK_ID = " WHERE drink_addons.drink_id = ? OR product.id = ? ";
     private static final String WHERE_ID_IN_LIST_OR_DRINK_ID_IN_LIST =
             " WHERE FIND_IN_SET(drink_addons.drink_id,?)>0 OR FIND_IN_SET(product.id,?)>0 ";
-    private static final String DB_ERROR_WHILE_INSERTING_ADDONS = "Database error while inserting addons of drink: ";
     private static final String INSERT_ADDON_SQL = "INSERT INTO drink_addons (drink_id, addon_id) VALUES (?,?); ";
     private static final String DELETE_ADDON_FROM_SET_SQL = "DELETE FROM drink_addons WHERE drink_id = ?; ";
 
     private static final String FIELD_PARENT_ID = "parent_id";
-    private static final String DATABASE_ERROR_WHILE_DELETING_DRINK_ADDONS = "Database error wile deleting drink addons: ";
-    private static final String DATABASE_ERROR_WHILE_GETTING_ALL_BY_ID = "Database error while getting all drinks by id ";
 
     private ProductDaoHelper productDaoHelper;
 
@@ -69,7 +73,7 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
             }
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_INSERTING_ADDONS + drink.toString());
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_INSERTING_ADDONS + drink.toString());
         }
     }
 
@@ -99,7 +103,7 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
 
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DATABASE_ERROR_WHILE_DELETING_DRINK_ADDONS + drink.toString());
+                    .addLogMessage(LOG_MESSAGE_DATABASE_ERROR_WHILE_DELETING_DRINK_ADDONS + drink.toString());
         }
     }
 
@@ -113,7 +117,7 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
 
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_GETTING_ALL);
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_GETTING_ALL);
         }
     }
 
@@ -163,7 +167,7 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
             }
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_GETTING_BY_ID);
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_GETTING_BY_ID);
         }
     }
 
@@ -203,7 +207,7 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
             }
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DATABASE_ERROR_WHILE_GETTING_ALL_BY_ID + productIds.toString());
+                    .addLogMessage(LOG_MESSAGE_DATABASE_ERROR_WHILE_GETTING_ALL_BY_ID + productIds.toString());
         }
     }
 

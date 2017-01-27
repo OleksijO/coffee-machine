@@ -19,8 +19,10 @@ import static coffee.machine.model.entity.user.UserRole.ADMIN;
  * @author oleksij.onysymchuk@gmail.com
  */
 class UserDaoImpl extends AbstractDao<User> implements UserDao {
-    private static final String DB_ERROR_WHILE_GETTING_BY_LOGIN = "Database error while getting user by login";
-    private static final String DB_ERROR_WHILE_GETTING_ALL_NON_ADMIN = DB_ERROR_WHILE_GETTING_ALL + "non admin users";
+    private static final String LOG_MESSAGE_DB_ERROR_WHILE_GETTING_BY_LOGIN =
+            "Database error while getting user by login";
+    private static final String LOG_MESSAGE_DB_ERROR_WHILE_GETTING_ALL_BY_ROLE =
+            LOG_MESSAGE_DB_ERROR_WHILE_GETTING_ALL + " for role ";
 
     private static final String SELECT_ALL_SQL =
             "SELECT users.id, email, password, full_name, account_id, amount, role FROM users " +
@@ -74,7 +76,7 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_INSERTING + user.toString());
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_INSERTING + user.toString());
         }
         return user;
     }
@@ -97,7 +99,7 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_UPDATING + user.toString());
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_UPDATING + user.toString());
         }
 
     }
@@ -111,7 +113,7 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_GETTING_ALL);
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_GETTING_ALL);
         }
     }
 
@@ -148,7 +150,7 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
             }
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_GETTING_BY_ID + id);
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_GETTING_BY_ID + id);
         }
     }
 
@@ -171,7 +173,7 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
             }
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_GETTING_BY_LOGIN + login);
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_GETTING_BY_LOGIN + login);
         }
     }
 
@@ -186,7 +188,7 @@ class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_GETTING_ALL_NON_ADMIN);
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_GETTING_ALL_BY_ROLE + role);
         }
     }
 

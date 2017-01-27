@@ -44,7 +44,7 @@ class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
             account.setId(accountId);
 
         } catch (SQLException e) {
-            throw new DaoException(e).addLogMessage(DB_ERROR_WHILE_INSERTING);
+            throw new DaoException(e).addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_INSERTING);
         }
         return account;
     }
@@ -63,7 +63,7 @@ class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_UPDATING);
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_UPDATING);
         }
     }
 
@@ -76,7 +76,7 @@ class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_GETTING_ALL);
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_GETTING_ALL);
         }
     }
 
@@ -109,7 +109,7 @@ class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
             }
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_GETTING_BY_ID);
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_GETTING_BY_ID);
         }
     }
 

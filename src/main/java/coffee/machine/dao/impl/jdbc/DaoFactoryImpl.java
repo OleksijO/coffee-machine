@@ -13,7 +13,7 @@ import java.sql.SQLException;
  * @author oleksij.onysymchuk@gmail.com
  */
 public class DaoFactoryImpl implements DaoManagerFactory {
-    private static final String SQL_CONNECTION_CAN_NOT_BE_NULL =
+    private static final String LOG_MESSAGE_SQL_CONNECTION_CAN_NOT_BE_NULL =
             "SQL connection can not be null. Datasource returned no connection.";
 
     private DataSource dataSource = JdbcPooledDataSource.getInstance();
@@ -40,7 +40,7 @@ public class DaoFactoryImpl implements DaoManagerFactory {
 
         if (connection == null) {
             throw new DaoException()
-                    .addLogMessage(SQL_CONNECTION_CAN_NOT_BE_NULL);
+                    .addLogMessage(LOG_MESSAGE_SQL_CONNECTION_CAN_NOT_BE_NULL);
         }
 
         return new DaoManagerImpl(connection, this);

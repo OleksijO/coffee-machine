@@ -23,9 +23,9 @@ import static coffee.machine.service.i18n.message.key.error.ServiceErrorMessageK
  * @author oleksij.onysymchuk@gmail.com
  */
 public class OrderPreparationServiceImpl extends GenericService implements OrderPreparationService {
-    private static final String LOG_MESSAGE_NOT_ENOUGH_FORMAT =
+    private static final String LOG_MESSAGE_FORMAT_NOT_ENOUGH_PRODUCT =
             "There is not enough product id=%d (%s). Ordered = %d, available = %d";
-    private static final String LOG_MESSAGE_NOT_ENOUGH_MONEY_FORMAT =
+    private static final String LOG_MESSAGE_FORMAT_NOT_ENOUGH_MONEY =
             "User has insufficient funds. Available amount = %.2f, order cost = %s";
 
     private static final int COFFEE_MACHINE_ACCOUNT_ID = CoffeeMachineConfig.ACCOUNT_ID;
@@ -98,7 +98,7 @@ public class OrderPreparationServiceImpl extends GenericService implements Order
                     .addMessageKey(ERROR_PREPARE_ORDER_USER_HAS_NOT_ENOUGH_MONEY)
                     .addAdditionalMessage(realOrderCost)
                     .addLogMessage(
-                            String.format(LOG_MESSAGE_NOT_ENOUGH_MONEY_FORMAT,
+                            String.format(LOG_MESSAGE_FORMAT_NOT_ENOUGH_MONEY,
                                     userAccountAmount * DB_MONEY_COEFFICIENT,
                                     realOrderCost));
         }
@@ -139,7 +139,7 @@ public class OrderPreparationServiceImpl extends GenericService implements Order
                     .addMessageKey(ERROR_PREPARE_ORDER_PRODUCT_NO_LONGER_AVAILABLE)
                     .addAdditionalMessage(orderedProduct.getName())
                     .addLogMessage(
-                            String.format(LOG_MESSAGE_NOT_ENOUGH_FORMAT,
+                            String.format(LOG_MESSAGE_FORMAT_NOT_ENOUGH_PRODUCT,
                                     orderedProduct.getId(),
                                     orderedProduct.getName(),
                                     quantityToBuy,

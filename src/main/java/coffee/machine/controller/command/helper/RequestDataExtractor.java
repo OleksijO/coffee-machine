@@ -23,7 +23,7 @@ public class RequestDataExtractor {
     private static final String LOG_MESSAGE_CANNOT_FIND_FIRST_ID_IN_PARAM = "Cannot find first id in param ";
     private static final String LOG_MESSAGE_CANNOT_FIND_SECOND_ID_IN_PARAM = "Cannot find second id in param ";
 
-    private static final String LOG_MESSAGE_PROBLEMS_WITH_PARSING_INT_FROM_PARAMETER_FORMAT =
+    private static final String LOG_MESSAGE_FORMAT_PROBLEMS_WITH_PARSING_INT_FROM_PARAMETER =
             "Problems with parsing INT from parameter '%s', its value ='%s'";
     private static final String LOG_MESSAGE_PROBLEMS_WITH_PARSING_DOUBLE_FROM_PARAMETER_FORMAT =
             "Problems with parsing DOUBLE from parameter '%s', its value ='%s'";
@@ -62,7 +62,7 @@ public class RequestDataExtractor {
         } catch (NumberFormatException e) {
             throw new ControllerException()
                     .addMessageKey(errorMessageKey)
-                    .addLogMessage(String.format(LOG_MESSAGE_PROBLEMS_WITH_PARSING_INT_FROM_PARAMETER_FORMAT,
+                    .addLogMessage(String.format(LOG_MESSAGE_FORMAT_PROBLEMS_WITH_PARSING_INT_FROM_PARAMETER,
                             param, request.getParameter(param)));
         }
     }

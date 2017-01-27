@@ -20,6 +20,9 @@ import java.util.Optional;
  * @author oleksij.onysymchuk@gmail.com
  */
 class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
+    private static final String LOG_MESSAGE_DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID =
+            "Database error while getting all orders by user id = ";
+
     private static final String SELECT_ALL_ORDERS_SQL =
             " SELECT orders.id, user_id, date_time, amount, " +
                     "  orders_drink.drink_id, product.name AS drink_name, orders_drink.quantity AS drink_quantity, " +
@@ -51,18 +54,20 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
             "INSERT INTO orders_drink (orders_id, drink_id, quantity ) VALUES (?,?,?)";
     private static final String INSERT_ORDER_DRINK_ADDON_SQL =
             "INSERT INTO orders_addon (orders_drink_id, addon_id, quantity) VALUES (?,?,?)";
-    private static final String TABLE = "orders";
 
+    private static final String TABLE = "orders";
     private static final String WHERE_USER_ID = " WHERE user_id = ?";
     private static final String ORDER_BY_DATE_TIME_DESC = " ORDER BY date_time DESC, drink_id ASC, addon_id ASC";
-    private static final String SELECT_ALL_BY_USER_ID = SELECT_ALL_ORDERS_SQL + WHERE_USER_ID + ORDER_BY_DATE_TIME_DESC;
     private static final String WHERE_ID = " WHERE orders.id = ?";
-    private static final String SELECT_BY_ID = SELECT_ALL_ORDERS_SQL + WHERE_ID;
     private static final String LIMIT_OFFSET_QUANTITY =
             "INNER JOIN (SELECT id FROM orders  WHERE user_id = ? ORDER BY date_time DESC LIMIT ?,?) AS limitedOrders " +
                     " ON limitedOrders.id = orders.id ";
+
     private static final String SELECT_ALL_BY_USER_ID_WITH_LIMIT =
             SELECT_ALL_ORDERS_SQL + LIMIT_OFFSET_QUANTITY + WHERE_USER_ID + ORDER_BY_DATE_TIME_DESC;
+    private static final String SELECT_ALL_BY_USER_ID =
+            SELECT_ALL_ORDERS_SQL + WHERE_USER_ID + ORDER_BY_DATE_TIME_DESC;
+    private static final String SELECT_BY_ID = SELECT_ALL_ORDERS_SQL + WHERE_ID;
     private static final String SELECT_COUNT_ORDERS = "SELECT COUNT(id) AS total_count FROM orders " + WHERE_USER_ID;
 
     private static final String FIELD_USER_ID = "user_id";
@@ -75,8 +80,6 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
     private static final String FIELD_DRINK_QUANTITY = "drink_quantity";
     private static final String FIELD_DRINK_NAME = "drink_name";
     private static final String FIELD_TOTAL_COUNT = "total_count";
-    private static final String DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID =
-            "Database error while getting all orders by user id = ";
 
     // state saving for method parseResultSet(ResultSet)
     private ResultSet processingResultSet;
@@ -104,7 +107,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
 
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_INSERTING + order);
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_INSERTING + order);
         }
         return order;
     }
@@ -161,7 +164,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
             }
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_GETTING_BY_ID);
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_GETTING_BY_ID);
         }
     }
 
@@ -261,7 +264,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
             }
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_GETTING_BY_ID + id);
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_GETTING_BY_ID + id);
         }
     }
 
@@ -281,7 +284,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
             }
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID + userId);
+                    .addLogMessage(LOG_MESSAGE_DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID + userId);
         }
     }
 
@@ -301,7 +304,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
 
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID + userId);
+                    .addLogMessage(LOG_MESSAGE_DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID + userId);
         }
         try (PreparedStatement statementOrder =
                      connection.prepareStatement(SELECT_ALL_BY_USER_ID_WITH_LIMIT)) {
@@ -316,7 +319,7 @@ class OrderDaoImpl extends AbstractDao<Order> implements OrderDao {
 
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID + userId);
+                    .addLogMessage(LOG_MESSAGE_DATABASE_ERROR_WHILE_GETTING_ALL_BY_USER_ID + userId);
         }
         return ordersResult;
     }

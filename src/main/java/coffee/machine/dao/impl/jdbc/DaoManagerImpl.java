@@ -13,10 +13,10 @@ import java.sql.SQLException;
  * @author oleksij.onysymchuk@gmail.com
  */
 class DaoManagerImpl implements DaoManager {
-    private static final String CAN_NOT_BEGIN_TRANSACTION = "Can not begin transaction.";
-    private static final String CAN_NOT_COMMIT_TRANSACTION = "Can not commit transaction";
-    private static final String CAN_NOT_ROLLBACK_TRANSACTION = "Can not rollback transaction";
-    private static final String CAN_NOT_CLOSE_CONNECTION = "Can not close connection";
+    private static final String LOG_MESSAGE_CAN_NOT_BEGIN_TRANSACTION = "Can not begin transaction.";
+    private static final String LOG_MESSAGE_CAN_NOT_COMMIT_TRANSACTION = "Can not commit transaction";
+    private static final String LOG_MESSAGE_CAN_NOT_ROLLBACK_TRANSACTION = "Can not rollback transaction";
+    private static final String LOG_MESSAGE_CAN_NOT_CLOSE_CONNECTION = "Can not close connection";
 
     private static final int DEFAULT_TRANSACTION_ISOLATION_LEVEL = Connection.TRANSACTION_READ_COMMITTED;
     private static final int SERIALIZABLE_TRANSACTION_ISOLATION_LEVEL = Connection.TRANSACTION_SERIALIZABLE;
@@ -43,7 +43,7 @@ class DaoManagerImpl implements DaoManager {
             transactionActive = true;
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(CAN_NOT_BEGIN_TRANSACTION);
+                    .addLogMessage(LOG_MESSAGE_CAN_NOT_BEGIN_TRANSACTION);
         }
     }
 
@@ -61,7 +61,7 @@ class DaoManagerImpl implements DaoManager {
             transactionActive = false;
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(CAN_NOT_COMMIT_TRANSACTION);
+                    .addLogMessage(LOG_MESSAGE_CAN_NOT_COMMIT_TRANSACTION);
         }
 
     }
@@ -74,7 +74,7 @@ class DaoManagerImpl implements DaoManager {
             transactionActive = false;
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(CAN_NOT_ROLLBACK_TRANSACTION);
+                    .addLogMessage(LOG_MESSAGE_CAN_NOT_ROLLBACK_TRANSACTION);
         }
     }
 
@@ -87,7 +87,7 @@ class DaoManagerImpl implements DaoManager {
             sqlConnection.close();
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(CAN_NOT_CLOSE_CONNECTION);
+                    .addLogMessage(LOG_MESSAGE_CAN_NOT_CLOSE_CONNECTION);
         }
     }
 

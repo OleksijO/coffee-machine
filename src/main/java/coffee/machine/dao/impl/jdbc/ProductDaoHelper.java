@@ -14,6 +14,13 @@ import java.util.stream.Collectors;
  * @author oleksij.onysymchuk@gmail.com
  */
 class ProductDaoHelper extends AbstractDao<Product> {
+    static final String FIELD_NAME = "name";
+    static final String FIELD_PRICE = "price";
+    static final String FIELD_QUANTITY = "quantity";
+    static final String FIELD_TYPE = "type";
+
+    private static final String LOG_MESSAGE_DB_ERROR_WHILE_GETTING_ALL_BY_ID = "Database error while getting all products by id ";
+
     private static final String SELECT_ALL_SQL =
             "SELECT product.id, name, price, quantity, type FROM product ";
     private static final String UPDATE_SQL =
@@ -29,18 +36,9 @@ class ProductDaoHelper extends AbstractDao<Product> {
     private static final String WHERE_PRODUCT_IS = " WHERE type = '%s'";
     private static final String WHERE_PRODUCT_ID_IN_LIST = " WHERE FIND_IN_SET(product.id,?)>0 ";
 
-    private static final String DB_ERROR_WHILE_GETTING_ALL_BY_ID = "Database error while getting all products by id ";
-
-
-    static final String FIELD_NAME = "name";
-    static final String FIELD_PRICE = "price";
-    static final String FIELD_QUANTITY = "quantity";
-    static final String FIELD_TYPE = "type";
-
     ProductDaoHelper(Connection connection) {
         super(connection);
     }
-
 
     @Override
     public Product insert(Product product) {
@@ -60,7 +58,7 @@ class ProductDaoHelper extends AbstractDao<Product> {
             product.setId(productId);
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_INSERTING + product.toString());
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_INSERTING + product.toString());
         }
         return product;
     }
@@ -78,7 +76,7 @@ class ProductDaoHelper extends AbstractDao<Product> {
 
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_UPDATING + product.toString());
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_UPDATING + product.toString());
         }
     }
 
@@ -99,7 +97,7 @@ class ProductDaoHelper extends AbstractDao<Product> {
 
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_UPDATING + product.toString());
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_UPDATING + product.toString());
         }
     }
 
@@ -109,6 +107,7 @@ class ProductDaoHelper extends AbstractDao<Product> {
     }
 
     private List<Product> parseResultSet(ResultSet resultSet) throws SQLException {
+
         List<Product> products = new ArrayList<>();
         while (resultSet.next()) {
 
@@ -126,6 +125,7 @@ class ProductDaoHelper extends AbstractDao<Product> {
 
 
     public Optional<Product> getById(int id) {
+
         try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SQL + WHERE_PRODUCT_ID)) {
 
             statement.setInt(1, id);
@@ -137,7 +137,7 @@ class ProductDaoHelper extends AbstractDao<Product> {
             }
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_GETTING_BY_ID + id);
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_GETTING_BY_ID + id);
         }
     }
 
@@ -153,11 +153,12 @@ class ProductDaoHelper extends AbstractDao<Product> {
 
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_DELETING_BY_ID + id);
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_DELETING_BY_ID + id);
         }
     }
 
     List<Product> getAll(ProductType type) {
+
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(
                      SELECT_ALL_SQL + String.format(WHERE_PRODUCT_IS, type) + ORDER_BY_ID)) {
@@ -166,12 +167,13 @@ class ProductDaoHelper extends AbstractDao<Product> {
 
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_GETTING_ALL);
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_GETTING_ALL);
         }
     }
 
 
     List<Product> getAllByIds(Set<Integer> productIds) {
+
         if (productIds.isEmpty()) {
             return Collections.emptyList();
         }
@@ -186,11 +188,12 @@ class ProductDaoHelper extends AbstractDao<Product> {
             }
         } catch (SQLException e) {
             throw new DaoException(e)
-                    .addLogMessage(DB_ERROR_WHILE_GETTING_ALL_BY_ID + productIds);
+                    .addLogMessage(LOG_MESSAGE_DB_ERROR_WHILE_GETTING_ALL_BY_ID + productIds);
         }
     }
 
     String getStringListOf(Set<Integer> productIds) {
+
         return productIds.stream()
                 .map(i -> Integer.toString(i))
                 .collect(Collectors.joining(","));
