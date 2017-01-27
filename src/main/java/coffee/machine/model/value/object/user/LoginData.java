@@ -11,13 +11,18 @@ public class LoginData {
     private String email;
     private String password;
 
+    private boolean passwordEncrypted;
+
     public LoginData(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
     public void encryptPassword() {
-        password = PasswordEncryptor.encryptPassword(password);
+        if (!passwordEncrypted) {
+            password = PasswordEncryptor.encryptPassword(password);
+            passwordEncrypted = true;
+        }
     }
 
     public String getEmail() {
