@@ -44,14 +44,22 @@ public class AdminAddCreditSubmitCommand extends CommandWrapperTemplate {
 
     private static final int COFFEE_MACHINE_ACCOUNT_ID = CoffeeMachineConfig.ACCOUNT_ID;
 
-    private AccountService accountService = AccountServiceImpl.getInstance();
-    private UserService userService = UserServiceImpl.getInstance();
+    private AccountService accountService;
+    private UserService userService;
 
     private RequestDataExtractor dataExtractorHelper = new RequestDataExtractor();
     private Validator<CreditsReceipt> creditsReceiptValidator = new CreditsReceiptValidator();
 
     public AdminAddCreditSubmitCommand() {
         super(ADMIN_ADD_CREDITS_PAGE);
+        accountService = AccountServiceImpl.getInstance();
+        userService = UserServiceImpl.getInstance();
+    }
+
+    AdminAddCreditSubmitCommand(AccountService accountService, UserService userService) {
+        super(ADMIN_ADD_CREDITS_PAGE);
+        this.accountService = accountService;
+        this.userService = userService;
     }
 
     @Override

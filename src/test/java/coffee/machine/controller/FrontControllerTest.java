@@ -47,7 +47,7 @@ public class FrontControllerTest {
     public void init() {
         MockitoAnnotations.initMocks(this);
         controller = new FrontController();
-        controller.commandHolder = commandHolder;
+        controller.setCommandHolder(commandHolder);
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute(anyString())).thenReturn(1);
         when(request.getRequestDispatcher(any())).thenReturn(requestDispatcher);

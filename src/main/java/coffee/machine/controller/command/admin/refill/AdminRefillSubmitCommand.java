@@ -53,13 +53,28 @@ public class AdminRefillSubmitCommand extends CommandWrapperTemplate {
     private RequestDataExtractor dataExtractorHelper = new RequestDataExtractor();
     private Validator<ProductsReceipt> productsReceiptValidator = new ProductsReceiptValidator();
 
-    private RefillService refillService = RefillServiceImpl.getInstance();
-    private DrinkService drinkService = DrinkServiceImpl.getInstance();
-    private AddonService addonService = AddonServiceImpl.getInstance();
-    private AccountService accountService = AccountServiceImpl.getInstance();
+    private RefillService refillService;
+    private DrinkService drinkService;
+    private AddonService addonService;
+    private AccountService accountService;
 
     public AdminRefillSubmitCommand() {
         super(ADMIN_REFILL_PAGE);
+        refillService = RefillServiceImpl.getInstance();
+        drinkService = DrinkServiceImpl.getInstance();
+        addonService = AddonServiceImpl.getInstance();
+        accountService = AccountServiceImpl.getInstance();
+    }
+
+    AdminRefillSubmitCommand(RefillService refillService,
+                                    DrinkService drinkService,
+                                    AddonService addonService,
+                                    AccountService accountService) {
+        super(ADMIN_REFILL_PAGE);
+        this.refillService = refillService;
+        this.drinkService = drinkService;
+        this.addonService = addonService;
+        this.accountService = accountService;
     }
 
     @Override

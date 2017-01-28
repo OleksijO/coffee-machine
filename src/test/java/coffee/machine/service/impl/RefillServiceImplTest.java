@@ -58,7 +58,7 @@ public class RefillServiceImplTest {
         when(daoManager.getDrinkDao()).thenReturn(drinkDao);
         when(daoManager.getAddonDao()).thenReturn(addonDao);
 
-        service = RefillServiceImpl.getInstance();
+        service = new RefillServiceImpl();
         ((RefillServiceImpl) service).setDaoFactory(daoFactory);
 
         drinksToUpdate = new ArrayList<>();

@@ -26,7 +26,7 @@ public class FrontController extends HttpServlet {
     /**
      * Command's holder instance
      */
-    CommandHolder commandHolder;
+    private CommandHolder commandHolder;
 
 
     @Override
@@ -83,4 +83,7 @@ public class FrontController extends HttpServlet {
         processRequest(request, response);
     }
 
+    void setCommandHolder(CommandHolder commandHolder) {
+        this.commandHolder = commandHolder;
+    }
 }

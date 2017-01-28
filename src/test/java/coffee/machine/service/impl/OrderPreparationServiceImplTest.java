@@ -44,7 +44,7 @@ public class OrderPreparationServiceImplTest {
     @Mock
     private DaoManager daoManager;
 
-    private OrderPreparationService service = OrderPreparationServiceImpl.getInstance();
+    private OrderPreparationService service = new OrderPreparationServiceImpl();
 
     private Account coffeeMachineAccount = AccountsData.COFFEE_MACHINE.getCopy();
     private User user = UsersData.A.user;

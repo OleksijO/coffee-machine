@@ -28,6 +28,9 @@ public class RefillServiceImpl extends GenericService implements RefillService {
         private static final RefillService instance = new RefillServiceImpl(DaoFactoryImpl.getInstance());
     }
 
+    RefillServiceImpl() {
+    }
+
     public static RefillService getInstance() {
         return InstanceHolder.instance;
     }

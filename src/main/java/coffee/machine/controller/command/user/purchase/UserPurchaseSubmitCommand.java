@@ -44,7 +44,7 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
 
     private DrinkService drinkService = DrinkServiceImpl.getInstance();
     private AccountService accountService = AccountServiceImpl.getInstance();
-    private OrderPreparationService coffeeMachine = OrderPreparationServiceImpl.getInstance();
+    private OrderPreparationService orderPreparationService = OrderPreparationServiceImpl.getInstance();
 
     private RequestDataExtractor dataExtractorHelper = new RequestDataExtractor();
     private Validator<Order> orderValidator = new OrderValidator();
@@ -52,6 +52,15 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
 
     public UserPurchaseSubmitCommand() {
         super(USER_PURCHASE_PAGE);
+    }
+
+    UserPurchaseSubmitCommand(DrinkService drinkService,
+                                     AccountService accountService,
+                                     OrderPreparationService orderPreparationService) {
+        super(USER_PURCHASE_PAGE);
+        this.drinkService = drinkService;
+        this.accountService = accountService;
+        this.orderPreparationService = orderPreparationService;
     }
 
     @Override
@@ -79,7 +88,7 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
             return USER_PURCHASE_PAGE;
         }
 
-        Order order = coffeeMachine.prepareOrder(preOrder);
+        Order order = orderPreparationService.prepareOrder(preOrder);
         logDetailsAndPlaceMessageToRequest(request, order);
         clearFormData(request);
         return USER_PURCHASE_PAGE;
@@ -165,15 +174,4 @@ public class UserPurchaseSubmitCommand extends CommandWrapperTemplate {
         request.removeAttribute(PREVIOUS_VALUES_TABLE);
     }
 
-    public void setCoffeeMachineOrderService(OrderPreparationService coffeeMachine) {
-        this.coffeeMachine = coffeeMachine;
-    }
-
-    public void setDrinkService(DrinkService drinkService) {
-        this.drinkService = drinkService;
-    }
-
-    public void setAccountService(AccountService accountService) {
-        this.accountService = accountService;
-    }
 }

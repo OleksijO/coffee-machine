@@ -53,16 +53,18 @@ public class AdminRefillSubmitCommandTest {
     private AccountService accountService;
 
 
-    private Command command = new AdminRefillSubmitCommand();
+    private Command command;
 
 
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        ((AdminRefillSubmitCommand) command).setRefillService(refillService);
-        ((AdminRefillSubmitCommand) command).setAddonService(addonService);
-        ((AdminRefillSubmitCommand) command).setAccountService(accountService);
-        ((AdminRefillSubmitCommand) command).setDrinkService(drinkService);
+        command = new AdminRefillSubmitCommand(
+                refillService,
+                drinkService,
+                addonService,
+                accountService
+        );
         when(request.getSession()).thenReturn(session);
         when(request.getMethod()).thenReturn("post");
         when(accountService.getById(CoffeeMachineConfig.ACCOUNT_ID)).thenReturn(Optional.of(new Account()));

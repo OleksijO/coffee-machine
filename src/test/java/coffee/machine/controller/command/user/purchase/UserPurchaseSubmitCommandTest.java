@@ -56,9 +56,11 @@ public class UserPurchaseSubmitCommandTest {
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        ((UserPurchaseSubmitCommand) command).setCoffeeMachineOrderService(orderService);
-        ((UserPurchaseSubmitCommand) command).setDrinkService(drinkService);
-        ((UserPurchaseSubmitCommand) command).setAccountService(accountService);
+        command = new UserPurchaseSubmitCommand(
+                drinkService,
+                accountService,
+                orderService
+        );
         when(request.getSession()).thenReturn(session);
         when(request.getMethod()).thenReturn("post");
         Account account = new Account();

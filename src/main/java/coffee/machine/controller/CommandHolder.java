@@ -68,6 +68,10 @@ class CommandHolder {
 
     }
 
+    /**
+     * @param commandKey Key of the command, mapped to certain uri and request method
+     * @return Command instance, mapped to certain uri and request method
+     */
     Command findCommand(String commandKey) {
         return commands.getOrDefault(commandKey, unsupportedPathCommand);
     }

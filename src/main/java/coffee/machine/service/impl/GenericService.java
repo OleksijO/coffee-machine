@@ -14,6 +14,9 @@ import coffee.machine.service.impl.wrapper.TransactionalWrapper;
 abstract class GenericService {
     DaoManagerFactory daoFactory;
 
+    public GenericService() {
+    }
+
     GenericService(DaoManagerFactory daoFactory) {
         this.daoFactory = daoFactory;
     }
