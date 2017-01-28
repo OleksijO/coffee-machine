@@ -4,6 +4,7 @@ import coffee.machine.dao.DaoManager;
 import coffee.machine.dao.DaoManagerFactory;
 import coffee.machine.dao.OrderDao;
 import coffee.machine.model.entity.Order;
+import coffee.machine.model.value.object.Orders;
 import data.test.entity.OrdersData;
 import org.junit.After;
 import org.junit.Before;
@@ -116,5 +117,23 @@ public class OrderDaoIntegrationTest {
         List<Order> resultList = new ArrayList<>();
         resultList.addAll(orderDao.getAllByUserId(1));
         assertTrue(resultList.isEmpty());
+    }
+
+    @Test
+    public void testGetAllByUserIdWithLimitsReturnsCorrectTotalCount(){
+        Orders orders = orderDao.getAllByUserId(2,0,10);
+        assertEquals(testOrders.size(), orders.getTotalCount());
+    }
+
+    @Test
+    public void testGetAllByUserIdWithLimitsReturnsCorrectOrders(){
+        Orders orders = orderDao.getAllByUserId(2,1,1);
+        assertEquals(OrdersData.A1.order, orders.getOrderList().get(0));
+    }
+
+    @Test
+    public void testGetAllByUserIdWithLimitsReturnsZeroIfNoOrders(){
+        Orders orders = orderDao.getAllByUserId(100500,100,0);
+        assertEquals(0, orders.getTotalCount());
     }
 }
