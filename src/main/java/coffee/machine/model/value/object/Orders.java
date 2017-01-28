@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author oleksij.onysymchuk@gmail
+ * This class represents DTO for transfer data from DAO layer to view layer
+ *
+ * @author oleksij.onysymchuk@gmail.com
  */
 public class Orders {
     private List<Order> orderList = new ArrayList<>();
