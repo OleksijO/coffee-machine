@@ -2,21 +2,23 @@ package coffee.machine.model.entity.product;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+
+import static coffee.machine.model.entity.product.ProductType.ADDON;
+import static coffee.machine.model.entity.product.ProductType.DRINK;
 
 /**
- * Creates new instance on Product hierarchy by ProductType
+ * Creates new instance of Product hierarchy by ProductType
  *
  * @author oleksij.onysymchuk@gmail.com
  */
 class ProductFactory {
-    private Map<ProductType, Class> supportedClasses = new HashMap<>();
-    {
-        supportedClasses.put(ProductType.ADDON, Product.class);
-        supportedClasses.put(ProductType.DRINK, Drink.class);
-    }
+    private static final String UNSUPPORTED_PRODUCT_TYPE = "Unsupported product type = ";
+
+    private Map<ProductType, ProductProducer> supportedProductProducers = new HashMap<>();
 
     private ProductFactory() {
+        supportedProductProducers.put(ADDON, Product::new);
+        supportedProductProducers.put(DRINK, Drink::new);
     }
 
     private static class InstanceHolder {
@@ -28,12 +30,15 @@ class ProductFactory {
     }
 
     Product getNewInstanceOfType(ProductType type) {
-        Class clazz = supportedClasses.get(type);
-        Objects.requireNonNull(clazz);
-        try {
-            return (Product) clazz.newInstance();
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
+        Product product = supportedProductProducers.get(type).newInstance();
+        if (product == null) {
+            throw new IllegalArgumentException(UNSUPPORTED_PRODUCT_TYPE + type);
         }
+        return product;
+    }
+
+    @FunctionalInterface
+    private interface ProductProducer {
+        Product newInstance();
     }
 }
