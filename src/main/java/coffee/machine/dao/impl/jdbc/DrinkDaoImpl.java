@@ -4,7 +4,6 @@ import coffee.machine.dao.DrinkDao;
 import coffee.machine.dao.exception.DaoException;
 import coffee.machine.model.entity.product.Drink;
 import coffee.machine.model.entity.product.Product;
-import coffee.machine.model.entity.product.ProductType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,6 +13,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static coffee.machine.dao.impl.jdbc.ProductDaoHelper.*;
+import static coffee.machine.model.entity.product.ProductType.ADDON;
+import static coffee.machine.model.entity.product.ProductType.DRINK;
 
 /**
  * This class is the implementation of Drink entity DAO
@@ -29,18 +30,38 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
             "Database error while inserting addons of drink: ";
 
     private static final String SELECT_ALL_DRINKS_WITH_ADDONS_FORMAT = "" +
-            " SELECT id, name, price, quantity, type, drink_id AS parent_id " +
+            " SELECT  id, name, price, quantity, " +
+            "         addons_id, addon_name, addon_price, addon_quantity " +
             " FROM product " +
-            " LEFT JOIN drink_addons ON product.id = drink_addons.addon_id " +
+            " LEFT JOIN drink_addons " +
+            " ON product.id = drink_addons.drink_id " +
+            " LEFT JOIN ( " +
+            "              SELECT " +
+            "                id    AS addons_id, " +
+            "                name  AS addon_name, " +
+            "                price AS addon_price, " +
+            "                quantity addon_quantity " +
+            "              FROM product " +
+            "              WHERE type = '" + ADDON + "' " +
+            "            ) AS addons " +
+            " ON addons.addons_id = drink_addons.addon_id " +
+            " WHERE type='" + DRINK + "' " +
             " %s " +
-            " ORDER BY type DESC, id ASC";
-    private static final String WHERE_ID_OR_DRINK_ID = " WHERE drink_addons.drink_id = ? OR product.id = ? ";
-    private static final String WHERE_ID_IN_LIST_OR_DRINK_ID_IN_LIST =
-            " WHERE FIND_IN_SET(drink_addons.drink_id,?)>0 OR FIND_IN_SET(product.id,?)>0 ";
+            " ORDER by id ASC, addons_id ASC ";
+    private static final String AND_ID_IS = " AND id = ? ";
+    private static final String AND_ID_IN_LIST =
+            " AND FIND_IN_SET(id,?) > 0 ";
     private static final String INSERT_ADDON_SQL = "INSERT INTO drink_addons (drink_id, addon_id) VALUES (?,?); ";
     private static final String DELETE_ADDON_FROM_SET_SQL = "DELETE FROM drink_addons WHERE drink_id = ?; ";
 
-    private static final String FIELD_PARENT_ID = "parent_id";
+    private static final String FIELD_DRINK_ID = FIELD_ID;
+    private static final String FIELD_DRINK_NAME = FIELD_NAME;
+    private static final String FIELD_DRINK_PRICE = FIELD_PRICE;
+    private static final String FIELD_DRINK_QUANTITY = FIELD_QUANTITY;
+    private static final String FIELD_ADDON_ID = "addons_" + FIELD_ID;
+    private static final String FIELD_ADDON_NAME = "addon_" + FIELD_NAME;
+    private static final String FIELD_ADDON_PRICE = "addon_" + FIELD_PRICE;
+    private static final String FIELD_ADDON_QUANTITY = "addon_" + FIELD_QUANTITY;
 
     private ProductDaoHelper productDaoHelper;
 
@@ -56,20 +77,21 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
         checkIsUnsaved(drink);
 
         productDaoHelper.insert(drink);
-        insertAddonSet(drink);
+        insertAddonSetOfDrink(drink);
 
         return drink;
     }
 
-    private void insertAddonSet(Drink drink) {
+    private void insertAddonSetOfDrink(Drink drink) {
+        List<Product> addons = drink.getAddons();
+        if (addons.isEmpty()) {
+            return;
+        }
         try (PreparedStatement statementForInsertAddonToSet = connection.prepareStatement(INSERT_ADDON_SQL)) {
-            List<Product> addons = drink.getAddons();
-            if (!addons.isEmpty()) {
-                for (Product addon : addons) {
-                    statementForInsertAddonToSet.setInt(1, drink.getId());
-                    statementForInsertAddonToSet.setInt(2, addon.getId());
-                    statementForInsertAddonToSet.executeUpdate();
-                }
+            for (Product addon : addons) {
+                statementForInsertAddonToSet.setInt(1, drink.getId());
+                statementForInsertAddonToSet.setInt(2, addon.getId());
+                statementForInsertAddonToSet.executeUpdate();
             }
         } catch (SQLException e) {
             throw new DaoException(e)
@@ -91,7 +113,7 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
 
     private void updateDrinkAddons(Drink drink) {
         deleteDrinkAddons(drink);
-        insertAddonSet(drink);
+        insertAddonSetOfDrink(drink);
     }
 
     private void deleteDrinkAddons(Drink drink) {
@@ -122,31 +144,48 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
     }
 
     private List<Drink> parseResultSet(ResultSet resultSet) throws SQLException {
-        List<Drink> drinkList = new ArrayList<>();
+        List<Drink> drinks = new ArrayList<>();
+        int currentDrinkId = -1;
+        Drink drink = null;
         while (resultSet.next()) {
-            Product product = getProductFromCurrentResultSet(resultSet);
-            if (product.getType() == ProductType.DRINK) {
-                drinkList.add((Drink) product);
-            } else {
-                Product addon = product;
-                int drinkId = resultSet.getInt(FIELD_PARENT_ID);
-                drinkList.stream()
-                        .filter(drink -> drink.getId() == drinkId)
-                        .findFirst()
-                        .orElseThrow(IllegalStateException::new)
-                        .addAddon(addon);
+            if (isCurrentDrinkIdChanged(currentDrinkId, resultSet)) {
+                drink = getDrinkFromResultSet(resultSet);
+                drinks.add(drink);
+                currentDrinkId = drink.getId();
             }
+            addAddonFromResultSetToDrinkIfPresent(resultSet, drink);
         }
-        return drinkList;
+        return drinks;
     }
 
-    private Product getProductFromCurrentResultSet(ResultSet resultSet) throws SQLException {
-        ProductType type = ProductType.valueOf(resultSet.getString(FIELD_TYPE));
-        return new Product.Builder(type)
-                .setId(resultSet.getInt(FIELD_ID))
-                .setName(resultSet.getString(FIELD_NAME))
-                .setPrice(resultSet.getLong(FIELD_PRICE))
-                .setQuantity(resultSet.getInt(FIELD_QUANTITY))
+    private boolean isCurrentDrinkIdChanged(int currentDrinkId, ResultSet resultSet) throws SQLException {
+        return currentDrinkId != resultSet.getInt(FIELD_DRINK_ID);
+    }
+
+    private Drink getDrinkFromResultSet(ResultSet resultSet) throws SQLException {
+        return new Drink.Builder()
+                .setId(resultSet.getInt(FIELD_DRINK_ID))
+                .setName(resultSet.getString(FIELD_DRINK_NAME))
+                .setPrice(resultSet.getLong(FIELD_DRINK_PRICE))
+                .setQuantity(resultSet.getInt(FIELD_DRINK_QUANTITY))
+                .build();
+    }
+
+    private void addAddonFromResultSetToDrinkIfPresent(ResultSet resultSet, Drink drink) throws SQLException {
+        if (drink == null) {
+            throw new IllegalStateException();
+        }
+        if (resultSet.getString(FIELD_ADDON_NAME) != null) {
+            drink.addAddon(getAddonFromResultSet(resultSet));
+        }
+    }
+
+    private Product getAddonFromResultSet(ResultSet resultSet) throws SQLException {
+        return new Product.Builder()
+                .setId(resultSet.getInt(FIELD_ADDON_ID))
+                .setName(resultSet.getString(FIELD_ADDON_NAME))
+                .setPrice(resultSet.getLong(FIELD_ADDON_PRICE))
+                .setQuantity(resultSet.getInt(FIELD_ADDON_QUANTITY))
                 .build();
     }
 
@@ -154,10 +193,9 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
     public Optional<Drink> getById(int id) {
         try (PreparedStatement statement =
                      connection.prepareStatement(
-                             String.format(SELECT_ALL_DRINKS_WITH_ADDONS_FORMAT, WHERE_ID_OR_DRINK_ID))) {
+                             String.format(SELECT_ALL_DRINKS_WITH_ADDONS_FORMAT, AND_ID_IS))) {
 
             statement.setInt(1, id);
-            statement.setInt(2, id);
 
             try (ResultSet resultSet = statement.executeQuery()) {
 
@@ -195,11 +233,9 @@ class DrinkDaoImpl extends AbstractDao<Drink> implements DrinkDao {
         }
         String ids = productDaoHelper.getStringListOf(productIds);
         try (PreparedStatement statement = connection.prepareStatement(
-                String.format(SELECT_ALL_DRINKS_WITH_ADDONS_FORMAT,
-                        WHERE_ID_IN_LIST_OR_DRINK_ID_IN_LIST))) {
+                String.format(SELECT_ALL_DRINKS_WITH_ADDONS_FORMAT, AND_ID_IN_LIST))) {
 
             statement.setString(1, ids);
-            statement.setString(2, ids);
 
             try (ResultSet resultSet = statement.executeQuery()) {
 
